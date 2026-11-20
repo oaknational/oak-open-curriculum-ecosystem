@@ -5,7 +5,8 @@ name: 'Anchor the staging and force-push guards to their own invocation'
 overview: >-
   Make the wildcard-staging and force-push entries of the command guard match the one git
   invocation they name, so an unrelated word later on the same command line is never refused.
-status: ratified
+status: superseded
+superseded_by: command-guards-and-merge-review-reading
 ratified_by: owner
 ratified_date: 2026-11-20
 ratified_where: "The owner's word in the session of Sandpiper guards Wind (690653), 2026-11-20, on the staging guard's false positive: 'plan and route a fix'"
