@@ -1251,14 +1251,14 @@ inside a rule name).
 - **The owner on people, 2026-11-20, by question prompt.** A pending review request of a person
   is not a review in progress; the merge tool waits for bots only.
 - **Resume here.** In order:
-  1. The first pull request of Part B is pushed from the lane worktree
-     `.claude/worktrees/merge-review-reading`, branch
-     `fix/merge-tool-reads-reviews-from-the-pull-request`: `merge-bot merge` and `pr state`
-     read the reviewers from the pull request and take no `--expect`, `--expect none` or
-     `--unavailable`. Open its pull request if it is not open, wait for its checks and
-     review, deal with the review, merge it. Until it merges and the primary checkout's
-     `agent-tools` is rebuilt, the installed merge tool still requires `--expect <login>`.
-     The design as built is in the plan node's last section.
+  1. The first pull request of Part B landed as oaknational#1041 (`a1c3d2150`):
+     `merge-bot merge --pr <n>` and `pr state <n>` read the reviewers from the pull request
+     and take no `--expect`, `--expect none` or `--unavailable`. The primary checkout and the
+     coordination worktree are rebuilt on it; the lane worktree and branch are retired.
+     Review added four rules to the design: a live review run holds a settled round, and
+     holds a pull request nobody has yet reviewed; an empty-bodied reply on the tip leaves an
+     earlier review standing; the pull request's author is no reviewer of it; a skip notice
+     anchors no quiet window.
   2. The second pull request of Part B: the records-class door (`RECORDS_CLASS_MERGE_STATES`
      in `merge-decision.ts`; the narrowing in `merge-records-checks.ts`). It still merges a
      bot's documentation-only pull request with no review, and past a pending check the base

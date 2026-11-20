@@ -114,6 +114,18 @@ The account with its sources is the addendum to the reunification retrospective 
 - **Surprise:** commitlint read a body line that began `backwards:` as a footer and refused
   the commit with a warning about a blank line. A body line must not begin with one word and
   a colon.
+- **Mistake (mine), twice in one hour:** I piped a commit into `grep` and read the push that
+  followed as carrying it. The commit had failed on a lint error, the push carried nothing,
+  and I told two review threads the cure was pushed. Then a `for` loop over quoted triples
+  posted no replies under zsh, which does not split a variable into words. Both were caught
+  by output that was missing. Each step's exit code is printed by name, and a write to a
+  pull request is read back before it is reported.
+- **Surprise:** a change to the merge door is merged by the door as it stands on `main`.
+  oaknational#1041's own new rule (one review of any commit) did not apply to its own
+  merge; the installed tool required a review of the tip.
+- **What worked:** four Copilot rounds on the merge door found seven real faults, none of
+  them in the lines the previous round changed. On a gate, a round's yield is not bounded
+  by the size of its last push.
 - **Observation:** the records-class door sets aside a pending check the base branch does
   not require. A review that runs as a check is such a check, so that door merges past a
   review in progress. It is the next pull request.
