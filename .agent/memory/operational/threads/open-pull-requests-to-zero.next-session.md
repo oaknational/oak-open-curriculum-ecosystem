@@ -1297,4 +1297,132 @@ inside a rule name).
   Castr reported on 2026-11-21, unverified here, that Castr refuses Oak's v1 document
   (1.1.1) in every output, at a schema-valued `additionalProperties` in two response
   schemas. The migration node does not use Castr; the fact matters if that changes.
+
+  **Handover at the owner's compaction word, 2026-11-21 (the owner is changing accounts, so
+  this record, the plan and the napkin are the whole of what carries over).** Every process
+  of this seat is stopped: no background task, no comms watcher, no gate slot held, no claim
+  open. No pull request of this seat's is open.
+
+  State of the trees:
+
+  - `main` is at `400a5b5e1` (oaknational#1052). The primary checkout is fast-forwarded to it.
+  - The coordination branch `coordination/2026-11-21-018e53` holds unpushed commits: the
+    plan's validator mechanism and Practice Core ruling, ledger rows for #1050 to #1052, the
+    thread record, and this handover. It needs a fold: merge `origin/main` in, push with
+    `merge-bot push`, open a records pull request, one review, merge at SETTLE-READY, cut
+    the successor with `coordination successor-name`, retire the old branch.
+  - The lane worktree `.claude/worktrees/names-validator`, branch
+    `feat/validate-no-code-owner-names`, holds one unpushed commit, `2d1724c02`: the new
+    validator (entry point, helpers, 13 unit cases, a script line in
+    `agent-tools/package.json`, an entry in `knip.config.ts`). Its push was stopped part-way
+    through the pre-push gate at the compaction word, so nothing reached the remote. It
+    passed lint, type-check, the format check and the whole `agent-tools` suite locally.
+
+  To resume, in order:
+
+  1. Push the validator lane with `merge-bot push` in its own call, read the exit code,
+     then open the pull request. Title: "feat(agent-tools): report tracked lines that name a
+     code owner". The description says: what it finds (a code owner's account as a whole
+     name, any case: mention, branch prefix, package scope, domain stem, mail local part;
+     teams and comments are not names); the optional untracked list
+     `.agent/state/personal-names.local.txt`; the two exemptions (`.github/CODEOWNERS`, the
+     Practice Core); `--report` and the exit codes 0, 1, 2; that it is not wired into the
+     gates because the report finds 770 lines in 36 directories on `main`; and that the
+     unit suite and the helper were written together, with no failing run first. Mark it
+     ready and request one Copilot review (new code).
+  2. Fold the coordination branch as above.
+  3. Dated records (todo 4), one surface per pull request, sized by
+     `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`. The
+     replacements used so far: an account as a mention becomes "the owner" or "a code
+     owner"; a branch prefixed with an account takes `<owner>/` when inside a code span
+     (outside a code span that placeholder is read as markup, so reword); the sibling estate
+     named by a personal site or its abbreviation becomes "the sibling estate"; a mail
+     address becomes a role phrase. Nothing else in a record changes. The abbreviation of
+     the sibling's name and personal mail domains are not found by the validator; a local
+     list adds them.
+  4. The reviewer templates still to read (`onboarding-expert`, `subagent-architect`,
+     `test-expert` and the smaller ones the 2026-10-04 commit touched) and the three review
+     observations the plan lists.
+  5. Wire the validator into `repo-validators:check` when its count is zero.
+
+  What this seat worked under, for a seat that inherits no private memory:
+
+  - A question for the owner goes through the question tool; text in ordinary output is not
+    seen. A merge is never asked of the owner: SETTLE-READY merges through `merge-bot merge`.
+  - A reviewer is requested only for a reason (no review yet, new code, a sensitive area).
+    Copilot is requested with `gh pr edit <n> --add-reviewer @copilot`, confirmed on the
+    timeline; the other review bot is out of credit and posts a skip notice.
+  - One concern per pull request, one of this seat's open at a time, the description saying
+    what is not in it; `--wip-limit` is the open count plus four.
+  - Tracked files are edited with the edit tool. A commit message goes in a file: commitlint
+    refuses a body line over 100 characters and one that begins with a word and a colon, and
+    the command guard reads the message text.
+  - Each of a commit, a push, a reply and a resolve runs in its own call, its exit code read
+    before the next. The napkin of 2026-11-21 records five instances of batching them.
+  - A merged branch is retired with `merge-bot retire` without asking.
+  - The review cost gate holds a push past the budget until the seat writes one line in
+    `.agent/state/collaboration/review-rebudgets.md` at the lane worktree's own path.
+  - Two entries of the previous account's private memory are, by the owner's own rulings,
+    never written to version control, and are not copied here. The owner holds them. Three
+    more concern another repository of the owner's, whose own plans and decisions ledger
+    hold them.
+
+  Owner rulings that were held only in that private memory, each with its date, copied so a
+  new account has them. Where a rule or skill already says the same, the rule governs:
+
+  - 2026-10-02: history shared with the fork is kept by merging; `main` is never rebased
+    onto, nor a branch onto `main`.
+  - 2026-10-03: a script used twice becomes a standard tool in `agent-tools`, sized as its
+    own work, never extended in place.
+  - 2026-10-14: a review bot, a sub-reviewer or a conscience check is information to test
+    against the rule and earlier rulings; it is never authority, and never a question for
+    the owner on the reviewer's say.
+  - 2026-10-17: a clean and green pull request merges by the merge tool; "merge at your
+    word" is never written.
+  - 2026-10-17: where decision-record numbers clash, this repository's numbering wins and
+    the fork renumbers.
+  - 2026-11-01: standing practice in code is cited from `principles.md`; quoting the owner
+    there frames the ordinary as a special case.
+  - 2026-11-02: no ledger of justifications per change. The change carries what, the commit
+    carries why; an audit anchors the content it proves, never the file.
+  - 2026-11-02: Oak's repositories and other Oak systems are permitted again, replacing a
+    read-only ruling of 2026-10-13.
+  - 2026-11-03: for a harmless warning, "leave it until there is evidence" is an option to
+    offer. The turbo environment warnings on the deployment platform stand by that ruling. A
+    list of follow-ups is a list of observations, not of lanes.
+  - 2026-11-04: a branch provably integrated into `main` is deleted without asking; repeated
+    2026-11-21 ("existing policy and does not require using up my attention").
+  - 2026-11-08: a side agent's notes are checked first-hand, claim by claim, and their
+    framing tested against the owner's intent, before anything is done on them; their labels
+    are not repeated.
+  - 2026-11-09: the fork may be named on Oak surfaces, lifting a prohibition of 2026-09-02.
+    The split of credentials between the two is unchanged.
+  - 2026-11-11: the reunification merge was the owner's alone to make. It is made.
+  - 2026-11-12: a pull request is never held on a screen-reader check by the owner; a
+    documentation-only pull request needs no browser tests.
+  - 2026-11-13: plugins from the official marketplace are not security-reviewed or pinned;
+    configuration particular to a checkout stays out of version control.
+  - 2026-11-15: the root README says what the repository contains and how to use it. It is
+    not a landing page and does not describe or define the organisation.
+  - 2026-11-16: a paid account for the MCP inspection tool is available after login; its
+    account address is never written to any tracked file, commit or report; use its latest
+    version.
+  - 2026-11-18: this checkout's `origin` is Oak's repository and the fork is a second
+    remote; older wording that reads the other way is historical.
+  - 2026-11-18: pull requests to Oak are small and bounded, one concern each; the work-in-
+    progress limit counts only this seat's own.
+  - 2026-11-19: before making an instruction general, state its precondition and its
+    lifetime. A hold given for one trial had been made standing policy.
+  - 2026-11-20: a reviewer is requested only when no review has arrived or the area is
+    sensitive, never for ceremony.
+  - 2026-11-20: documents are "correct, complete, relevant, proportionate, cogent, and
+    cohesive", as a starting point.
+  - 2026-11-20: reviews are read from the pull request, never declared to the tool; a review
+    in progress is waited for, every review is dealt with, and there is always at least one.
+  - 2026-11-20: for a many-agent survey, overlapping surveys run on the mid-tier model, the
+    seat synthesises, and one or two spot checks run on the top model; very large reads use
+    suites of the small model. Correctness stays with the seat.
+  - 2026-11-20: nothing particular to this instance of the repository, and no real account
+    name, goes into tracked files; fixtures use invented logins. The cleanup plan records
+    the rulings of 2026-11-21 that bound it.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
