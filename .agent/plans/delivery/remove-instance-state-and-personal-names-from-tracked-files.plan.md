@@ -125,8 +125,12 @@ Three kinds of occurrence, each with its own cure.
    such as "the owner", and nothing else in the record changes (the owner's answer by
    question prompt, 2026-11-21: "Rewrite names only").
 
-A check keeps the result: a validator over every tracked file but `.github/CODEOWNERS` and
-the Practice Core, that fails on a real account name. Its list is derived (the owner's answer
+A check keeps the result: a validator over the tracked text files, `.github/CODEOWNERS` and
+the Practice Core apart, that fails on a real account name. It reads what the scan policy
+shared by the whole-tree validators reads (`agent-tools/src/core/tracked-file-scan.ts`), so
+binary files, lockfiles and source maps are not read, and a clean report says nothing about
+them: a name in a generated file is cured in the manifest or source that made it. Its list
+is derived (the owner's answer
 by question prompt, 2026-11-21): it reads the account names from `.github/CODEOWNERS`, which
 GitHub requires to be real, so it runs in CI and in a fork with no setup, and no second list
 is tracked. An optional untracked file on a machine adds domains and mail addresses. It is
