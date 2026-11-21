@@ -152,3 +152,11 @@ The account with its sources is the addendum to the reunification retrospective 
   mismatch and the commit in the same batch went ahead, its message naming an entry it did
   not hold. The entries of 2026-11-20 record the same shape twice. An edit and the commit
   that depends on it are separate steps, the edit's result read first.
+- **Surprise:** Vercel published no status for the second commit of oaknational#1043 (a
+  skill passage and a code comment), and the base branch requires the `Vercel` context.
+  GitHub read the pull request as blocked and the merge tool held at CHECKS-RUNNING for
+  about forty minutes with nothing on stderr. `gh pr checks` listed every check as passed,
+  since the missing context is a commit status with no check run. An empty commit brought
+  the deployment and the status. One instance; the cause on Vercel's side is unread.
+- **Observation:** under `--json` the merge tool wrote no progress line in those forty
+  minutes. The verdict was read with `pr state` in a second call.

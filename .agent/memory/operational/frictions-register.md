@@ -4866,10 +4866,13 @@ Observed twice on 2026-09-29 by the Director: `.agent/rules/.logs` refused by th
 - **Expected**, in the owner's terms: the tool takes no declared reviewer set. It reads the pull
   request: at least one review exists; a review in progress is waited for; every review is
   dealt with, where declining to act is a way of dealing with it.
-- **Candidate cure**: the delivery node `command-guards-and-merge-review-reading`, Part B. Two
-  readings in it are for the owner to confirm: whether the one review must cover the final
-  commit, and whether a records-class pull request also needs one.
+- **Cure**: the delivery node `command-guards-and-merge-review-reading`, Part B, in two pull
+  requests. oaknational#1041 (2026-11-20): the tool reads the reviewers from the pull request
+  and takes no `--expect`, `--expect none` or `--unavailable`. oaknational#1043 (2026-11-21):
+  the records-class door is removed, so every pull request needs one review, waits for a
+  review in progress and waits out the quiet window. The owner settled both readings by
+  question prompt: a review of any commit meets the rule, and a records pull request follows
+  it too.
 - **Target surface**: agent-tools CLI (`merge-bot`, `pr-watch`).
-- **Status**: open.
-- **Owner direction status**: owner-directed (2026-11-20). Until the tool changes, a seat
-  waits for a review in progress and deals with every review before it calls the merge.
+- **Status**: closed 2026-11-21, by oaknational#1041 and oaknational#1043.
+- **Owner direction status**: owner-directed (2026-11-20).
