@@ -30,8 +30,5 @@ standard `// eslint-disable-next-line preserve-caught-error --
 `no-eslint-disable` rule, which requires a reason).
 
 The `Result` type and its helpers live in the estate's result package
-(jimcresswell.net: `@engraph/result` in `tooling/result/`; OCE: the package its
-ADR-088 records); see its README. Enforcement: a `no-throw-statement` rule
-exists in the estate's ESLint plugin; in jimcresswell.net it is switched off by
-owner ruling (2026-09-12), and until the owner re-enables it reviewers carry
-this rule there.
+(OCE: the package its ADR-088 records); see its README. Enforcement: a
+`no-throw-statement` rule exists in the estate's ESLint plugin.

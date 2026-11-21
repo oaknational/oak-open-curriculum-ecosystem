@@ -23,7 +23,7 @@ Worked instance that prompted graduation: Ferny Capture D in
 napkin entry intended for ongoing follow-on-author consumption. The
 napkin pointer became a broken link the moment `/tmp/` rotated. Cured
 by moving the synthesis into the active memory tier (the WS-8 ratification
-reviewer synthesis of 2026-05-24, a record jimcresswell.net still carries)
+reviewer synthesis of 2026-05-24)
 and updating the napkin pointer. The same shape has appeared multiple
 times across sessions — this rule fixes the class.
 

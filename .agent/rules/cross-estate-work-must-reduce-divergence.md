@@ -12,8 +12,8 @@ the discipline is the two-estate form of [`replace-dont-bridge`](replace-dont-br
 
 ## Trigger
 
-An activity is about to edit both estates, jimcresswell.net (JC.net) and the Open Curriculum
-Ecosystem (OCE): a dedicated consolidation, a skill or rule sync, a Practice exchange or
+An activity is about to edit both estates, the Open Curriculum Ecosystem (OCE) and its
+sibling Practice estate: a dedicated consolidation, a skill or rule sync, a Practice exchange or
 transplant, or an edit to any path that exists at the same relative location in both.
 
 ## Action
@@ -28,7 +28,7 @@ transplant, or an edit to any path that exists at the same relative location in 
 2. **Write shared changes once, in both.** A change to a shared path lands in both estates in
    the same words and the same wrapping. An estate-specific fact goes into an estate-only
    surface, or into the shared file in both estates worded so it reads true in each: name the
-   estate ("in OCE", "in JC.net"), never "this repository", "here" or "the lineage".
+   estate ("in OCE"), never "this repository", "here" or "the lineage".
    Twin pull requests for one shared change land in sequence. The first copy's review settles
    the bytes and it lands without waiting for its twin; the second estate's copy is cut from the
    settled blobs (the Director's ruling of 2026-09-26; of eleven exchange-lane events applying
@@ -120,7 +120,7 @@ which also carries the measure as a script. The two main branches differed by 21
 
 ## Capability parity
 
-Alignment is of capability as well as text. The owner, 2026-10-01, asked whether JC.net adopts two
+Alignment is of capability as well as text. The owner, 2026-10-01, asked whether the sibling estate adopts two
 OCE tooling families, verbatim: "This shouldn't be a question, we are bringing both estates to the
 same level of capability, anything useful that one has must make it to the other." When one estate
 holds a useful capability the other lacks, the question is how and in what order it travels, never

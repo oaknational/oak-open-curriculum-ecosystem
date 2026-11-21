@@ -6,8 +6,7 @@ description: Before committing to the shape of a build (tool, feature, schema, m
 # Verify the Data Supports the Shape Before Building
 
 Operationalises the host's record that the data is the source of truth for
-what can be built (jimcresswell.net: ADR-020, the entity model as the source
-of truth for shared atoms; OCE: ADR-038, the compilation-time revolution) and
+what can be built (OCE: ADR-038, the compilation-time revolution) and
 [PDR-085 (Definition of Delivery)](../practice-core/decision-records/PDR-085-definition-of-delivery.md)
 — value reaches a beneficiary or it has not been delivered. It is the design-time
 face of [`verify-dont-trust`](verify-dont-trust.md): a design premise is a claim
@@ -33,8 +32,7 @@ Recurring faces:
   cheap scan of the actual corpus to test the premise the fix rests on *before*
   code lands. A premise the data refutes is redirected at the source, not
   engineered around. Fingerprint the **source**, not a projection: in
-  jimcresswell.net the ground truth is the entity model, and in OCE the in-repo
-  bulk export of its curriculum data; rendered surfaces, generated corpora,
+  OCE the ground truth is the in-repo bulk export of its curriculum data; rendered surfaces, generated corpora,
   JSON-LD and a PDF are projections that can flatten away structure the source
   carries. Check the source before declaring a relationship "must be sourced"
   / "deferred" / "not present".
@@ -73,7 +71,7 @@ class the governing plan had already assigned elsewhere; the correction was to
 delete the surface, not to add optional fields or bridges around the fabricated
 premise.
 
-A fourth instance (JC.net, 2026-09-13): a curator-passes README was imported
+A fourth instance (2026-09-13): a curator-passes README was imported
 because a report listed the directory as a register the curation loop writes to;
 the writer's own doctrine (PDR-081 and the curator-pass skill) says the loop
 writes no such register, and the directory was history OCE kept. Before creating
