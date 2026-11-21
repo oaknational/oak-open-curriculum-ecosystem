@@ -252,7 +252,7 @@ When configuration issues affect code quality, architecture, or type safety, thi
 ### Inheritance and Consistency
 
 - [ ] TypeScript configs extend `tsconfig.base.json`
-- [ ] ESLint configs extend root configuration
+- [ ] ESLint configs compose the shared standards plugin (the two hand-rolled configs excepted)
 - [ ] Vitest configs re-export the shared `baseTestConfig` OR explicitly exclude `**/*.e2e.test.ts`
 - [ ] Vitest E2E configs extend the shared `baseE2EConfig` or define workspace-specific E2E config where E2E tests exist
 - [ ] No workspace-specific Prettier overrides (unless justified)
