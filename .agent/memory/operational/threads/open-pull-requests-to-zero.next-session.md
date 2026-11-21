@@ -1278,5 +1278,15 @@ inside a rule name).
      were retired that day. `coordination/2026-11-20-e9673c` reached `main` by cherry-pick;
      a merge that takes no content records its ancestry on the coordination branch, and the
      retire tool will take it once that branch folds.
+  6. Cleanup delivery, 2026-11-21, five pull requests merged: oaknational#1045 (package
+     manifests name the organisation only, the owner's answer by question prompt), #1046
+     (invented identities in `agent-tools` tests), #1047 (nineteen rules) and #1048 (seven
+     skills and the testing directive) without the sibling estate (the owner's answer:
+     remove the passages), and #1049 (nine reviewer templates trued to this repository,
+     `0f578a8c2`). The plan holds the re-count and what #1049 found.
+     Next, in order: the harvested fixtures under `agent-tools/tests/pr-tally`; the other
+     templates the 2026-10-04 commit touched, and the three review observations the plan
+     lists; decision records, delivery plans and `docs/architecture` pages; dated records,
+     names only, one surface at a time; the validator last.
   The v1 migration is planned and not started, at the owner's word.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
