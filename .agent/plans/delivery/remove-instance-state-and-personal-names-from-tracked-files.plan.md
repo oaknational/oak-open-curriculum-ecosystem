@@ -4,15 +4,18 @@ node_type: delivery
 name: 'Remove instance state and personal names from tracked files'
 overview: >-
   Rules, skills, directives, code and tests state general requirements and use invented
-  identities; no tracked living file names a real person's account or carries a fact true only
-  of this instance of the repository.
-status: sketch
+  identities; no tracked file but the code-owners file names a real person's account, and no
+  living file carries a fact true only of this instance of the repository.
+status: ratified
+ratified_by: owner
+ratified_date: 2026-11-21
+ratified_where: "The owner's answer to a question prompt in the session of Sandpiper guards Wind (690653), 2026-11-21: 'Approve'."
 serves: organisational-identity-below-the-tree
 impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-last_updated: 2026-11-20
+last_updated: 2026-11-21
 ---
 
 # Remove instance state and personal names from tracked files
@@ -62,10 +65,11 @@ Three kinds of occurrence, each with its own cure.
    following the merge-bot configuration's shape (an untracked file behind a tracked example),
    or is deleted when nothing reads it. The rule keeps the general requirement.
 3. **A dated record.** Memory, reports, research, comms records and archives record what
-   happened. The owner decides at pickup whether these are rewritten, left, or moved out of
-   the repository; this plan changes none of them before that answer.
+   happened. Each real account name, domain or address in one is replaced with a role word
+   such as "the owner", and nothing else in the record changes (the owner's answer by
+   question prompt, 2026-11-21: "Rewrite names only").
 
-A check keeps the result: a validator over the living surfaces that fails on a real account
+A check keeps the result: a validator over every tracked file but `.github/CODEOWNERS` that fails on a real account
 name from a list held outside version control, so the list itself is not the leak.
 
 ## Acceptance criteria
@@ -76,22 +80,28 @@ name from a list held outside version control, so the list itself is not the lea
 2. Every instance fact removed from a rule or skill is either read from configuration at run
    time or absent, and the tool or rule that used it still passes its tests. Proof:
    `repo-safe`, CI.
-3. Dated records are disposed as the owner answers. Proof: `owner-held`, the answer recorded
-   in this node.
+3. No dated record names a real person's account, domain or address, and each changed record
+   differs from its earlier form in those names alone. Proof: `repo-safe`, the search and the
+   diff recorded on the pull request.
 4. `.github/CODEOWNERS` is unchanged. Proof: `repo-safe`, the diff.
 
 ## Todos
 
 1. Re-count, for every real person the repository names, and sort each occurrence into the
    three kinds.
-2. Ask the owner, by question prompt, how dated records are disposed.
-3. Fixtures and examples, one pull request per workspace or surface.
-4. Instance facts, one pull request per fact family, each with its configuration home.
-5. The validator, landed blocking once the living surfaces are clean.
+2. Fixtures and examples, one pull request per workspace or surface.
+3. Instance facts, one pull request per fact family, each with its configuration home.
+4. Dated records, names only, one pull request per surface (memory, reports, research, comms
+   records, archives).
+5. The validator, landed blocking once every tracked surface is clean.
 
 ## Out of scope
 
 - Git history. Removing a name from past commits is a separate decision with its own costs.
 - `ratified_by` and similar authority fields in plan and decision-record frontmatter, until
-  the owner says whether a role name replaces a personal one there.
+  the owner says whether a role name replaces a personal one there. They hold a person's
+  name, where this plan removes account names, domains and addresses, and the validator's
+  list holds only those three kinds. The fields therefore stay as they are and do not hold
+  up todo 5; a field that carries an account name, domain or address is in scope like any
+  other line.
 - Agent session names, which name no person.

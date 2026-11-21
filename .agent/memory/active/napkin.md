@@ -129,3 +129,34 @@ The account with its sources is the addendum to the reunification retrospective 
 - **Observation:** the records-class door sets aside a pending check the base branch does
   not require. A review that runs as a check is such a check, so that door merges past a
   review in progress. It is the next pull request.
+
+## 2026-11-21 — Sandpiper guards Wind (690653): the records-class door removed
+
+- **Observation:** oaknational#1042 was the first merge under the new reading. The tool found
+  Copilot from the pull request and read its leg as owing nothing on the tip. The
+  records-class door then merged it inside the quiet window, a second instance of the fault
+  oaknational#1043 removes.
+- **Surprise:** a Windows-only test failed once on oaknational#1042 and passed on a re-run of
+  the failed jobs: `agent-tools/tests/collaboration-state/transaction.integration.test.ts`,
+  "serializes concurrent JSON file updates without lost writes", `EPERM` on the `mkdir` of
+  the `.transaction` lock directory. One instance; no lane.
+- **Surprise:** read against the owner's "same rule" answer, the records-class door had no
+  narrower form to keep. With one review required, the quiet window kept and every check
+  binding, the changed paths decide nothing, so the class modules were deleted. What stayed
+  is the proof that each required context has reported, which was never about the class.
+- **Mistake (mine):** the comms watcher had been dead since the last compaction and the
+  seat's claim on the reunification draft, merged on 2026-11-18, was still open. Both were
+  found at the owner's team re-ground on 2026-11-21, not by me. After a compaction the
+  watcher and the seat's own claims are read before work resumes.
+- **Mistake (mine), the third instance:** an edit to this file failed on a line-wrap
+  mismatch and the commit in the same batch went ahead, its message naming an entry it did
+  not hold. The entries of 2026-11-20 record the same shape twice. An edit and the commit
+  that depends on it are separate steps, the edit's result read first.
+- **Surprise:** Vercel published no status for the second commit of oaknational#1043 (a
+  skill passage and a code comment), and the base branch requires the `Vercel` context.
+  GitHub read the pull request as blocked and the merge tool held at CHECKS-RUNNING for
+  about forty minutes with nothing on stderr. `gh pr checks` listed every check as passed,
+  since the missing context is a commit status with no check run. An empty commit brought
+  the deployment and the status. One instance; the cause on Vercel's side is unread.
+- **Observation:** under `--json` the merge tool wrote no progress line in those forty
+  minutes. The verdict was read with `pr state` in a second call.

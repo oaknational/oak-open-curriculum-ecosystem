@@ -1259,11 +1259,19 @@ inside a rule name).
      holds a pull request nobody has yet reviewed; an empty-bodied reply on the tip leaves an
      earlier review standing; the pull request's author is no reviewer of it; a skip notice
      anchors no quiet window.
-  2. The second pull request of Part B: the records-class door (`RECORDS_CLASS_MERGE_STATES`
-     in `merge-decision.ts`; the narrowing in `merge-records-checks.ts`). It still merges a
-     bot's documentation-only pull request with no review, and past a pending check the base
-     branch does not require, which is how a running review check was nearly merged past on
-     oaknational#1036.
-  3. The cleanup plan and this record go up as the next records pull request.
-  4. Close friction F-298 when both pull requests of Part B have merged.
+  2. The second pull request of Part B landed as oaknational#1043 (`b692d317b`, 2026-11-21):
+     the records-class door is removed, and `merge-bot merge` acts on SETTLE-READY alone for
+     every pull request. Both checkouts are rebuilt on it; the lane worktree and branch are
+     retired. A records pull request, a coordination fold among them, now needs one review
+     and waits out the quiet window. One Copilot review found one fault in the skill text,
+     cured. Vercel published no status for the cure commit and the base branch requires one;
+     an empty commit re-triggered it.
+  3. The cleanup plan landed as oaknational#1042 (`cf363cd54`). The owner ratified its shape
+     by question prompt on 2026-11-21 and answered that dated records have real names
+     rewritten and nothing else changed. Delivery has not started and waits for the owner's
+     word.
+  4. Friction F-298 is closed. The plan node `command-guards-and-merge-review-reading` has
+     both parts built.
+  Nothing of this seat's is in flight. The v1 migration is planned and not started, at the
+  owner's word.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
