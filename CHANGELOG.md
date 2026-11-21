@@ -1,3 +1,15 @@
+# [1.188.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.25...v1.188.0) (2026-11-21)
+
+
+### Bug Fixes
+
+* **agent-tools:** close three gaps a review found in the names validator ([0600fa5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/0600fa5d33ba491620dce324f6a5cfbf86505b9b))
+
+
+### Features
+
+* **agent-tools:** report tracked lines that name a code owner ([2d1724c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/2d1724c02fcdbfbe6fcb169182adfe848a924acd))
+
 ## [1.187.25](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.24...v1.187.25) (2026-11-21)
 
 ## [1.187.24](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.23...v1.187.24) (2026-11-21)
