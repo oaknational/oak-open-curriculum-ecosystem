@@ -30,6 +30,10 @@ describe('parseCodeOwnerLogins', () => {
     ]);
   });
 
+  it('leaves out an account named in a comment that ends a pattern line', () => {
+    expect(parseCodeOwnerLogins('* @a-person # ask @another-person\n')).toEqual(['a-person']);
+  });
+
   it('reads no account from a file with no owners', () => {
     expect(parseCodeOwnerLogins('# nothing owned yet\n')).toEqual([]);
   });

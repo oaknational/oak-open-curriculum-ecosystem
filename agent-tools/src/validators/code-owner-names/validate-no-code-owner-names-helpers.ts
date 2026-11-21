@@ -41,7 +41,8 @@ const ACCOUNT_CHARACTER = 'a-z0-9-';
 /**
  * The account names a code-owners file gives ownership to, lower-cased, each
  * once, in file order. A team (`@org/team`) names no person and is left out,
- * and so is anything in a comment.
+ * and so is anything in a comment, whether the comment is a whole line or
+ * ends a pattern line.
  */
 export function parseCodeOwnerLogins(content: string): string[] {
   const logins = new Set<string>();
@@ -51,6 +52,9 @@ export function parseCodeOwnerLogins(content: string): string[] {
       continue;
     }
     for (const token of line.split(/\s+/u).slice(1)) {
+      if (token.startsWith('#')) {
+        break;
+      }
       if (token.startsWith('@') && !token.includes('/')) {
         logins.add(token.slice(1).toLowerCase());
       }

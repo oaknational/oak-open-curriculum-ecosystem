@@ -10,19 +10,26 @@
  * `.agent/state/personal-names.local.txt`, one per line.
  *
  * The Practice Core is exempt: it names its authors and origins as
- * attribution.
+ * attribution. The scan reads what the shared tracked-file policy reads
+ * (`core/tracked-file-scan.ts`): binary files, lockfiles and source maps are
+ * left out, because each is generated and a name in one is cured in the
+ * manifest or source that produced it, which is scanned.
  *
  * With `--report` the validator prints a count per directory and exits 0, for
  * sizing a cleanup. Without it: exit 0 clean, exit 1 a name was found, exit 2
- * the scan could not be made (git could not list the tracked files, or a
- * tracked file could not be read).
+ * the scan could not be made (the code-owners file or the local list is there
+ * and cannot be read, git could not list the tracked files, or a tracked file
+ * could not be read).
  *
  * @packageDocumentation
  */
 
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
+import { err, ok, type Result } from '@oaknational/result';
+
+import { errorCodeOf } from '../../core/error-code.js';
 import { resolveRepoRoot } from '../../core/repo-root.js';
 import { describeGitReadFailure, listTrackedFiles } from '../../core/repository-paths.js';
 import { writeErrorLine, writeLine } from '../../core/terminal-output.js';
@@ -44,16 +51,32 @@ const EXTRA_NAMES_PATH = '.agent/state/personal-names.local.txt';
 const repoRoot = resolveRepoRoot(import.meta.url);
 const reportOnly = process.argv.includes('--report');
 
-/** The text of a file that may be absent; absent reads as empty, unreadable throws. */
-function readOptional(relativePath: string): string {
-  const absolutePath = path.join(repoRoot, relativePath);
-  return existsSync(absolutePath) ? readFileSync(absolutePath, 'utf8') : '';
+/**
+ * The text of a file that may be absent. Absent reads as empty. A file that is
+ * there and cannot be read is the error arm, carrying the refusal line: the
+ * list of names would be short, so a clean verdict would not be one.
+ */
+function readOptional(relativePath: string): Result<string, string> {
+  try {
+    return ok(readFileSync(path.join(repoRoot, relativePath), 'utf8'));
+  } catch (error) {
+    const code = error instanceof Error ? errorCodeOf(error) : undefined;
+    return code === 'ENOENT' ? ok('') : err(`cannot read '${relativePath}' (${code ?? 'unknown'})`);
+  }
 }
 
-const names = [
-  ...parseCodeOwnerLogins(readOptional(CODE_OWNERS_PATH)),
-  ...parseExtraNames(readOptional(EXTRA_NAMES_PATH)),
-];
+const codeOwners = readOptional(CODE_OWNERS_PATH);
+const extraNames = readOptional(EXTRA_NAMES_PATH);
+if (!codeOwners.ok || !extraNames.ok) {
+  for (const source of [codeOwners, extraNames]) {
+    if (!source.ok) {
+      writeErrorLine(`${TOOL}: ${source.error}`);
+    }
+  }
+  process.exit(2);
+}
+
+const names = [...parseCodeOwnerLogins(codeOwners.value), ...parseExtraNames(extraNames.value)];
 
 if (names.length === 0) {
   writeLine(`✓ ${TOOL}: no code owners named in ${CODE_OWNERS_PATH}; nothing to look for`);
