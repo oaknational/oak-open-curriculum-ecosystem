@@ -160,3 +160,32 @@ The account with its sources is the addendum to the reunification retrospective 
   the deployment and the status. One instance; the cause on Vercel's side is unread.
 - **Observation:** under `--json` the merge tool wrote no progress line in those forty
   minutes. The verdict was read with `pr state` in a second call.
+- **Correction (owner):** I listed a merged local branch among the decisions waiting for the
+  owner. A merged branch is deleted without asking; the policy already said so.
+- **What worked:** `merge-bot retire` deleted two local branches that plain `git branch -d`
+  was refused for. It refuses a branch whose commits reached `main` by cherry-pick; a merge
+  of that branch taking no content, made after `git cherry` showed both commits upstream,
+  records the ancestry for the retire tool to read after the next fold.
+- **Mistake (mine), the fourth instance:** two commits ran in one shell line on 2026-11-21.
+  The first failed and its staged plan edit went into the second, a continuity commit. One
+  commit per call, its exit code read before the next file is staged.
+- **Surprise:** nine reviewer templates had described another repository since 2026-10-04,
+  and a search for that repository's name found only the sentences that named it. Reading
+  around a match found the rest.
+- **Reviewer finding upheld (oaknational#1049):** I edited sentences in templates that had
+  been rewritten whole, and wrote two configuration facts from a search that matched one
+  string. The cure was each template's earlier body, checked for cited paths that exist.
+  When a file was replaced whole, compare it with its earlier version before editing lines.
+- **Mistake (mine):** on oaknational#1049 a push was held by the review cost gate and the
+  same shell line went on to post "cured" on the thread and resolve it. The exit code was
+  printed and nothing read it. The tool then read the pull request as ready to merge at a
+  tip without the cure. I caught it reading the output before merging, recorded the
+  rebudget decision and pushed. A reply or a resolve runs in a later call than its push.
+- **Surprise:** the review cost gate reads `review-rebudgets.md` at the lane worktree's own
+  path, and a lane worktree does not have the primary checkout's copy.
+- **Surprise:** commitlint refuses a body line over 100 characters, and the command guard
+  refused a commit whose message held the word for git's file-reverting verb. A message
+  goes in a file written with the write tool.
+- **Surprise:** the cleanup re-count found people in 19 package manifests (`author` and
+  `contributors`), a surface the first count had not named. The owner chose the
+  organisation alone for those fields.

@@ -268,6 +268,12 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-20 | oaknational#1041 | 3 | 19.34 / 40 | within | 0 | agreed | the merge tool and `pr state` read the reviewers from the pull request; Copilot requested four times: seven findings over three rounds, all upheld and cured, the fourth review found nothing; the second review read the commit before the one it was asked about |
 | 2026-11-21 | oaknational#1042 | 1 | 0 / 40 | within | 0 | agreed | the cleanup plan and the day's records, records-class; one Copilot finding (the plan marked ratified without its shape approved), upheld and cured in one push the survey prices at nothing |
 | 2026-11-21 | oaknational#1043 | 1 | 0 / 40 | within | 0 | agreed | the records-class door removed from the merge tool; one Copilot review requested, the change being the merge gate: one finding, upheld and cured; a third push changed no file and re-triggered a missing Vercel status |
+| 2026-11-21 | oaknational#1044 | 1 | 0 / 40 | within | 0 | agreed | the cleanup plan ratified, friction F-298 closed, the day's records; the first records pull request merged under the single rule; one Copilot finding (the validator's scope against the authority fields left out of scope), upheld and cured in one push the survey prices at nothing |
+| 2026-11-21 | oaknational#1045 | 1 | 0 / 40 | within | 0 | agreed | package manifests name the organisation only; one Copilot review requested, none having arrived: no finding |
+| 2026-11-21 | oaknational#1046 | 1 | 0 / 40 | within | 0 | agreed | invented identities in `agent-tools` tests; one Copilot review requested after the tool read none: no finding |
+| 2026-11-21 | oaknational#1047 | 1 | 0 / 40 | within | 0 | agreed | nineteen rules without the sibling estate; one Copilot review: no finding |
+| 2026-11-21 | oaknational#1048 | 1 | 0 / 40 | within | 0 | agreed | seven skills and the testing directive; one finding (a label left ambiguous by the removal), upheld in part and cured in one push the survey prices at nothing |
+| 2026-11-21 | oaknational#1049 | 3 | 43.94 / 40 | exhausted | 1 | agreed | nine reviewer templates trued; three Copilot rounds, nine findings, all upheld: the first changed the method from edited sentences to the earlier bodies, the second kept the security template's coverage, the third corrected two references; one push past the budget on the seat's recorded decision, which the survey counts as none; three further observations recorded in the plan as later work |
 
 ## Weight changes
 

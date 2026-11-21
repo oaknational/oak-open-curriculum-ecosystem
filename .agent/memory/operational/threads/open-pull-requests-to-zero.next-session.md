@@ -1268,10 +1268,25 @@ inside a rule name).
      an empty commit re-triggered it.
   3. The cleanup plan landed as oaknational#1042 (`cf363cd54`). The owner ratified its shape
      by question prompt on 2026-11-21 and answered that dated records have real names
-     rewritten and nothing else changed. Delivery has not started and waits for the owner's
-     word.
+     rewritten and nothing else changed. The ratification landed as oaknational#1044
+     (`a4661211d`), the first records pull request merged under the single rule. The owner
+     gave the word to start delivery on 2026-11-21, and ruled that `ratified_by` fields keep
+     the personal name.
   4. Friction F-298 is closed. The plan node `command-guards-and-merge-review-reading` has
      both parts built.
-  Nothing of this seat's is in flight. The v1 migration is planned and not started, at the
-  owner's word.
+  5. The owner, 2026-11-21: a merged branch is deleted without asking. Two local branches
+     were retired that day. `coordination/2026-11-20-e9673c` reached `main` by cherry-pick;
+     a merge that takes no content records its ancestry on the coordination branch, and the
+     retire tool will take it once that branch folds.
+  6. Cleanup delivery, 2026-11-21, five pull requests merged: oaknational#1045 (package
+     manifests name the organisation only, the owner's answer by question prompt), #1046
+     (invented identities in `agent-tools` tests), #1047 (nineteen rules) and #1048 (seven
+     skills and the testing directive) without the sibling estate (the owner's answer:
+     remove the passages), and #1049 (nine reviewer templates trued to this repository,
+     `0f578a8c2`). The plan holds the re-count and what #1049 found.
+     Next, in order: the harvested fixtures under `agent-tools/tests/pr-tally`; the other
+     templates the 2026-10-04 commit touched, and the three review observations the plan
+     lists; decision records, delivery plans and `docs/architecture` pages; dated records,
+     names only, one surface at a time; the validator last.
+  The v1 migration is planned and not started, at the owner's word.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.

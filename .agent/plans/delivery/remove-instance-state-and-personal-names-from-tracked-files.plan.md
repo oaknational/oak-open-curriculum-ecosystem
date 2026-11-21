@@ -54,6 +54,62 @@ Counted with `git grep` at `origin/main`; re-count at pickup.
 - Other people's logins are in `.github/CODEOWNERS`, which GitHub requires to be real.
 - This count covers one person. Other real names, logins and addresses are not yet counted.
 
+## The re-count of 2026-11-21 (todo 1)
+
+Counted with `git grep` at `origin/main` (`f36581d97`), leaving out `.github/CODEOWNERS`.
+
+- **The owner's account name or domain: 210 files.** 119 are dated records. 91 are living
+  files:
+  - 19 `package.json` files carry people in `author` or `contributors`: a contact address
+    and a personal site in each, and in the root file the account's page and two other
+    people's addresses.
+  - 19 files under `agent-tools` (15 source, 4 tests) name a second repository after the
+    domain, as a probe's location or a fixture.
+  - 18 rules, 6 sub-agent templates, 7 skills, 8 delivery plans, 4 decision records under
+    `practice-core`, 2 pages under `docs/architecture`, and the sub-agents index.
+  - The forms: the domain (89 occurrences), the mention form (22), the bare name (17), the
+    contact address (19), about 20 branch names prefixed with the name, a package scope (3)
+    and the second repository (4).
+- **A second code owner's account name: 43 files**, 6 of them living (4 delivery plans, 2
+  pages under `docs/architecture`), the rest dated records.
+- **Two other code owners: 3 files**, dated records and the root `package.json`.
+- **A personal mail address: 3 files**, a comms record and two archived Sonar evidence files
+  (13 occurrences).
+- **One contributor's address on a personal domain: 1 file**, the root `package.json`.
+- Addresses at the organisation's domain are shared mailboxes or fixtures, but for one
+  personal address in one file.
+
+### Found during delivery, 2026-11-21
+
+The name search understated one surface. Nine reviewer templates under
+`.agent/sub-agents/templates` carry another repository's instance as their own: its
+workspaces, its configuration files, its decision-record numbers and two reviewers this
+repository does not have. A search for the account name and the domain finds the sentences
+that name that repository and misses the paragraphs that describe it without naming it. The
+wording these templates carried before 2026-10-04 is in git history. Editing sentences did
+not make them true (a review of oaknational#1049 found absent records still cited), so six
+have their earlier bodies back under their current frontmatter (accessibility, React,
+documentation, config, type, design system), the config one trued against today's files. The
+security template keeps its current text, which is general, with four instance lines trued,
+and two smaller ones (code, assumptions) are edited. Still to read line by line: the other
+templates that commit touched (`onboarding-expert`, `subagent-architect`, `test-expert` and
+smaller ones), and the prose improvements the replaced text carried in the six, which are
+worth re-applying for this repository.
+
+The same review found three places where the earlier bodies are behind this repository's
+records, accepted and left for the next work on these templates:
+
+- the type template's two-executor and `as` checks are unqualified where ADR-038 allows Zod
+  and `as const`, and one strategy throws where the Result rule applies;
+- the design-system template names `index.html` where the resource is the banner page, treats
+  DTCG as the universal source where ADR-213 gives CSS that authority, and expects identical
+  theme overrides where the model is a sparse overlay;
+- the documentation template checks ADRs only, where the reviewer roster and PDR-019 cover
+  PDRs too.
+
+The owner's answers by question prompt on 2026-11-21: package manifests name the organisation
+only, and passages about the sibling estate are removed from this estate's rules and skills.
+
 ## Mechanism
 
 Three kinds of occurrence, each with its own cure.
@@ -98,10 +154,8 @@ name from a list held outside version control, so the list itself is not the lea
 ## Out of scope
 
 - Git history. Removing a name from past commits is a separate decision with its own costs.
-- `ratified_by` and similar authority fields in plan and decision-record frontmatter, until
-  the owner says whether a role name replaces a personal one there. They hold a person's
-  name, where this plan removes account names, domains and addresses, and the validator's
-  list holds only those three kinds. The fields therefore stay as they are and do not hold
-  up todo 5; a field that carries an account name, domain or address is in scope like any
-  other line.
+- `ratified_by` and similar authority fields in plan and decision-record frontmatter. They
+  keep the personal name of whoever ratified (the owner's word, 2026-11-21). This plan
+  removes account names, domains and addresses, and the validator's list holds only those
+  three kinds; a field that carries one of those is in scope like any other line.
 - Agent session names, which name no person.
