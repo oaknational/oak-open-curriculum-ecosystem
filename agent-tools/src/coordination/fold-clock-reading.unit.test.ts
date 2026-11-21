@@ -73,7 +73,7 @@ describe('parseTimeline', () => {
         {
           event: 'review_requested',
           created_at: '2026-10-10T11:18:21Z',
-          requested_reviewer: { login: 'jimCresswell', type: 'User' },
+          requested_reviewer: { login: 'a-person', type: 'User' },
         },
         {
           event: 'review_requested',

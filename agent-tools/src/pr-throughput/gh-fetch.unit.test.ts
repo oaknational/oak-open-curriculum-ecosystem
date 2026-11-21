@@ -12,7 +12,7 @@ const VALID_PAYLOAD = JSON.stringify([
     number: 429,
     createdAt: '2026-07-20T08:00:00Z',
     mergedAt: '2026-07-20T19:19:49Z',
-    headRefName: 'jimcresswell/aip-137-dtcg-css-consistency-validator',
+    headRefName: 'a-person/aip-137-dtcg-css-consistency-validator',
   },
 ]);
 

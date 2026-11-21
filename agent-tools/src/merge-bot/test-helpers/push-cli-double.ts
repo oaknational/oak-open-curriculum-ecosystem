@@ -15,7 +15,7 @@ import type { PushMint } from '../push-mint.js';
 
 export const TOKEN = 'sekrit-installation-token';
 export const GIT_PATH = '/usr/bin/git';
-export const BRANCH = 'jimcresswell/mcp-508-slice';
+export const BRANCH = 'a-person/mcp-508-slice';
 export const REMOTE = 'https://github.com/acme/widgets.git';
 /** The commit HEAD names in these fixtures, a full SHA-1 object name. */
 export const COMMIT = 'def5678def5678def5678def5678def5678def56';

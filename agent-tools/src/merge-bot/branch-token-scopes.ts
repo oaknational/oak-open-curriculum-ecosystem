@@ -19,8 +19,8 @@ export const BRANCH_TOKEN_SCOPES = {
    *
    * ## Provenance, 2026-09-28
    *
-   * A live probe in jimCresswell/jimcresswell.net, where this row was
-   * authored, under a token minted with this row alone: the bot created a
+   * A live probe in the repository where this row was authored, under a
+   * token minted with this row alone: the bot created a
    * throwaway branch at the default branch's tip (REST
    * `POST git/refs`), then deleted it with GraphQL `updateRefs`. A stale
    * `beforeOid` left the ref in place, answered by a generic GraphQL error
@@ -41,8 +41,8 @@ export const BRANCH_TOKEN_SCOPES = {
    *
    * ## Provenance, 2026-09-28
    *
-   * A live probe in jimCresswell/jimcresswell.net, under a token minted with
-   * this row alone, through the production mint:
+   * A live probe in the same repository, under a token minted with this row
+   * alone, through the production mint:
    *
    * - GitHub's mint response granted exactly `contents: read` and
    *   `metadata: read`, for this one repository.

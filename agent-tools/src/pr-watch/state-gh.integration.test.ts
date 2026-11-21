@@ -92,8 +92,8 @@ describe('readPrStateReading', () => {
       execFileSync: makeExecutor(
         {
           agentTaskList: JSON.stringify([
-            { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
-            { id: 'done-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: 't2' },
+            { id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null },
+            { id: 'done-1', name: 'Review from @a-person', createdAt: 't', completedAt: 't2' },
           ]),
           agentTaskViews: {
             'live-1': JSON.stringify({
@@ -120,9 +120,7 @@ describe('readPrStateReading', () => {
     // Only the run mapped to THIS PR survives; the other PR's run is filtered.
     expect(reading.reviewRuns).toEqual({
       kind: 'read',
-      runs: [
-        { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
-      ],
+      runs: [{ id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null }],
     });
   });
 
@@ -161,7 +159,7 @@ describe('readPrStateReading', () => {
         {
           agentTaskList: JSON.stringify([
             { id: 'no-pr', name: 'Task from @x', createdAt: 't0', completedAt: 't1' },
-            { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
+            { id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null },
           ]),
           agentTaskViews: {
             'no-pr': JSON.stringify({
@@ -183,9 +181,7 @@ describe('readPrStateReading', () => {
     });
     expect(reading.reviewRuns).toEqual({
       kind: 'read',
-      runs: [
-        { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
-      ],
+      runs: [{ id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null }],
     });
   });
 
@@ -200,7 +196,7 @@ describe('readPrStateReading', () => {
       execFileSync: makeExecutor(
         {
           agentTaskList: JSON.stringify([
-            { id: 'keyless', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
+            { id: 'keyless', name: 'Review from @a-person', createdAt: 't', completedAt: null },
           ]),
           agentTaskViews: {
             keyless: JSON.stringify({ id: 'keyless', completedAt: null }),
@@ -228,7 +224,7 @@ describe('readPrStateReading', () => {
         {
           agentTaskList: JSON.stringify([
             { id: 'broken', name: 'Task from @x', createdAt: 't0', completedAt: null },
-            { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
+            { id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null },
           ]),
           agentTaskViews: {
             broken: JSON.stringify({ id: 'broken', completedAt: null, pullRequestNumber: 'x' }),
@@ -245,9 +241,7 @@ describe('readPrStateReading', () => {
     });
     expect(reading.reviewRuns).toEqual({
       kind: 'read',
-      runs: [
-        { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
-      ],
+      runs: [{ id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null }],
       truncated: true,
       note: 'agent-task view unreadable for broken — those runs unobserved (first: Invalid input: expected number, received string at pullRequestNumber)',
     });
@@ -265,7 +259,7 @@ describe('readPrStateReading', () => {
         {
           agentTaskList: JSON.stringify([
             { id: 'gone', name: 'Task from @x', createdAt: 't0', completedAt: null },
-            { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
+            { id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null },
           ]),
           agentTaskViews: {
             'live-1': JSON.stringify({
@@ -281,9 +275,7 @@ describe('readPrStateReading', () => {
     });
     expect(reading.reviewRuns).toEqual({
       kind: 'read',
-      runs: [
-        { id: 'live-1', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
-      ],
+      runs: [{ id: 'live-1', name: 'Review from @a-person', createdAt: 't', completedAt: null }],
       truncated: true,
       note: 'agent-task view unreadable for gone — those runs unobserved (first: unexpected agent-task view gone)',
     });
@@ -300,7 +292,7 @@ describe('readPrStateReading', () => {
       execFileSync: makeExecutor(
         {
           agentTaskList: JSON.stringify([
-            { id: 'half', name: 'Review from @jimCresswell', createdAt: 't', completedAt: null },
+            { id: 'half', name: 'Review from @a-person', createdAt: 't', completedAt: null },
           ]),
           agentTaskViews: {
             half: JSON.stringify({ id: 'half', completedAt: null, pullRequestNumber: 461 }),
@@ -369,7 +361,7 @@ describe('readPrStateReading', () => {
     // view. The evidence line must name both, in this order.
     const listed = Array.from({ length: 100 }, (_, index) => ({
       id: `done-${index}`,
-      name: 'Review from @jimCresswell',
+      name: 'Review from @a-person',
       createdAt: `2026-09-09T00:${String(99 - index).padStart(2, '0')}:00Z`,
       completedAt: 'done',
     }));
@@ -464,7 +456,7 @@ describe('readPrStateReading', () => {
     const calls: string[][] = [];
     const completed = Array.from({ length: 9 }, (_, index) => ({
       id: `done-${index}`,
-      name: 'Review from @jimCresswell',
+      name: 'Review from @a-person',
       createdAt: 't',
       completedAt: 't2',
     }));

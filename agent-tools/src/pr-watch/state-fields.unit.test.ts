@@ -189,7 +189,7 @@ describe('parseAgentTaskList / parseAgentTaskView', () => {
     const runs = parseAgentTaskList([
       {
         id: 'run-1',
-        name: 'Review from @jimCresswell',
+        name: 'Review from @a-person',
         createdAt: '2026-07-21T10:22:07Z',
         completedAt: null,
       },
@@ -197,7 +197,7 @@ describe('parseAgentTaskList / parseAgentTaskView', () => {
     expect(runs).toEqual([
       {
         id: 'run-1',
-        name: 'Review from @jimCresswell',
+        name: 'Review from @a-person',
         createdAt: '2026-07-21T10:22:07Z',
         completedAt: null,
       },
