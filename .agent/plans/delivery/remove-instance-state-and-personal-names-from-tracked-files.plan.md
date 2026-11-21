@@ -6,10 +6,7 @@ overview: >-
   Rules, skills, directives, code and tests state general requirements and use invented
   identities; no tracked living file names a real person's account or carries a fact true only
   of this instance of the repository.
-status: ratified
-ratified_by: owner
-ratified_date: 2026-11-20
-ratified_where: "The owner's answer to a question prompt in the session of Sandpiper guards Wind (690653), 2026-11-20: 'Plan a cleanup'."
+status: sketch
 serves: organisational-identity-below-the-tree
 impact_areas:
   - practice-and-estate
