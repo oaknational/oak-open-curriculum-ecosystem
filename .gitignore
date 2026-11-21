@@ -349,6 +349,9 @@ packages/design/oak-design-system/.sync-staging/
 .agent/state/mcpjam-credentials.json
 .agent/state/*credentials*.json
 .agent/state/*.credentials.json
+# A machine's own extra names for validate-no-code-owner-names: real names by
+# definition, so the list is never staged.
+.agent/state/personal-names.local.txt
 # The owner's raw studio export (record material; canonical integration lives
 # in packages/design/oak-design-system — un-tracked 2026-07-28, MCP-333, with
 # the bytes preserved in the branch history that merged via PR #569)
