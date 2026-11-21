@@ -48,9 +48,7 @@ sourced by five hooks, each covering the path git actually routes it
 through. OCE's guard refuses `main` and `master` by name, in any case, and
 the default branch `refs/remotes/origin/HEAD` names, so a repository whose
 default branch has another name is guarded too while `origin/HEAD` is set
-(`git clone` sets it; `git remote set-head origin --auto` restores it);
-jimcresswell.net's guard refuses `main` by name and takes that form at the
-parity queue's code landing:
+(`git clone` sets it; `git remote set-head origin --auto` restores it):
 
 - `pre-commit` — plain `git commit` and `git commit --amend`;
 - `pre-merge-commit` — clean merges, including a reflexive `git pull` on a

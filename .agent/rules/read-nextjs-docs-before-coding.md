@@ -35,8 +35,7 @@ when unsure.
 Worked instance (OCE): Next 16 renamed `middleware.ts` to
 `proxy.ts`; earlier in-tree research predated the rename, so a plan built on
 training-data recall would have wired the wrong file — caught only because the
-live docs were checked. jimcresswell.net's content-negotiation proxy (its
-ADR-009) is exactly such a file.
+live docs were checked.
 
 ## Related Surfaces
 

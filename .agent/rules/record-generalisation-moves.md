@@ -70,14 +70,3 @@ Fires on changes under `agent-tools/`, `.agent/practice-core/`, `.agent/rules/`,
 `.agent/skills/`, `.agent/directives/` and the platform adapters, when the change's effect is
 generality or portability. A fix to this repository's own product or paths is not a
 generalisation move and carries no trailer.
-
-## Provenance
-
-The owner's direction and the rule were first written in the jimcresswell.net Practice on
-2026-09-13, in a register form: `.agent/rules/record-generalisation-moves.md` as that
-repository's history holds it before 2026-09-24.
-The open-curriculum-ecosystem Practice took it through the Practice Box exchange of
-2026-09-24 (batch one). The adaptation: the note moves from an append-only register file into
-a commit trailer, and the list is computed from git history. The register form stopped
-getting rows after ten days while qualifying moves kept landing, and a register cannot keep a
-lineage status true.

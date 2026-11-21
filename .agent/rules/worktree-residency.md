@@ -77,8 +77,8 @@ owner is at the keyboard.
    absolute worktree paths on every edit) is no longer a lane shape
    here; it remains the only shape for a worktree of a SIBLING
    repository, since `EnterWorktree` enters worktrees of the session's
-   own repository alone (refused first-hand 2026-09-30 on an OCE
-   worktree from a jimcresswell.net session).
+   own repository alone (refused first-hand 2026-09-30 on a
+   worktree of a sibling repository).
    Fresh-cut-from-the-base matters doubly under residency: the
    worktree becomes the session's working context, so a stale branch
    means stale doctrine. **Never let `EnterWorktree` fresh mode CREATE

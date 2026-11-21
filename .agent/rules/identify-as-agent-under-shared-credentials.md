@@ -30,8 +30,8 @@ is silently credited with words they did not write.
 The agent is about to author or edit any **outward, human-visible artefact**
 via shared credentials. In this repository that means the team bot account
 (the one the clone's merge-bot config names, the mandatory default) or — only
-in the owner-permitted exceptional cases — the owner account
-(`@jimCresswell`); the rule fires before:
+in the owner-permitted exceptional cases — the owner account; the rule
+fires before:
 
 - a PR or issue **comment** (`gh pr comment`, `gh issue comment`, `gh api
   .../comments`);
@@ -63,7 +63,7 @@ Canonical form under a human account — a trailer at the end of the artefact:
 Agent-authored on behalf of `<account>` by <agent-name> (<platform>, <model>)
 
 Example:
-Agent-authored on behalf of `jimCresswell` by Inferno holds Tongs (Claude Code, Opus 4.8 1M)
+Agent-authored on behalf of `a-person` by Inferno holds Tongs (Claude Code, Opus 4.8 1M)
 ```
 
 Under the team bot, the account shows which credential posted and names no
