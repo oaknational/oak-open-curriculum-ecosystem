@@ -154,8 +154,9 @@ once the tree is clean.
 3. Instance facts, one pull request per fact family, each with its configuration home.
 4. Dated records, names only, one pull request per surface (memory, reports, research, comms
    records, archives).
-5. The validator: built as a report before todo 4, landed blocking once every tracked
-   surface is clean.
+5. The validator: built as a report before todo 4 (landed as oaknational#1053,
+   `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`), landed
+   blocking once every tracked surface is clean.
 
 ## Out of scope
 
