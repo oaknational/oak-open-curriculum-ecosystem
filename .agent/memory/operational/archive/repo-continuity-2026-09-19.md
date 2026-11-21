@@ -64,7 +64,7 @@ forward-asks remain.
   is on main (owner-merged 14:05Z on `475a8193d`, four Copilot rounds settled at owner word
   "keep 915 tight"). Kiln merged main into `handoff/jim-september` (`ba7e37d78`). The next
   objective item runs on ONE branch at owner word ("all of that goes into the same branch as
-  the delivery plan, to minimise the total number of prs"): `jimcresswell/mcp-661-split-delivery-plan`
+  the delivery plan, to minimise the total number of prs"): `<owner>/mcp-661-split-delivery-plan`
   carries these record true-ups, the five review items routed off #915, and the split delivery
   plan node `oak-open-curriculum-mcp-extraction` (serving `toolkit-re-architecture`, born
   sketch, presented for the owner's word). Pickup map: the estate-coordination thread record
@@ -385,7 +385,7 @@ successor folded as #155".
    `agent-tools/src/session-metadata/window-registry.ts` so `session-metadata` reads this seat's
    context without a stand-in entry;
 4. scheduled maintenance: TypeScript strictness to the owner's target set, after the
-   jimcresswell.net strictness slices land. The direction was relayed 2026-09-16 by Cauldron herds
+   the sibling estate's strictness slices land. The direction was relayed 2026-09-16 by Cauldron herds
    Lustre; its full substance is in the estate-coordination record's §"2026-09-16 ~15:0xZ —
    COMPACTION BOUNDARY" item 5.
 
@@ -448,7 +448,7 @@ plans-estate pass; until then the index is the stated authority.
 ### The 2026-09-02 fold landed — next at owner word (2026-09-02)
 
 Status 2026-09-02 ~14:2xZ: step 1 done by Kiln (`ba7e37d78`); step 2 in flight as MCP-661
-on `jimcresswell/mcp-661-split-delivery-plan` (the routed #915 review items ride the same
+on `<owner>/mcp-661-split-delivery-plan` (the routed #915 review items ride the same
 branch at owner word); step 3 follows at the owner's word.
 
 1. Kiln holds Slag merges main into `handoff/jim-september` by semantic merge (the napkin

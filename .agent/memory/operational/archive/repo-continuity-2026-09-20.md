@@ -339,7 +339,7 @@ branch folded as #156".
    `agent-tools/src/session-metadata/window-registry.ts` so `session-metadata` reads this seat's
    context without a stand-in entry;
 4. scheduled maintenance: TypeScript strictness to the owner's target set, after the
-   jimcresswell.net strictness slices land. The direction was relayed 2026-09-16 by Cauldron herds
+   the sibling estate's strictness slices land. The direction was relayed 2026-09-16 by Cauldron herds
    Lustre; its full substance is in the estate-coordination record's §"Tool and code lanes
    owed" item 7.
 
