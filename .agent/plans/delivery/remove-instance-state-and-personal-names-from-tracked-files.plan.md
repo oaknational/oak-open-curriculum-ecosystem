@@ -125,8 +125,17 @@ Three kinds of occurrence, each with its own cure.
    such as "the owner", and nothing else in the record changes (the owner's answer by
    question prompt, 2026-11-21: "Rewrite names only").
 
-A check keeps the result: a validator over every tracked file but `.github/CODEOWNERS` that fails on a real account
-name from a list held outside version control, so the list itself is not the leak.
+A check keeps the result: a validator over the tracked text files, `.github/CODEOWNERS` and
+the Practice Core apart, that fails on a real account name. It reads what the scan policy
+shared by the whole-tree validators reads (`agent-tools/src/core/tracked-file-scan.ts`), so
+binary files, lockfiles and source maps are not read, and a clean report says nothing about
+them: a name in a generated file is cured in the manifest or source that made it. Its list
+is derived (the owner's answer
+by question prompt, 2026-11-21): it reads the account names from `.github/CODEOWNERS`, which
+GitHub requires to be real, so it runs in CI and in a fork with no setup, and no second list
+is tracked. An optional untracked file on a machine adds domains and mail addresses. It is
+built first as a report, to drive the dated-record pull requests, and wired into the gates
+once the tree is clean.
 
 ## Acceptance criteria
 
@@ -149,7 +158,9 @@ name from a list held outside version control, so the list itself is not the lea
 3. Instance facts, one pull request per fact family, each with its configuration home.
 4. Dated records, names only, one pull request per surface (memory, reports, research, comms
    records, archives).
-5. The validator, landed blocking once every tracked surface is clean.
+5. The validator: built as a report before todo 4 (landed as oaknational#1053,
+   `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`), landed
+   blocking once every tracked surface is clean.
 
 ## Out of scope
 
@@ -158,4 +169,9 @@ name from a list held outside version control, so the list itself is not the lea
   keep the personal name of whoever ratified (the owner's word, 2026-11-21). This plan
   removes account names, domains and addresses, and the validator's list holds only those
   three kinds; a field that carries one of those is in scope like any other line.
+- The Practice Core (`.agent/practice-core`): its provenance file, its changelog and its
+  decision records name the sibling estate and the Practice's author as attribution and
+  history, and stay as they are; the validator skips the directory (the owner's answer by
+  question prompt, 2026-11-21). In the architectural decision records and in PDR-118 only
+  an account name is replaced with a role word.
 - Agent session names, which name no person.
