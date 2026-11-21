@@ -54,16 +54,9 @@
     "filesystem"
   ],
   "author": {
-    "name": "Jim Cresswell",
-    "email": "contact@jimcresswell.net",
-    "url": "https://jimcresswell.net"
+    "name": "Oak National Academy",
+    "email": "help@thenational.academy",
+    "url": "https://www.thenational.academy"
   },
-  "contributors": [
-    {
-      "name": "Oak National Academy",
-      "email": "help@thenational.academy",
-      "url": "https://www.thenational.academy"
-    }
-  ],
   "license": "MIT"
 }

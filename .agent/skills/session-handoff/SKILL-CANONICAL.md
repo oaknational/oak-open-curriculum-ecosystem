@@ -225,11 +225,11 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    the owner rules a shared handoff BRANCH for a day's uncommitted records
    (2026-09-02, `handoff/jim-september`), that branch is the owner's
    instrument, not a licence for per-seat handover PRs — a seat's own draft
-   continuity PR was withdrawn the same day under this ruling. Local
-   amendment (owner ruling 2026-09-13, `jimcresswell.net`): a wrap run
+   continuity PR was withdrawn the same day under this ruling. A wrap run
    because the owner has asked for a clean tree before compaction lands
-   as its own `chore(continuity)` commit; the owner's compaction word is
-   the instrument, and the no-handover-PR half of the 2026-07-15 ruling
+   as its own `chore(continuity)` commit
+   ([`continuity-surface-commits-as-orphans`](../../rules/continuity-surface-commits-as-orphans.md));
+   the owner's compaction word is the instrument, and the no-handover-PR half of the 2026-07-15 ruling
    stands unchanged. The home of
    every wrap and continuity record is the primary checkout's day-stamped
    coordination branch, by pathspec, riding its fold; no seat mints a private
@@ -781,11 +781,7 @@ no retrospective memos; those are close-out work, this skill's §Steps.
     gate evidence is the landed commit's own pre-commit run: the hook runs
     Prettier and markdownlint on the staged files, the repo validators, the
     shell lint, and the whole-tree build, type-check, lint and unit tests
-    (`.turbo/last-gate.log`). That is OCE's hook. In JC.net the commit hook
-    runs the staged-file checks and the changed-workspace lint only, and the
-    whole-tree gate with the site's end-to-end suite runs at the push, so in
-    JC.net the local gate evidence is the push's own pre-push run and a
-    commit that was never pushed carries none. The wider suites that `pnpm check` also
+    (`.turbo/last-gate.log`). That is OCE's hook. The wider suites that `pnpm check` also
     aggregates (widget, e2e, ui and a11y) run on the pull request's checks,
     which the front door verdicts before any merge. Owner ruling,
     2026-09-14, verbatim: "the commit triggers the gates, there is no point

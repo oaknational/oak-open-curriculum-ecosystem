@@ -17,12 +17,12 @@ describe('parseGateSlotArgv', () => {
         'pnpm',
         '--fail-if-no-match',
         '--filter',
-        '@jimcresswell/www',
+        '@example-org/www',
         'test:e2e',
       ]),
     ).toStrictEqual({
       kind: 'run',
-      pnpmArgs: ['--fail-if-no-match', '--filter', '@jimcresswell/www', 'test:e2e'],
+      pnpmArgs: ['--fail-if-no-match', '--filter', '@example-org/www', 'test:e2e'],
     });
   });
 

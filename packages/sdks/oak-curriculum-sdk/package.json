@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/curriculum-sdk",
-  "version": "1.187.17",
+  "version": "1.187.21",
   "description": "TypeScript SDK for Oak National Academy Curriculum API",
   "type": "module",
   "main": "dist/index.js",
@@ -142,16 +142,9 @@
     "typescript"
   ],
   "author": {
-    "name": "Jim Cresswell",
-    "email": "contact@jimcresswell.net",
-    "url": "https://jimcresswell.net"
+    "name": "Oak National Academy",
+    "email": "help@thenational.academy",
+    "url": "https://www.thenational.academy"
   },
-  "contributors": [
-    {
-      "name": "Oak National Academy",
-      "email": "help@thenational.academy",
-      "url": "https://www.thenational.academy"
-    }
-  ],
   "license": "MIT"
 }

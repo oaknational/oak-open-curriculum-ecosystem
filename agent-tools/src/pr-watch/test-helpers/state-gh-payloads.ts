@@ -31,7 +31,7 @@ export function viewPayload(oid: string = HEAD, overrides: Partial<StateViewSeed
       },
     ],
     autoMergeRequest: null,
-    reviewRequests: [{ __typename: 'User', login: 'jimCresswell' }],
+    reviewRequests: [{ __typename: 'User', login: 'a-person' }],
     ...overrides,
   });
 }

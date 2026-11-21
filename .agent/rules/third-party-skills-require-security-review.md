@@ -83,8 +83,7 @@ at the reviewed SHA; file-level vendoring of individual SKILL.md files
 safe; the tier-3 eval runner unsafe outside a container. OCE's prior
 vendored adoptions (its identity-provider skill family, the MCP inspector and
 the skill-creator) were markdown-and-scripts payloads that predated the rule,
-and their reviews backfill at their next pin bump; jimcresswell.net started
-with none.
+and their reviews backfill at their next pin bump.
 
 ## Enforcement
 

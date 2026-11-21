@@ -317,7 +317,7 @@ describe('computePrVerdict — run liveness per reviewer', () => {
         reviewRuns: {
           kind: 'read',
           runs: [
-            { id: 'run-1', name: 'Review from @jimCresswell', createdAt: 't0', completedAt: null },
+            { id: 'run-1', name: 'Review from @a-person', createdAt: 't0', completedAt: null },
           ],
         },
       }),
@@ -337,7 +337,7 @@ describe('computePrVerdict — run liveness per reviewer', () => {
           runs: [
             {
               id: 'run-1',
-              name: 'Review from @jimCresswell',
+              name: 'Review from @a-person',
               createdAt: 't0',
               completedAt: '2026-07-21T12:40:00Z',
             },
@@ -490,7 +490,7 @@ describe('computePrVerdict — quiet window and settlement (SKILL item 4)', () =
         reviews: [
           ...settledReading().reviews,
           {
-            author: 'jimCresswell',
+            author: 'a-person',
             state: 'COMMENTED',
             body: 'Fixed at source in abc1234.\n\n— Moth mends Dreamscape (92e9d6)',
             commitOid: TIP,
@@ -513,7 +513,7 @@ describe('computePrVerdict — quiet window and settlement (SKILL item 4)', () =
         reviews: [
           ...settledReading().reviews,
           {
-            author: 'jimCresswell',
+            author: 'a-person',
             state: 'COMMENTED',
             body: 'Fixed at source in abc1234.\n\n— Moth mends Dreamscape (92e9d6-9c1)',
             commitOid: TIP,

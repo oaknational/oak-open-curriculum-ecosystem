@@ -27,7 +27,7 @@ The fence has three layers; all three bind, always:
    `.agent/reports/initial-release-supporting-docs/`). Agents never
    transcribe, summarise, or paraphrase the Notion page into tracked
    content — content invariants cure by construction, not by scanning.
-3. **Human** — CODEOWNERS review (`* @jimCresswell`) on every planning
+3. **Human** — CODEOWNERS review on every planning
    surface; the owner's eye crosses every change that could carry
    strategy-layer material.
 

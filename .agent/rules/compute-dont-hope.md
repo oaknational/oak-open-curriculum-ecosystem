@@ -58,11 +58,3 @@ declaration states an intent; a list restates a fact.
 - 2026-09-12: a shared start-right workflow carried a hand-copied gate list, twelve of
   nineteen citations dead after a transplant. Cure: a cited-scripts validator resolves every
   citation against the root package manifest on every run.
-
-## Provenance
-
-This rule was first written in the jimcresswell.net Practice on 2026-09-13, at
-[`.agent/rules/compute-dont-hope.md`](https://github.com/jimCresswell/jimcresswell.net/blob/main/.agent/rules/compute-dont-hope.md).
-It is shared text between that Practice and the open-curriculum-ecosystem Practice, which
-took it through the Practice Box exchange of 2026-09-24 (batch one). The one adaptation is
-the worked instances, rewritten to name no host pull request.

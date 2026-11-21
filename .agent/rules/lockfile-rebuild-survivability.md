@@ -98,7 +98,7 @@ pnpm `overrides` replace the **effective specifier of every dependency they
 bind**, direct dependencies included, and the lockfile records the override's
 specifier and the overrides themselves. An override and the manifests it binds
 therefore drift apart in two ways, and pnpm treats them differently (measured
-in jimcresswell.net on pnpm 12.4.2, 2026-09-16):
+on pnpm 12.4.2, 2026-09-16):
 
 - **An override changed without regenerating the lockfile fails loudly.** The
   lockfile's recorded overrides no longer match the workspace's, and

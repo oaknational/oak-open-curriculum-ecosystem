@@ -411,7 +411,7 @@ the independent decision-complete audit.
 | Issue Type | Recommended Specialist |
 |------------|------------------------|
 | Architectural boundary concerns in the plan's proposed structure | `architecture-expert` for workspace boundaries and import direction, plus the persona for the lane the plan touches (`.agent/sub-agents/components/architecture/reviewer-team.md`) |
-| Technology choice needs external validation | Relevant domain expert (e.g., `pkg-expert` for Schema.org and JSON-LD, `react-component-expert` for React and Next.js) |
+| Technology choice needs external validation | Relevant domain expert (e.g., `elasticsearch-expert`, `mcp-expert`, `react-component-expert`) |
 | Documentation obligations arising from the plan | `docs-adr-expert` |
 | Security implications of proposed architecture | `security-expert` |
 

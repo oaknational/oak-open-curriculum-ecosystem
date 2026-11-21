@@ -1,32 +1,13 @@
 {
   "name": "@oaknational/open-curriculum-ecosystem",
-  "version": "1.187.17",
+  "version": "1.187.21",
   "private": true,
   "description": "Oak National Academy open curriculum data ecosystem - tools and services for working with the Oak Open Curriculum data",
-  "author": "https://github.com/jimCresswell",
-  "contributors": [
-    {
-      "name": "Jim Cresswell",
-      "email": "contact@jimcresswell.net",
-      "url": "https://jimcresswell.net"
-    },
-    {
-      "name": "Mark Hodierne",
-      "email": "mark@markhodierne.com"
-    },
-    {
-      "name": "John Roberts",
-      "email": "john.roberts@thenational.academy"
-    },
-    {
-      "name": "Heather W"
-    },
-    {
-      "name": "Oak National Academy",
-      "email": "help@thenational.academy",
-      "url": "https://www.thenational.academy"
-    }
-  ],
+  "author": {
+    "name": "Oak National Academy",
+    "email": "help@thenational.academy",
+    "url": "https://www.thenational.academy"
+  },
   "type": "module",
   "scripts": {
     "pnpm:devPreinstall": "node runtime-only-scripts/validate-package-manager-version.mjs",

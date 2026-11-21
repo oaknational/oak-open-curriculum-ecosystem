@@ -50,6 +50,6 @@ export function stateViewFixture(): StateViewSeed {
       { __typename: 'StatusContext', context: 'legacy/status', state: 'SUCCESS' },
     ],
     autoMergeRequest: null,
-    reviewRequests: [{ __typename: 'User', login: 'jimCresswell' }],
+    reviewRequests: [{ __typename: 'User', login: 'a-person' }],
   };
 }

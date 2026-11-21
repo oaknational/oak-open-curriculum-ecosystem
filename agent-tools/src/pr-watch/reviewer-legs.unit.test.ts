@@ -200,16 +200,16 @@ describe('mostBlockingLeg', () => {
   it('matches reviewer logins case-insensitively (GitHub logins are)', () => {
     const legs = computeReviewerLegs({
       ...base,
-      expectedReviewers: ['JIMCRESSWELL'],
-      reviews: [review({ author: 'jimCresswell' })],
+      expectedReviewers: ['A-PERSON'],
+      reviews: [review({ author: 'a-person' })],
       reviewRequests: [],
       now: '2026-07-21T12:06:00Z',
     });
     expect(legs[0]?.state).toBe('SATISFIED');
     expect(
       mostBlockingLeg({
-        legs: [{ reviewer: 'JIMCRESSWELL', state: 'OWED', detail: '' }],
-        reviewRequests: ['jimCresswell'],
+        legs: [{ reviewer: 'A-PERSON', state: 'OWED', detail: '' }],
+        reviewRequests: ['a-person'],
         liveRunReviewers: [],
         runsReadable: true,
       }),
@@ -539,10 +539,7 @@ describe('computeReviewerLegs — a later tip, for a reviewer whose review of an
       'a quota bounce on the earlier tip: no review ever happened',
       review({ commitOid: OLD, body: 'Code review skipped: overage spend limit reached.' }),
     ],
-    [
-      "another author's review of the earlier tip",
-      review({ author: 'jimCresswell', commitOid: OLD }),
-    ],
+    ["another author's review of the earlier tip", review({ author: 'a-person', commitOid: OLD })],
     ['an earlier review whose commit gh omitted', review({ commitOid: '' })],
     ['a PENDING draft on the earlier tip', review({ commitOid: OLD, state: 'PENDING' })],
   ])(

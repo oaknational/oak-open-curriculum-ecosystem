@@ -39,12 +39,11 @@ Owner ruling (2026-07-28): **"Strict, all the time, everywhere"** — every
 boundary the repository owns (authored content and configuration it reads,
 environment values, fetched data, tool inputs and outputs, hook and CLI
 inputs) carries a schema and is validated to it at entry, with realistic
-examples drawn from real data. The founding instances: in OCE every MCP tool
+examples drawn from real data. The founding instance: in OCE every MCP tool
 carries input and output schemas (the graph tools first; the dated tolerance
 from the same ruling, hand-authored runtime checks staying for now under the
 V1 deadline, is an exception with a named revisit on OCE's tracker, never
-doctrine); in jimcresswell.net the entity model's validation in its site
-library.
+doctrine).
 
 See [`validation-strategy.md`](../directives/validation-strategy.md)
 §Compile-time types and §Runtime validation at the boundary.

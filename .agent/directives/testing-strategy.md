@@ -564,9 +564,8 @@ integration → E2E). There is a second, orthogonal axis: EXECUTION
 SURFACE. Scope-axis tests and checks typically execute source through a
 loader-assisted harness (vitest, tsx) while production executes built
 artefacts under plain `node` — and nothing at any scope level REQUIRES
-surface fidelity. An E2E check MAY boot the built artefact (jimcresswell.net's
-Playwright suite runs against the production build its `e2e:server` script
-builds and serves, and OCE's CLI contract E2E booted its built binary), but
+surface fidelity. An E2E check MAY boot the built artefact (OCE's CLI contract E2E booted
+its built binary), but
 that coverage is incidental to its scope classification.
 Smoke checks own the surface axis and make artefact fidelity MANDATORY:
 minimum behaviour scope, maximum surface fidelity. Defects that exist
@@ -838,7 +837,7 @@ the schedule. Worked instances: a fixed-port Playwright `webServer` turned
 one seat's render server into a fleet-wide push outage (cure: an ephemeral
 port the harness's own server process binds and keeps for its whole life,
 serving the build from that socket, so no server this run did not start is
-ever proved; jimcresswell.net's site config, 2026-09-13, starts that process from
+ever proved; one such config starts that process from
 global setup and hands its origin to the workers through the runner's own
 environment, read there only as the runner's internal handshake channel, so
 the environment never sets the harness's port or origin from outside); a
