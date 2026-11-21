@@ -1293,5 +1293,8 @@ inside a rule name).
      `.agent/reports/agentic-engineering`, `.agent/reports/practice-exchange` and the
      rapid-comms records); the other templates the 2026-10-04 commit touched and the three
      review observations the plan lists; the validator last.
-  The v1 migration is planned and not started, at the owner's word.
+  The v1 migration is planned and not started, at the owner's word. A peer seat working in
+  Castr reported on 2026-11-21, unverified here, that Castr refuses Oak's v1 document
+  (1.1.1) in every output, at a schema-valued `additionalProperties` in two response
+  schemas. The migration node does not use Castr; the fact matters if that changes.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
