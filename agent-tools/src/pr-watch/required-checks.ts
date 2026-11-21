@@ -8,10 +8,10 @@ import { parseWithSchema } from '../core/schema-parse.js';
  * `GET /repos/{owner}/{repo}/rules/branches/{branch}`: every
  * `required_status_checks` rule's contexts, in rule order. The one
  * definition of "checks green by name" the merge door and
- * the coordination fold clock share (consolidated at the second consumer):
- * the fold skill's full condition is exactly the contexts the default
- * branch's rules require, read at run time, and no other name (a door
- * computed from a carried list of names refused a green fold, 2026-10-02).
+ * the coordination fold clock share (consolidated at the second consumer).
+ * The names are read from the rules at run time and never carried as a
+ * list (a door computed from a carried list of names refused a green fold,
+ * 2026-10-02).
  *
  * The parse fails closed. Every rule names its type; a rule of type
  * `required_status_checks` is then held to its full shape — `parameters`

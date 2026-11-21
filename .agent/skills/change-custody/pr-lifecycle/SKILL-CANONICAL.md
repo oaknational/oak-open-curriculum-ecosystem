@@ -288,15 +288,15 @@ holds executables beside its prose (hooks, scripts, skill scripts), and a change
 to one of those is a code change whatever directory it sits in (a finding on a fold
 merged on 2026-09-21).
 
-**Review request policy (the owner's word of 2026-10-27, standing).** A
-pull-request review — Copilot's, Codex's or any other vendor's on the pull
-request — is requested only for a stated reason, never automatically;
-verbatim: "only request co-pilot reviews or other agent reviews when you
-have a good reason, don't do it automatically, they are expensive." The one
-question, in the owner's words of 2026-10-28: "do we need a review in order
-for this work to be safe and effective?" — if yes and no review has
-occurred, request one; if no, none is requested, and a tool that requires
-one regardless is a broken tool and is cured. The policy binds
+**Review request policy.** Every pull request has one review before it
+merges, and `merge-bot merge` refuses one that nobody has reviewed. Where
+the repository's automatic review at open has arrived, that is the one;
+where none has, the seat requests one, and "no review yet" is the stated
+reason. Any further review — Copilot's, Codex's or any other vendor's on
+the pull request — is requested only for a stated reason, never
+automatically; the owner's words of 2026-10-27: "only request co-pilot
+reviews or other agent reviews when you have a good reason, don't do it
+automatically, they are expensive." The policy binds
 pull-request reviewers only: the estate's own sub-agent reviewers
 (`code-expert` and the roster the `invoke-code-experts` rule names) are a
 different instrument under that rule's own terms (the owner, 2026-10-28:
