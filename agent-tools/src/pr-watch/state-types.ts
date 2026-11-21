@@ -56,8 +56,8 @@ export interface PrStateReading extends BindingHead {
   readonly url: string;
   /**
    * The author login as `gh pr view` spells it (`app/<slug>` for an App): the
-   * records-class door opens only for a GitHub App's pull request
-   * (`merge-bot/merge-records-checks.ts`).
+   * merge door proves the required contexts of the merge bot's own pull
+   * request (`merge-bot/merge-door-checks.ts`).
    */
   readonly author: string;
   /** `OPEN` | `CLOSED` | `MERGED`. */

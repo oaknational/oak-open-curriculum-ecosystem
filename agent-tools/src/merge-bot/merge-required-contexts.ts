@@ -17,7 +17,7 @@ import type { BotIdentity } from './resolve-identity.js';
  * pull request's base ref, then EVERY page of that branch's rules (the
  * endpoint pages at 30 by default, and a required-status-checks rule on a
  * later page is still a rule), parsed by the reader the fold clock shares.
- * Split from `merge-records-checks.ts` at the file-size gate.
+ * `merge-door-checks.ts` proves them on a settled verdict.
  */
 
 export interface RulesTarget {

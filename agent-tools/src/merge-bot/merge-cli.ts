@@ -100,8 +100,8 @@ export async function runMergeAction(
   return pollUntilActionable({ parsed: parsed.value, ...bot.value, run: run.value, input });
 }
 
-// The identity and the bot's login (its app slug): the records door admits
-// only the bot's own pull requests (merge-records-checks.ts).
+// The identity and the bot's login (its app slug): the door proves the
+// required contexts of the bot's own pull requests (merge-door-checks.ts).
 function resolveBot(
   identityInput: MergeBotResolveInput,
 ): Result<{ readonly identity: BotIdentity; readonly appSlug: string }, Error> {

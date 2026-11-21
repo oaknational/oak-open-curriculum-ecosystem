@@ -8,10 +8,6 @@
  * for it. Everything else runs every gate, conservatively: one path outside
  * the definition makes the whole change a code change.
  *
- * This is narrower than the merge door's records class
- * (`merge-bot/change-class.ts`), which answers a different question (which
- * reviews a pull request waits for) and also takes other documentation roots.
- *
  * @packageDocumentation
  */
 
