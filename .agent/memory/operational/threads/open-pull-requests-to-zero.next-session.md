@@ -1299,39 +1299,28 @@ inside a rule name).
   schemas. The migration node does not use Castr; the fact matters if that changes.
 
   **Handover at the owner's compaction word, 2026-11-21 (the owner is changing accounts, so
-  this record, the plan and the napkin are the whole of what carries over).** Every process
-  of this seat is stopped: no background task, no comms watcher, no gate slot held, no claim
-  open. No pull request of this seat's is open.
+  this record, the plan and the napkin are the whole of what carries over).** The seat
+  resumed the same evening at the owner's `start-right-team`, solo, with the comms watcher
+  armed and no heartbeat (no peer to read it).
 
-  State of the trees:
+  State of the trees after the resume:
 
-  - `main` is at `400a5b5e1` (oaknational#1052). The primary checkout is fast-forwarded to it.
-  - The coordination branch `coordination/2026-11-21-018e53` holds unpushed commits: the
-    plan's validator mechanism and Practice Core ruling, ledger rows for #1050 to #1052, the
-    thread record, and this handover. It needs a fold: merge `origin/main` in, push with
-    `merge-bot push`, open a records pull request, one review, merge at SETTLE-READY, cut
-    the successor with `coordination successor-name`, retire the old branch.
-  - The lane worktree `.claude/worktrees/names-validator`, branch
-    `feat/validate-no-code-owner-names`, holds one unpushed commit, `2d1724c02`: the new
-    validator (entry point, helpers, 13 unit cases, a script line in
-    `agent-tools/package.json`, an entry in `knip.config.ts`). Its push was stopped part-way
-    through the pre-push gate at the compaction word, so nothing reached the remote. It
-    passed lint, type-check, the format check and the whole `agent-tools` suite locally.
+  - `main` is at `d92e6f859` (oaknational#1053). The validator landed there: the entry
+    point, its helpers and 14 unit cases, a script line in `agent-tools/package.json`, an
+    entry in `knip.config.ts`, and the local list `.agent/state/personal-names.local.txt`
+    ignored. One Copilot review raised four findings: three upheld and cured in one push,
+    one declined (the scan policy shared with two other validators leaves lockfiles and
+    source maps out; a name in a generated file is cured in the manifest that made it).
+    The lane's worktree is removed and its branch retired.
+  - The coordination branch `coordination/2026-11-21-018e53` carries the plan's validator
+    mechanism and Practice Core ruling, ledger rows for #1050 to #1053, and this record. Its
+    fold: push with `merge-bot push`, a records pull request, one review, merge at
+    SETTLE-READY, the successor cut with `coordination successor-name`, the old branch
+    retired.
 
-  To resume, in order:
+  What remains, in order:
 
-  1. Push the validator lane with `merge-bot push` in its own call, read the exit code,
-     then open the pull request. Title: "feat(agent-tools): report tracked lines that name a
-     code owner". The description says: what it finds (a code owner's account as a whole
-     name, any case: mention, branch prefix, package scope, domain stem, mail local part;
-     teams and comments are not names); the optional untracked list
-     `.agent/state/personal-names.local.txt`; the two exemptions (`.github/CODEOWNERS`, the
-     Practice Core); `--report` and the exit codes 0, 1, 2; that it is not wired into the
-     gates because the report finds 770 lines in 36 directories on `main`; and that the
-     unit suite and the helper were written together, with no failing run first. Mark it
-     ready and request one Copilot review (new code).
-  2. Fold the coordination branch as above.
-  3. Dated records (todo 4), one surface per pull request, sized by
+  1. Dated records (todo 4), one surface per pull request, sized by
      `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`. The
      replacements used so far: an account as a mention becomes "the owner" or "a code
      owner"; a branch prefixed with an account takes `<owner>/` when inside a code span
@@ -1340,10 +1329,10 @@ inside a rule name).
      address becomes a role phrase. Nothing else in a record changes. The abbreviation of
      the sibling's name and personal mail domains are not found by the validator; a local
      list adds them.
-  4. The reviewer templates still to read (`onboarding-expert`, `subagent-architect`,
+  2. The reviewer templates still to read (`onboarding-expert`, `subagent-architect`,
      `test-expert` and the smaller ones the 2026-10-04 commit touched) and the three review
      observations the plan lists.
-  5. Wire the validator into `repo-validators:check` when its count is zero.
+  3. Wire the validator into `repo-validators:check` when its count is zero.
 
   What this seat worked under, for a seat that inherits no private memory:
 
