@@ -194,43 +194,19 @@ fold merges (a Director's ruling with the lane's agreement, 2026-09-07, events d
    findings on one fold, 2026-09-24; a pickup that said "first act: fold this
    branch" inside the branch whose merge made it false).
 7. Arm a settle watch (Monitor) whose filter is loud on EVERY terminal
-   state (`silence-is-never-liveness`). Full condition = exactly the status
-   contexts the default branch's rules require, read from the rules at run
-   time and each SUCCESS, and no other name: a deployment or vendor status
-   the rules do not require is information on the pull request, never a gate
-   (a door computed from a list of names carried from the other estate
-   refused a green fold, 2026-10-02); never a gate is not never read: the
-   lifecycle skill's Phase 3 harvest reads and triages every non-required
-   verdict (a code-quality vendor's gate among them) before the merge + zero
-   unresolved review threads +
-   MERGEABLE. No vendor review is requested at the ready-mark by default
-   (the owner, 2026-10-27: a review is requested only for a stated reason,
-   never automatically; reviews are expensive); where the host's
-   configuration reviews a ready pull request by itself the review arrives
-   unasked, and a records-class fold never waits for it either way: `merge-bot merge` computes the class from the
-   pull request's changed files (every path documentation or Practice
-   prose, decided per path, `change-class.ts`; a seat never declares it) and
-   merges a records-class fold at checks green by name (the required
-   contexts above, read from the rules at run time; a pending check the
-   rules do not require — the vendor's own review run among them — does not
-   hold a records-class fold, a failed check of any name does) with zero
-   unresolved threads on the verdicts that differ from SETTLE-READY only by
-   the vendor leg, naming the ground in its evidence (the owner's ruling of 2026-09-03,
-   "Change the merge policy instead", as the door's behaviour; the owner's
-   decision of 2026-10-10 on the retrospective's proposal 1). The review is
-   harvested after the merge under PDR-140 clause 9(e): each finding is read
-   under clause 9(a), an over-bar finding cures in the successor's first
-   records commit, a below-bar one is rejected with rationale or routed. A
-   fold carrying a code path keeps the SETTLE-READY door. The history this
-   replaces, with its price: a fold merged with no review took six true
-   findings after its merge (2026-09-21), and on 2026-10-01 one estate's
-   vendor reviews found two false entries in records the other estate had
-   merged unreviewed; the clause those two instances graduated on 2026-10-02
-   ("a fold is reviewed before it merges") then cost four jimcresswell.net
-   folds 26 to 58 minutes of wall time against the owner's ten-minute bound,
-   nine vendor rounds of 4 to 8 minutes each for 39 findings, none of them
-   authority
-   (the retrospective of 2026-10-10).
+   state (`silence-is-never-liveness`). Full condition = the verdict
+   `merge-bot merge` acts on, SETTLE-READY, which a fold meets as any pull
+   request does: every reported check green, required by the default
+   branch's rules or not; every status context those rules require green by
+   name, read from the rules at run time; zero unresolved review threads;
+   MERGEABLE; one review of any commit of the pull request; no review in
+   progress; the quiet window elapsed. A fold that nobody has reviewed is
+   refused, and the seat requests one review
+   ([`pr-lifecycle`](../change-custody/pr-lifecycle/SKILL-CANONICAL.md)
+   Phase 2's review request policy); where the host's configuration reviews
+   a ready pull request by itself, that review is the one. Each finding is
+   dispositioned before the merge: an over-bar finding cures on the fold, a
+   below-bar one is rejected with rationale or routed.
 8. Bot REST merge at the FETCHED full head sha — fetched at merge time,
    never typed from memory, never expanded from an abbreviation — with
    `merge_method=merge`, never squash.

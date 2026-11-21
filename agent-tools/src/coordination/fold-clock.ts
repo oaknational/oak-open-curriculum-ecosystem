@@ -13,8 +13,8 @@ import { earliest, latest, minutesBetween } from './fold-clock-time.js';
  *
  * Instants: the ready-mark (the last `ready_for_review`, else the pull
  * request's opening), checks green (the latest passing completion among the
- * base branch's REQUIRED contexts on the tip — the merge door's own
- * definition for the records class, never every check-run, since a vendor's
+ * base branch's REQUIRED contexts on the tip — the definition
+ * the merge door proves by name, never every check-run, since a vendor's
  * review runs as a check-run of its own; a context is judged by its LATEST
  * run, as GitHub judges it, a run with no instant yet holding the context
  * open, and a commit status counts as a run of its context because a
