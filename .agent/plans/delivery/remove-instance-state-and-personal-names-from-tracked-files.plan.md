@@ -98,10 +98,8 @@ name from a list held outside version control, so the list itself is not the lea
 ## Out of scope
 
 - Git history. Removing a name from past commits is a separate decision with its own costs.
-- `ratified_by` and similar authority fields in plan and decision-record frontmatter, until
-  the owner says whether a role name replaces a personal one there. They hold a person's
-  name, where this plan removes account names, domains and addresses, and the validator's
-  list holds only those three kinds. The fields therefore stay as they are and do not hold
-  up todo 5; a field that carries an account name, domain or address is in scope like any
-  other line.
+- `ratified_by` and similar authority fields in plan and decision-record frontmatter. They
+  keep the personal name of whoever ratified (the owner's word, 2026-11-21). This plan
+  removes account names, domains and addresses, and the validator's list holds only those
+  three kinds; a field that carries one of those is in scope like any other line.
 - Agent session names, which name no person.

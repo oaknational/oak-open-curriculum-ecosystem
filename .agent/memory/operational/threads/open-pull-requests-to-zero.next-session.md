@@ -1268,10 +1268,15 @@ inside a rule name).
      an empty commit re-triggered it.
   3. The cleanup plan landed as oaknational#1042 (`cf363cd54`). The owner ratified its shape
      by question prompt on 2026-11-21 and answered that dated records have real names
-     rewritten and nothing else changed. Delivery has not started and waits for the owner's
-     word.
+     rewritten and nothing else changed. The ratification landed as oaknational#1044
+     (`a4661211d`), the first records pull request merged under the single rule. The owner
+     gave the word to start delivery on 2026-11-21, and ruled that `ratified_by` fields keep
+     the personal name. Next is todo 1, the re-count.
   4. Friction F-298 is closed. The plan node `command-guards-and-merge-review-reading` has
      both parts built.
-  Nothing of this seat's is in flight. The v1 migration is planned and not started, at the
-  owner's word.
+  5. The owner, 2026-11-21: a merged branch is deleted without asking. Two local branches
+     were retired that day. `coordination/2026-11-20-e9673c` reached `main` by cherry-pick;
+     a merge that takes no content records its ancestry on the coordination branch, and the
+     retire tool will take it once that branch folds.
+  The v1 migration is planned and not started, at the owner's word.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
