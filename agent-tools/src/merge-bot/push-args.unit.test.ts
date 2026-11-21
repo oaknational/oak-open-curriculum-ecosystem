@@ -24,11 +24,11 @@ const gitCannotStart = (): CheckRefFormatRun => ({
 
 describe('parsePushArgs', () => {
   it('parses the full flag line', () => {
-    const parsed = parsePushArgs(['--branch', 'jimcresswell/mcp-508-slice', '--json']);
+    const parsed = parsePushArgs(['--branch', 'a-person/mcp-508-slice', '--json']);
 
     expect(parsed.ok).toBe(true);
     if (parsed.ok) {
-      expect(parsed.value).toEqual({ branch: 'jimcresswell/mcp-508-slice', json: true });
+      expect(parsed.value).toEqual({ branch: 'a-person/mcp-508-slice', json: true });
     }
   });
 
@@ -102,7 +102,7 @@ describe('parsePushArgs', () => {
   });
 
   it('accepts the branch shapes the estate actually cuts', () => {
-    for (const good of ['main', 'jimcresswell/mcp-508-merge-bot-merge', 'release-1.2.3', 'x_y']) {
+    for (const good of ['main', 'a-person/mcp-508-merge-bot-merge', 'release-1.2.3', 'x_y']) {
       expect(parsePushArgs(['--branch', good]).ok).toBe(true);
     }
   });

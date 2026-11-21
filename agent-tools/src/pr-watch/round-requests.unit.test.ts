@@ -133,7 +133,7 @@ describe('roundAwaiter', () => {
   it('lets a review stand when the round after it was asked of another reviewer', () => {
     const awaits = roundAwaiter(
       COPILOT,
-      ['jimCresswell'],
+      ['a-person'],
       [{ reviewer: CODEX_CONNECTOR_LOGIN, at: '2026-07-21T11:40:00Z' }],
     );
     expect(awaits(review)).toBe(false);

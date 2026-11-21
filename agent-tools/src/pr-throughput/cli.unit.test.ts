@@ -16,7 +16,7 @@ const CORPUS = JSON.stringify([
     number: 429,
     createdAt: '2026-07-20T08:14:00Z',
     mergedAt: '2026-07-20T19:19:49Z',
-    headRefName: 'jimcresswell/aip-137-dtcg-css-consistency-validator',
+    headRefName: 'a-person/aip-137-dtcg-css-consistency-validator',
   },
   {
     number: 434,
