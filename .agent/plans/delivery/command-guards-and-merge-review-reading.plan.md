@@ -152,9 +152,9 @@ authors of real reviews, plus the bot reviewers a round is asked of. Nothing dec
   request shows it is reviewing.
 - **Removed, in the first pull request of Part B:** `--expect <login>`, `--expect none`,
   `--unavailable` and the declared-set refusals at the door.
-- **Still to do, as its own pull request:** the records-class door
-  (`RECORDS_CLASS_MERGE_STATES` in `merge-decision.ts`, and the narrowing in
-  `merge-records-checks.ts` that sets aside a pending check the base branch does not
-  require). It still merges a bot's documentation-only pull request with no review and past a
-  running review check. The owner's answer is that every pull request needs one review.
+- **Removed, in the second pull request of Part B:** the records-class door. `merge-bot merge`
+  acts on SETTLE-READY alone for every pull request and never reads the changed paths; every
+  reported check binds, so a review running as a check is waited for. What stays, in
+  `merge-door-checks.ts`: on a settled verdict the bot's own pull request proves the base
+  branch's required contexts by name.
 - **Left as it is:** `review-cost`'s own `--expect`, which prices rounds and gates no merge.

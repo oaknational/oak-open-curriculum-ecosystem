@@ -7,7 +7,7 @@ import { parseWithSchema } from '../core/schema-parse.js';
  * The status contexts a branch's rules require, parsed from
  * `GET /repos/{owner}/{repo}/rules/branches/{branch}`: every
  * `required_status_checks` rule's contexts, in rule order. The one
- * definition of "checks green by name" the merge door's records class and
+ * definition of "checks green by name" the merge door and
  * the coordination fold clock share (consolidated at the second consumer):
  * the fold skill's full condition is exactly the contexts the default
  * branch's rules require, read at run time, and no other name (a door

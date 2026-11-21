@@ -8,7 +8,7 @@ import type { GithubApiFetch } from '../mint-installation-token.js';
  * The canonical `runMergeExecution` input for the merge-bot integration suites:
  * one minted token, the reading injected as a constant, the fetch port the
  * caller's. One owner (consolidate-at-second-consumer): the execution suite
- * and the records-class suite share the premise, and variation is expressed
+ * and the door-checks suite share the premise, and variation is expressed
  * through `overrides` at call sites, never by editing this base.
  */
 export function makeInput(

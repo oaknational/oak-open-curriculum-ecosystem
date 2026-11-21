@@ -60,7 +60,7 @@ const stateViewSchema = z.object({
   url: z.string(),
   // The pull request's author login as `gh pr view` spells it: a user's login,
   // or `app/<slug>` for a GitHub App; a deleted account is null, read as
-  // 'unknown'. The records-class door reads it (`merge-records-checks.ts`).
+  // 'unknown'. The merge door reads it (`merge-door-checks.ts`).
   author: z
     .object({ login: z.string() })
     .nullish()

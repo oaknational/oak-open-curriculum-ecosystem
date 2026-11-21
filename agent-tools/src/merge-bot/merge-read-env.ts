@@ -17,7 +17,7 @@ import type { GhCommandExecutor } from '../pr-watch/gh.js';
  * would steer reads to another host while the merge PUT stays pinned to
  * api.github.com by construction (`merge-github-api.ts`) — the reading
  * and the act must run against the same host. Split from `merge.ts` at
- * the seam that file's size gate asked for when the records class arrived.
+ * the seam that file's size gate asked for.
  */
 export function readEnv(
   baseEnv: Readonly<Record<string, string | undefined>>,

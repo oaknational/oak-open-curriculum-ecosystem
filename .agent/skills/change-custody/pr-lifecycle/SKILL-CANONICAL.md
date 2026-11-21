@@ -309,10 +309,9 @@ first-hand (every vendor round on such doctrine found a true defect,
 2026-10-02), a change whose shape the seat doubts — stated where the
 request is made. An intermediate cure push, a pure sync, a push the seat
 has read and tested, and the passing of a round are never reasons.
-Copilot's absence never blocks a merge on a docs-only bot-authored pull
-request (the owner's 2026-09-03 exception, §merge boundary item 5;
-`merge-bot merge` reads the class from the diff and merges it at green, the
-review harvested after the merge); on a code pull request a
+Every pull request, a docs-only one among them, needs one review of any of
+its commits before it merges, and `merge-bot merge` refuses one that nobody
+has reviewed. A
 reviewer's leg reads UNOWED on a tip after the commit they reviewed, with no
 round asked of them since (state machine item 3), and the round settles on
 it; the leg is OWED only while a review of that tip is due and has not
@@ -1454,12 +1453,7 @@ create` on such a branch exits non-zero with "a pull request for branch …
    rationale, the cure SHA's presence on the branch, any thread resolved
    without a disposition, and prose findings a summary carries — including SETTLED-NO-REVIEW, the timeout-settled round
    this SKILL's item 4 anchor describes, which is watch-endable but NEVER
-   merge-eligible — EXCEPT for the class the owner ruled on 2026-09-03
-   ("Change the merge policy instead"): a bot-authored pull request that
-   touches only documentation and Practice surfaces merges at checks green
-   by name, zero unresolved threads, every finding dispositioned, with the
-   Claude Code Review's standing verdict and NO Copilot leg expected; for
-   that class a timeout-settled round IS merge-eligible. The Copilot leg, when a review of the tip is wanted for a
+   merge-eligible, on any pull request. The Copilot leg, when a review of the tip is wanted for a
    stated reason (Phase 2's review request policy; never by default), is
    obtained by a review request on the tip,
    `POST repos/{owner}/{repo}/pulls/{n}/requested_reviewers` with
@@ -1479,30 +1473,16 @@ create` on such a branch exits non-zero with "a pull request for branch …
    nothing; a leg it reads UNOWED (the reviewer reviewed an earlier commit
    and no round is asked of them since) settles, and is requested only for a stated
    reason; a leg it reads OWED (a review of this tip is due and has not
-   bound) waits for it. A CODE pull request lands only through the front
-   door with every reviewer's leg as the tool reads it on the tip —
-   SATISFIED or UNOWED, or the posted subagent review where a vendor is
-   unavailable and a review was wanted (item 3's owner ruling of
-   2026-09-10) — never by the REST merge below. The exception stands for
-   the docs-only bot-authored class on its own grounds, and the tool knows
-   the class: `merge-bot merge` computes it from
-   the pull request's changed files (every path documentation or Practice
-   prose, decided per path as above; `change-class.ts`), merges at checks
-   green BY NAME (the base branch's required contexts, read from its rules at
-   run time; a pending check the rules do not require, the vendor's own
-   review run among them, does not hold a records-class pull request, a
-   failed check of any name does) with zero unresolved threads on the
-   verdicts that differ from SETTLE-READY only by the vendor leg
-   (`RECORDS_CLASS_MERGE_STATES`), and names the ground in
-   its evidence; a
-   vendor review requested on the tip is harvested after the merge under
-   PDR-140 clause 9(e). The interim this clause carried until then ("until
-   the tool learns that class, the merging seat recomputes that gate by name
-   and lands the merge through the sanctioned REST endpoint as the bot")
-   ended as its own PDR-130 prediction said it would: four jimcresswell.net
-   folds waited on the leg between 2026-10-04 and 2026-10-10, and the tool
-   learned the class there (the retrospective of 2026-10-10; the owner's
-   decision on its proposal 1), carried to OCE at his word of 2026-10-14. The two
+   bound) waits for it. Every pull request, whatever paths it changes, lands
+   only through the front door with every reviewer's leg as the tool reads
+   it on the tip — SATISFIED or UNOWED, or the posted subagent review where
+   a vendor is unavailable and a review was wanted (item 3's owner ruling of
+   2026-09-10). `merge-bot merge` holds every pull request to one verdict:
+   every reported check green, required by the base branch's rules or not
+   (a review running as a check is waited for); on the bot's own pull
+   request, every context those rules require green BY NAME, read from the
+   rules at run time; zero unresolved threads; one review of any commit;
+   the quiet window elapsed. The two
    non-bot shapes remain: the explicit
    `gh pr merge --merge` command, or ARMING auto-merge — permitted
    exactly and only **at settled-READY under a Director grant**

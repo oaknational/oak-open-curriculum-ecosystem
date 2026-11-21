@@ -7,7 +7,7 @@ import { decideMergeAction, type MergeDecision } from './merge-decision.js';
 import { realFetch } from './github-fetch.js';
 import { readMergeSettings, putMerge } from './merge-github-api.js';
 import { readExecutor } from './merge-read-env.js';
-import { resolveVerdict } from './merge-records-checks.js';
+import { resolveVerdict } from './merge-door-checks.js';
 import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-config.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import type { BotIdentity } from './resolve-identity.js';
@@ -160,15 +160,14 @@ function refused(decision: Refusal, verdict: PrVerdict): Result<MergeOutcome, Er
 }
 
 /**
- * The verdict → class → eligibility → settings-gate → merge tail. The base's
- * required contexts are read on every verdict the bot's own pull request
- * could merge on, the change class only where it decides
- * (`merge-records-checks.ts`); a failed read there is the transient class the
- * poll loop retries. Eligibility is classified BEFORE the settings GET (a
- * fallible call that once turned every typed refusal into an operational
- * failure): the decision is asked with `allowMergeCommit: true` first, then
- * with the REAL setting, so the never-squash refusal keeps its one wording. A
- * merge the class opened carries its ground beside the verdict's lines.
+ * The verdict → eligibility → settings-gate → merge tail. The base's
+ * required contexts are read on the settled verdict of the bot's own pull
+ * request (`merge-door-checks.ts`); a failed read there is the transient
+ * class the poll loop retries. Eligibility is classified BEFORE the settings
+ * GET (a fallible call that once turned every typed refusal into an
+ * operational failure): the decision is asked with `allowMergeCommit: true`
+ * first, then with the REAL setting, so the never-squash refusal keeps its
+ * one wording.
  */
 async function gateAndMerge(context: {
   readonly input: MergeExecutionInput;
@@ -189,13 +188,9 @@ async function gateAndMerge(context: {
     const message = `door reading failed: ${resolved.error.message}`;
     return err(new ReadingUnavailableError(message, { cause: resolved.error }));
   }
-  const { verdict, changeClass } = resolved.value;
+  const verdict = resolved.value;
   const decide = (allowMergeCommit: boolean): MergeDecision =>
-    decideMergeAction({
-      verdict,
-      allowMergeCommit,
-      changeClass,
-    });
+    decideMergeAction({ verdict, allowMergeCommit });
 
   const eligible = decide(true);
   if (eligible.kind === 'refuse') {
@@ -209,19 +204,18 @@ async function gateAndMerge(context: {
   if (decision.kind === 'refuse') {
     return refused(decision, verdict);
   }
-  return mergeVerdicted({ fetchImpl, token, input, reading, verdict, ground: decision.ground });
+  return mergeVerdicted({ fetchImpl, token, input, reading, verdict });
 }
 
-/** The merge PUT at the verdicted tip; the outcome's evidence is the verdict's lines plus the class ground, when one opened the door. */
+/** The merge PUT at the verdicted tip; the outcome's evidence is the verdict's lines. */
 async function mergeVerdicted(context: {
   readonly fetchImpl: GithubApiFetch;
   readonly token: string;
   readonly input: MergeExecutionInput;
   readonly reading: PrStateReading;
   readonly verdict: PrVerdict;
-  readonly ground: string | undefined;
 }): Promise<Result<MergeOutcome, Error>> {
-  const { fetchImpl, token, input, reading, verdict, ground } = context;
+  const { fetchImpl, token, input, reading, verdict } = context;
   const merged = await putMerge(fetchImpl, token, {
     identity: input.identity,
     prNumber: input.prNumber,
@@ -230,6 +224,5 @@ async function mergeVerdicted(context: {
   if (!merged.ok) {
     return merged;
   }
-  const evidence = ground === undefined ? verdict.evidence : [...verdict.evidence, ground];
-  return ok({ kind: 'merged', sha: merged.value, evidence });
+  return ok({ kind: 'merged', sha: merged.value, evidence: verdict.evidence });
 }

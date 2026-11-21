@@ -396,9 +396,8 @@ reviewer: it reads the reviews from the pull request
 (`.agent/reference/merge-bot.md`). A review in progress is waited for, one
 review of any commit of the pull request must exist, and every review is
 dealt with. A bot asked for a round that never reviews settles through the
-timeout to SETTLED-NO-REVIEW, which the front door refuses by name; the
-docs-only bot-authored class then lands through the sanctioned REST endpoint
-under the owner's exception below. Any other pull request lands with each
+timeout to SETTLED-NO-REVIEW, which the front door refuses by name on every
+pull request. A pull request lands with each
 reviewer's leg as the tool reads it on the tip, SATISFIED or UNOWED (the
 reviewer reviewed an earlier commit and no round is asked of them since). A
 review is requested on a tip only for a stated reason, never to fill a leg.
@@ -419,13 +418,8 @@ answers 409 rather than landing unverdicted. A client-side merge with a
 head-match flag checks the sha and nothing else — the 1.179.0 carrier landed
 that way on 2026-09-09 (ead92d875's second parent is 007b0d32e) with no
 tool-side recomputation of the reviewer leg, which is the gap the front door
-closes. One class the front door refuses by name: a round settled only by
-timeout (`SETTLED-NO-REVIEW`) on a bot-authored pull request that touches
-only documentation and Practice surfaces is merge-eligible under
-pr-lifecycle's owner-ruled 2026-09-03 exception, and until the tool learns
-that class the merging seat recomputes the gate by name and lands it through
-the sanctioned REST endpoint as the bot; a carrier that carries code is never
-in that class. Squash or rebase would diverge the history from upstream and
+closes. A round settled only by timeout (`SETTLED-NO-REVIEW`) is refused by
+name on every pull request. Squash or rebase would diverge the history from upstream and
 make the next sync a conflict.
 
 ### 8a. The other open lanes at a landing

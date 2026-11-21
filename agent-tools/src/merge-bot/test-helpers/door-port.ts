@@ -4,16 +4,15 @@ import type { MergeOutcome } from '../merge.js';
 import type { GithubApiFetch } from '../mint-installation-token.js';
 
 /**
- * The fetch port the records-door suites share: a constant table by URL
- * serving the changed files, the base ref, the base branch's rules (by
- * page), the merge settings and the merge PUT, recording every URL asked
- * for; one URL substring may be made to answer 502. One owner
- * (consolidate-at-second-consumer): the records-class suite and the
- * settled-verdict suite share the premise, and variation is expressed
- * through `options` at call sites, never by editing this base.
+ * The fetch port the merge-door suites share: a constant table by URL
+ * serving the base ref, the base branch's rules (by page), the merge
+ * settings and the merge PUT, recording every URL asked for; one URL
+ * substring may be made to answer 502. One owner
+ * (consolidate-at-second-consumer): variation is expressed through
+ * `options` at call sites, never by editing this base.
  */
 
-export interface ClassPortOptions {
+export interface DoorPortOptions {
   /** The contexts the served rules require; absent, the estate's two. */
   readonly required?: readonly string[];
   /** A URL substring whose reads answer 502. */
@@ -22,27 +21,13 @@ export interface ClassPortOptions {
   readonly rulesPages?: readonly (readonly unknown[])[];
 }
 
-export interface ClassPort {
+export interface DoorPort {
   readonly fetchImpl: GithubApiFetch;
   /** Every URL the product asked the port for, in order. */
   readonly calls: { url: string }[];
 }
 
-/** A records-class diff: every path documentation or Practice prose. */
-export const RECORDS_FILES: readonly { filename: string }[] = [
-  { filename: '.agent/memory/active/napkin.md' },
-  { filename: '.agent/memory/operational/repo-continuity.md' },
-];
-
-/** A code-class diff: one product source file. */
-export const CODE_FILES: readonly { filename: string }[] = [
-  { filename: 'agent-tools/src/merge-bot/merge.ts' },
-];
-
-export function makeClassPort(
-  files: readonly { filename: string }[],
-  options: ClassPortOptions = {},
-): ClassPort {
+export function makeDoorPort(options: DoorPortOptions = {}): DoorPort {
   const calls: { url: string }[] = [];
   const required = options.required ?? ['run-quality-gates', 'CodeQL'];
   const defaultRules = [
@@ -59,9 +44,6 @@ export function makeClassPort(
     return options.rulesPages[page - 1] ?? [];
   };
   const answer = (url: string): unknown => {
-    if (url.includes('/pulls/42/files')) {
-      return files;
-    }
     if (url.endsWith('/pulls/42/merge')) {
       return { merged: true, sha: 'mergesha1' };
     }
@@ -78,6 +60,11 @@ export function makeClassPort(
     return Promise.resolve({ status: 200, json: () => Promise.resolve(answer(url)) });
   };
   return { fetchImpl, calls };
+}
+
+/** Whether the port was asked to merge. */
+export function mergeAsked(port: DoorPort): boolean {
+  return port.calls.some((call) => call.url.endsWith('/pulls/42/merge'));
 }
 
 /** The refusal's verdict state, or undefined when the outcome was not a refusal. */

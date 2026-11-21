@@ -7,7 +7,7 @@ import type { GithubApiFetch } from './mint-installation-token.js';
 import { ReadingUnavailableError, runMergeExecution, type MergeExecutionInput } from './merge.js';
 import { makeInput } from './test-helpers/merge-execution-input.js';
 import { settledReading, SETTLED_HEAD_OID } from './test-helpers/pr-state-reading.js';
-import { CODE_FILES, makeClassPort } from './test-helpers/records-class-port.js';
+import { makeDoorPort } from './test-helpers/door-port.js';
 
 /**
  * Integration over injected ports (constant fakes, no process, no network):
@@ -400,12 +400,12 @@ describe('runMergeExecution — target grammar (security H2)', () => {
 
 describe('runMergeExecution — a pull request nobody has reviewed', () => {
   it.each([
-    ['the bot’s own code-class pull request', 'app/acme-bot'],
+    ['the bot’s own pull request', 'app/acme-bot'],
     ['a person’s pull request', 'a-person'],
   ])('refuses %s with green checks and no review, and names the cause', async (_whose, author) => {
     // Checks have been green for an hour (08:00 against 09:00); with nobody
     // having reviewed and no bot reviewing, no length of wait settles it.
-    const { fetchImpl, calls } = makeClassPort(CODE_FILES);
+    const { fetchImpl, calls } = makeDoorPort();
     const unreviewed = makeReading({
       author,
       expectedReviewers: [],
