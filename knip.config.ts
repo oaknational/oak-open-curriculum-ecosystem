@@ -128,6 +128,7 @@ const config: KnipConfig = {
         'src/validators/cited-paths/validate-cited-paths.ts',
         'src/validators/cited-scripts/validate-cited-scripts.ts',
         'src/validators/lineage-names/validate-no-lineage-names.ts',
+        'src/validators/code-owner-names/validate-no-code-owner-names.ts',
         'src/validators/family-conformance/validate-family-conformance.ts',
         'src/validators/pretooluse-guard-routing/validate-pretooluse-guard-routing.ts',
         'src/validators/policy-reappraisal/validate-policy-reappraisal.ts',

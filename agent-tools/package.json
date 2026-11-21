@@ -75,6 +75,7 @@
     "validate-no-host-names-in-core-headings": "cd .. && pnpm exec tsx agent-tools/src/validators/core-host-names/validate-no-host-names-in-core-headings.ts",
     "validate-workspace-config-isolation": "cd .. && pnpm exec tsx agent-tools/src/validators/workspace-config-isolation/validate-workspace-config-isolation.ts",
     "validate-identity-naming": "cd .. && pnpm exec tsx agent-tools/src/validators/identity-naming/validate-identity-naming.ts",
+    "validate-no-code-owner-names": "cd .. && pnpm exec tsx agent-tools/src/validators/code-owner-names/validate-no-code-owner-names.ts",
     "validate-markdown-links": "cd .. && pnpm exec tsx agent-tools/src/validators/markdown-links/validate-markdown-links.ts",
     "validate-mcp-content-current-source": "cd .. && pnpm exec turbo run sdk-codegen build --filter=@oaknational/oak-curriculum-mcp-streamable-http^... --output-logs=errors-only && pnpm exec tsx agent-tools/src/mcp-content-current-source/validate-current-source.ts",
     "refresh-mcp-content-current-source-anchors": "cd .. && pnpm exec turbo run sdk-codegen build --filter=@oaknational/oak-curriculum-mcp-streamable-http^... --output-logs=errors-only && pnpm exec tsx agent-tools/src/mcp-content-current-source/validate-current-source.ts --refresh-anchors",
