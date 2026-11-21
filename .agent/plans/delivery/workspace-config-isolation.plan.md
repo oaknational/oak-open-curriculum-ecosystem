@@ -140,7 +140,7 @@ config files.
   Both are in todo 1's scope; the stale-input class gets its own
   validator leg.
 - A probe worktree (`.claude/worktrees/vitest-config-workspace`,
-  branch renamed to `jimcresswell/vitest-config-workspace`, local
+  branch renamed to `<owner>/vitest-config-workspace`, local
   only) carries the seed edits: the base-config hatch removed, the
   boundary rule bound to config files, and the tsup globs deleted
   from the shared `ignores` — the state in which the firing and
@@ -831,7 +831,7 @@ only if its opening check shows `no-require-imports` absent.
   into this body; the transcripts and this file's history carry the
   detail.
 - The probe worktree carries only regenerable seed edits; losing it
-  costs minutes. Its branch: `jimcresswell/vitest-config-workspace`.
+  costs minutes. Its branch: `<owner>/vitest-config-workspace`.
 - Linear ticket: mint when the standing ticket embargo lifts
   (2026-08-10) and backfill `tickets`.
 

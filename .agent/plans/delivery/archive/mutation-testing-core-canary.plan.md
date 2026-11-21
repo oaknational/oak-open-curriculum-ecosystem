@@ -49,7 +49,7 @@ consumes.
 ## Provenance — what the spike proved and where it stopped
 
 This node extracts and completes the work preserved on branch
-`jimcresswell/mutation-testing-core-canary` (orphan-rescue `4ffef19a0`,
+`<owner>/mutation-testing-core-canary` (orphan-rescue `4ffef19a0`,
 tidied `b12197181`, WIP preview PR #807). Commissioning word 2026-08-05
 in session Drake spins Obsidian ("I want the mutation testing set up on
 the simplest core package we have" + card answer "Tonight, full canary

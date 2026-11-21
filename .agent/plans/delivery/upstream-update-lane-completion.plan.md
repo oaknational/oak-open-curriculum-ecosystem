@@ -49,7 +49,7 @@ The executing seat is Birch holds Seedling (e48fe2), claude-code /
 claude-fable-5, lane claim `186e6899` (retained through the compaction
 boundary), session home worktree
 `.claude/worktrees/upstream-spec-probe` (branch
-`jimcresswell/upstream-spec-probe`). The fleet is quiesced for Matt's
+`<owner>/upstream-spec-probe`). The fleet is quiesced for Matt's
 clear run; the Director is dark; blockers card the owner directly. Owner
 questions go via AskUserQuestion cards. Solo-session monitor posture:
 no heartbeat (consumer-absent exemption) and no comms watcher needed

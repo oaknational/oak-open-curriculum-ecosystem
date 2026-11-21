@@ -18,7 +18,7 @@ ratified_where: >-
   reshaped after two Cricket checks (a two-hour layer pass writing a one-page model, one hour of
   evidence rows, one landing, about four hours of one seat); the answer, verbatim, "Ratify as
   reshaped (Recommended)", ratifies the node in both estates as one system. This frontmatter is
-  the record of the word in each estate; the card's full text is kept in the jimcresswell.net
+  the record of the word in each estate; the card's full text is kept in the sibling estate's
   napkin block of 2026-10-04, a sibling-estate surface named here and not linked.
 serves: best-of-each-practice
 impact_areas:

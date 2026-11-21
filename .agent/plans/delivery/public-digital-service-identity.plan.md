@@ -163,7 +163,7 @@ Direction quote, the ARC channel naming-map entry, the thread record) are
 trued in PR5 with quote-elision + head-note — the last occurrences standing
 by design. No deletions except the owner-authorised archive removal (D7).
 
-## D5 — PR slices (PDR-132; branches `jimcresswell/pds-*`; bot identity; Copilot at open; never squash)
+## D5 — PR slices (PDR-132; branches `<owner>/pds-*`; bot identity; Copilot at open; never squash)
 
 | PR | Story | Reviewers (fan-from-brief, opus) | Window |
 | --- | --- | --- | --- |

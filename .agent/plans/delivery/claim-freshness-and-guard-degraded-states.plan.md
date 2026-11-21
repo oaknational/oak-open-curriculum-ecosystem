@@ -87,7 +87,7 @@ Landing 1 is carried by PR #745:
   consumers and no misleading completeness claim.
 
 Landing 2 is a concrete successor PR under MCP-476, carried on
-`jimcresswell/mcp-476-claim-freshness-session-instrument`:
+`<owner>/mcp-476-claim-freshness-session-instrument`:
 
 - **Session-open drift instrument** `check-claim-freshness` (clock and
   environment arm): expired `review_by` and pin-drift among `pinned`
@@ -412,7 +412,7 @@ a dated supersession note in
   contract/guidance, ADR-223, and this trued plan node. Mergeable
   independently with zero claim that expiry is enforced.
 - **Freshness landing 2 (MCP-476 successor PR,
-  `jimcresswell/mcp-476-claim-freshness-session-instrument`)** — generic
+  `<owner>/mcp-476-claim-freshness-session-instrument`)** — generic
   SessionStart shim + both registrations + `check-claim-freshness`
   instrument + pinned-version collector + health-probe extension +
   residual-mirror census + tests + smoke. This is the sole expiry/pin-drift enforcement
@@ -475,7 +475,7 @@ a dated supersession note in
   plan claimed its SessionStart consumer. The owner-directed
   reconciliation split MCP-476 explicitly: PR #745 carries the strict
   pin union, clock-free integrity gate, and report-only inventory;
-  `jimcresswell/mcp-476-claim-freshness-session-instrument` carries the
+  `<owner>/mcp-476-claim-freshness-session-instrument` carries the
   sole expiry/pin-drift consumer and enforcement. No freshness-
   prevention claim is valid before that successor lands.
 - Pending (Slice 2, pre-merge): D8 probe set with pre-agreed mapping;

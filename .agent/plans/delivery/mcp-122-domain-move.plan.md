@@ -107,7 +107,7 @@ Each a single-story PR, default round budget:
 ## Dated notes
 
 - **2026-08-02** — Landed into the corpus from the orphaned branch
-  `jimcresswell/mcp-122-domain-move-…` (found holding the only copy
+  `<owner>/mcp-122-domain-move-…` (found holding the only copy
   during the owner-directed branch-estate review; authored 2026-07-23,
   born-sketch). The original edge-mechanism gate deadline (2026-07-26,
   the release-node P3D tempo) lapsed unanswered during the

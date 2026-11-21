@@ -485,7 +485,7 @@ Every `platform_support` row also implements ADR-223's freshness contract:
 inside `repo-validators:check`. In MCP-476 landing 1 (PR #745), its successful
 output is a report-only inventory of pinned obligations and not-tracked rows;
 it does not enforce expiry or pin drift. The concrete MCP-476 landing 2 on
-`jimcresswell/mcp-476-claim-freshness-session-instrument` adds the sole
+`<owner>/mcp-476-claim-freshness-session-instrument` adds the sole
 SessionStart and health-probe consumers for those clock- and
 environment-bearing decisions. Until that successor lands, the estate must not
 claim that invisible freshness decay is prevented. Current pin values and

@@ -4,7 +4,7 @@ pdr_kind: governance
 
 # PDR-118: Agent Work-State Model
 
-**Status**: Accepted (ratified 2026-06-27 by owner @jimCresswell)
+**Status**: Accepted (ratified 2026-06-27 by the owner)
 **Date**: 2026-06-27
 **Related**:
 [PDR-027](PDR-027-threads-sessions-and-agent-identity.md)
