@@ -264,6 +264,8 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-20 | oaknational#1037 | 0 | 0 / 40 | within | 0 | agreed | three decision records trued to the owner-gates removal; `claude[bot]` found nothing |
 | 2026-11-20 | oaknational#1038 | 0 | 0 / 40 | within | 0 | agreed | three plan nodes and the day's records, records-class; the survey counts no round, yet `claude[bot]` raised one optional finding, checked and declined with reasons |
 | 2026-11-20 | oaknational#1039 | 2 | 5.68 / 40 | within | 0 | agreed | the staging and forced-push guards matched on the invocation; `claude[bot]` skipped for want of credit, Copilot requested twice: one finding upheld and cured in one push, one body finding declined with reasons |
+| 2026-11-20 | oaknational#1040 | 1 | 0 / 40 | within | 0 | agreed | the plan's two further owner answers and the day's records, records-class; one review round at opening, no settlement push |
+| 2026-11-20 | oaknational#1041 | 3 | 19.34 / 40 | within | 0 | agreed | the merge tool and `pr state` read the reviewers from the pull request; Copilot requested four times: seven findings over three rounds, all upheld and cured, the fourth review found nothing; the second review read the commit before the one it was asked about |
 
 ## Weight changes
 
