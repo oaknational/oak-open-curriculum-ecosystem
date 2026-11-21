@@ -1271,7 +1271,7 @@ inside a rule name).
      rewritten and nothing else changed. The ratification landed as oaknational#1044
      (`a4661211d`), the first records pull request merged under the single rule. The owner
      gave the word to start delivery on 2026-11-21, and ruled that `ratified_by` fields keep
-     the personal name. Next is todo 1, the re-count.
+     the personal name.
   4. Friction F-298 is closed. The plan node `command-guards-and-merge-review-reading` has
      both parts built.
   5. The owner, 2026-11-21: a merged branch is deleted without asking. Two local branches
