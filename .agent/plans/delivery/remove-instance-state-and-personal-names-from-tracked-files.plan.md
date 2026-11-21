@@ -125,7 +125,8 @@ Three kinds of occurrence, each with its own cure.
    such as "the owner", and nothing else in the record changes (the owner's answer by
    question prompt, 2026-11-21: "Rewrite names only").
 
-A check keeps the result: a validator over every tracked file but `.github/CODEOWNERS` that fails on a real account
+A check keeps the result: a validator over every tracked file but `.github/CODEOWNERS` and
+the Practice Core, that fails on a real account
 name from a list held outside version control, so the list itself is not the leak.
 
 ## Acceptance criteria
@@ -158,4 +159,9 @@ name from a list held outside version control, so the list itself is not the lea
   keep the personal name of whoever ratified (the owner's word, 2026-11-21). This plan
   removes account names, domains and addresses, and the validator's list holds only those
   three kinds; a field that carries one of those is in scope like any other line.
+- The Practice Core (`.agent/practice-core`): its provenance file, its changelog and its
+  decision records name the sibling estate and the Practice's author as attribution and
+  history, and stay as they are; the validator skips the directory (the owner's answer by
+  question prompt, 2026-11-21). In the architectural decision records and in PDR-118 only
+  an account name is replaced with a role word.
 - Agent session names, which name no person.
