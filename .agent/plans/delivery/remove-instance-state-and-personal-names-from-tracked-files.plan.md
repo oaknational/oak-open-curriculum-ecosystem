@@ -86,9 +86,13 @@ The name search understated one surface. Nine reviewer templates under
 workspaces, its configuration files, its decision-record numbers and two reviewers this
 repository does not have. A search for the account name and the domain finds the sentences
 that name that repository and misses the paragraphs that describe it without naming it. The
-wording these templates carried before 2026-10-04 is in git history and is the source for
-truing them. Four are trued (config, accessibility, React, documentation) with the security
-template and the index; four remain (design system, type, code, assumptions).
+wording these templates carried before 2026-10-04 is in git history. Editing sentences did
+not make them true (a review of oaknational#1049 found absent records still cited), so seven
+have their earlier bodies back under their current frontmatter, the config one trued against
+today's files, and two smaller ones are edited. Still to read line by line: the other
+templates that commit touched (`onboarding-expert`, `subagent-architect`, `test-expert` and
+smaller ones), and the prose improvements the replaced text carried, which are worth
+re-applying for this repository.
 
 The owner's answers by question prompt on 2026-11-21: package manifests name the organisation
 only, and passages about the sibling estate are removed from this estate's rules and skills.
