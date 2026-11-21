@@ -87,12 +87,14 @@ workspaces, its configuration files, its decision-record numbers and two reviewe
 repository does not have. A search for the account name and the domain finds the sentences
 that name that repository and misses the paragraphs that describe it without naming it. The
 wording these templates carried before 2026-10-04 is in git history. Editing sentences did
-not make them true (a review of oaknational#1049 found absent records still cited), so seven
-have their earlier bodies back under their current frontmatter, the config one trued against
-today's files, and two smaller ones are edited. Still to read line by line: the other
+not make them true (a review of oaknational#1049 found absent records still cited), so six
+have their earlier bodies back under their current frontmatter (accessibility, React,
+documentation, config, type, design system), the config one trued against today's files. The
+security template keeps its current text, which is general, with four instance lines trued,
+and two smaller ones (code, assumptions) are edited. Still to read line by line: the other
 templates that commit touched (`onboarding-expert`, `subagent-architect`, `test-expert` and
-smaller ones), and the prose improvements the replaced text carried, which are worth
-re-applying for this repository.
+smaller ones), and the prose improvements the replaced text carried in the six, which are
+worth re-applying for this repository.
 
 The same review found three places where the earlier bodies are behind this repository's
 records, accepted and left for the next work on these templates:
