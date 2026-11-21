@@ -26,7 +26,7 @@ A fold past ten minutes is a finding, never read as normal. The owner,
 ridiculous, and a clear signal of a process and engineering failure. 20
 minutes would be somewhat excessive, 10 minutes would be acceptable. We have a
 problem with our PR approaches and mechanisms". The retrospective of that day
-measured the jimcresswell.net folds 320 to 326 at 25.9 to 57.8 minutes wall each: a
+measured seven folds at 25.9 to 57.8 minutes wall each: a
 records-only push reaches CI within 2.1 to 3.8 minutes of its commit, a
 vendor review round costs 3.9 to 7.8 minutes, and the door's floor was about
 fourteen minutes before any finding. So no ceremony is added to a fold, and a
@@ -52,7 +52,7 @@ contradiction and wording in one push (2026-10-02 and 2026-10-03).
    boundaries) and coordinate on their channel when in doubt. Never
    capture a half-state; never delete or revert anything found
    (`never-use-git-to-remove-work`). A directory no fleet seat wrote or
-   claims can be wanted work: of an agent's content workspace found in JC.net's
+   claims can be wanted work: of an agent's content workspace found in a sibling estate's
    primary on 2026-09-28 the owner said, relayed by the Director,
    "legitimate and should be treated as material to commit" and "keep it off
    the fold, and the Practice agents decide if any changes are needed before
