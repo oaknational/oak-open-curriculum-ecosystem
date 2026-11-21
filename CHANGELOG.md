@@ -1,3 +1,14 @@
+## [1.187.14](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.13...v1.187.14) (2026-11-21)
+
+
+### Bug Fixes
+
+* **merge-bot:** read the reviewers from the pull request and take no reviewer list ([3844396](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/3844396e49c8341806180cfe31c5fcf072f98886))
+* **pr-watch:** a review of any commit meets the rule, and a skip notice awaits no one ([ffb7db5](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ffb7db5ed668561d97e647f76c8d25673d533558))
+* **pr-watch:** the author reviews nothing of their own, and a skip notice anchors no window ([39e5c78](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/39e5c786f1b139977ad3e55eaad2edeefb814548))
+* **pr-watch:** wait for a live review run before anyone has reviewed ([e630ca4](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/e630ca4ea3db70fb23e240ee469e1d15185709d9))
+* **pr-watch:** wait for a live review run, and let an empty reply leave a review standing ([bebb266](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/bebb266a40c47ea2bb452757fcce9968c19ed490))
+
 ## [1.187.13](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.12...v1.187.13) (2026-11-20)
 
 ## [1.187.12](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.11...v1.187.12) (2026-11-20)
