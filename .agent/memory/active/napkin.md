@@ -160,3 +160,15 @@ The account with its sources is the addendum to the reunification retrospective 
   the deployment and the status. One instance; the cause on Vercel's side is unread.
 - **Observation:** under `--json` the merge tool wrote no progress line in those forty
   minutes. The verdict was read with `pr state` in a second call.
+- **Correction (owner):** I listed a merged local branch among the decisions waiting for the
+  owner. A merged branch is deleted without asking; the policy already said so.
+- **What worked:** `merge-bot retire` deleted two local branches that plain `git branch -d`
+  was refused for. It refuses a branch whose commits reached `main` by cherry-pick; a merge
+  of that branch taking no content, made after `git cherry` showed both commits upstream,
+  records the ancestry for the retire tool to read after the next fold.
+- **Mistake (mine), the fourth instance:** two commits ran in one shell line on 2026-11-21.
+  The first failed and its staged plan edit went into the second, a continuity commit. One
+  commit per call, its exit code read before the next file is staged.
+- **Surprise:** the cleanup re-count found people in 19 package manifests (`author` and
+  `contributors`), a surface the first count had not named. The owner chose the
+  organisation alone for those fields.
