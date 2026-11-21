@@ -33,9 +33,9 @@ standard one; a `pointerTail` where the pointer paragraph continues past the tem
 (verbatim, as `cricket-procedure-xhigh` carries ", then execute its procedure exactly."). A
 standard role declares its `description`, its `platforms` and, per platform, only what
 deviates. `platforms` is the set of surfaces the adapters render on: an omitted `platforms`
-renders on every surface, Gemini included, and the set a host renders is its own (in OCE
-every declaration names `cursor`, `claude` and `codex`, and no `.gemini/agents/` surface
-exists). A fan-out (the cricket templates, and `architecture-expert`, whose four lenses are
+renders on every surface, Gemini included, and the set a host renders is its own (in OCE a
+standard role names `cursor`, `claude` and `codex`, a variant names its own set, and no
+`.gemini/agents/` surface exists). A fan-out (the cricket templates, and `architecture-expert`, whose four lenses are
 its variants) declares `variants`, each an adapter in
 its own name with every field, its `title`, its Cursor or Codex `description` where it differs,
 and every `note`, because the variants differ by design and are never flattened. The Gemini
