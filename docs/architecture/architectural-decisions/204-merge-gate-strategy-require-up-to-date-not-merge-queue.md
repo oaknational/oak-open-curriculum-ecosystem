@@ -2,7 +2,7 @@
 
 **Status**: Accepted (owner-ratified, 2026-06-26)
 **Date**: 2026-06-26
-**Decision Makers**: Owner (@jimCresswell) + agentic session (Wombat wakes Eventide)
+**Decision Makers**: Owner + agentic session (Wombat wakes Eventide)
 **Related**:
 [ADR-161](161-network-free-pr-check-ci-boundary.md) (network-free PR-check CI
 boundary — the constraint that rules out the merge-queue-compatible SonarCloud

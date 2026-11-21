@@ -149,7 +149,7 @@ is therefore explicit:
    free-standing warning design; it is report-only and must not be
    cited as prevention of invisible expiry.
 2. **Landing 2 — the MCP-476 successor on
-   `jimcresswell/mcp-476-claim-freshness-session-instrument`** carries
+   `<owner>/mcp-476-claim-freshness-session-instrument`** carries
    the generic SessionStart shim, expiry and pinned-version drift
    checker, allow-listed collector, health-probe extension, and their
    proofs. Only that landing makes the rely-or-reverify decision at

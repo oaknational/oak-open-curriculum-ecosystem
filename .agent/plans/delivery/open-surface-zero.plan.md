@@ -112,7 +112,7 @@ Real orphans — 18 at the 2026-08-10 live recount (`git ls-remote`
 minus open-PR heads, `main`, and coordination), after excluding
 `gh-readonly-queue/*` (GitHub merge-queue internals,
 platform-managed). The census's original 19 included
-`jimcresswell/mutation-testing-core-canary` (the prefixed twin of the
+`<owner>/mutation-testing-core-canary` (the prefixed twin of the
 PR #807 head), since deleted at that PR's merge as its recorded
 disposition — the recount confirms the 18 listed, no omissions:
 `agent/n8n-practice-comparative-research`,
@@ -126,20 +126,20 @@ disposition — the recount confirms the 18 listed, no omissions:
 `fix/claude-hook-hardening`,
 `fix/mcp-143-guard-cascade`,
 `fix/mcp-507-oauth-facade`,
-`jimcresswell/commit-queue-sameagent-id-routing`,
-`jimcresswell/jim-next-2026-08-04`,
-`jimcresswell/mcp-103-content-workspace`,
-`jimcresswell/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the`,
-`jimcresswell/mcp-475-preview-build-validation`,
-`jimcresswell/mcp-487-sanitise-numeric-input`,
+`<owner>/commit-queue-sameagent-id-routing`,
+`<owner>/jim-next-2026-08-04`,
+`<owner>/mcp-103-content-workspace`,
+`<owner>/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the`,
+`<owner>/mcp-475-preview-build-validation`,
+`<owner>/mcp-487-sanitise-numeric-input`,
 `test/emgeebot-ambient-verify`.
 Per branch at slot: read content first-hand → already-merged/superseded
 ⇒ surface provenance and propose deletion (never unprompted removal);
 live value ⇒ open the draft PR that should have existed; unclear ⇒
-one-line owner ask. Owner-authored branches (`jimcresswell/jim-next…`)
+one-line owner ask. Owner-authored branches (`<owner>/jim-next…`)
 get the ask, never a unilateral disposition.
 
-`jimcresswell/mcp-487-sanitise-numeric-input`, provenance for its slot: MCP-487 was closed
+`<owner>/mcp-487-sanitise-numeric-input`, provenance for its slot: MCP-487 was closed
 2026-09-02 on evidence — the server accepts numeric `offset`/`limit` (the owner's MCPJam
 test); the Claude Code client defect the branch worked around was fixed in 2.1.221 (PR #752
 triage record, `.agent/reports/pr-comment-triage-2026-08-04.md`); a live Claude Code MCP
