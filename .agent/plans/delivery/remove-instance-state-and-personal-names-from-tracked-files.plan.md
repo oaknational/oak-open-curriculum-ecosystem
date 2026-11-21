@@ -54,6 +54,31 @@ Counted with `git grep` at `origin/main`; re-count at pickup.
 - Other people's logins are in `.github/CODEOWNERS`, which GitHub requires to be real.
 - This count covers one person. Other real names, logins and addresses are not yet counted.
 
+## The re-count of 2026-11-21 (todo 1)
+
+Counted with `git grep` at `origin/main` (`f36581d97`), leaving out `.github/CODEOWNERS`.
+
+- **The owner's account name or domain: 210 files.** 119 are dated records. 91 are living
+  files:
+  - 19 `package.json` files carry people in `author` or `contributors`: a contact address
+    and a personal site in each, and in the root file the account's page and two other
+    people's addresses.
+  - 19 files under `agent-tools` (15 source, 4 tests) name a second repository after the
+    domain, as a probe's location or a fixture.
+  - 18 rules, 6 sub-agent templates, 7 skills, 8 delivery plans, 4 decision records under
+    `practice-core`, 2 pages under `docs/architecture`, and the sub-agents index.
+  - The forms: the domain (89 occurrences), the mention form (22), the bare name (17), the
+    contact address (19), about 20 branch names prefixed with the name, a package scope (3)
+    and the second repository (4).
+- **A second code owner's account name: 43 files**, 6 of them living (4 delivery plans, 2
+  pages under `docs/architecture`), the rest dated records.
+- **Two other code owners: 3 files**, dated records and the root `package.json`.
+- **A personal mail address: 3 files**, a comms record and two archived Sonar evidence files
+  (13 occurrences).
+- **One contributor's address on a personal domain: 1 file**, the root `package.json`.
+- Addresses at the organisation's domain are shared mailboxes or fixtures, but for one
+  personal address in one file.
+
 ## Mechanism
 
 Three kinds of occurrence, each with its own cure.
