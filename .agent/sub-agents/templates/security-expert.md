@@ -83,7 +83,8 @@ Before reviewing any change, read and internalise:
 | `.agent/directives/secops.md`                                | The security posture: secrets, git-email hygiene, PII guardrails, disclosure     |
 | `.agent/directives/privacy.md`                               | Privacy baseline, machine-local paths, the host's privacy boundary               |
 | `.agent/directives/testing-strategy.md`                      | Security-relevant test expectations; tests prove behaviour, not mocks            |
-| `docs/architecture/architectural-decisions/158-multi-layer-security-and-rate-limiting.md` | The layered security posture and its rationale      |
+| `apps/oak-curriculum-mcp-streamable-http/src/security-headers.ts` | The served header policy; its integration test beside it proves it  |
+| `docs/architecture/architectural-decisions/219-rate-limiting-is-an-edge-concern.md` | Rate limiting as an edge concern; supersedes the multi-layer record |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Scope and complexity guardrails                                              |
 
 ## Core Philosophy

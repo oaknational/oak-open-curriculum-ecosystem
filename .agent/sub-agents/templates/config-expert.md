@@ -124,16 +124,13 @@ Produce the structured output below. Include a per-workspace inheritance analysi
 
 Each workspace with TypeScript source should extend the base configuration, by the relative
 path its depth needs (`../tsconfig.base.json` from `agent-tools`, `../../../` from a package
-under `packages/*/`):
+under `packages/*/`). `packages/core/result/tsconfig.json`:
 
 ```json
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src"
-  },
-  "include": ["src/**/*"],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../../tsconfig.base.json",
+  "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
 ```
