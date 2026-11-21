@@ -278,6 +278,8 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-21 | oaknational#1051 | 1 | 0 / 40 | within | 0 | agreed | a person's login replaced in the recorded harvests; the pre-push gate caught a review-cost assertion the edit shortened by eight characters, cured before the pull request opened; one Copilot review: no finding |
 | 2026-11-21 | oaknational#1052 | 1 | 0 / 40 | within | 0 | agreed | role words in plans, two ADRs and PDR-118; one Copilot review requested, decision records being a sensitive area: no finding |
 | 2026-11-21 | oaknational#1053 | 1 | 0 / 40 | within | 0 | agreed | the code-owner-names validator, report mode, outside the gates; one Copilot review requested, the change being new code: four findings, three upheld and cured in one push (a comment ending a pattern line read as an owner, an unreadable input exiting 1, the local list not ignored), one declined with the note corrected (the shared scan policy leaves lockfiles and source maps out) |
+| 2026-11-21 | oaknational#1054 | 1 | 0 / 40 | within | 0 | agreed | the coordination branch of 2026-11-21 folded; one Copilot finding (the plan still said the validator covers every tracked file), upheld and cured in one push |
+| 2026-11-21 | oaknational#1055 | 1 | 0 / 40 | within | 0 | agreed | role words for accounts in live memory and experience records, 38 lines in 20 files; one Copilot review: no finding |
 
 ## Weight changes
 

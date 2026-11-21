@@ -1318,9 +1318,17 @@ inside a rule name).
     SETTLE-READY, the successor cut with `coordination successor-name`, the old branch
     retired.
 
+  The fold landed as oaknational#1054 and the branch rotated to
+  `coordination/2026-11-21-e71d8e`. The first surface of todo 4 landed as oaknational#1055:
+  live memory (archives apart) and experience records, 38 lines in 20 files. The report read
+  732 lines in 28 directories after it. A quoted message keeps its words with the account in
+  square brackets; a commit author value becomes a placeholder pair inside its code span.
+
   What remains, in order:
 
-  1. Dated records (todo 4), one surface per pull request, sized by
+  1. Dated records (todo 4), one surface per pull request, largest first by the report:
+     the agentic-engineering reports, the archived Sonar evidence directory, the operational
+     memory archive, the rapid-comms records, the active memory archive. Sized by
      `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`. The
      replacements used so far: an account as a mention becomes "the owner" or "a code
      owner"; a branch prefixed with an account takes `<owner>/` when inside a code span
