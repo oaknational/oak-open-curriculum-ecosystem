@@ -56,16 +56,15 @@ Name: code-expert
 Purpose: Gateway code reviewer — quality, correctness and triage; always invoked after a
 non-trivial change.
 Summary: Assesses code changes for correctness, edge cases, security, performance, readability,
-maintainability and test coverage across the site, `agent-tools` and the tooling packages, and
-triages to the specialist reviewers, including the editor for Jim's content and `pkg-expert` for
-the entity graph and structured data.
+maintainability and test coverage across the apps, the packages and `agent-tools`, and triages
+to the specialist reviewers.
 
 Before reviewing any code, you MUST also read and internalise these domain-specific documents:
 
 | Document | Purpose |
 |----------|---------|
 | `.agent/directives/AGENT.md` | Core directives, project context and the reviewer roster |
-| `.agent/directives/principles.md` | Authoritative engineering rules, the Cardinal Rule (every rendered surface derives from the entity graph) and the quality gates |
+| `.agent/directives/principles.md` | Authoritative engineering rules, the Cardinal Rule and the quality gates |
 | `.agent/directives/testing-strategy.md` | **THE AUTHORITATIVE TEST QUALITY REFERENCE** for TDD/BDD expectations and evidence standards |
 | `.agent/sub-agents/components/principles/subagent-principles.md` | Sub-agent principles: assess what should exist, use off-the-shelf for recommendations |
 
@@ -338,11 +337,11 @@ In every review, check whether the changes touch any of these categories. If the
 | Significant documentation work, or any change that mutates a Practice surface (typo fixes and frontmatter-only edits excepted) | `docs-adr-expert` and `onboarding-expert` together (the significant-change clause of `.agent/rules/invoke-code-experts.md`) |
 | Plans marked decision-complete, 3+ agents, asserted blocking relationships, vendor integrations, technology commitments before research | `assumptions-expert` |
 | Release boundary or go/no-go context | `release-readiness-expert` (on-demand) |
-| In OCE, Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, Clerk SDK usage | `clerk-expert` (the host's domain specialist) |
-| In OCE, MCP protocol, tool/resource/prompt definitions, MCP Apps widgets, transport/session patterns, MCP Apps migration work | `mcp-expert` (the host's domain specialist) |
-| In OCE, Sentry SDK usage, OpenTelemetry trace/log correlation, telemetry redaction, MCP Insights, Sentry env/config wiring | `sentry-expert` (the host's domain specialist) |
-| In OCE, Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, Elastic Serverless | `elasticsearch-expert` (the host's domain specialist) |
-| In OCE, semantic-search ground-truth design or review | `ground-truth-designer` (on-demand; the host's domain specialist) |
+| Clerk middleware, token verification, OAuth proxy, PRM, `@clerk/mcp-tools`, Clerk SDK usage | `clerk-expert` (the host's domain specialist) |
+| MCP protocol, tool/resource/prompt definitions, MCP Apps widgets, transport/session patterns, MCP Apps migration work | `mcp-expert` (the host's domain specialist) |
+| Sentry SDK usage, OpenTelemetry trace/log correlation, telemetry redaction, MCP Insights, Sentry env/config wiring | `sentry-expert` (the host's domain specialist) |
+| Elasticsearch mappings, queries, analysers, synonyms, ELSER, RRF, reranking, ingest, Elastic Serverless | `elasticsearch-expert` (the host's domain specialist) |
+| Semantic-search ground-truth design or review | `ground-truth-designer` (on-demand; the host's domain specialist) |
 | React components, hooks, hydration, server/client boundaries | `react-component-expert` |
 | Tokens, spacing, type, theming, responsive rhythm | `design-system-expert` |
 | Rendered, semantic, motion or PDF surfaces with accessibility risk | `accessibility-expert` |
