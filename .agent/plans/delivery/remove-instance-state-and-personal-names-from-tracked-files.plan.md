@@ -94,6 +94,17 @@ templates that commit touched (`onboarding-expert`, `subagent-architect`, `test-
 smaller ones), and the prose improvements the replaced text carried, which are worth
 re-applying for this repository.
 
+The same review found three places where the earlier bodies are behind this repository's
+records, accepted and left for the next work on these templates:
+
+- the type template's two-executor and `as` checks are unqualified where ADR-038 allows Zod
+  and `as const`, and one strategy throws where the Result rule applies;
+- the design-system template names `index.html` where the resource is the banner page, treats
+  DTCG as the universal source where ADR-213 gives CSS that authority, and expects identical
+  theme overrides where the model is a sparse overlay;
+- the documentation template checks ADRs only, where the reviewer roster and PDR-019 cover
+  PDRs too.
+
 The owner's answers by question prompt on 2026-11-21: package manifests name the organisation
 only, and passages about the sibling estate are removed from this estate's rules and skills.
 
