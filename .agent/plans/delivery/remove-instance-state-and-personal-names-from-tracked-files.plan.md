@@ -79,6 +79,20 @@ Counted with `git grep` at `origin/main` (`f36581d97`), leaving out `.github/COD
 - Addresses at the organisation's domain are shared mailboxes or fixtures, but for one
   personal address in one file.
 
+### Found during delivery, 2026-11-21
+
+The name search understated one surface. Nine reviewer templates under
+`.agent/sub-agents/templates` carry another repository's instance as their own: its
+workspaces, its configuration files, its decision-record numbers and two reviewers this
+repository does not have. A search for the account name and the domain finds the sentences
+that name that repository and misses the paragraphs that describe it without naming it. The
+wording these templates carried before 2026-10-04 is in git history and is the source for
+truing them. Four are trued (config, accessibility, React, documentation) with the security
+template and the index; four remain (design system, type, code, assumptions).
+
+The owner's answers by question prompt on 2026-11-21: package manifests name the organisation
+only, and passages about the sibling estate are removed from this estate's rules and skills.
+
 ## Mechanism
 
 Three kinds of occurrence, each with its own cure.
