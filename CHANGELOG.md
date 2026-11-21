@@ -1,3 +1,10 @@
+## [1.187.16](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.15...v1.187.16) (2026-11-21)
+
+
+### Bug Fixes
+
+* **merge-bot:** hold every pull request to one review and every check ([4be6427](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/4be64271807fabb926d765e47415ff30bd24d8bb))
+
 ## [1.187.15](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.14...v1.187.15) (2026-11-21)
 
 ## [1.187.14](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.187.13...v1.187.14) (2026-11-21)
