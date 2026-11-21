@@ -274,6 +274,9 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-21 | oaknational#1047 | 1 | 0 / 40 | within | 0 | agreed | nineteen rules without the sibling estate; one Copilot review: no finding |
 | 2026-11-21 | oaknational#1048 | 1 | 0 / 40 | within | 0 | agreed | seven skills and the testing directive; one finding (a label left ambiguous by the removal), upheld in part and cured in one push the survey prices at nothing |
 | 2026-11-21 | oaknational#1049 | 3 | 43.94 / 40 | exhausted | 1 | agreed | nine reviewer templates trued; three Copilot rounds, nine findings, all upheld: the first changed the method from edited sentences to the earlier bodies, the second kept the security template's coverage, the third corrected two references; one push past the budget on the seat's recorded decision, which the survey counts as none; three further observations recorded in the plan as later work |
+| 2026-11-21 | oaknational#1050 | 1 | 0 / 40 | within | 0 | agreed | the cleanup re-count, findings and the day's records; one Copilot finding (the plan said seven templates took earlier bodies where six did, and a met next step stood in the thread record), upheld and cured in one push the survey prices at nothing |
+| 2026-11-21 | oaknational#1051 | 1 | 0 / 40 | within | 0 | agreed | a person's login replaced in the recorded harvests; the pre-push gate caught a review-cost assertion the edit shortened by eight characters, cured before the pull request opened; one Copilot review: no finding |
+| 2026-11-21 | oaknational#1052 | 1 | 0 / 40 | within | 0 | agreed | role words in plans, two ADRs and PDR-118; one Copilot review requested, decision records being a sensitive area: no finding |
 
 ## Weight changes
 

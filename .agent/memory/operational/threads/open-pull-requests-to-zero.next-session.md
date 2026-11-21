@@ -1284,9 +1284,14 @@ inside a rule name).
      skills and the testing directive) without the sibling estate (the owner's answer:
      remove the passages), and #1049 (nine reviewer templates trued to this repository,
      `0f578a8c2`). The plan holds the re-count and what #1049 found.
-     Next, in order: the harvested fixtures under `agent-tools/tests/pr-tally`; the other
-     templates the 2026-10-04 commit touched, and the three review observations the plan
-     lists; decision records, delivery plans and `docs/architecture` pages; dated records,
-     names only, one surface at a time; the validator last.
+     Then oaknational#1050 (the day's records), #1051 (the recorded harvests under
+     `agent-tools/tests/pr-tally`; `agent-tools` now holds no occurrence) and #1052 (role
+     words in plans, two ADRs, PDR-118, the hooks readme and a prompt, `400a5b5e1`). The
+     owner ruled by question prompt that the Practice Core stays as it is.
+     Next, in order: dated records, names only, one surface per pull request (about 170
+     files and 2,500 lines on 2026-11-21, the largest being `.agent/memory/operational`,
+     `.agent/reports/agentic-engineering`, `.agent/reports/practice-exchange` and the
+     rapid-comms records); the other templates the 2026-10-04 commit touched and the three
+     review observations the plan lists; the validator last.
   The v1 migration is planned and not started, at the owner's word.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
