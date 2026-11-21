@@ -24,7 +24,7 @@ The governing node is `practice-parity-for-extraction` (the Director's, 2026-10-
 superseded `practice-work-finish`); the finish's criterion 1 (the
 write list at zero open items, the notebooks processed and archived, the counters at zero) and
 criterion 2 (no consolidation branch left in either repository). This node is the last step of
-that node's first todo in JC.net and the matching residue in OCE, sized from the audit of
+that node's first todo in the sibling estate and the matching residue in OCE, sized from the audit of
 2026-10-02 18:3xZ recorded in the two-estate thread record's twelfth entry (the write list as one
 numbered table). The owner's words that bound it: "NOTHING should be worked on without clear
 completion criteria, sizing, and an unambiguous and provable statement of how it provides ratified
@@ -35,7 +35,7 @@ napkins, we fully process them, and once all knowledge is safe we move them to a
 
 When this lands, every one of the 97 write-list items is in its home in both repositories, closed
 on a reading, on a memory surface, or sequenced into the extraction plan with the mechanism named;
-the three unconsolidated notebooks of JC.net are archived by proof after full processing; JC.net's
+the three unconsolidated notebooks of the sibling estate are archived by proof after full processing; the sibling estate's
 live notebook is rotated; the two directive clauses held by PDR-052's floor are on both default
 branches; and the two omnibus branches are deleted on the content script's zero. None of that is
 true now: eleven lessons sit in one estate's homes only, two sit nowhere, the notebooks hold the
@@ -60,7 +60,7 @@ write list's source, and the branches hold a directive clause no default branch 
   node from the node alone.
 - Slices land one at a time under one open pull request per repository, each pull request body
   naming the W items it lands, the same bytes in both repositories where the home exists in both.
-- The notebooks move only after the write list reads zero in JC.net, by `consolidate-docs` step 6
+- The notebooks move only after the write list reads zero in the sibling estate, by `consolidate-docs` step 6
   (read each block against its home, graduate what is unhomed, distil, archive by the byte proof
   of 6b); the one phrase the privacy directive keeps out of version control is omitted from the
   archived copy of the 2026-03-08 notebook.
@@ -75,12 +75,12 @@ write list's source, and the branches hold a directive clause no default branch 
    LANDED-OCE 0; every remaining row is LANDED-BOTH, CLOSED-ON-READING, MEMORY, SEQUENCED with its
    mechanism, or NOT-AN-ITEM. Proof, `repo-safe`: each LANDED-BOTH row names a file and a line in
    each repository, and `grep` of the named words at both default tips finds them.
-2. `.agent/memory/active/unconsolidated/` in JC.net is empty, and the archive commit names the
+2. `.agent/memory/active/unconsolidated/` in the sibling estate is empty, and the archive commit names the
    three notebooks with the byte proof of `consolidate-docs` 6b (the archive's body equals the
    moved range cut from the pre-move blob; for the 2026-03-08 notebook, equal except the one
    omitted phrase, named in the commit as an omission, not quoted). Proof, `repo-safe`: the
    directory listing and the archive commit.
-3. JC.net's live notebook is under 500 lines after the rotation, the rotated range is in the
+3. The sibling estate's live notebook is under 500 lines after the rotation, the rotated range is in the
    archive directory with the same byte proof, and `distilled.md` holds what the rotation
    distilled. Proof, `repo-safe`: `wc -l`, the archive commit, the distilled file's dated block.
 4. The continuity directive's archive clause and the privacy directive's capture clause are on
@@ -93,10 +93,10 @@ write list's source, and the branches hold a directive clause no default branch 
 
 | Step | Files | Size | Position |
 | --- | --- | --- | --- |
-| JC.net slice 2w, five W items and the count clause | 5 | one pull request, about 30 lines, two review rounds at most | first, JC.net's slot after 298 merges |
+| The sibling estate's slice 2w, five W items and the count clause | 5 | one pull request, about 30 lines, two review rounds at most | first, the sibling estate's slot after 298 merges |
 | OCE slice 2w, the Practice twins | 5 | one pull request, about 25 lines | OCE's slot after Efreet lifts Scorch's y |
 | OCE slice 2x, the product-docs items | 4 | one pull request, about 12 lines | after OCE 2w |
-| the notebook rotation | the notebook, its archive, `distilled.md` | about two hours: four read-only Sonnet readers over the day's blocks against their homes, every presence claim verified first-hand, one records commit | after JC.net 2w merges |
+| the notebook rotation | the notebook, its archive, `distilled.md` | about two hours: four read-only Sonnet readers over the day's blocks against their homes, every presence claim verified first-hand, one records commit | after the sibling estate 2w merges |
 | the three notebooks' move | three files to the archive | half an hour, one records commit | with the rotation |
 | the directive clauses | two directives per repository | one pull request per repository, under the floor, after a compaction | when the reading allows |
 | the omnibus branches | two local branches, one script | ten minutes, the script in a records commit | after the directive clauses land |
@@ -105,7 +105,7 @@ About five seat-hours in all; finished within one day of the resume.
 
 ## Todos
 
-1. **JC.net slice 2w** (`docs/consolidation-2w-write-list-residue`), from `origin/main`, five
+1. **The sibling estate's slice 2w** (`docs/consolidation-2w-write-list-residue`), from `origin/main`, five
    files, each sentence added where the file treats the subject, in British spelling:
    - `.agent/skills/change-custody/pr-lifecycle/SKILL-CANONICAL.md`, the review-leg section
      (W13, a port of OCE's text at its lines 1137 to 1142): "A reviewer's reported result has two
@@ -133,7 +133,7 @@ About five seat-hours in all; finished within one day of the resume.
      a skill that carries an evaluation suite (`evals/evals.json`) goes over the review bar, re-run
      the suite and take a fresh human read of its outputs before the change merges: the owner's
      human-review criterion; a green suite alone does not satisfy it."
-   - `.agent/rules/review-feedback-defaults-to-triage.md`, after the action steps (W12; JC.net's
+   - `.agent/rules/review-feedback-defaults-to-triage.md`, after the action steps (W12; the sibling estate's
      pull-request skill carries it at its line 499, the named rule in neither estate): "Where the
      cure is cheaper than the argument against it, cure; a disposition that costs more than the fix
      is the wrong instrument. A second raising of the same finding by an independent reviewer tips
@@ -148,10 +148,10 @@ About five seat-hours in all; finished within one day of the resume.
    files, the same sentences: the pull-request skill's Copilot paragraph (W84); the surface matrix
    needs nothing (it is the source); `.agent/rules/review-feedback-defaults-to-triage.md` (W12);
    `.agent/rules/validators-must-recompute-not-just-record.md` (the count clause);
-   `.agent/rules/invoke-code-experts.md`, after the consult paragraph (W37, JC.net's lines 17 to
+   `.agent/rules/invoke-code-experts.md`, after the consult paragraph (W37, the sibling estate's lines 17 to
    19): "Each test change gets a `test-expert` verdict before it is committed, and the commit
    message or the pull-request body records the verdict."; `.agent/rules/verify-dont-trust.md`,
-   its evidence-handling section (W32, JC.net's lines 294 to 298, verbatim): "A review request for
+   its evidence-handling section (W32, the sibling estate's lines 294 to 298, verbatim): "A review request for
    a durable local capture carries metadata only: its path, byte size, hash, run times, tool
    version and the shape of the command. A reviewer who asks for the payload is routed to the
    Director. Originals behind test fixtures are never published: redacted projections are
@@ -171,7 +171,7 @@ About five seat-hours in all; finished within one day of the resume.
    `docs/governance/sonar-disposition-policy.md`: "Sonar rule `javascript:S7764` (prefer
    `globalThis`) is rejected on the injectable-window test seam, where the seam names `window`
    explicitly so tests can inject it; the rejection carries this reason at each site."
-4. **The notebook rotation in JC.net**, after 2w merges: `consolidate-docs` step 6 over
+4. **The notebook rotation in the sibling estate**, after 2w merges: `consolidate-docs` step 6 over
    `.agent/memory/active/napkin.md` (967 lines at 2026-10-02 18:4xZ, the seats' and the
    Director's blocks of the day among them): four read-only Sonnet readers, one per quarter of the
    file, each block's lessons read against their homes with quoted lines; the seat verifies every
@@ -184,7 +184,7 @@ About five seat-hours in all; finished within one day of the resume.
    names the omission without quoting it.
 6. **The directive clauses**, one pull request per repository after a compaction with the reading
    under the floor twice: the continuity directive's archive clause (the omnibus branch's seven
-   lines, `git diff c6394b98e 767c05a9 -- .agent/directives/continuity-practice.md` in JC.net,
+   lines, `git diff c6394b98e 767c05a9 -- .agent/directives/continuity-practice.md` in the sibling estate,
    with the reviewer's cure of 2026-10-02 applied: the pre-move blob is the surface as committed at
    `HEAD` before the move, never "the move commit's parent") and the privacy directive's capture
    clause (the W32 sentence above, in its PII section).
@@ -192,12 +192,12 @@ About five seat-hours in all; finished within one day of the resume.
    `.agent/reports/agentic-engineering/` beside a one-paragraph reading; each branch is deleted
    when the script prints zero missing lines against the default tip or every remaining line is
    named in the reading as superseded or carried in fuller words (the twelfth entry's reading
-   stands for JC.net at main SHA:f4a1c7496 except the directive clause); OCE's branch by its seat
+   stands for the sibling estate at main SHA:f4a1c7496 except the directive clause); OCE's branch by its seat
    on the same reading.
 
 ## Out of scope
 
-- W33 (the Sonar disposition policy port into JC.net; the author-skills and deslop skills into
+- W33 (the Sonar disposition policy port into the sibling estate; the author-skills and deslop skills into
   OCE) and W44 (the form of the ADR-187 port): difference rows of the register and the inventory,
   read by the parity ledger of `practice-parity-for-extraction` as capability rows; where a
   Practice-wide decision made in one repository lives is the extraction design's decision.

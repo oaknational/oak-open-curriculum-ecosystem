@@ -81,7 +81,7 @@ always based on current `origin/main`. After a PR merges, pull `main` and cut th
 - **Coordination home**: `coordination/team-tooling-session-2026-06-28` (off `main`), Director-owned,
   sole writer; pushed at waypoints (carries this opener + the setup + the dedicated consolidation; draft
   PR #268); never PR'd mid-arc, never rebased; merged at arc end after a divergence analysis, via the
-  **@jimCresswell code-owner gate** (no `--admin`, no `--no-verify`).
+  **code-owner gate** (no `--admin`, no `--no-verify`).
 - **Coordination ⇇ main merges**: Director merges `origin/main` INTO the coordination home
   (forward-only, merge commit) when Director tooling needs landed source or drift accumulates;
   divergence analysis first.
