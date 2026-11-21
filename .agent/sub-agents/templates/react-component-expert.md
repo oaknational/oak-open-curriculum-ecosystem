@@ -105,9 +105,8 @@ This expert applies a live-docs-first authority order, specialised for React
 1. **Current React documentation** — fetched live from `react.dev`
 2. **React API reference** — canonical hook and component APIs
 3. **The host's records and rules** — the rendering-proof rule
-   (`visual-verdicts-require-rendered-proof`; in the sibling estate, jimcresswell.net also ADR-016 and ADR-022), the
-   production-build E2E pattern (in the sibling estate, jimcresswell.net ADR-019), the `read-nextjs-docs-before-coding`
-   rule, the design-system and accessibility references
+   (`visual-verdicts-require-rendered-proof`), ADR-147, ADR-148 and ADR-149, the
+   `read-nextjs-docs-before-coding` rule, the design-system and accessibility references
 4. **Existing implementation** — evidence of what was built, not
    authority on what should be built
 
@@ -115,13 +114,10 @@ When the live docs contradict cached knowledge, the live docs win.
 
 ## Deployment Context
 
-The host's; in the sibling estate, jimcresswell.net: a statically built Next.js App Router site (`jcdotnet`): pages
-under `app/`, shared components under `components/`, content derived from the entity graph at
-build time. Components render as server components by default; client components
-(`'use client'`) exist only where interaction requires them (the theme provider and toggle, for
-instance). The generated PDF renders from the same components in the same `pnpm build`, so a
-component change reaches the PDF; rendered proof comes from the visual-regression harness. In
-every estate, per `visual-verdicts-require-rendered-proof`, a visual verdict without rendered
+UI-shipping workspaces consuming React. Components may render as server components, client
+components, or MCP App view components using the `@modelcontextprotocol/ext-apps` bridge.
+Rendered proof comes from the host's rendered-proof instrument, named in its gates skill. Per
+`visual-verdicts-require-rendered-proof`, a visual verdict without rendered
 proof is not a verdict.
 
 ## Authoritative Sources (MUST CONSULT)

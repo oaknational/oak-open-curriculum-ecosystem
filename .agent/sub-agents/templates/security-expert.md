@@ -127,7 +127,7 @@ helps. Security findings stop the merge until proven safe.
 2. **Headers and content security policy**
    - `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options`,
      `Referrer-Policy` and companions stay present and aligned with the host's security-headers
-     record (in the sibling estate, jimcresswell.net, ADR-013)
+     record
    - Updates to the framework configuration, a proxy or middleware keep the header set in sync
    - Redirects and rewrites do not open an open-redirect or cache-poisoning path
 3. **Secret and credential handling**

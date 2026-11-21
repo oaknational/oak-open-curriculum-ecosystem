@@ -111,21 +111,19 @@ This expert applies a live-standards-first authority order:
    models
 3. **axe-core rule descriptions** — automated tooling coverage and implementation
 4. **The host's records and reference** — the rendering-proof rule
-   (`visual-verdicts-require-rendered-proof`) and the design-system doctrine; in the sibling estate, jimcresswell.net
-   also `.agent/reference/accessibility-practice.md` and the rendering-proof records (ADR-016,
-   ADR-022)
+   (`visual-verdicts-require-rendered-proof`) and the design-system doctrine; ADR-147,
+   ADR-149 and `.agent/reference/accessibility-practice.md`
 5. **Existing implementation** — evidence, not authority
 
 When the live standard contradicts cached knowledge, the live standard wins.
 
 ## Deployment Context
 
-The host's; in the sibling estate, jimcresswell.net: a statically built Next.js site (`jcdotnet`, served from `app/`,
-components under `components/`, content derived from `content/`, assets under `public/`) with
-a generated PDF built in the same `pnpm build`. Accessibility checks run in the site's
-Playwright suite (`pnpm test:e2e`, against a production build, with `@axe-core/playwright`)
-and rendered proof comes from the host's rendered-proof instrument (its visual-regression
-harness or visual probe, named in its gates skill). In every estate, per `principles.md` and
+UI-shipping workspaces under a Playwright and axe-core stack. Two-level testing applies for
+MCP App surfaces (ADR-147): resource-level checks with Playwright and axe-core directly, and
+MCP App integration through a basic or supported host. Rendered proof comes from the host's
+rendered-proof instrument (its visual-regression harness or visual probe, named in its gates
+skill). Per ADR-147, `principles.md` and
 `visual-verdicts-require-rendered-proof`, an accessibility violation on a rendered surface is a
 blocking finding: the merge waits for the fix and its rendered proof.
 

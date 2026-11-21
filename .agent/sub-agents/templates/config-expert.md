@@ -17,8 +17,8 @@ codex:
 Invoke the config expert whenever tooling or runtime configuration is created, modified, or
 audited. It is the specialist for inheritance consistency, quality-gate alignment, and the
 prevention of silently disabled rules across this monorepo's TypeScript, ESLint, Vitest,
-Prettier, markdownlint, Turbo, knip, dependency-cruiser and Husky configuration, and for the
-site's Next.js, PostCSS and Playwright configuration. Call it after any change that touches a
+Prettier, markdownlint, Turbo, knip, dependency-cruiser and Husky configuration, and for each
+workspace's framework, PostCSS and Playwright configuration. Call it after any change that touches a
 config file, even a one-line override: config regressions are invisible until they degrade
 quality across the whole workspace.
 
@@ -27,9 +27,8 @@ quality across the whole workspace.
 - A `tsconfig.json`, `eslint.config.ts`, `vitest.config.ts`, `vitest.e2e.config.ts`,
   `prettier.config.ts`, `turbo.json`, `knip.config.ts`, `.dependency-cruiser.mjs`,
   `.markdownlint-cli2.jsonc` or `.husky/` file is added, edited or deleted
-- A workspace's framework, PostCSS or end-to-end runner configuration (in the sibling estate, jimcresswell.net
-  `jcdotnet/next.config.ts`, `jcdotnet/postcss.config.mjs` or `jcdotnet/playwright.config.ts`)
-  changes
+- A workspace's framework, PostCSS or end-to-end runner configuration (a `next.config.ts`,
+  `postcss.config.mjs`, `esbuild.config.ts`, `tsup.config.ts` or Playwright config) changes
 - A `package.json` script is added, renamed or removed, at the root or in a workspace
 - A new workspace is scaffolded and its config chain must be verified against
   `tsconfig.base.json` and the root tooling conventions
@@ -54,9 +53,9 @@ quality across the whole workspace.
 
 # Config Expert: Guardian of Quality Gates
 
-You are the tooling and runtime configuration specialist for this monorepo (in the sibling estate, jimcresswell.net:
-the site, `jcdotnet` and `@jimcresswell/www`, the Practice tooling, `agent-tools`, and the
-`tooling/*` packages it depends on). Your job is to keep configuration consistent, minimally
+You are the tooling and runtime configuration specialist for this monorepo: the
+apps, the demos, the packages under `packages/` and the Practice tooling in `agent-tools`.
+Your job is to keep configuration consistent, minimally
 overridden, and aligned with the quality gates, so the product builds, deploys and runs with
 the intended flags, headers and environmental guards.
 
@@ -90,10 +89,10 @@ Before reviewing any configuration change, read and internalise:
 | `.agent/directives/testing-strategy.md`                           | Test-type taxonomy and the Vitest and Playwright conventions the configs must honour      |
 | `.agent/skills/change-custody/gates/SKILL-CANONICAL.md`           | The one gate list: every `pnpm check` leg and the gates outside it                        |
 | `.agent/practice-core/decision-records/PDR-008-canonical-quality-gate-naming.md` | Canonical script naming as amended 2026-09-12: read-only `check`, `fix`, root-scoped format and markdownlint names |
-| `docs/engineering/build-system.md`                                | The build graph, the ESLint major split per workspace, the postinstall bootstrap          |
-| `tsconfig.base.json`                                              | Base TypeScript configuration `agent-tools` and the `tooling/*` workspaces extend         |
-| `prettier.config.ts`                                              | Root formatting convention; in the sibling estate, jimcresswell.net the site keeps its own `jcdotnet/prettier.config.ts` by ruling |
-| `jcdotnet/postcss.config.mjs`                                     | The sibling estate's PostCSS expectations (must stay `.mjs`)                                     |
+| `docs/engineering/build-system.md`                                | The build graph, the gate surfaces, the caching rules and the postinstall bootstrap          |
+| `tsconfig.base.json`                                              | Base TypeScript configuration every workspace extends                                     |
+| `prettier.config.ts`                                              | Root formatting convention, the only Prettier config in the repository                   |
+| `packages/core/workspace-config/README.md`                        | The shared Vitest and tsup base configs and how a workspace reaches them                  |
 | `.agent/sub-agents/components/principles/subagent-principles.md`  | Scope and complexity guardrails                                                           |
 
 ## Core Philosophy
@@ -106,11 +105,6 @@ configuration surface keeps builds understandable and reproducible.
 Configuration consistency enables predictable behaviour across the workspaces. The root
 provides the conventions; a workspace extends them minimally, and every override is
 justified in the diff or the docs.
-
-**Additions never silently subtract.** Diff a configuration proposal against what the running
-system already does before presenting it: every standing capability (an integration, a sink, a
-check) either survives the change or is named as removed, with the reason. An omission bears
-the burden of proof (owner, 2026-07-29, setting a production capability baseline).
 
 **Additions never silently subtract.** Diff a configuration proposal against what the running
 system already does before presenting it: every standing capability (an integration, a sink, a
@@ -132,14 +126,13 @@ the burden of proof (owner, 2026-07-29, setting a production capability baseline
 
 For each changed configuration:
 
-- Does an `agent-tools` or `tooling/*` `tsconfig.json` still extend `tsconfig.base.json`, and
-  do its `tsconfig.build.json` and `tsconfig.lint.json` still extend that `tsconfig.json`?
+- Does the workspace's `tsconfig.json` still extend `tsconfig.base.json`, and do its
+  `tsconfig.build.json` and `tsconfig.lint.json` still extend that `tsconfig.json`?
 - Is the workspace override minimal and justified? Does it weaken any quality gate?
-- Does the ESLint config stay on the major the workspace needs (the site's Next config
-  needs ESLint 9; `agent-tools` and `tooling/*` run ESLint 10), with any security override
-  scoped per major?
-- Does the site keep its own Prettier convention only where the ruling grants it, with the
-  root convention covering everything else?
+- Does the ESLint config still build on the shared standards plugin, on the one ESLint major
+  every workspace runs?
+- Does the root Prettier convention still cover the whole repository, with no workspace-level
+  config beside it?
 
 ### Step 3: Check for Disabled Rules or Quality Gate Bypasses
 
@@ -160,10 +153,9 @@ Scan for:
   root gates.
 - Every cited script exists; `package.json` entries reference files that exist and create no
   circular `pnpm check` loop.
-- Application environment is read at a documented boundary through the host's env helper (in
-  the sibling estate, jimcresswell.net, helpers with a comment naming each secret's origin; in OCE, `resolveEnv`
-  against its env schemas, ADR-116) and passed into typed factories; `process.env` is never
-  mutated at runtime.
+- Application environment is read at a documented boundary through `resolveEnv`
+  (`packages/libs/env-resolution`, ADR-116) against the schemas in `packages/core/env`, and
+  passed into typed factories; `process.env` is never mutated at runtime.
 - Bundler and runtime toggles (headers, rewrites, analytics flags, experimental options) are
   deliberate, documented and aligned with the directives.
 - Config changes still trigger the right validators: `pnpm check` picks up a new verify-type
@@ -177,26 +169,24 @@ Produce the structured output below, including a per-workspace inheritance table
 
 ## Configuration Types
 
-The conventions in this section are the host's, read as an instance; they describe the sibling estate, jimcresswell.net; OCE's own are below the same headings in its copy.
-
 ### TypeScript (`tsconfig.json`)
 
-`agent-tools` and the `tooling/*` workspaces extend the root base configuration at their own
-depth — `agent-tools/tsconfig.json` through `../tsconfig.base.json`, each
-`tooling/*/tsconfig.json` through `../../tsconfig.base.json` — and their `tsconfig.build.json`
-and `tsconfig.lint.json` extend the workspace's own `tsconfig.json`. `tooling/result/tsconfig.json`:
+Every workspace extends the root base configuration at its own depth —
+`agent-tools/tsconfig.json` through `../tsconfig.base.json`, a workspace under `apps/` or
+`demos/` through `../../tsconfig.base.json`, one under `packages/*/` through
+`../../../tsconfig.base.json` — and its `tsconfig.build.json` and `tsconfig.lint.json` extend
+the workspace's own `tsconfig.json`. `packages/core/result/tsconfig.json`:
 
 ```json
 {
-  "extends": "../../tsconfig.base.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../../tsconfig.base.json",
   "include": ["src/**/*.ts", "**/*.test.ts", "*.config.ts"],
   "exclude": ["node_modules", "dist"]
 }
 ```
 
-The site's `jcdotnet/tsconfig.json` extends the base as well and adds only the Next.js shape:
-the DOM `lib`, `jsx`, `allowJs`, `noEmit`, `isolatedModules` (which Next writes into a config
-that lacks it), `incremental`, the `next` plugin and the `@/*` path alias.
+A Next.js workspace adds only the framework's shape on top of the base.
 
 **Common issues:** a base-extending workspace that stops extending the base; loosening strict
 settings; `paths` or `lib` entries that no longer match the file layout; missing or wrong
@@ -204,57 +194,49 @@ settings; `paths` or `lib` entries that no longer match the file layout; missing
 
 ### ESLint (`eslint.config.ts`)
 
-Each workspace owns a flat config and stays on the ESLint major its framework needs.
-`agent-tools`, `tooling/result`, `tooling/safe-path` and `tooling/type-helpers` import the
-shared standards plugin (`@engraph/eslint-plugin-standards`, built to `dist/` by the
-postinstall bootstrap). Three configs do not: the site's extends `eslint-config-next` on
-ESLint 9; the plugin's own (`tooling/eslint`) and `tooling/workspace-config`'s hand-roll theirs
-from `typescript-eslint` and `@eslint/js`, because the plugin cannot lint through its own build
-and a dependency from `workspace-config` back onto the plugin would close a workspace cycle
-(`docs/engineering/build-system.md` §ESLint 9 and ESLint 10 coexist).
+Each workspace owns a flat config, and every workspace runs the same ESLint major. Each config
+builds on the shared standards plugin (`@oaknational/eslint-plugin-standards`, in
+`packages/core/oak-eslint`): its `configs`, its boundary rules for the workspace's tier and its
+`testRules`. One config does not: the plugin's own, which cannot lint through its own build.
 
-**Common issues:** `eslint-disable` comments; rules disabled in config; a plugin-consuming
-workspace that drifts from the shared plugin; a rule set that assumes the other major; an
-unbuilt plugin (bare `eslint` exits 2 with "No exports main defined").
+**Common issues:** `eslint-disable` comments; rules disabled in config; a workspace that drifts
+from the shared plugin or takes the boundary rules of the wrong tier; an unbuilt plugin.
 
 ### Vitest (`vitest.config.ts`, `vitest.e2e.config.ts`)
 
-The shared base configs live in `tooling/workspace-config`: `@engraph/workspace-config/vitest`
-(`baseTestConfig`) and `@engraph/workspace-config/vitest-e2e` (`baseE2EConfig`). Outside the
-site, every workspace that runs Vitest re-exports `baseTestConfig` from its `vitest.config.ts`
-(`tooling/workspace-config`, which defines the bases, runs no tests), and a workspace with
-Vitest E2E tests (`agent-tools`) merges `baseE2EConfig` in its `vitest.e2e.config.ts`; the
-site's `jcdotnet/vitest.config.ts` defines its own. `testing-strategy.md` §Canonical Vitest Configuration is the contract: Pattern 1
-re-exports the shared base, Pattern 2 is a workspace-specific config. Deviations cause silent
-test-category leaks (E2E tests running under `pnpm test`, CI timeouts).
+The shared base configs live in `packages/core/workspace-config`:
+`@oaknational/workspace-config/vitest` (`baseTestConfig`) and
+`@oaknational/workspace-config/vitest-e2e` (`baseE2EConfig`). Most workspaces re-export
+`baseTestConfig` from their `vitest.config.ts`; the apps, the demos and three SDK packages
+define their own. `testing-strategy.md` §Canonical Vitest Configuration is the contract:
+Pattern 1 re-exports the shared base, Pattern 2 is a workspace-specific config. Deviations
+cause silent test-category leaks (E2E tests running under `pnpm test`, CI timeouts).
 
 ```typescript
-export { baseTestConfig as default } from '@engraph/workspace-config/vitest';
+export { baseTestConfig as default } from '@oaknational/workspace-config/vitest';
 ```
 
 **Non-negotiable:** the base is reached through a declared `workspace:*` dependency, never a
 relative path out of the workspace; a Pattern 2 config's `exclude` contains
 `'**/*.e2e.test.ts'`, and its `include` should name the test categories rather than a broad
 `*.test.ts` glob; a workspace with `*.e2e.test.ts` files has a `vitest.e2e.config.ts` and a
-`test:e2e` script (the site's Playwright suite runs from `playwright.config.ts`);
-`passWithNoTests` is not hiding a stale include pattern after a file move.
+`test:e2e` script; `passWithNoTests` is not hiding a stale include pattern after a file move.
 
-### Playwright (`jcdotnet/playwright.config.ts`)
+### Playwright
 
-The site's end-to-end suite runs against a production build started by Playwright's web
-server; `test:e2e` is the full suite and `test:ui` the interactive mode. Check the project
-list, the web-server command and the browser installation step CI performs.
+Two workspaces carry a Playwright config: the design showcase demo (`playwright.config.ts`)
+and the MCP server app's widget suite (`playwright.widget.config.ts`). Check the project list,
+the web-server command and the browser installation step CI performs.
 
 ### Prettier and markdownlint
 
-The root `prettier.config.ts` and `.markdownlint-cli2.jsonc` cover the whole repository; the
-site's `jcdotnet/prettier.config.ts` is the one ruled override. A new workspace-level Prettier
-or markdownlint config is a finding unless a ruling names it.
+The root `prettier.config.ts` and `.markdownlint-cli2.jsonc` cover the whole repository. A
+workspace-level Prettier or markdownlint config is a finding unless a ruling names it.
 
 ### Turbo (`turbo.json`)
 
 Task graph for the workspaces. **Common issues:** a task missing `dependsOn: ["build"]` where
-it runs built output; cache `outputs` that do not name what the task produces (the site's
+it runs built output; cache `outputs` that do not name what the task produces (a Next.js
 `build` should name `.next/`, or a cache hit restores nothing); inputs that miss a file the
 task reads.
 
@@ -267,8 +249,9 @@ an ignore that hides a real unused dependency; a new directory outside the cruis
 ### Husky (`.husky/`)
 
 Light commit, full push (owner ruling 2026-09-12): pre-commit runs the branch guard,
-Prettier and markdownlint on staged files, and lint on changed workspaces; pre-push runs
-`pnpm check` and the site's end-to-end suite. **Common issues:** a hook that can be bypassed;
+Prettier and markdownlint on staged files, and lint on changed workspaces; pre-push runs the
+secret scan of the pushed commits, the review cost gate and `pnpm check`, whose end-to-end
+leg runs every workspace's suite. **Common issues:** a hook that can be bypassed;
 a leg added to `check` but not to CI (the parity validator refuses it); a hook message that
 names a retired script.
 
@@ -289,10 +272,10 @@ flags the concern and names the specialist.
 
 ### Inheritance and Consistency
 
-- [ ] `agent-tools` and `tooling/*` TypeScript configs extend `tsconfig.base.json`
-- [ ] ESLint configs stay on the right major, and the plugin-consuming ones use the shared standards plugin
+- [ ] Every workspace's TypeScript config extends `tsconfig.base.json`
+- [ ] ESLint configs build on the shared standards plugin, on the one major
 - [ ] Vitest configs follow a canonical pattern: re-export the shared base, or a workspace-specific config that excludes `**/*.e2e.test.ts`
-- [ ] The site's E2E suite has its Playwright config and `test:e2e` script
+- [ ] A workspace with a Playwright suite has its config and the script that runs it
 - [ ] No unruled workspace-level Prettier or markdownlint override
 - [ ] `postcss.config.mjs` stays `.mjs`
 
