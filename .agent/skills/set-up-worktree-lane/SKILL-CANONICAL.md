@@ -94,10 +94,7 @@ is committer, on the owner's word in each estate (OCE, 2026-08-04: "we need
 to tell Vercel on whose authority this work was done"; "keep the bot identity
 locally shared, not in version control": the team bot the clone's merge-bot
 config names is the committer and the push transport, and the human on whose
-authority the work is done is the author, passed per commit; jimcresswell.net,
-2026-09-17: "Owner identity, as now": the owner as author and committer from
-the clone's shared identity, the acting agent named in the commit's
-`Co-Authored-By` trailer, bot credentials for third-party writes only). The
+authority the work is done is the author, passed per commit). The
 mechanics are that rule's; this skill holds no value of an identity. A new
 worktree therefore needs no identity step at all — only a check that what it
 inherited matches the primary:

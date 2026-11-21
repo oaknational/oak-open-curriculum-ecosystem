@@ -830,8 +830,7 @@ contradicts (2026-10-02).
   minutes (2026-09-09). The bot re-runs the failed job under its
   `workflow-dispatch` scope (the installation holds Actions write in each
   estate: OCE read it from the installations endpoint on 2026-09-11 and
-  cites two bot re-runs of 2026-09-12; jimcresswell.net minted a
-  `workflow-dispatch` run on 2026-09-25; `.agent/reference/merge-bot.md`
+  cites two bot re-runs of 2026-09-12; `.agent/reference/merge-bot.md`
   records the host's evidence), so no push is made: an empty-commit
   re-trigger was the route only while the bot used a scope without that
   permission.
@@ -1461,10 +1460,7 @@ create` on such a branch exits non-zero with "a pull request for branch …
    that registers it in the estate (`.agent/reference/merge-bot.md` names
    it): in OCE the bot's own pull-request-work token returns 201 and the
    timeline shows `review_requested Copilot` within seconds (first-hand on
-   #108, #109, #110, #114); in jimcresswell.net that call under the bot
-   token registers nothing, and the owner's CLI credential registers the
-   request on the timeline within a minute unless the previous request's
-   review is still in flight (verified live 2026-09-13). Verify on the
+   #108, #109, #110, #114). Verify on the
    timeline or the GraphQL `reviewRequests` connection, since gh's
    requested-reviewers list never shows a Bot request, and never through
    the draft/ready toggle, which fires nothing on a pull request already

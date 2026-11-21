@@ -31,9 +31,7 @@ aggregate local proof gate — unrolled one leg per line, followed by the host's
 gates outside it. The Practice-operation legs (format, markdown, shell lint,
 lint, type-check, test, the validators) are the family's and read the same in
 every estate; the product legs are the host's, and each estate's block below
-names its own. CI runs the same legs (in jimcresswell.net
-`validate-check-ci-parity` refuses a drift between `check` and
-`.github/workflows/ci.yml`). Re-read `package.json` before editing this list;
+names its own. CI runs the same legs. Re-read `package.json` before editing this list;
 the root script is the source of truth when the gate graph changes, and the
 cited-scripts validator refuses a `pnpm <script>` citation that `package.json`
 does not define (its sibling, the cited-paths validator, refuses a

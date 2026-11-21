@@ -525,6 +525,5 @@ declared" (Finch binds Sundog's panel-refuted frame of 2026-09-06, events 4382df
   check and the build; step 3 above says why its branch cut does not apply.
 - the host's decision record on organisational identity below the tree, where
   it has one (OCE: ADR-231, `231-organisational-identity-below-the-tree.md` in
-  its decision-record directory; jimcresswell.net states the rule in this
-  skill's step 3 and holds no record)
+  its decision-record directory)
   — why the fork diff is enumerated and identity-free.
