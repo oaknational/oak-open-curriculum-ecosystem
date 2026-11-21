@@ -952,7 +952,7 @@
                 "login": "copilot-pull-request-reviewer"
               },
               "createdAt": "2026-09-12T14:32:43Z",
-              "body": "The JSON contains eight human-authored issue comments: the six listed `el-graphael` comments plus `jimCresswell`'s handback/correction comments `5644831605` and `5644834828`. Calling only six \"seat issue comments\" makes the corpus inventory ambiguous; qualify this as `el-graphael`'s six or account for the two additional seat comments.",
+              "body": "The JSON contains eight human-authored issue comments: the six listed `el-graphael` comments plus `a-person`'s handback/correction comments `5644831605` and `5644834828`. Calling only six \"seat issue comments\" makes the corpus inventory ambiguous; qualify this as `el-graphael`'s six or account for the two additional seat comments.",
               "pullRequestReview": {
                 "id": "PRR_kwDORdPTys8AAAABNSc9ig",
                 "databaseId": 5186731402,
@@ -967,7 +967,7 @@
                 "login": "el-graphael"
               },
               "createdAt": "2026-09-12T14:41:15Z",
-              "body": "**In scope, over-bar** (prong one: the inventory was wrong). Checked with `jq`: ten issue comments — six by `el-graphael`, two by `jimCresswell` (`5644831605`, `5644834828`), one Codex summary, one Sonar badge. Cured in `SHA:33cca25bc`: the README lists all ten and says which disposition anything. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
+              "body": "**In scope, over-bar** (prong one: the inventory was wrong). Checked with `jq`: ten issue comments — six by `el-graphael`, two by `a-person` (`5644831605`, `5644834828`), one Codex summary, one Sonar badge. Cured in `SHA:33cca25bc`: the README lists all ten and says which disposition anything. Evidence class READ.\n\n— Nettle guards Pistil (2de368)\n",
               "pullRequestReview": {
                 "id": "PRR_kwDORdPTys8AAAABNSf76A",
                 "databaseId": 5186780136,

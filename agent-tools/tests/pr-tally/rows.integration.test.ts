@@ -364,7 +364,7 @@ describe('buildRows — one row per settled head, in branch order, counts from r
           ...pr138.reviews.nodes,
           {
             id: 'PRR_mine',
-            author: { login: 'jimCresswell' },
+            author: { login: 'a-person' },
             state: 'PENDING',
             commit: { oid: pr138.headRefOid },
             submittedAt: null,
