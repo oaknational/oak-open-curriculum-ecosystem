@@ -1259,11 +1259,13 @@ inside a rule name).
      holds a pull request nobody has yet reviewed; an empty-bodied reply on the tip leaves an
      earlier review standing; the pull request's author is no reviewer of it; a skip notice
      anchors no quiet window.
-  2. The second pull request of Part B: the records-class door (`RECORDS_CLASS_MERGE_STATES`
-     in `merge-decision.ts`; the narrowing in `merge-records-checks.ts`). It still merges a
-     bot's documentation-only pull request with no review, and past a pending check the base
-     branch does not require, which is how a running review check was nearly merged past on
-     oaknational#1036.
-  3. The cleanup plan and this record go up as the next records pull request.
-  4. Close friction F-298 when both pull requests of Part B have merged.
+  2. The second pull request of Part B is oaknational#1043, opened 2026-11-21 on
+     `fix/records-class-door-needs-one-review` (worktree `.claude/worktrees/records-door`):
+     the records-class door is removed, and `merge-bot merge` acts on SETTLE-READY alone for
+     every pull request. One Copilot review is requested, the change being the merge gate.
+     Until it merges and the checkouts are rebuilt, the installed tool still has the door.
+  3. The cleanup plan and this record landed as oaknational#1042 (`cf363cd54`). The plan is
+     a sketch: its shape and the fate of dated records are the owner's to approve, by
+     question prompt.
+  4. Close friction F-298 when oaknational#1043 has merged.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
