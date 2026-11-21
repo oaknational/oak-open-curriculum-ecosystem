@@ -58,7 +58,7 @@ F-98 / F-87 / F-90 / F-91.
   (Layer 0 needs no statusline change — the binding already derives from cwd).
 - **Reaching `main`**: the continuity artefacts and the eventual
   `feat/agent-spawn-flow` work reach `main` when `docs/consolidations` merges — a
-  code-owner-ruleset merge (`@jimCresswell` review; `--admin` forbidden). This is
+  code-owner-ruleset merge (the code owner's review; `--admin` forbidden). This is
   **not a blocker for pickup** (you ground and build off `docs/consolidations`); it
   is the finalization step.
 

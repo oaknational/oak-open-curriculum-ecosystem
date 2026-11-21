@@ -88,12 +88,12 @@ spent it on my own laziness.
 
 ## The one that was purely his
 
-MG told me: *"emgee-bot MUST re-request review from mantagen ... otherwise it doesn't
+MG told me: *"emgee-bot MUST re-request review from [his own account] ... otherwise it doesn't
 show in the filtered queue."*
 
 I had not known this, and neither had any seat before me. Answering a review — pushing
 the cure, posting the reply, going green — changes **none** of the fields that his
-`review-requested:mantagen` filter reads. Reviewing a PR *removes* it from his queue,
+`review-requested:<code-owner>` filter reads. Reviewing a PR *removes* it from his queue,
 and nothing ever puts it back. So an answered review is invisible. Nothing errors.
 Nothing is red. The board keeps reading `CHANGES_REQUESTED`, which looks like
 "waiting on us" while the truth is the exact inversion.

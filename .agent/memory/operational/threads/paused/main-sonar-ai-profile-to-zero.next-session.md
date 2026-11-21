@@ -179,7 +179,7 @@ base, empty intersection — no manual merge needed). Claim `6bded07b` closed.
 agent-authored under the owner's shared gh auth and the sole code owner IS the author**
 (GitHub auto-satisfies the code-owner gate and forbids self-approval) — the documented
 author-dependent gate behaviour, NOT because "these paths aren't code-owner-gated." CODEOWNERS
-is `* @jimCresswell`; every path is gated. An earlier note here claimed path-scoping — that was
+is one line, `*` and one account; every path is gated. An earlier note here claimed path-scoping — that was
 a misdiagnosis (see the pr-lifecycle skill §Phase 7 author-dependent gate notes).
 
 **2026-06-27 (Gull tracks Eyrie, 483d97) — BLOCKER + S101 + Phase 2 landed:**

@@ -71,7 +71,7 @@ own words as the drive's distilled set.
   worktrees: spawn-created ones pass the pre-commit gate; a hand-rolled one
   cannot, and the failure presents as a `next/font/google` build error.
 - **`gh` is authenticated as the owner even though git is ambient emgeebot.** A
-  bare `gh pr create` authors as `mantagen` and silently drops the reviewer
+  bare `gh pr create` authors as the owner's account and silently drops the reviewer
   request, leaving the code-owner gate unsatisfiable. Mint a token; verify with
   `--json author,reviewRequests`. Five instances to date.
 - **A non-existent path under `/mcp/` returns 406, not 404.** Any check written

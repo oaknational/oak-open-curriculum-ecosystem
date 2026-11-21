@@ -372,14 +372,14 @@ this section when it lands or the owner closes it.
    class turns on any absent leg, never on Codex's credit alone; the second arm as worded is
    neither met nor falsified, and the lane's warrant rests on the absent-leg cases.
 7. **Scheduled maintenance: TypeScript strictness to the target set.** Owner direction, relayed at
-   15:13Z on 2026-09-16 by Cauldron herds Lustre (880ff9, the jimcresswell.net Director) as
+   15:13Z on 2026-09-16 by Cauldron herds Lustre (880ff9, the sibling estate's Director) as
    directed event `42fe1d6f-7d2a-4fe8-9f9d-f36bc7ea2928` in that repository's stream. The owner's
    words, verbatim:
    *"I would like the typescript strictness levels brought up to the highest levels we are aiming
    for after the next slices, but to schedule it as maintenance, I am happy with that label because
    it should always have been that strict, it drifted over time."*
 
-   **When.** Cauldron's reading is that it runs after the jimcresswell.net strictness slices now in
+   **When.** Cauldron's reading is that it runs after the sibling estate's strictness slices now in
    flight land (its #94, #95 and those after), so this estate inherits a proven method. It needs a
    plan node; none is authored yet.
 
@@ -1395,8 +1395,8 @@ and repository paths as arguments and carry no machine path; run them with `sh`)
   is that logging in often is not acceptable. This seat used `TURBO_CACHE=local:rw` for one commit
   and named it a workaround; withdrawn at the owner's word.
 - **J2's verdict for its body** (measured 09:4xZ on the lineage tree): the lineage-names needles
-  are the second estate's repository identifiers `jimcresswell/jimcresswell.net`, `jcdotnet` and
-  `@jimcresswell/` (three doctrine files and one fixture carry them: compute-dont-hope.md:58-59,
+  are the second estate's repository identifiers: its owner-and-name path, its short name and
+  its package scope (three doctrine files and one fixture carry them: compute-dont-hope.md:58-59,
   the cricket skill 148-149, the comms-channels skill 79-80, gate-slot-argv.unit.test.ts:20-25);
   the bare domain is declined as a needle because 19 package manifests carry the owner's contact
   email and site. Exclude paths: the records (memory, reports, plans*, experience, state,
@@ -2405,7 +2405,7 @@ The resume re-arms as if nothing survived, verifying by id first: the two comms 
 (`run/comms-watch.sh <estate-root> "$PPID"`, one per estate), the two heartbeats (`run/heartbeat.sh
 <estate-root> <claim-id> consolidation-2 <branch> <label>`), the lock watch (`run/wait-gone.sh
 <primary>/.git/index.lock 2`) while the lock stands, and the pull-request watch (`run/pr-terminal.sh
-<root> jimCresswell jimcresswell.net 291 <head>`); then reads the Director's stream lines since
+<root> <owner> <sibling-repo> 291 <head>`); then reads the Director's stream lines since
 14:4xZ before any write. Claims the sibling estate 009bbaea and this estate 08f94e2a stay this
 seat's with handoff pointers; the one open pull request's claim is retained until it merges.
 
@@ -2930,7 +2930,7 @@ heartbeats (`run/heartbeat.sh <estate-root> <claim> consolidation-2 <coordinatio
 "<label>"`, claims 009bbaea-1956-44bf-a78a-59a509579e7a here and
 08f94e2a-0068-45d0-a62a-8aaac7da2aa5 in OCE, stopped during any push window, this seat's or a
 peer's, and re-armed at the push-done); the lock watch (`run/wait-gone.sh <primary>/.git/index.lock
-2`); one pull-request watch at a time (`run/pr-terminal.sh <root> jimCresswell jimcresswell.net 298
+2`); one pull-request watch at a time (`run/pr-terminal.sh <root> <owner> <sibling-repo> 298
 <head9>`). The scripts are in the session state directory synced into both estates' gitignored
 `comms-analysis-2026-10-01/session-7d8b9d/`. The first reads at the resume: the task list; `git
 status --branch` in the primary and the lane of each estate; 298's threads; the claims registry for

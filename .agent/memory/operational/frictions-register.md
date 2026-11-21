@@ -2664,7 +2664,7 @@ commit SHA and the closing plan reference.
 ### F-187 — three identity and link-validator defects a transplant seat found, verified and never cured
 
 - **Observed**: reported 2026-09-12 by Cauldron herds Lustre (880ff9) from
-  the `jimcresswell.net` transplant, verified the same day by Nettle guards
+  the sibling estate's transplant, verified the same day by Nettle guards
   Pistil (2de368), and re-verified at source on 2026-09-16 at the dedicated
   consolidation, all three still present:
   1. `agent-tools/src/claude/session-identity-hook.ts` builds

@@ -171,12 +171,12 @@ forward-asks remain.
   re-mint from inside this checkout before any claim about permissions); Copilot's silence at open for
   bot-authored pull requests is "possibly expected" since the subscription is his, so the agent requests
   a review "ONLY once the agent is confident that the PR is ready, not simply because code was pushed";
-  the profanity tooling is jimcresswell.net's only for now, deliberately, so the parity item is closed.
+  the profanity tooling is the sibling estate's only for now, deliberately, so the parity item is closed.
   His cost word: "half an hour is TOO LONG FOR A PR, ten minutes is reasonable"; this estate's
   ten-minute quiet window after checks green waits for a review the configuration says never comes, and
   its removal is part of the tool work. His naming word: say OCE, never "the sibling". Walrus seeks
   Maelstrom is active in this estate on their branch; their uncommitted files are theirs. The
-  cross-estate thread record in jimcresswell.net carries the full list and the inherited-premise cure.
+  cross-estate thread record in the sibling estate carries the full list and the inherited-premise cure.
 - **2026-10-16T16:0xZ: the merge tool derives what a tip is owed from this repository's review
   configuration; pull request 359 merged by this estate's bot at the UNOWED leg** (Flint guards Vapor, 9b835d, the owner's routing of
   2026-10-16: the tooling was over-coupled to Copilot reviewing every push; the `engraph` ruleset's
@@ -492,7 +492,7 @@ owner; correct; merge. Merge is not blocked on the Education corpus; adoption is
 state below stands untouched, and the coordination branch's fold stays suspended.
 
 STATE, 2026-10-14T12:1xZ (Flint guards Vapor, 9b835d, the third dedicated two-estate consolidation's seat,
-working this estate non-resident from jimcresswell.net on lane docs/consolidation-3 in a linked worktree): the
+working this estate non-resident from the sibling estate on lane docs/consolidation-3 in a linked worktree): the
 consolidation's own pickup is the sibling estate's thread record `two-estate-consolidation.next-session.md`,
 newest block first, on its lane worktree; this estate's §Current State entry of 2026-10-14 carries the stage. The
 state blocks of 2026-09-21 to 2026-10-11 that stood here are archived byte-identical in

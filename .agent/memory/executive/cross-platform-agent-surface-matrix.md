@@ -57,7 +57,7 @@ In OCE the `agent-platform-citizenship` strategic node (formerly
 `first-class-copilot-cli-practice-citizenship`) and its serving delivery plans
 are authoritative for target and mechanism, with MCP-150, MCP-154, MCP-155 and
 MCP-156 as supplementary Linear projections for execution state and sensitive
-details; jimcresswell.net carries the target in this matrix alone.
+details; the sibling estate carries the target in this matrix alone.
 
 ## Adapter Families
 
@@ -83,7 +83,7 @@ the tool call (exit 2), while a not-built artefact fails open (exit 0) with a
 loud, logged warning so a fresh checkout is not bricked — well within the
 per-tool-call hook timeout. The same file registers a never-blocking
 `PreCompact` observer (`agent-tools`' `claude-pre-compact-observe-hook`, through
-the `.claude/hooks/_lib/log-hook-errors.sh` wrapper; jimcresswell.net runs it
+the `.claude/hooks/_lib/log-hook-errors.sh` wrapper; the sibling estate runs it
 from the TypeScript source, OCE from the prebuilt `dist` artefact). It is an
 observer, not a guard: it has no key in the canonical policy, never blocks a
 compaction, and appends what the harness sends at each compaction to a
@@ -174,7 +174,7 @@ declaration set yet. Dated observations already on record:
 - **Slack Watcher organ (Slack channel + cloud-harness reminder
   substrate) — full 14-class declaration, 2026-08-24**: recorded
   skill-locally for operational reading in
-  `slack-watcher` §6 (authored in OCE; carried to jimcresswell.net on
+  `slack-watcher` §6 (authored in OCE; carried to the sibling estate on
   2026-10-03) (this ledger points, never restates). Headline rows: `NOTIFY`
   cannot-certify (no dated externally observed wake on record; a
   self-bind reminder records no run history), proxy = the tenure

@@ -166,7 +166,7 @@ thread was paused at the 2026-09-06 consolidation (the paused index in
 this record; no implementation authority or live evidence should be inferred
 from the retired seat.
 
-- Branch: `jimcresswell/typescript-estate-consolidation-review` in the dedicated
+- Branch: `<owner>/typescript-estate-consolidation-review` in the dedicated
   worktree whose basename is `typescript-estate-review-019fc3`; resolve its
   host path with `git worktree list`.
 - Recorded base: `7ea6ba55b16988cfb0cdcb0f485db32f71777628`; this was not reverified during

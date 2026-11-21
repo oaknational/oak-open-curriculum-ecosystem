@@ -167,7 +167,7 @@ and a cross-machine resume needs them:
   never squash; agent merges are REST calls on minted bot tokens at the
   full condition (every named check green, zero unresolved review
   threads, MERGEABLE, and — since at least 2026-08-03 — the repo-wide
-  CODEOWNERS approval from jimCresswell or mantagen).
+  CODEOWNERS approval from a code owner).
 - **First-major-release gates** (owner rulings): the release is gated on
   the guidance artefact, the MCPJam test suites, and one-click install;
   the sensitivity split stands; a thing merely executed is not thereby

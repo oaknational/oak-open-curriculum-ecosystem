@@ -42,7 +42,7 @@ https://chatgpt.com/codex/settings/usage to purchase more credits or try again a
 The state has two distinct layers and is **not safe/complete**:
 
 1. **Remote PR #582:** branch
-   `jimcresswell/mcp-103-model-behaviour-content-workspace-all-repo-controlled-mcp`, last
+   `<owner>/mcp-103-model-behaviour-content-workspace-all-repo-controlled-mcp`, last
    verified pushed head `SHA:11bfdf01e206c2d28e8f8d724d0a84cfc4333b2b`. The PR body describes
    that pushed head. Remote CI, current mergeability, latest `origin/main`, and any review
    activity after the credit failure are unverified.

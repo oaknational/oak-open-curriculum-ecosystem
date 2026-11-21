@@ -4,7 +4,7 @@ polarity: pattern
 use_this_when: A checker is about to be trusted on the strength of a green result — a new validator, guard, lint rule, harness comparison or schema check passing on the current tree, or a targeted run (a lint over specific paths, an advisory commit-message check, a one-off validator invocation) that came back green — and it has never been shown to fail on the failure it exists to catch
 category: testing
 layer: general
-proven_in: "the visual-regression harness proved in an isolated repository from `git archive` with a deliberate visual change, and the schema-dts guard's red phase with the historical failure re-added (jimcresswell.net, 2026-03-08); markdownlint dot-directory false-greens (paired controls, 2026-06-12) and argless commit-message advisory false-greens (two seats, 2026-06-11) in OCE"
+proven_in: "the visual-regression harness proved in an isolated repository from `git archive` with a deliberate visual change, and the schema-dts guard's red phase with the historical failure re-added (the sibling estate, 2026-03-08); markdownlint dot-directory false-greens (paired controls, 2026-06-12) and argless commit-message advisory false-greens (two seats, 2026-06-11) in OCE"
 proven_date: 2026-03-08
 barrier:
   broadly_applicable: true
