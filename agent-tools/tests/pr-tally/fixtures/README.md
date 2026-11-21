@@ -5,6 +5,10 @@ Recorded harvests for the `pr-tally` command's tests (the delivery node
 files — the tally builder's, the settlement suite, and the corpus suite that reads them through
 the whole instrument; the unit suites take literal inputs; tests never call GitHub.
 
+One edit applies to every harvest: a person's account name is replaced with `a-person`,
+wherever it appears, as a login, in a branch name or in a comment body. The accounts that
+review bots and agents post under are as recorded.
+
 ## `pr-135-harvest.json`
 
 The four reads the node's mechanism names, recorded once from PR #135 of
@@ -146,7 +150,7 @@ What the corpus carries, each claim checked against the JSON with `jq` on 2026-0
   role suffix makes every recorded reply read as NOT signed under the current code. The
   node's ledger carries the pickup question for todo 1: widen the predicate by dated
   amendment, or treat this corpus's replies as unsigned;
-- ten issue comments: `jimCresswell`'s handback and its correction (`5644831605`,
+- ten issue comments: `a-person`'s handback and its correction (`5644831605`,
   `5644834828`), a Codex summary and a Sonar badge, none dispositioning anything; and six
   by `el-graphael` — two resume-state records and the late intake declaration
   (`5644727301`, `5644730066`, `5645756283`), which disposition nothing, and three body-only
