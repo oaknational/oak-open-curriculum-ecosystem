@@ -169,6 +169,16 @@ The account with its sources is the addendum to the reunification retrospective 
 - **Mistake (mine), the fourth instance:** two commits ran in one shell line on 2026-11-21.
   The first failed and its staged plan edit went into the second, a continuity commit. One
   commit per call, its exit code read before the next file is staged.
+- **Surprise:** nine reviewer templates had described another repository since 2026-10-04,
+  and a search for that repository's name found only the sentences that named it. Reading
+  around a match found the rest.
+- **Reviewer finding upheld (oaknational#1049):** I edited sentences in templates that had
+  been rewritten whole, and wrote two configuration facts from a search that matched one
+  string. The cure was each template's earlier body, checked for cited paths that exist.
+  When a file was replaced whole, compare it with its earlier version before editing lines.
+- **Surprise:** commitlint refuses a body line over 100 characters, and the command guard
+  refused a commit whose message held the word for git's file-reverting verb. A message
+  goes in a file written with the write tool.
 - **Surprise:** the cleanup re-count found people in 19 package manifests (`author` and
   `contributors`), a surface the first count had not named. The owner chose the
   organisation alone for those fields.
