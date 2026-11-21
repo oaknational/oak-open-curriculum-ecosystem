@@ -225,11 +225,11 @@ no retrospective memos; those are close-out work, this skill's §Steps.
    the owner rules a shared handoff BRANCH for a day's uncommitted records
    (2026-09-02, `handoff/jim-september`), that branch is the owner's
    instrument, not a licence for per-seat handover PRs — a seat's own draft
-   continuity PR was withdrawn the same day under this ruling. Local
-   amendment (owner ruling 2026-09-13): a wrap run
+   continuity PR was withdrawn the same day under this ruling. A wrap run
    because the owner has asked for a clean tree before compaction lands
-   as its own `chore(continuity)` commit; the owner's compaction word is
-   the instrument, and the no-handover-PR half of the 2026-07-15 ruling
+   as its own `chore(continuity)` commit
+   ([`continuity-surface-commits-as-orphans`](../../rules/continuity-surface-commits-as-orphans.md));
+   the owner's compaction word is the instrument, and the no-handover-PR half of the 2026-07-15 ruling
    stands unchanged. The home of
    every wrap and continuity record is the primary checkout's day-stamped
    coordination branch, by pathspec, riding its fold; no seat mints a private
