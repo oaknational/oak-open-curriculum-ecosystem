@@ -176,6 +176,13 @@ The account with its sources is the addendum to the reunification retrospective 
   been rewritten whole, and wrote two configuration facts from a search that matched one
   string. The cure was each template's earlier body, checked for cited paths that exist.
   When a file was replaced whole, compare it with its earlier version before editing lines.
+- **Mistake (mine):** on oaknational#1049 a push was held by the review cost gate and the
+  same shell line went on to post "cured" on the thread and resolve it. The exit code was
+  printed and nothing read it. The tool then read the pull request as ready to merge at a
+  tip without the cure. I caught it reading the output before merging, recorded the
+  rebudget decision and pushed. A reply or a resolve runs in a later call than its push.
+- **Surprise:** the review cost gate reads `review-rebudgets.md` at the lane worktree's own
+  path, and a lane worktree does not have the primary checkout's copy.
 - **Surprise:** commitlint refuses a body line over 100 characters, and the command guard
   refused a commit whose message held the word for git's file-reverting verb. A message
   goes in a file written with the write tool.
