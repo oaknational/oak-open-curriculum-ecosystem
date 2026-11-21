@@ -496,7 +496,7 @@ record, the lane's pickup was the napkin section "2026-09-24 wrap — the Codex 
       `oce-wt-scan-scope`, 4 files, head `b93e59971`): CLEAN since 15:57Z (Codex clean, Copilot no
       thread, CI green, zero unresolved), BEHIND; next at the slot after Siren's 258 (held from
       16:17Z). Its door: one sync merge of origin/engraph in the worktree
-      (`GIT_AUTHOR_NAME="Jim Cresswell" GIT_AUTHOR_EMAIL="1314980+jimCresswell@users.noreply.github.com"
+      (`GIT_AUTHOR_NAME="<owner name>" GIT_AUTHOR_EMAIL="<owner noreply address>"
       git merge --no-edit origin/engraph`), one `merge-bot push --json` at a host read below two, both
       legs re-requested on the synced head, the sweep (read at 16:31Z: 64 removed lines, every one the
       old name-only scoping or a fixture it replaced), `merge-bot merge --pr 257 --expect
@@ -1005,7 +1005,7 @@ record, the lane's pickup was the napkin section "2026-09-24 wrap — the Codex 
     were accepted and folded in, uncommitted.
   - The host gate question was settled by the Director at about 16:00Z. The cure is
     `no-unbounded-host-load` item 6's semaphore, ruled by the owner on 2026-09-07. Corrected at
-    about 16:47Z (the Director, from Siren's first-hand read): it is BUILT in jimcresswell.net by
+    about 16:47Z (the Director, from Siren's first-hand read): it is BUILT in the sibling estate by
     that morning's PR 162. It gives pre-push gate slots, host bound 2 and ceiling 3, one gate per
     worktree, and loopback slots the kernel releases on death, with tests. The pre-commit slot is
     PR D of the ratified node `commit-as-the-full-local-gate`. This estate carries none of it at
@@ -1207,8 +1207,8 @@ record, the lane's pickup was the napkin section "2026-09-24 wrap — the Codex 
 - **Step 1 committed**: `db726e641`, "a dialogue id is a bounded lowercase slug". It adds
   `cleanup-row.ts` (`DialogueId`, `parseDialogueId`) and 16 tests. Slip: it was committed without
   `--author`, so it is bot-authored. The rule calls that outcome fail-safe, and it is corrected
-  forward: every later commit passes `--author="Jim Cresswell
-  <1314980+jimCresswell@users.noreply.github.com>"`, the value read from `4682907ad`'s author.
+  forward: every later commit passes `--author="<owner name>
+  <owner noreply address>"`, the value read from `4682907ad`'s author.
 - **Steps 2 to 4 committed, owner-authored**, each through the full pre-commit:
   - `10f77553c`: `threadsCreated(run)` and `CodexRun.killed.stdout`, plus killed-stays-killed.
   - `a34b104e6`: the rows on the turn path, including the refused-row failure. It was planned as a

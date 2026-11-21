@@ -32,7 +32,7 @@ earned promotion.
 New napkin rotations append below; the next consolidation promotes them out.
 
 The dedicated two-estate consolidation of 2026-09-30 (Hawthorn binds Bracken, b3f117, from
-jimcresswell.net) promoted the seven lessons of the 2026-09-29 rotation into their homes: the
+the sibling estate) promoted the seven lessons of the 2026-09-29 rotation into their homes: the
 background-agent read into the `wrap` skill's report step; the reserved shell names into
 `.agent/reference/shell-and-tooling-gotchas.md`; the scratch-script guards into
 `use-monitor-for-event-driven-wake`; the knip export refusal into

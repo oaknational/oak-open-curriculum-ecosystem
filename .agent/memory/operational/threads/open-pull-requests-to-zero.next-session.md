@@ -1053,7 +1053,7 @@ This state supersedes the 2026-11-16 state where they differ. Its timeline was r
 ### What landed
 
 - **oaknational#1023 merged** on 2026-11-18 at 13:07:12Z as `dae303661`, by the GitHub account
-  `mantagen`, 21 seconds after that account's approval. The standing word was that the owner
+  of another code owner, 21 seconds after that account's approval. The standing word was that the owner
   alone executes this merge; no record says how the merge by another account came about, and
   the owner did not raise it. The merge's tree equals the fork tip's (`fc45609c8`).
 - Before it, on the fork: 430 (the production snagging list, `6a99eb399`) and 431 (the

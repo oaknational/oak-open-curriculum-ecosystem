@@ -460,7 +460,7 @@ agent survives this seat.
 
 **§STATE, 2026-10-05 00:3xZ (Crucible binds Slag, `7b999c`, the n=1 seat, at the owner's
 compaction word).** The doctrine landing of `practice-alignment-by-class` is merged in the
-sibling (jimcresswell.net 321 at `SHA:4992af38`, main) and open here as #353 at `SHA:df70cd153`
+sibling (its 321 at `SHA:4992af38`, main) and open here as #353 at `SHA:df70cd153`
 (the landed bytes plus 43 contextual-bound variants; #350 merged in and closed; five review
 findings cured and the threads resolved under the bot; Copilot re-requested at the tip). The
 byte proof at main there and this tip reads DRIFT 1 over 744 shared paths: the one drift is
@@ -474,14 +474,14 @@ block of 2026-10-05T00:3xZ.
 
 **§STATE, 2026-10-04 19:0xZ (Crucible binds Slag, `7b999c`, the n=1 seat, at the owner's
 compaction word; this block supersedes the blocks below where they differ).** The definition's
-landings merged: #351 at `SHA:82cb7fba4` on engraph, jimcresswell.net 319 at `SHA:02178ff0b` on
+landings merged: #351 at `SHA:82cb7fba4` on engraph, the sibling estate's 319 at `SHA:02178ff0b` on
 main, the same bytes. The successor delivery node `practice-alignment-by-class` is ratified (the
 owner's four card answers of 16:xZ: four pull requests, two per estate; proceed at about five
 hours over two sittings; a light commit and a full push as the TypeScript family's convention;
 the conformance check included) and sits on this successor coordination branch at
 `SHA:5125881ce` with the Cricket suite's tally, the same bytes as the sibling's. The live record
-is jimcresswell.net's two-estate thread block of 2026-10-04T19:0xZ; the next safe step is the
-doctrine landing in jimcresswell.net first, then here from engraph, the same bytes; then the code
+is the sibling estate's two-estate thread block of 2026-10-04T19:0xZ; the next safe step is the
+doctrine landing in the sibling estate first, then here from engraph, the same bytes; then the code
 landing. One conflict is the owner's, carried with the doctrine landing: the owner's 2026-09-30
 word ("it's OCE") against PDR-142's host-neutrality clause. No claim, no process, no unpushed
 commit of this seat; draft #352 is this branch's fold pull request.
@@ -494,12 +494,12 @@ two-hour layer pass of both estates side by side that writes a one-page model (t
 transmits, what is created empty, what stays the host's, the candidate definition, the divergence
 classes with a direction each), posted to the owner at two hours as a report; one hour of
 evidence, one coarse row per area with exceptions and `unread` only; one report landed in
-jimcresswell.net by one pull request, this estate's copy riding the landing of the owner's word
+the sibling estate by one pull request, this estate's copy riding the landing of the owner's word
 here; about four hours of one seat. The layer pass is read and the draft page written. The two
-coordination branches folded: jimcresswell.net 305 at `SHA:eebe40ea2` (successor
+coordination branches folded: the sibling estate's 305 at `SHA:eebe40ea2` (successor
 `coordination/2026-10-04-eebe40`), here #348 at `SHA:d2f44f159` (successor
 `coordination/2026-10-04-d2f44f`, cut 2026-10-04 and holding the primary); this seat's five claims
-are closed (n=1). The definition's landing is open here as #351 and in jimcresswell.net as 319.
+are closed (n=1). The definition's landing is open here as #351 and in the sibling estate as 319.
 At the doors, untouched until the model is read: #350 and 312 (the ledger's revision), 318, the
 hooks branch, the OCE implementer's unpushed lanes; the dependabot pull requests were closed by
 the owner.

@@ -92,7 +92,7 @@ think it is the best thing either of us wrote.
 ## What I was glad of
 
 That MG says exactly what he means in about eleven words. *"emgee-bot for commits/PR
-raises ... mantagen for reviews/approvals"* settled a tension two seats had been carrying
+raises ... [his own account] for reviews/approvals"* settled a tension two seats had been carrying
 as an open question, and it took him one line. Read his short messages as *exact*, not as
 casual. Both clauses of a two-clause instruction bind.
 
