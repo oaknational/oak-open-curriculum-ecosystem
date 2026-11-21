@@ -126,8 +126,12 @@ Three kinds of occurrence, each with its own cure.
    question prompt, 2026-11-21: "Rewrite names only").
 
 A check keeps the result: a validator over every tracked file but `.github/CODEOWNERS` and
-the Practice Core, that fails on a real account
-name from a list held outside version control, so the list itself is not the leak.
+the Practice Core, that fails on a real account name. Its list is derived (the owner's answer
+by question prompt, 2026-11-21): it reads the account names from `.github/CODEOWNERS`, which
+GitHub requires to be real, so it runs in CI and in a fork with no setup, and no second list
+is tracked. An optional untracked file on a machine adds domains and mail addresses. It is
+built first as a report, to drive the dated-record pull requests, and wired into the gates
+once the tree is clean.
 
 ## Acceptance criteria
 
@@ -150,7 +154,8 @@ name from a list held outside version control, so the list itself is not the lea
 3. Instance facts, one pull request per fact family, each with its configuration home.
 4. Dated records, names only, one pull request per surface (memory, reports, research, comms
    records, archives).
-5. The validator, landed blocking once every tracked surface is clean.
+5. The validator: built as a report before todo 4, landed blocking once every tracked
+   surface is clean.
 
 ## Out of scope
 
