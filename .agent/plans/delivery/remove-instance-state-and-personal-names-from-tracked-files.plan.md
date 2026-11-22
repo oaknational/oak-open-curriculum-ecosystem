@@ -15,7 +15,7 @@ impact_areas:
   - practice-and-estate
 tickets: []
 depends_on: []
-last_updated: 2026-11-21
+last_updated: 2026-11-22
 ---
 
 # Remove instance state and personal names from tracked files
@@ -134,8 +134,13 @@ is derived (the owner's answer
 by question prompt, 2026-11-21): it reads the account names from `.github/CODEOWNERS`, which
 GitHub requires to be real, so it runs in CI and in a fork with no setup, and no second list
 is tracked. An optional untracked file on a machine adds domains and mail addresses. It is
-built first as a report, to drive the dated-record pull requests, and wired into the gates
-once the tree is clean.
+built first as a report, to drive the dated-record pull requests, and runs in
+`repo-validators:check` now that the tree is clean.
+
+What it does not find: a personal mail address or domain that is not a code owner's account
+name (the local list adds those on a machine that wants them), and the initials abbreviation
+of the sibling estate's site, which is none of an account, a domain or an address and stays
+in the records that use it.
 
 ## Acceptance criteria
 
@@ -157,10 +162,16 @@ once the tree is clean.
 2. Fixtures and examples, one pull request per workspace or surface.
 3. Instance facts, one pull request per fact family, each with its configuration home.
 4. Dated records, names only, one pull request per surface (memory, reports, research, comms
-   records, archives).
+   records, archives). Done: oaknational#1055 to #1062, eight surfaces; the validator read
+   no line on `main` after the last (2026-11-22).
 5. The validator: built as a report before todo 4 (landed as oaknational#1053,
    `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`), landed
-   blocking once every tracked surface is clean.
+   blocking once every tracked surface is clean. Done: it is the last step of
+   `repo-validators:check`.
+
+Still open under this plan: the reviewer templates not yet read line by line, and the three
+places where the restored template bodies are behind this repository's records (both under
+"Found during delivery" above).
 
 ## Out of scope
 
