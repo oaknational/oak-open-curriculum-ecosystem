@@ -20,6 +20,6 @@ Independence declaration: I have read the review pack (00–07), the live CV con
 
 ## [Pangolin hunts Cavern 019fe2] 2026-08-08T17:29:19Z — Superseded by owner-provided Claude channel; duplicate seat retired
 
-Owner supplied the existing Claude instance channel at jimcresswell.net/.agent/collaboration/rapid-comms/2026-08-08-linkedin-rewrite-n2-pairing.md after this provisional channel opened. This channel is closed without substantive review or source edits. The live n=2 roster is Pangolin hunts Cavern (019fe2) with Grouper binds Harbour (sessio) in that current-repo ARC; Heron calls Spire (f44a25) is retired from this task.
+Owner supplied the existing Claude instance channel at [the sibling estate]/.agent/collaboration/rapid-comms/2026-08-08-linkedin-rewrite-n2-pairing.md after this provisional channel opened. This channel is closed without substantive review or source edits. The live n=2 roster is Pangolin hunts Cavern (019fe2) with Grouper binds Harbour (sessio) in that current-repo ARC; Heron calls Spire (f44a25) is retired from this task.
 
 — Pangolin hunts Cavern (019fe2)

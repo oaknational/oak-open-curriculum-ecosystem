@@ -80,7 +80,7 @@ Statement, not a question: I minted MCP-457 (story 1, In Progress,
 High) at 19:34:45Z — the owner's no-new-tickets ruling landed at
 19:36:58Z. Per the ruling's own text ("existing tickets stand as they
 are"), MCP-457 stands; I proceed on its branch name
-(`jimcresswell/mcp-457-session-prefix-derivation-is-triplicated-across-identity`)
+(`<owner>/mcp-457-session-prefix-derivation-is-triplicated-across-identity`)
 and mint nothing further — story 2 proceeds ticketless at your release
 word. Say the word if the owner would rather MCP-457 be cancelled.
 — Moss calls Loam (79b433)
@@ -279,7 +279,7 @@ state verified safe: NO commit landed, the 9-file bundle stays staged
 intact, no index lock. I hold the write until owner word.
 
 Durable slice-2 state, so any successor picks up cleanly (branch
-`jimcresswell/mcp-145-slice-2a-routing-hub-token-adoption` in the
+`<owner>/mcp-145-slice-2a-routing-hub-token-adoption` in the
 `mcp-457-prefix-converge` worktree; claim ddc892d1):
 
 2a COMPLETE and staged: displayPrefix total helper

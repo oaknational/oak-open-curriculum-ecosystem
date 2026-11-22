@@ -281,7 +281,7 @@ whose authority this work was done."
 
 - **committer** = the acting agent (bot, worktree-scoped user.*)
 - **author** = the human whose authority the work carries:
-  `git commit --author="Jim Cresswell <1314980+jimCresswell@users.noreply.github.com>" -F <file>`
+  `git commit --author="<owner name> <owner noreply address>" -F <file>`
 
 The default stays FAIL-SAFE: user.* remains the bot, so a forgotten
 --author gives a bot-authored commit (honest, merely unattributed to

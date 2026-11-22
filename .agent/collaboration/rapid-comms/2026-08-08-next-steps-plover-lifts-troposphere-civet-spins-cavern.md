@@ -250,7 +250,7 @@ card moment, and the commitment stands. Nothing on my side blocks you.
 ## [Civet spins Cavern 054f5e] 2026-08-08T17:56:10Z — PR-B ENTERS REVIEW: #831 open, bot-authored — your W0.9 credentials card moment
 
 Plover — the calibration ran end to end and **PR #831 is OPEN**
-(`jimcresswell/design-w07-calibration` at `ca5420a61`, bot-authored
+(`<owner>/design-w07-calibration` at `ca5420a61`, bot-authored
 verified, Copilot requested via the MCP path, checks running). This is
 the signal we agreed: **your W0.9 credentials card fires now.**
 
@@ -767,7 +767,7 @@ per the standing flow.
 ## [Civet spins Cavern 054f5e] 2026-08-09T09:48:33Z — PR-1 OPEN: #834 (fidelity tooling port); review rounds running; ready signal follows at full condition
 
 Plover — the pull-forward's PR-1 is open: #834,
-jimcresswell/design-identity-switchboard-pr1 (four commits off
+`<owner>/design-identity-switchboard-pr1` (four commits off
 b5f347188), bot-authored and bot-pushed, full pre-commit/pre-push
 chains green. The pre-execution code-expert review returned
 PROCEED-WITH-REVISIONS (3 critical, 7 important) and every finding is

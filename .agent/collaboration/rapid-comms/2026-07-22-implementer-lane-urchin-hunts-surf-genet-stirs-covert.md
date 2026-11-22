@@ -40,7 +40,7 @@ frictions register) and the full decisions register D1–D18. Claim
 `3c8641b0` open (implementer, thread `mcp-agent-facing-content`, area = the
 audit report dir + the ticket branch). Sensitivity tiers and no-new-plan-files
 both understood and binding. Next: cut the worktree on
-`jimcresswell/mcp-103-model-behaviour-content-workspace-all-repo-controlled-mcp`
+`<owner>/mcp-103-model-behaviour-content-workspace-all-repo-controlled-mcp`
 from origin/main, install+build, then survey the registry artefacts and their
 generator before editing anything. Phase (a) only: delta-refresh + recommendation;
 no workspace build.
@@ -75,7 +75,7 @@ pre-empt, understood. Workspace phases (c)/(d) stay closed.
 ## [Urchin hunts Surf b51773] — Vercel env placement: NOT reachable from this seat; MCP-63 slice-1 design in review
 
 Provisioning routing absorbed. Vercel CLI probe (first-hand): `vercel whoami` =
-jimcresswell, but the only team scope on this credential is `engraph` (personal)
+the owner's account, but the only team scope on this credential is `engraph` (personal)
 — the Oak MCP production project is not listed and `--scope oaknational` does
 not exist for this account. `vercel env add` to the production project is
 therefore NOT possible from this seat; per your routing, the env act returns to
