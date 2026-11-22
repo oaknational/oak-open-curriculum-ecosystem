@@ -151,6 +151,7 @@ describe('merge-bot pull-request, front door', () => {
     },
     { args: ['resolve', '--pr', '42', '--thread', 'PRRT_kwDOAbc'], kind: 'resolved' },
     { args: ['ready', '--pr', '42'], kind: 'ready' },
+    { args: ['request-review', '--pr', '42'], kind: 'review-requested' },
     { args: ['close', '--pr', '42', '--reason-file', BODY_FILE], kind: 'closed' },
   ])('dispatches $kind with exit 0, every call under the minted token', async ({ args, kind }) => {
     const run = await runPullRequest([...args, '--json'], { script: CONVERSATION_SCRIPT });
@@ -249,6 +250,7 @@ describe('merge-bot pull-request, front door', () => {
     { verb: 'reply', args: ['reply', '--pr', '42', '--comment', '777', '--body-file', BODY_FILE] },
     { verb: 'resolve', args: ['resolve', '--pr', '42', '--thread', 'PRRT_kwDOAbc'] },
     { verb: 'ready', args: ['ready', '--pr', '42'] },
+    { verb: 'request-review', args: ['request-review', '--pr', '42'] },
     { verb: 'close', args: ['close', '--pr', '42', '--reason-file', BODY_FILE] },
   ])(
     'mints $verb at the pull-request-conversation scope, pull_requests write alone, one mint per invocation',

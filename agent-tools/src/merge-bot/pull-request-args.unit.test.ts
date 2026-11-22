@@ -6,7 +6,7 @@ import { failureMessage } from './test-helpers/result-failure.js';
 import { ok } from '@oaknational/result';
 
 /**
- * The `merge-bot pull-request` argv contract: a closed grammar of seven verbs,
+ * The `merge-bot pull-request` argv contract: a closed grammar of eight verbs,
  * each with its own closed flag set. Pure parsing over an injected ref-format
  * oracle (a constant answer), so no git binary is asked. What is proven: each
  * verb's full flag line parses to its typed request; every other shape — an
@@ -64,6 +64,10 @@ describe('parsePullRequestArgs', () => {
     {
       argv: ['ready', '--json', '--pr', '42'],
       request: { verb: 'ready', pr: 42, json: true },
+    },
+    {
+      argv: ['request-review', '--pr', '42'],
+      request: { verb: 'request-review', pr: 42, json: false },
     },
     {
       argv: ['close', '--pr', '42', '--reason-file', 'why.md'],

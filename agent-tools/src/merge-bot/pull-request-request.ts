@@ -12,6 +12,7 @@ export const VALUE_FLAGS = {
   reply: ['--pr', '--comment', '--body-file'],
   resolve: ['--pr', '--thread'],
   ready: ['--pr'],
+  'request-review': ['--pr'],
   close: ['--pr', '--reason-file'],
   'dispatch-workflow': ['--workflow'],
 } as const satisfies Readonly<Record<string, readonly string[]>>;
@@ -26,6 +27,7 @@ export const PULL_REQUEST_VERBS: readonly PullRequestVerb[] = [
   'reply',
   'resolve',
   'ready',
+  'request-review',
   'close',
   'dispatch-workflow',
 ];
@@ -60,6 +62,7 @@ export type PullRequestRequest =
       readonly json: boolean;
     }
   | { readonly verb: 'ready'; readonly pr: number; readonly json: boolean }
+  | { readonly verb: 'request-review'; readonly pr: number; readonly json: boolean }
   | {
       readonly verb: 'close';
       readonly pr: number;
