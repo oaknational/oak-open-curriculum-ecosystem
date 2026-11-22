@@ -1,7 +1,7 @@
 ---
 title: How the Agentic Engineering System Works
 status: active
-last_reviewed: 2026-07-28
+last_reviewed: 2026-11-22
 ---
 
 # How the Agentic Engineering System Works
@@ -16,9 +16,12 @@ lanes, evidence surfaces, and formal report lanes — use the
 
 ## What This System Does
 
-The code in this repository is written by AI agents, directed and reviewed by
-Oak's engineers. Humans provide direction, design guardrails, and
-corrective feedback. The **Agentic Engineering Practice** — "the Practice" —
+The code in this repository is written by AI agents, directed by Oak's
+engineers. Humans provide direction, design guardrails, and corrective
+feedback. Agents do the work inside those guardrails, often with nobody
+watching
+([Unattended Work](#unattended-work--what-an-agent-can-and-cannot-do)).
+The **Agentic Engineering Practice** — "the Practice" —
 is the interconnected system that makes this safe, high-quality, and
 self-improving. It is a reusable plain-text framework for agentic-first
 engineering: agents from major vendors can collaborate, learn, adapt, and keep
@@ -61,11 +64,73 @@ The layers interact: philosophy governs what structures are created (e.g. "if a 
 
 The system prevents entropy through interlocking negative feedback loops.
 
-**Quality gates** are the primary enforcement mechanism. Every change must pass: type-check, lint, build, test, format, markdownlint. The critical design choice: **all gates are always blocking** — there is no "non-blocking warning" category inside the gate set. This is enforced through [architectural principles](../../.agent/directives/principles.md) (§Code Quality) that fire on every agent interaction and the canonical `pnpm check` command. Informational health checks such as `pnpm practice:fitness:informational` sit outside `pnpm check`; they surface drift without redefining it as a quality gate. Gates catch entropy within seconds.
+**Quality gates** are the primary enforcement mechanism. One command, `pnpm check`, runs the whole set, and the `check` script in the root [`package.json`](../../package.json) is its definition. In outline:
+
+- a secrets scan;
+- format, Markdown and shell lint;
+- code generation, then build, type-check, lint, unit and end-to-end tests in every workspace;
+- browser, widget and accessibility tests;
+- unused-code and dependency-direction checks;
+- checks that the agent tooling (skills, sub-agents, platform adapters) is consistent;
+- the repository's own validators, which hold documents and records to their rules (links resolve, cited scripts exist, no personal file path or account name is committed).
+
+The critical design choice: **all gates are always blocking** — there is no "non-blocking warning" category inside the gate set. This is enforced through [architectural principles](../../.agent/directives/principles.md) (§Code Quality) that fire on every agent interaction. Informational health checks such as `pnpm practice:fitness:informational` sit outside `pnpm check`; they surface drift without redefining it as a quality gate. Gates catch entropy before a change leaves the machine.
 
 **Specialist reviewers** provide targeted review after non-trivial changes. The [specialist roster](../../.agent/memory/executive/invoke-code-experts.md) includes a gateway reviewer (`code-expert`) that triages to specialists: architecture reviewers (4, each with a different lens), test-expert, type-expert, security-expert, config-expert, docs-adr-expert, and domain specialists. Reviewers catch entropy within the session — they assess not just code correctness but architectural alignment with the Practice itself.
 
 **Strict rules** ([`principles.md`](../../.agent/directives/principles.md)) encode non-negotiable constraints: TDD at all levels, no type shortcuts, fail fast with helpful errors, no disabled checks, no compatibility layers. These are not guidelines — they are enforced by lint rules, compiler checks, and reviewer scrutiny. Rules catch entropy at authoring time.
+
+## Unattended Work — What an Agent Can and Cannot Do
+
+No person was at a keyboard when an agent's commit was made. Its timestamp
+records when the agent ran, which can be any hour of any day. The author
+field names the person who directed the work, not someone working at that
+hour; the committer is the bot. On GitHub an agent acts as a bot account, so
+the platform's own record says an agent opened, answered and merged a pull
+request.
+
+A person sets the work going, usually by directing and approving a plan, and
+may not look again until it is done. To ask about a pull request, ask the
+person named as its commits' author.
+
+What limits the damage an unattended agent can do is a series of gates that
+run whether or not anyone is watching:
+
+- **Before a command runs.** A guard reads each shell command an agent is
+  about to run and refuses the ones that destroy Git history or skip a gate:
+  a forced push, an interactive rebase, a commit or push with its hooks
+  turned off ([the hook policy](../../.agent/hooks/README.md)).
+- **At commit.** A hook refuses a commit on the default branch
+  ([the rule](../../.agent/rules/never-commit-to-main.md)). Staged files must
+  pass format, Markdown and lint checks, and the commit message its own lint.
+- **At push.** The whole of `pnpm check` runs on the machine before anything
+  leaves it. A failure stops the push.
+- **On the pull request.** CI runs the gates again on clean machines, and adds
+  code scanning, static analysis, a dependency review, a secrets scan and a
+  preview deployment. The default branch takes changes through pull requests
+  only, and its rules name the checks that must pass
+  ([CI policy](../engineering/ci-policy.md)).
+- **At merge.** An agent merges through one tool, never by hand. The tool
+  merges only when every check is green and every review thread is resolved,
+  always with a merge commit, and only the exact commit it judged
+  ([the merge tool](../engineering/merge-bot.md)). Each act on GitHub uses a
+  token made for that one act and limited to it.
+
+**Review on the pull request.** This is separate from the specialist reviewers
+above, who read work during a session. A review on the pull request, by a
+person or a review bot, is asked for where the change's complexity justifies
+one. The merging agent makes that judgement. The merge tool refuses a pull
+request with no review unless the agent gives its reason, and it posts that
+reason on the pull request before it merges.
+
+**Beyond the gates, rules bind the agent.** Without new, explicit permission
+from a person, an agent does not skip a hook, rewrite or delete Git history,
+alter a recorded architectural decision, or take a step a plan reserves for a
+named person. Where a gate refuses, the agent's job is to fix what the gate
+found, never to get past the gate.
+
+**When a bad change gets through anyway**, it is corrected by a new change
+through the same gates. History is never rewritten to hide it.
 
 ## Learning Loops — How Knowledge Compounds
 
@@ -105,12 +170,12 @@ Different mechanisms serve different time horizons:
 | [ADRs](../architecture/architectural-decisions/)          | Permanent       | Architectural decisions and their rationale         |
 | [Patterns](../../.agent/memory/active/patterns/README.md) | Permanent       | Reusable abstractions for recurring design problems |
 
-Plans follow a lifecycle (`future/` → `current/` → `active/` → `archive/completed/`) and carry value traceability: every non-trivial plan states the outcome sought, the impact it should create, and the mechanism by which that creates value. Plans with acceptance criteria and deterministic validation commands make completion objective rather than subjective.
+Plans are of three types ([the planning estate](../../.agent/plans/README.md)): strategic plans hold an outcome and the bet behind it, delivery plans hold one step of the work and are archived when it is done, and runbooks hold a repeatable procedure. A plan governs no work until a person has ratified it. Plans carry value traceability: every non-trivial plan states the outcome sought, the impact it should create, and the mechanism by which that creates value. Plans with acceptance criteria and deterministic validation commands make completion objective rather than subjective.
 
 ## Propagation — How the Practice Travels Between Repos
 
-The Practice is not confined to this repository. The portable part — seven
-files called the **Practice Core** — travels via
+The Practice is not confined to this repository. The portable part — a bounded
+package of files called the [**Practice Core**](../../.agent/practice-core/index.md) — travels via
 [plasmid exchange](../architecture/architectural-decisions/124-practice-propagation-model.md).
 Each repo carries its own Practice instance; there is no hierarchy.
 
