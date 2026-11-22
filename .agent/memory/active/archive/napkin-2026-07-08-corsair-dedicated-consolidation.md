@@ -199,7 +199,7 @@ New session observations append below.
 - **Bots re-review every push — worked instance of "0 unresolved is a moment"**: PR #315 read
   0-unresolved at 07:21Z; a new Bugbot thread landed on the SAME tip's review round minutes
   later (13th thread). The binding-moment recompute (F-130 discipline) is what caught it.
-- **Shared-auth attribution caveat**: my GraphQL thread replies render as jimCresswell events
+- **Shared-auth attribution caveat**: my GraphQL thread replies render as events of the owner's account
   in watcher streams and comment lists (shared gh credentials). When auditing "owner comments"
   on a PR, filter by the agent-signature line in the body, not by author login. (Wildfire used
   a `[Agent: …]` body PREFIX — prefix-first is the stronger convention; I used a trailing

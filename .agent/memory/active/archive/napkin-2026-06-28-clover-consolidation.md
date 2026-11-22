@@ -269,7 +269,7 @@ Session arc (post-compaction, all landed; branch `docs/agent-work-state-projecti
   wouldn't have shown it. [[feedback_verify_on_real_content_not_fixtures]].
 - **Commit AND push authority delegated to me (owner, this session).** "Commits are your decision" then "Push
   is yours too" — supersedes the prior "owner controls push" / owner-gates-commits posture (main-MERGE still
-  needs @jimCresswell code-owner approval, unchanged). Homed to per-user memory; **scope (standing vs
+  needs the code owner's approval, unchanged). Homed to per-user memory; **scope (standing vs
   session) is worth confirming next session** — the owner framed push as "yours from here on".
 - **Loss-scan (6e.2, first-hand): what reached no durable surface and is now homed here.** All of the above.
   Also conserved to the execution plan's disposition ledger (commit `a0e1b3e3f`) and per-user memory. Strongest
