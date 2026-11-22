@@ -1327,12 +1327,17 @@ inside a rule name).
   archive, 133 lines in 16 files; the report read 600 lines in 27 directories after it. In
   those records the second human code owner is "the second code owner" in prose and
   `<code-owner>` in a code span.
+  The third surface landed as oaknational#1057 on 2026-11-22: the active memory archive, 59
+  lines in 14 files; the report read 541 lines in 26 directories after it. Before each
+  commit the diff is checked by script for a placeholder outside a code span and for a
+  substituted phrase that follows an article.
 
   What remains, in order:
 
   1. Dated records (todo 4), one surface per pull request, largest first by the report:
-     the agentic-engineering reports, the archived Sonar evidence directory, the rapid-comms
-     records, the active memory archive, the other reports. Sized by
+     the agentic-engineering reports (139 lines), the archived Sonar evidence directory (138
+     lines in two files, likely recorded data), the rapid-comms records (93), the other
+     reports, the plan archives. Sized by
      `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`. The
      replacements used so far: an account as a mention becomes "the owner" or "a code
      owner"; a branch prefixed with an account takes `<owner>/` when inside a code span
