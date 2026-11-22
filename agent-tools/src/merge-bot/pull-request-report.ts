@@ -24,6 +24,7 @@ export type PullRequestOutcome =
     }
   | { readonly kind: 'resolved'; readonly pr: number; readonly thread: string }
   | { readonly kind: 'ready'; readonly pr: number }
+  | { readonly kind: 'review-requested'; readonly pr: number; readonly reviewer: 'copilot' }
   | { readonly kind: 'closed'; readonly pr: number; readonly commentId: number }
   | { readonly kind: 'dispatched'; readonly workflow: string; readonly ref: string }
   | { readonly kind: 'refused'; readonly reason: string };
@@ -47,6 +48,9 @@ function doneLine(outcome: Exclude<PullRequestOutcome, { kind: 'refused' }>): st
   }
   if (outcome.kind === 'ready') {
     return `ready: #${String(outcome.pr)} is ready for review`;
+  }
+  if (outcome.kind === 'review-requested') {
+    return `review-requested: #${String(outcome.pr)} of ${outcome.reviewer}`;
   }
   if (outcome.kind === 'dispatched') {
     return `dispatched: ${outcome.workflow} on ${outcome.ref}`;

@@ -115,23 +115,32 @@ export async function runPullRequest(
   return { exit, out: out.join(''), err: errText.join(''), requests: github.requests };
 }
 
+/** The REST answers on pull request 42, by request line. */
+const REST_ANSWERS: ReadonlyMap<string, ReturnType<GithubScript>> = new Map([
+  [
+    `GET ${API}/pulls/42`,
+    { status: 200, body: { number: 42, node_id: 'PR_kwDOXyz', state: 'open', draft: true } },
+  ],
+  [
+    `POST ${API}/issues/42/comments`,
+    { status: 201, body: { id: 9001, html_url: `${API}/pull/42#issuecomment-9001` } },
+  ],
+  [
+    `POST ${API}/pulls/42/comments/777/replies`,
+    { status: 201, body: { id: 778, html_url: `${API}/pull/42#discussion_r778` } },
+  ],
+  [
+    `POST ${API}/pulls/42/copilot-code-review`,
+    { status: 201, body: { node_id: 'CCR_kwDOAbc', state: 'PENDING' } },
+  ],
+  [`PATCH ${API}/pulls/42`, { status: 200, body: { state: 'closed' } }],
+]);
+
 /** GitHub as it reads when every verb on pull request 42 can proceed. */
 export const CONVERSATION_SCRIPT: GithubScript = (request) => {
   const line = `${request.method} ${request.url}`;
-  if (line === `GET ${API}/pulls/42`) {
-    return { status: 200, body: { number: 42, node_id: 'PR_kwDOXyz', state: 'open', draft: true } };
-  }
-  if (line === `POST ${API}/issues/42/comments`) {
-    return { status: 201, body: { id: 9001, html_url: `${API}/pull/42#issuecomment-9001` } };
-  }
-  if (line === `POST ${API}/pulls/42/comments/777/replies`) {
-    return { status: 201, body: { id: 778, html_url: `${API}/pull/42#discussion_r778` } };
-  }
-  if (line === `PATCH ${API}/pulls/42`) {
-    return { status: 200, body: { state: 'closed' } };
-  }
   if (line !== `POST ${GRAPHQL}`) {
-    return undefined;
+    return REST_ANSWERS.get(line);
   }
   const document = JSON.stringify(request.body);
   if (document.includes('resolveReviewThread')) {
