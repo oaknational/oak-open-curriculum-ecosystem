@@ -64,20 +64,39 @@ interface ResolveInput {
   readonly reading: PrStateReading;
   readonly appSlug: string;
   readonly nowIso: string;
+  /**
+   * The caller gave a reason for a merge with no review AND the reading
+   * shows a pull request nobody has reviewed or is reviewing
+   * (`merge-no-review.ts`), so the unreviewed verdict may merge too.
+   */
+  readonly mayMergeUnreviewed: boolean;
   readonly fetchImpl: GithubApiFetch;
   readonly token: string;
   readonly target: RulesTarget;
 }
 
 /**
- * The verdict as the core reads it; on a settled verdict of the merge bot's
- * own pull request, the verdict recomputed with every unreported required
- * context pending. A failed rules read is returned as the failure, which
- * `merge.ts` types as a retryable reading failure.
+ * Whether the verdict is one the command may merge on, so that the required
+ * contexts must be proved first: a settled verdict always, and the
+ * unreviewed one when the caller has given its reason for no review.
+ */
+function mayMerge(state: PrVerdict['state'], mayMergeUnreviewed: boolean): boolean {
+  return state === 'SETTLE-READY' || (mayMergeUnreviewed && state === 'SILENT-WAIT-NO-REVIEWER');
+}
+
+/**
+ * The verdict as the core reads it; on a verdict of the merge bot's own
+ * pull request that the command may merge on, the verdict recomputed with
+ * every unreported required context pending. A failed rules read is
+ * returned as the failure, which `merge.ts` types as a retryable reading
+ * failure.
  */
 export async function resolveVerdict(input: ResolveInput): Promise<Result<PrVerdict, Error>> {
   const verdict = computePrVerdict(input.reading, input.nowIso);
-  if (verdict.state !== 'SETTLE-READY' || !isBotAuthored(input.reading.author, input.appSlug)) {
+  if (
+    !mayMerge(verdict.state, input.mayMergeUnreviewed) ||
+    !isBotAuthored(input.reading.author, input.appSlug)
+  ) {
     return ok(verdict);
   }
   const required = await readRequiredContexts(input.fetchImpl, input.token, input.target);

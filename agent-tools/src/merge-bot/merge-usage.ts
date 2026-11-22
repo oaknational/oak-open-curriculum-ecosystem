@@ -1,3 +1,4 @@
+import { QUIET_WINDOW_MS } from '../pr-watch/reviewer-legs.js';
 import { SETTLEMENT_WAIT_STATES } from './merge-decision.js';
 
 /**
@@ -13,9 +14,11 @@ export const DEFAULT_MAX_POLLS = 90;
 /** 50 minutes: the whole budget must end well inside GitHub's one-hour installation-token TTL. */
 export const MAX_BUDGET_SECONDS = 3000;
 
-export const MERGE_USAGE = `merge-bot merge --pr <number> [--json] [--interval <seconds>] [--max-polls <n>]
-  Merges the PR via the sanctioned REST path when — and only when — the
-  settlement verdict is SETTLE-READY, whatever paths the PR changes;
+export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-file <path>] [--json]
+                [--interval <seconds>] [--max-polls <n>]
+  Merges the PR via the sanctioned REST path when the settlement verdict is
+  SETTLE-READY, whatever paths the PR changes, and otherwise only on the
+  stated reason for no review described below;
   merge-commit method always (refusing when repo settings disallow merge
   commits, never a squash fallback), the VERDICTED tip's sha in the body (a
   moved tip answers 409 — an operational failure, exit 1 — never an
@@ -37,9 +40,30 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--json] [--interval <
   agent run, a round asked of a bot reviewer; a request of a person is not
   waited for), one review of any commit of the pull request must exist (a
   skip notice is not a review), and every review thread must be resolved.
-  With no review the command refuses and says so; request one.
+  With no review the command refuses and says so. A review is owed where
+  the change's complexity justifies one: request one, or, when the change
+  is simple enough to need none, pass --no-review-reason-file <path>. The
+  file's text is posted on the pull request as the record, before the
+  merge call; an empty file refuses, and a reason that cannot be posted
+  stops the merge. The reason stands in for the missing review ALONE: red
+  checks, open threads, a draft or a review in progress refuse as before.
+  So does anything that shows a review exists or can have started unseen,
+  and a refusal with a reason given says which: a reviewer who owes a
+  round; a review-run listing not read in full; a review by another
+  account, an approval or a change request with an empty body and a
+  comment on a line among them (a notice that no review occurred is not
+  one); and a pull request marked ready, or gone green, within the last
+  ${QUIET_WINDOW_MS / 60_000} minutes, since an automatic reviewer starts on such an event and
+  shows nothing until it reports. Another account's draft and a comment
+  saying a review is under way cannot be seen and do not hold the merge.
+  The text is posted verbatim, so a
+  reason containing an @ refuses (an @name notifies a person or asks a
+  review bot for a round). A second attempt posts the reason again. A
+  review can still arrive between the reading and the merge call, as on
+  every merge: the call is pinned to the commit, not to the reviews.
   --json puts EXACTLY the outcome object on stdout; progress moves to
-  stderr.
+  stderr. A refusal raised before the pull request is read (the reason
+  file) has a refusal's keys, with verdictState null and no evidence.
   Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —
   an already-MERGED PR exits 3.
   The pr-lifecycle merge-base deletion sweep is NOT discharged by this
