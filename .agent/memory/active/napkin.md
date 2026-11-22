@@ -200,3 +200,37 @@ The account with its sources is the addendum to the reunification retrospective 
 - **Pattern:** for names in records, three shapes cover nearly every line: a role phrase in
   prose, a placeholder inside a code span (a bare branch name gains the span), and square
   brackets inside a quoted message.
+- **Mistake (2026-11-22):** I ran `merge-bot push … | tail -3` in the background. The pipe
+  gave the task `tail`'s exit code, the notification read "completed (exit code 0)", and a
+  push the unused-code gate had refused looked done until opening the pull request found no
+  branch. The rule already exists (`exit-codes-in-band-never-piped`). The form that works:
+  redirect the whole output to a log file, read `$?` on the next line and print it, then
+  show the log's tail.
+- **Mistake (2026-11-22):** I told the owner "a GitHub App can never get a Copilot review"
+  from one refused call and one unanswered comment. The refusal's own text named a second
+  cause, "or code review is disabled by their organization's Copilot policy", and I read
+  only the first. An organisation policy, off by default, was the cause. A refusal that
+  names two causes is two hypotheses.
+- **Mistake (2026-11-22):** I wrote that Copilot reviews every push here because the merge
+  tool printed `review_on_push=true`, and that the validators gate runs at the commit hook
+  because other validators' headers say so. Each was a reading of a statement about the
+  system, not of the system: the rule does not fire for an App author with the policy off,
+  and `.husky/pre-commit` runs three staged checks and nothing else.
+- **Pattern (2026-11-22):** an independent reviewer briefed with the diff and the question
+  "how could this merge what it should not", and not with my reading of it, found two real
+  ways in a merge-gate change that my own tests had passed: a verdict name with two
+  producers, and a proof that ran on one verdict alone.
+- **Pattern (2026-11-22):** the window's mistakes share one generator: a label or a statement
+  about the system read as the system (a tool's evidence line, an error's first clause, a
+  header comment, a verdict name, a pipe's exit code, a function named `…ForCertain`). The
+  check: name the observation the statement rests on, and read that.
+- **Surprise (2026-11-22):** every bot pull request, when marked ready, has GitHub request the
+  four code owners in the bot's name: fifty-two requests to people from thirteen pull
+  requests in two days. I had read these timelines for Copilot's request and not for who
+  else was asked. A timeline read for one event is read for all of them.
+- **Surprise (2026-11-22):** three review passes over one merge-gate change (the code reviewer
+  before the commit, Copilot twice) gave twelve findings with none in common. Reviewers
+  sample different regions, so a clean pass by one says little about what another finds.
+- **Mistake (2026-11-22):** I wrote "forty-four requests from eleven pull requests" in a
+  record from three timelines and a guess at the rest. The count was fifty-two from
+  thirteen. A number in a record is counted before it is written.

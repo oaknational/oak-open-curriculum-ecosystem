@@ -1517,6 +1517,48 @@ inside a rule name).
   owner's word in the meantime: "If absolutely necessary my credentials can be used to
   request review, but I feel it should be easier than that"; the owner approved that use for
   oaknational#1064 and for the no-review option's own pull request.
+- **The owner's answer on the review source, 2026-11-22.** "The core reviewer is copilot,
+  Claude and Codex are secondary and we will not be adding credit." "Machine users are a
+  risk, we will not use them." "I think we need to use my credentials via the CLI, but with
+  judgement as to the value of the request". So a Copilot review is requested with
+  `gh pr edit <n> --add-reviewer @copilot` under the owner's sign-in, only where the change's
+  complexity justifies a review, and a simple change takes the no-review option. The owner
+  asked for a fresh look at why the owner's identity in the commit author field does not
+  trigger the automatic review.
+- **What that inquiry found, checked against two of its sources.** The automatic review is
+  decided by the account that opened the pull request; GitHub's pages do not mention the
+  commit author. "A GitHub App can never get a Copilot review", written above, is too
+  strong: since GitHub's change of 2026-08-27 a bot-authored pull request is reviewed and
+  billed to the organisation when the organisation policy "Allow members without a Copilot
+  license to use Copilot code review in GitHub.com" is on, after "AI credits paid usage".
+  The policy is off by default and the API does not show its state, so whether it is off
+  here is unconfirmed; the review endpoint's refusal fits it being off. With it on, the
+  ruleset's `review_on_push` would review and charge every push of every bot pull request.
+  Since 2026-11-06 an account on a ruleset's bypass list gets no automatic review, so the
+  Copilot rule in its own ruleset with the bot on its bypass list would leave colleagues
+  their automatic reviews and let the bot ask only on value, through the verb of
+  oaknational#1063 (closed; its branch `feat/merge-bot-request-review` is kept). None of
+  this is tested here and the settings are the owner's or an organisation admin's. The
+  owner's own account is on the bypass list of the ruleset that carries the Copilot rule.
+- **The owner turned the organisation policy on and set the rulesets, 2026-11-22.** With the
+  policy on, oaknational#1065 was asked of Copilot at open in the bot's name, with no act by
+  the seat. The owner's design: "I want humans to get a review on every push, PRs to get one
+  automatic review whoever opens them, and my bots to request for reviews except on PR open
+  which automatically gets a review anyway." The owner ran both changes; a seat does not
+  change rulesets. As read back that day: "Protect default branch" (13402577) carries the
+  Copilot rule with `review_on_push: false`, its other six rules, conditions and bypass list
+  unchanged; "Code Quality Copilot review for default branch" (19474916) is active with
+  `review_on_push: true` and both bot apps on its bypass list. Unconfirmed until seen: that
+  a person, covered by both, is reviewed on every push (how GitHub combines two such rules
+  is not documented); and that a bot pull request is asked at open and not on a later push.
+  The bot's own request after open needs the verb of oaknational#1063 brought back.
+- **oaknational#1065 carries the no-review option.** Copilot's automatic review raised six
+  findings, all upheld and cured in `f917e7929`: a review-run listing not read in full no
+  longer qualifies; a reason containing an at-sign is refused; the record says "not
+  reviewed"; no rules read when the reason cannot apply; a refusal object under `--json`;
+  and three documents that still said only a settled verdict merges.
+- **oaknational#1064 merged** (`f18bdabc9` is `main` after it): the names validator is the
+  last step of `repo-validators:check`.
 - **The names cleanup is closed but for its gate.** oaknational#1060 to #1062 landed the last
   three record surfaces and the validator reads no line on `main` in 11,765 files.
   oaknational#1064 wires it into `repo-validators:check`. One Copilot finding on it was
@@ -1535,3 +1577,99 @@ inside a rule name).
 - **A correction.** The archived plan
   `.agent/plans-old-archive/archive/completed/mcp-oauth-implementation-plan.archive.md` holds
   two example addresses (`test@…` and `yourname@…`), not a personal one. Nothing there changes.
+
+### Update 2026-11-22, the window's close (Sandpiper guards Wind, 690653)
+
+- **The rulesets before the owner's change, for a way back.** "Protect default branch"
+  (13402577): active, seven rules (deletion, non-fast-forward, pull request, code scanning,
+  code quality, required status checks, Copilot code review), the Copilot rule with
+  `review_on_push: true` and `review_draft_pull_requests: true`, three bypass actors. "Code
+  Quality Copilot review for default branch" (19474916): disabled, one Copilot rule with the
+  same two values, no bypass actor. The change set the first's `review_on_push` to false,
+  made the second active and put both bot apps on the second's bypass list. Nothing else
+  changed.
+- **The merge tool does not read the ruleset to decide a leg.** Read in
+  `agent-tools/src/pr-watch`: `reviewOnPush` and `reviewDraft` have one consumer, the
+  evidence line (`reviewConfigurationEvidence`). A leg is owed from a round asked, read from
+  the pull request's history. A reviewer whose review binds an earlier commit, and of whom no
+  round is asked since, reads UNOWED (`reviewer-legs.ts`, `unowedOnLaterTip`). So a bot pull
+  request reviewed at open and pushed to afterwards settles with no second review, which is
+  the owner's rule. Two statements say otherwise and are wrong: the evidence line prints
+  `review_on_push=true` for every author, because one of the two rulesets carries it, though
+  both bot apps are on that ruleset's bypass list; and the comment on `reviewConfiguration`
+  in `state-types.ts` says a leg is owed "only where the configuration or a request says so".
+- **The no-review option is a fallback now.** With one automatic review at open on every pull
+  request, the reviewer set is empty only when that review was never asked: the vendor's
+  outage, the policy off, or a quota. oaknational#1065 keeps the option for that case and
+  its documents are to say so.
+- **oaknational#1065, Copilot's second round, on `f917e7929`: four findings.** The push that
+  carried the first cures was reviewed automatically, in the bot's name, two seconds after
+  it landed; that was before the rulesets changed. Each finding was checked in the code.
+  - _An automatic Codex review can be under way and not show._ Upheld. The connector is
+    installed on Oak's repository (it has commented on 621 pull requests, the last on
+    2026-11-03), takes a ready-for-review event as its cue, and is counted a reviewer only
+    once it comments. Cure: the option does not apply within one quiet window of the last
+    ready-for-review event, and the function is renamed so its name claims no certainty.
+  - _The reviewer set leaves out some reviews._ Upheld. An approval or a change request with
+    an empty body, a draft in progress and a review by a deleted account are none of them in
+    the set, so the record "has not been reviewed" could be false. Cure: the option does not
+    apply when the harvest holds any review by another account that is not a skip notice, a
+    failed-run notice or the agent's own signed reply.
+  - _A review can arrive between the reading and the merge call._ Declined as a second
+    reading, upheld as a statement in the documents. A second reading takes longer than the
+    window it closes and leaves its own; the same window exists on every merge by the
+    command; the comment states what was true when it was posted.
+  - _The refusal object under `--json` has a different shape._ Upheld. Cure: the same keys as
+    every refusal, with `verdictState: null` because no verdict was read.
+- **The cure push is the second settlement push and the last.** The review-cost survey reads
+  oaknational#1065 at `warn`, 26.25 of 40. No third round is requested: the cures are read by
+  the code reviewer before the commit. That push is also the first by a bot since the
+  rulesets changed, so it shows whether a bot push is still reviewed automatically.
+- **Every bot pull request asks four people for a review.** When the pull request is marked
+  ready, GitHub requests the code owners, in the bot's name; the code owners file names them
+  on every path. Counted on each timeline: the thirteen pull requests oaknational#1053 to
+  #1065, of 2026-11-21 and 22, made fifty-two such requests, at the hours the agent worked.
+  This bears on the owner's concern about how agent work reads to colleagues and is put to
+  the owner; the file and the ruleset are the owner's to change.
+- **The thinking passes the owner asked for** (metacognition, free play, concept exploration,
+  reason, parallax), and what they gave.
+  - _One generator under the window's mistakes:_ a label or a statement about the system was
+    read as the system. Seven instances: the tool's `review_on_push=true` line; the first
+    clause of a refusal that named two causes; the validators' header comments; a verdict
+    name with two producers; the exit code of a pipe; the comment on `reviewConfiguration`;
+    and the name `unreviewedForCertain`, which claimed a certainty its reading cannot give.
+    The check that would have caught each: name the observation the statement rests on, and
+    read that.
+  - _Decisions on the cures that follow._ One pull request trues the statements: the seven
+    validator headers that say the gate runs at the commit hook (`identity-naming`,
+    `notion-fence`, `machine-local-paths`, `lifecycle-scripts`, `claim-freshness`,
+    `policy-reappraisal`, `pretooluse-guard-routing`), the comment on `reviewConfiguration`,
+    and the evidence line, which is to say that an author on a ruleset's bypass list is not
+    reviewed by it. Not done: splitting the verdict name `SILENT-WAIT-NO-REVIEWER` in two.
+    The verdict set is a contract, the one known trap is closed (the no-review option reads
+    the reviewer set, not the name), and no second consumer has tripped on it.
+  - _Associations from the free play, none of them a finding._ The June reports on review
+    dismissals already named the problem of an agent's act recorded under the owner's
+    credential, which is prior art for the concern about how agent work reads. The role
+    words chosen for the names cleanup are unequal: "the owner's account" names an account,
+    "the second code owner" names a person where the account was often driven by an agent.
+    A pull request carries three identities on three surfaces: a person as commit author,
+    the bot as committer and opener, the seat in a comment's signature. The owner's "I feel
+    it should be easier than that" was a prompt to look for the documented path, and it was
+    right. Three review passes over the no-review option (the code reviewer before the
+    commit, Copilot twice) gave twelve findings with none in common, so a further pass says
+    little about how many remain. Set aside: the bypass list read as a deprivation (forced),
+    and stacking local lanes (nothing in it).
+  - _What the world has yet to show._ A bot pull request asked of Copilot once at open and
+    not on a later push. A person's push reviewed again, with the person covered by both
+    rulesets. The `request-review` verb answered 201 with the organisation policy on.
+- **The queue, in order.** Cure and merge oaknational#1065, correcting the sentence in
+  `.agent/reference/merge-bot.md` that a bot's Copilot review is "requested by a person, or
+  not at all". Open the foundation page's pull request (branch
+  `docs/foundation-unattended-guardrails`, commit `53b97f810`, local) and add the link to the
+  first line of later pull requests once it lands. Bring the `request-review` verb back from
+  `feat/merge-bot-request-review` and prove it with a live call. The pull request that trues
+  the statements. Fold this coordination branch, which is past its lifetime. Then, in a
+  session of its own with a plan node not yet written: the pages the foundation page links
+  to and the Practice's definitions. Under the names plan: the reviewer templates not yet
+  read line by line. Not started without the owner's express request: the v1 migration.
