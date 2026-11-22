@@ -1714,6 +1714,20 @@ inside a rule name).
   bot not. Removing the default line would lift that gate for everyone not on the list.
   The recommendation is withdrawn, no pull request is opened, and the question goes back
   to the owner with the fact. Listing every ruleset, parents included, would have shown it.
+- **oaknational#1065 merged** (`e854ce4a1` is `main` after it), its branch retired and its
+  worktree removed. Copilot's third round, on the cure push, gave one finding, declined on
+  the thread: a refusal that only time resolves is terminal, so a run begun while checks
+  are pending exits 3 and the caller runs the command again after the time the refusal
+  names. A follow-up, not started: a refusal class the poll loop may outwait when a readable
+  quiet window is the only thing in the way.
+- **oaknational#1066 merged** (`fc46095dc` is `main` after it): the foundation page's section
+  on unattended work. Copilot was asked once at open, in the bot's name, with no act by the
+  seat. Its one finding was upheld: the page gave as universal three things that hold on an
+  engineer's machine only (the command guard is Claude Code's, a hosted cloud session runs
+  no local hooks and never merges, a token is scoped to a kind of act). The cure push was
+  reviewed automatically too, with no finding: the second bot push in a row reviewed
+  despite the bypass list. The first line of an agent pull request now links its last
+  words to `docs/foundation/agentic-engineering-system.md`.
 - **The owner's two answers, by question prompt, 2026-11-22.** The code owners file stays as
   it is: the four requests on each bot pull request continue. The rulesets stay as they
   are: bot pushes are reviewed and billed for now, the seat keeps cure pushes to one a
