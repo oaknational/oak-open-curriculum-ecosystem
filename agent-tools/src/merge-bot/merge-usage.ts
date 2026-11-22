@@ -47,8 +47,11 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-fi
   stops the merge. The reason stands in for the missing review ALONE: red
   checks, open threads, a draft or a review in progress refuse as before,
   and a pull request that has a review, or a reviewer who owes a round, is
-  never merged on the reason. The text is posted verbatim, so an @name in
-  it notifies that person; a second attempt posts the reason again.
+  never merged on the reason; nor is one whose review-run listing could
+  not be read in full, since a review may be running unseen. The text is
+  posted verbatim, so a reason containing an @ refuses (an @name notifies
+  a person or asks a review bot for a round). No quiet window applies:
+  it follows a review. A second attempt posts the reason again.
   --json puts EXACTLY the outcome object on stdout; progress moves to
   stderr.
   Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —

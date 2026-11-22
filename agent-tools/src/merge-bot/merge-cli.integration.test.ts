@@ -473,6 +473,33 @@ describe('runMergeBotCli merge — no review, on a reason the caller states', ()
     expect(run.urls).toEqual([]);
   });
 
+  it('puts the refusal object on stdout under --json when the reason file is empty', async () => {
+    const run = runMerge({
+      args: [...REASON_ARGS, '--json'],
+      readings: [unreviewed()],
+      overrides: filesWith(''),
+    });
+
+    expect(await run.exit).toBe(3);
+    expect(JSON.parse(run.out())).toMatchObject({ kind: 'refused' });
+    expect(run.urls).toEqual([]);
+  });
+
+  it.each(['No @codex review is necessary for this change.', 'Agreed with @a-person.'])(
+    'refuses a reason that mentions an account before minting: %s',
+    async (reason) => {
+      const run = runMerge({
+        args: REASON_ARGS,
+        readings: [unreviewed()],
+        overrides: filesWith(reason),
+      });
+
+      expect(await run.exit).toBe(3);
+      expect(run.errText()).toContain('@');
+      expect(run.urls).toEqual([]);
+    },
+  );
+
   it('fails when the reason file cannot be read, before minting: exit 1, nothing sent', async () => {
     const run = runMerge({
       args: REASON_ARGS,

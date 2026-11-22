@@ -160,6 +160,26 @@ describe('runMergeExecution, a merge with no review', () => {
       verdict: 'CHECKS-RED',
     },
     {
+      holds: 'the review runs could not be read, so a review may be running unseen',
+      reading: settledReading({
+        author: 'a-person',
+        expectedReviewers: [],
+        reviews: [],
+        reviewRuns: { kind: 'unavailable', reason: 'the host has no run listing' },
+      }),
+      verdict: 'SILENT-WAIT-NO-REVIEWER',
+    },
+    {
+      holds: 'the review-run listing is truncated, so a review may be running unseen',
+      reading: settledReading({
+        author: 'a-person',
+        expectedReviewers: [],
+        reviews: [],
+        reviewRuns: { kind: 'read', runs: [], truncated: true },
+      }),
+      verdict: 'SILENT-WAIT-NO-REVIEWER',
+    },
+    {
       holds: 'a review thread is open',
       reading: settledReading({
         author: 'a-person',
@@ -194,6 +214,32 @@ describe('runMergeExecution, a merge with no review', () => {
       expect(github.lines).not.toContain(MERGE);
     },
   );
+
+  it('reads no branch rules for the bot’s own pull request when a reviewer owes a round: the reason cannot apply', async () => {
+    const github = recordingFetch();
+    const reading = settledReading({
+      author: 'app/acme-bot',
+      expectedReviewers: ['copilot-pull-request-reviewer', 'claude'],
+      checksGreenAt: '2026-08-06T08:58:00Z',
+    });
+
+    const outcome = await runMergeExecution(
+      makeInput(reading, github.fetchImpl, { noReviewReason: REASON }),
+    );
+
+    expect(refusedOn(outcome)).toBe('SILENT-WAIT-NO-REVIEWER');
+    expect(github.lines).not.toContain('GET /rules/branches/main');
+  });
+
+  it('records that the pull request was not reviewed, which stays true if a person had been asked', async () => {
+    const github = recordingFetch();
+
+    await runMergeExecution(makeInput(unreviewed(), github.fetchImpl, { noReviewReason: REASON }));
+
+    const body = JSON.stringify(github.bodyOf('/issues/42/comments'));
+    expect(body).toContain('has not been reviewed');
+    expect(body).not.toContain('No review was requested');
+  });
 
   it('merges the bot’s own unreviewed pull request once every required context is green by name', async () => {
     const github = recordingFetch();

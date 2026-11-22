@@ -8,7 +8,7 @@ import { realFetch } from './github-fetch.js';
 import { readMergeSettings, putMerge } from './merge-github-api.js';
 import { readExecutor } from './merge-read-env.js';
 import { resolveVerdict } from './merge-door-checks.js';
-import { mergeGrounds } from './merge-no-review.js';
+import { mergeGrounds, unreviewedForCertain } from './merge-no-review.js';
 import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-config.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import type { BotIdentity } from './resolve-identity.js';
@@ -183,7 +183,7 @@ async function gateAndMerge(context: {
     reading,
     appSlug: input.appSlug,
     nowIso: input.nowIso,
-    reasonGiven: input.noReviewReason !== undefined,
+    mayMergeUnreviewed: input.noReviewReason !== undefined && unreviewedForCertain(reading),
     fetchImpl,
     token,
     target: { identity: input.identity, prNumber: input.prNumber },
@@ -198,7 +198,7 @@ async function gateAndMerge(context: {
       verdict,
       allowMergeCommit,
       noReviewReason: input.noReviewReason,
-      nobodyReviewsOrIsAsked: reading.expectedReviewers.length === 0,
+      nobodyReviewsOrIsAsked: unreviewedForCertain(reading),
     });
 
   const eligible = decide(true);

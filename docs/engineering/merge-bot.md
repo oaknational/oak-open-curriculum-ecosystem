@@ -40,9 +40,11 @@ pnpm agent-tools merge-bot merge --pr <n>
 ```
 
 It mints its own least-privilege token (`pull-request-merge`), reads the
-settlement verdict, and merges ONLY on SETTLE-READY — merge-commit method
+settlement verdict, and merges on SETTLE-READY — merge-commit method
 always, the VERDICTED tip's sha pinned in the call (a moved tip answers
-409), refusing by verdict name on everything else with exit 3. The command
+409), refusing by verdict name on everything else with exit 3. The one
+other merge is of a pull request nobody has reviewed, on the seat's stated
+reason (below). The command
 takes no reviewer list. It reads the reviews from the pull request:
 
 - **A review in progress is waited for.** A running review check holds the
@@ -60,9 +62,16 @@ takes no reviewer list. It reads the reviews from the pull request:
   review it passes `--no-review-reason-file <path>`: the command posts the
   file's text on the pull request as the record, then merges. The reason
   stands in for the missing review alone. Red checks, open threads, a draft
-  or a review in progress refuse as they do without it; a pull request that
-  has a review is merged as reviewed; an empty file refuses; and a reason
-  that cannot be posted stops the merge.
+  or a review in progress refuse as they do without it, and so does a
+  review-run listing that could not be read in full, because it cannot show
+  that no review is running. A pull request that has a review, or a reviewer
+  who owes a round, is never merged on the reason. An empty file refuses,
+  and so does a reason containing an `@`, which would notify a person or ask
+  a review bot for a round; a reason that cannot be posted stops the merge.
+  There is no quiet window on this path: the window follows a review, and
+  here there is none. The record says the pull request has not been
+  reviewed; a pending request of a person does not hold it, as for every
+  merge.
 - **Every review is dealt with.** Every review thread is resolved, and the
   merging seat reads and dispositions a review body's findings before it
   calls the command.

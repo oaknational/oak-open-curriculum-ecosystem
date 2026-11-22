@@ -1,7 +1,7 @@
 import { ok, type Result } from '@oaknational/result';
 
 import { printable } from '../pr-watch/printable.js';
-import type { PrVerdict } from '../pr-watch/state-types.js';
+import type { PrStateReading, PrVerdict } from '../pr-watch/state-types.js';
 import type { MergeDecision } from './merge-decision.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import { postIssueComment } from './pull-request-github.js';
@@ -18,7 +18,8 @@ import type { BotIdentity } from './resolve-identity.js';
  * is merged unreviewed without the record.
  *
  * The comment states what is true whether or not the merge call that
- * follows succeeds: that no review was requested, and the reason.
+ * follows succeeds: that the pull request has not been reviewed, and the
+ * reason.
  */
 
 /** The flag that names the reason file. */
@@ -31,8 +32,9 @@ export type NoReviewReasonRead =
 
 /**
  * Read the reason file, when the caller named one. An unreadable file is an
- * operational failure (exit 1); an empty one is a refusal (exit 3), because
- * the reason is the record and an empty record says nothing.
+ * operational failure (exit 1). A reason that cannot be posted as it stands
+ * is a refusal (exit 3): an empty one, because the reason is the record,
+ * and one that names an account (`reasonFault`).
  *
  * @param path - The file the caller named, or undefined when it named none.
  * @param read - The file reader.
@@ -55,19 +57,71 @@ export async function readNoReviewReason(
       message: `cannot read ${printable(path)}: ${printable(cause)}`,
     };
   }
-  return text.trim() === ''
-    ? {
+  const fault = reasonFault(text);
+  return fault === undefined
+    ? { kind: 'read', reason: text }
+    : {
         kind: 'stop',
         exit: 3,
-        message: `refused: ${REASON_FILE_FLAG} ${printable(path)} is empty; the reason is posted on the pull request, so it must say something`,
-      }
-    : { kind: 'read', reason: text };
+        message: `refused: ${REASON_FILE_FLAG} ${printable(path)} ${fault}`,
+      };
+}
+
+/**
+ * What is wrong with a reason's text, or undefined when it can be posted.
+ * The text goes on the pull request verbatim, where an `@name` is live: it
+ * notifies a person, and a review bot's trigger phrase asks that bot for a
+ * round AFTER the command judged the pull request unreviewed. So a reason
+ * names no account.
+ */
+function reasonFault(text: string): string | undefined {
+  if (text.trim() === '') {
+    return 'is empty; the reason is posted on the pull request, so it must say something';
+  }
+  return text.includes('@')
+    ? 'contains an @: the reason is posted verbatim, where an @name notifies a person or asks a review bot for a round; name no account'
+    : undefined;
+}
+
+/**
+ * Report what stopped the run before the mint, and answer with its exit
+ * code. Under `--json` a refusal also puts its object on stdout, as every
+ * typed refusal of the command does.
+ */
+export function reportReasonStop(
+  stop: Extract<NoReviewReasonRead, { kind: 'stop' }>,
+  json: boolean,
+  streams: {
+    readonly stdout: Pick<NodeJS.WriteStream, 'write'>;
+    readonly stderr: Pick<NodeJS.WriteStream, 'write'>;
+  },
+): number {
+  if (json && stop.exit === 3) {
+    streams.stdout.write(`${JSON.stringify({ kind: 'refused', reason: stop.message })}\n`);
+  }
+  streams.stderr.write(`merge-bot merge: ${stop.message}\n`);
+  return stop.exit;
+}
+
+/**
+ * Whether the reading shows, for certain, a pull request nobody has
+ * reviewed and nobody is reviewing: the expected reviewer set is empty, and
+ * the review runs were read in full. An unavailable or truncated run
+ * listing cannot show that no review is running, so it never qualifies.
+ * A pending request of a person does not hold the pull request back, which
+ * is the command's rule for every merge; the record says "not reviewed"
+ * and never "nobody was asked".
+ */
+export function unreviewedForCertain(reading: PrStateReading): boolean {
+  const { expectedReviewers, reviewRuns } = reading;
+  const runsReadInFull = reviewRuns.kind === 'read' && reviewRuns.truncated !== true;
+  return expectedReviewers.length === 0 && runsReadInFull;
 }
 
 /** The comment's text for a reason. */
 function noReviewComment(reason: string): string {
   return [
-    '**No review was requested for this pull request (agent comment).** The agent judged the change simple enough to merge on green checks alone. Its reason:',
+    '**This pull request has not been reviewed (agent comment).** The agent judged the change simple enough to merge on green checks alone. Its reason:',
     '',
     reason.trim(),
     '',

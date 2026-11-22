@@ -288,8 +288,13 @@ holds executables beside its prose (hooks, scripts, skill scripts), and a change
 to one of those is a code change whatever directory it sits in (a finding on a fold
 merged on 2026-09-21).
 
-**Review request policy.** Every pull request has one review before it
-merges, and `merge-bot merge` refuses one that nobody has reviewed. Where
+**Review request policy.** A pull request has one review before it merges
+where its complexity justifies one (the owner, 2026-11-22: "only one review
+is mandatory, and only then if the complexity of the PR justifies it,
+further reviews are strictly on a value basis"). `merge-bot merge` refuses
+a pull request nobody has reviewed unless the seat gives its reason for no
+review in a file (`--no-review-reason-file`), which the tool posts on the
+pull request before it merges. Where
 the repository's automatic review at open has arrived, that is the one;
 where none has, the seat requests one, and "no review yet" is the stated
 reason. Any further review — Copilot's, Codex's or any other vendor's on
@@ -309,9 +314,8 @@ first-hand (every vendor round on such doctrine found a true defect,
 2026-10-02), a change whose shape the seat doubts — stated where the
 request is made. An intermediate cure push, a pure sync, a push the seat
 has read and tested, and the passing of a round are never reasons.
-Every pull request, a docs-only one among them, needs one review of any of
-its commits before it merges, and `merge-bot merge` refuses one that nobody
-has reviewed. A
+A pull request the seat does not merge on a stated reason, a docs-only one
+among them, needs one review of any of its commits before it merges. A
 reviewer's leg reads UNOWED on a tip after the commit they reviewed, with no
 round asked of them since (state machine item 3), and the round settles on
 it; the leg is OWED only while a review of that tip is due and has not
@@ -1325,7 +1329,8 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    review is owed where the change's complexity justifies one, and the
    judgement is the merging seat's: for a change simple enough to need
    none, `merge-bot merge --no-review-reason-file <path>` posts the reason
-   on the pull request and merges, every other gate holding. A bot
+   on the pull request and merges. Checks, threads and draft state hold as
+   before; there is no quiet window, since the window follows a review. A bot
    the repository reviews with automatically joins the set when its round
    is asked or its review lands, and is OWED from the request until it
    posts or the checks-green timeout fires. PDR-140's loop discipline
@@ -1449,7 +1454,8 @@ create` on such a branch exits non-zero with "a pull request for branch …
    all issued at a freshly RECOMPUTED full gate. For BOT merges the front
    door is `pnpm agent-tools merge-bot merge --pr <n>`
    (MCP-508): it recomputes the LEG-DRIVEN settlement verdict itself,
-   merges only on SETTLE-READY with the verdicted tip's sha pinned, and
+   merges on SETTLE-READY (or, for a pull request nobody has reviewed, on
+   the seat's stated reason) with the verdicted tip's sha pinned, and
    refuses by verdict name. The tool reads checks, threads and reviewer
    legs. The zero-undispositioned and cure-worthy-zero legs above are the
    MERGING SEAT'S own recomputation at the boundary: the seat reads each

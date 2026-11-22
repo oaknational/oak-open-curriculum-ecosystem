@@ -64,8 +64,12 @@ interface ResolveInput {
   readonly reading: PrStateReading;
   readonly appSlug: string;
   readonly nowIso: string;
-  /** The caller gave a reason for a merge with no review, so an unreviewed verdict may merge too. */
-  readonly reasonGiven: boolean;
+  /**
+   * The caller gave a reason for a merge with no review AND the reading
+   * shows a pull request nobody has reviewed or is reviewing
+   * (`merge-no-review.ts`), so the unreviewed verdict may merge too.
+   */
+  readonly mayMergeUnreviewed: boolean;
   readonly fetchImpl: GithubApiFetch;
   readonly token: string;
   readonly target: RulesTarget;
@@ -76,8 +80,8 @@ interface ResolveInput {
  * contexts must be proved first: a settled verdict always, and the
  * unreviewed one when the caller has given its reason for no review.
  */
-function mayMerge(state: PrVerdict['state'], reasonGiven: boolean): boolean {
-  return state === 'SETTLE-READY' || (reasonGiven && state === 'SILENT-WAIT-NO-REVIEWER');
+function mayMerge(state: PrVerdict['state'], mayMergeUnreviewed: boolean): boolean {
+  return state === 'SETTLE-READY' || (mayMergeUnreviewed && state === 'SILENT-WAIT-NO-REVIEWER');
 }
 
 /**
@@ -90,7 +94,7 @@ function mayMerge(state: PrVerdict['state'], reasonGiven: boolean): boolean {
 export async function resolveVerdict(input: ResolveInput): Promise<Result<PrVerdict, Error>> {
   const verdict = computePrVerdict(input.reading, input.nowIso);
   if (
-    !mayMerge(verdict.state, input.reasonGiven) ||
+    !mayMerge(verdict.state, input.mayMergeUnreviewed) ||
     !isBotAuthored(input.reading.author, input.appSlug)
   ) {
     return ok(verdict);
