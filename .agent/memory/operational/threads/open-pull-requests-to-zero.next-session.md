@@ -1796,3 +1796,22 @@ inside a rule name).
 - **The seat's reading of the afternoon, given to the owner:** items 1, 2 and 4 of the order
   of work land today; item 3 (a refusal the poll loop may outwait) and item 5 (the reviewer
   templates) stay as recorded follow-ups.
+- **Item 1 landed as oaknational#1069** (`d355ccee7` is `main` after it): the
+  `request-review` verb. Its one live call was made on the draft oaknational#1068 after that
+  draft's automatic review had finished: 201, and `review_requested` of Copilot by the bot
+  on the timeline two seconds later; a call made while that review was pending was refused
+  as already pending. The reference paragraph, the engineering page and the pull request
+  skill name the verb as the way to ask. Copilot's review at open gave one finding, upheld:
+  "a person is asked by a person" contradicted the identity rule's row for a request of a
+  human reviewer. The cure push was reviewed automatically, with no finding: the third bot
+  push in a row reviewed without a request. The automatic review at open fires on a draft.
+- **Item 2 landed as oaknational#1070** (`238ccc2e9` is `main` after it): the eight
+  validator headers, and the review configuration's evidence line with two comments. Read
+  first-hand before the change: the configuration has one consumer, the evidence line, so
+  the line's `unread` and `absent` forms and the module's own comment made the same false
+  link to what a leg owes; all were corrected. The line now ends "(of any ruleset on the
+  base branch; bypass lists not read)". One Copilot review at open: no finding.
+- **The primary checkout's `main` is behind `origin/main`** and its built tool has neither
+  change until it is fast-forwarded and rebuilt. It carries an uncommitted change to
+  `.claude/settings.json` (enabled plugins) that is not this seat's, so the seat left the
+  primary as it found it.
