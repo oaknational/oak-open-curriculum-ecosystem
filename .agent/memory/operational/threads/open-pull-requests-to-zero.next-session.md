@@ -1445,3 +1445,93 @@ inside a rule name).
     name, goes into tracked files; fixtures use invented logins. The cleanup plan records
     the rulings of 2026-11-21 that bound it.
   Unchecked: whether `prevent-accidental-major-version` should refuse a `!` subject.
+
+### Update 2026-11-22, the owner on what follows the cleanup (Sandpiper guards Wind, 690653)
+
+- **The v1 migration.** The owner, 2026-11-22: "The V1 migration is considered feature work,
+  and will need to wait until other colleagues are available. I will handle it for now. Do not
+  start it without an express request." No seat starts `migrate-to-curriculum-api-v1` on a
+  standing word, a plan's order or a resume list.
+- **The Sonar rule set.** The owner, 2026-11-22: a rule configuration held in SonarCloud is the
+  one already decided as correct. Read that day: the rule set (the quality profile) is held in
+  SonarCloud; `.sonarcloud.properties` holds analysis scope only (duplication exclusions, the
+  design studio-source directory and binary file types, each with its authorisation in the
+  file). The fifty-nine rules in the comprehensive profile are therefore no open item.
+- **"Public pages" names repository pages.** The lane `public-pages-to-standard` is about the
+  Markdown pages a reader of the repository meets (`VISION.md`, `docs/README.md`, the strategy
+  pages, `CONTRIBUTING.md`, the app's README), not HTML served by the MCP app.
+- **Nothing in the cleanup blocks feature work.** The remaining names work is records only.
+  It lands as three record pull requests (the agentic-engineering reports, the other reports,
+  then plans, research, two decision records and the changelog) and one change wiring the
+  validator into `repo-validators:check`. The abbreviation of the sibling's site is none of an
+  account, a domain or an address, so it is outside the plan and stays.
+- **Agent work reads as agent work.** The owner, 2026-11-22: the author field on commits (the
+  owner's name, the bot as committer) is fine, and it must be clear that each pull request is
+  "opened, worked on, and closed by an agent", so that colleagues never read commit times as
+  a person working outside normal hours. From oaknational#1062 on, a pull request of this seat
+  says so in its first lines. The seat had requested Copilot reviews through the `gh` sign-in
+  on the machine, which is the owner's personal account and puts the owner's name on the
+  timeline; it stopped. Copilot reviews on every push here by configuration, and every write
+  to a pull request goes through `merge-bot pull-request`.
+- **The first line of a pull request, in the owner's wording (2026-11-22).** "Agent work. An AI
+  agent wrote, opened and will merge this pull request, working unattended from a
+  human-directed plan, inside guardrails designed for that." The last words link to
+  `docs/foundation/agentic-engineering-system.md` once that page covers the claim; until then
+  the line carries no link.
+- **That page does not yet cover the claim.** Read 2026-11-22: it names no unattended work, no
+  merge tool, no commit or push gate and no bot identity; it lists six quality gates where
+  `pnpm check` runs sixteen steps and a pull request runs twenty-two checks; it says code is
+  "reviewed by Oak's engineers", which a bot-reviewed merge makes untrue; its plan lifecycle
+  (`future/` to `archive/completed/`) is the retired backlog's; "seven files" undercounts the
+  Practice Core; `last_reviewed` is 2026-07-28. The owner's answer by question prompt: fix
+  the page, then link, and "draw a line between immediate work, and a separate docs only
+  session". Immediate: a section on what an unattended agent can and cannot do, and the
+  stale statements on that page. The separate session: the pages it links to, and the
+  Practice's definitions wherever they are written, made cohesive, consistent and well
+  written. No plan node holds that session yet.
+- **The review rule, changed by question prompt (2026-11-22).** The owner: "only one review is
+  mandatory, and only then if the complexity of the PR justifies it, further reviews are
+  strictly on a value basis". The merge tool since oaknational#1043 refuses any pull request
+  with no review. The owner chose: the seat may merge a green pull request with no review
+  when it judges the change too simple to need one, passing a one-line reason the tool
+  records on the pull request. That is a tool change, not built.
+- **The bot asks Copilot.** The owner chose, by question prompt, a `request-review` verb on
+  `merge-bot pull-request`, with one last request through the owner's sign-in for
+  oaknational#1062 and one for the verb's own pull request. The verb calls
+  `POST /repos/{owner}/{repo}/pulls/{n}/copilot-code-review`. `.agent/reference/merge-bot.md`
+  records that a request made on `requested_reviewers` under the bot's token registered
+  nothing (2026-09-13); whether the newer endpoint accepts the bot is settled by its first
+  live call. A comment on a pull request is no documented way to request a review.
+  Copilot does not review a bot-authored pull request here on its own, whatever the
+  `review_on_push` reading says: #1062 stood forty minutes with none.
+- **How that settled, later on 2026-11-22.** oaknational#1063 carried the verb and is closed
+  unmerged at the owner's word. Its first live call was refused by GitHub: "The actor does
+  not have a Copilot license that includes code review". A bot comment reading "@copilot
+  please review" drew nothing in five minutes. The base branch's ruleset does carry an
+  active `copilot_code_review` rule; GitHub makes that automatic request in the name of the
+  pull request's author one or two seconds after it opens (seen on two colleagues' pull
+  requests), and an App author holds no licence, so a bot-authored pull request gets none.
+  Three ways out were put to the owner and none is chosen: credit for the Claude review bot
+  (it already runs on every bot-authored pull request and posts a skip notice), a machine
+  user with a Copilot seat, or the owner's sign-in when a review is really needed. The
+  owner's word in the meantime: "If absolutely necessary my credentials can be used to
+  request review, but I feel it should be easier than that"; the owner approved that use for
+  oaknational#1064 and for the no-review option's own pull request.
+- **The names cleanup is closed but for its gate.** oaknational#1060 to #1062 landed the last
+  three record surfaces and the validator reads no line on `main` in 11,765 files.
+  oaknational#1064 wires it into `repo-validators:check`. One Copilot finding on it was
+  upheld: the validators gate runs at the push hook and in CI, not at the commit hook, and
+  the validator's header said otherwise. Several other validators' headers say "every
+  pre-commit" in the same way; they are not corrected.
+- **The no-review option is built on the branch `feat/merge-without-review-on-reason`**
+  (`d7a5eedc9`, not pushed): `merge-bot merge --no-review-reason-file <path>`. An
+  independent code review before the commit found two ways the first draft could merge what
+  it should not, both confirmed in the code and cured. The verdict name
+  `SILENT-WAIT-NO-REVIEWER` is also what a pull request reads when it has reviewers and one
+  owes an unrequested round, so the option keys on the reading's empty reviewer set as well
+  as the name. And the required-contexts proof ran on `SETTLE-READY` alone, so it now runs
+  on the unreviewed verdict too when a reason is given. Declined, with its reason on the
+  record: a second attempt after a failed merge posts the reason a second time.
+- **A correction.** The archived plan
+  `.agent/plans-old-archive/archive/completed/mcp-oauth-implementation-plan.archive.md` holds
+  two example addresses (`test@…` and `yourname@…`), not a personal one. Nothing there changes.
