@@ -85,21 +85,25 @@ The critical design choice: **all gates are always blocking** — there is no "n
 No person was at a keyboard when an agent's commit was made. Its timestamp
 records when the agent ran, which can be any hour of any day. The author
 field names the person who directed the work, not someone working at that
-hour; the committer is the bot. On GitHub an agent acts as a bot account, so
-the platform's own record says an agent opened, answered and merged a pull
-request.
+hour; the committer is the bot. On GitHub an agent that works from an
+engineer's machine acts as a bot account, so the platform's own record says
+an agent opened, answered and merged a pull request. An agent in a hosted
+cloud session uses the credential configured for that session, and never
+merges.
 
 A person sets the work going, usually by directing and approving a plan, and
 may not look again until it is done. To ask about a pull request, ask the
 person named as its commits' author.
 
 What limits the damage an unattended agent can do is a series of gates that
-run whether or not anyone is watching:
+run whether or not anyone is watching. For an agent on an engineer's machine:
 
-- **Before a command runs.** A guard reads each shell command an agent is
-  about to run and refuses the ones that destroy Git history or skip a gate:
-  a forced push, an interactive rebase, a commit or push with its hooks
-  turned off ([the hook policy](../../.agent/hooks/README.md)).
+- **Before a command runs.** In Claude Code, a guard reads each shell command
+  an agent is about to run and refuses the ones that destroy Git history or
+  skip a gate: a forced push, an interactive rebase, a commit or push with
+  its hooks turned off ([the hook policy](../../.agent/hooks/README.md)). On
+  other agent platforms the same limits are rules the agent follows, not a
+  guard that stops it.
 - **At commit.** A hook refuses a commit on the default branch
   ([the rule](../../.agent/rules/never-commit-to-main.md)). Staged files must
   pass format, Markdown and lint checks, and the commit message its own lint.
@@ -114,7 +118,15 @@ run whether or not anyone is watching:
   merges only when every check is green and every review thread is resolved,
   always with a merge commit, and only the exact commit it judged
   ([the merge tool](../engineering/merge-bot.md)). Each act on GitHub uses a
-  token made for that one act and limited to it.
+  short-lived token made for that kind of act, for this repository alone,
+  with only the permissions that kind of act needs.
+
+An agent in a hosted cloud session has no local hooks to run: by a recorded
+ruling it commits and pushes without them, opens a draft pull request at
+once, and treats CI's gates on that pull request as the verdict. It checks
+the branch, the staged files and the commit message by hand before it
+commits, because CI checks none of those, and it does not merge
+([the cloud routing](../../.agent/directives/cloud-environment-routing.md)).
 
 **Review on the pull request.** This is separate from the specialist reviewers
 above, who read work during a session. A review on the pull request, by a
