@@ -473,7 +473,7 @@ lockfile/mdc/README moves) are MOOT with the move.
 **S1 COMPLETE**: PR #850 merged `3afe99113` (2026-08-11, merge-commit
 method, owner-armed auto-merge; MCP-542 Done). The drive's record: a
 round-4 CHANGES_REQUESTED from the owner's PR Review Warden seat
-(under `mantagen`, at his direction) found the pinned matcher
+(under `<code-owner>`, at his direction) found the pinned matcher
 misclassifying the bare `$TURBO_ROOT$/` root input as dead — cured at
 `bca591fb5` after in-repo probe confirmation (root: 1,006 → 93,515
 dry-run resolved inputs; the mechanism's trailing-slash sibling

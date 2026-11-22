@@ -391,7 +391,7 @@ MCP-188 refusal) on the final diff, verdicts posted on the pull request before m
 5. The draft pull request already exists — #946, opened under the bot at handover with the
    plan node, title
    `MCP-655: fix(mcp-http): name the upstream authorization server in the PRM so RFC 9207 clients can sign in`,
-   label `jimbot`, assignee `mantagen` (owner word 2026-09-01). Its body describes the issue
+   label `jimbot`, assignee `<code-owner>` (owner word 2026-09-01). Its body describes the issue
    plainly (what is wrong, why, the fix, what is not changing, how it is proven) and carries
    `Fixes MCP-655`, the review focus (both discovery paths, the retained proxy, the MCP-188
    consequence), the validation evidence and the PDR-140 intake contract; edits go through a

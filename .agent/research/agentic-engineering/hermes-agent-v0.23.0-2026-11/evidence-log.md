@@ -22,8 +22,8 @@ session `01Duocji`).
 
 Notes on the pin:
 
-- The session's attached clones are the owner's forks (`jimCresswell/hermes-agent`,
-  `jimCresswell/hermes-agent-self-evolution`). The `hermes-agent` fork serves no tags
+- The session's attached clones are the owner's forks (`<owner>/hermes-agent`,
+  `<owner>/hermes-agent-self-evolution`). The `hermes-agent` fork serves no tags
   (`git ls-remote --tags origin` returned zero lines), so the tag was fetched from the public
   upstream by URL with `git fetch --depth 1 https://github.com/NousResearch/hermes-agent tag v0.23.0`.
   No remote was added to the clone.

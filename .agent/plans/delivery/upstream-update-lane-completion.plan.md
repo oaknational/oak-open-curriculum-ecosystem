@@ -59,7 +59,7 @@ until a second seat returns; re-arm both on any fleet resumption.
 
 State at the boundary: draft PR
 <https://github.com/oaknational/oak-open-curriculum-ecosystem/pull/735>,
-head `bcdc62373`, base main, bot-authored, 52 files. Matt (`mantagen`)
+head `bcdc62373`, base main, bot-authored, 52 files. Matt (`<code-owner>`)
 is assignee AND requested reviewer; Copilot review requested (both
 verified on the REST `requested_reviewers` surface). MCP-462 is In
 Progress with the PR attached. The body carries the beginner-explicit
