@@ -4,7 +4,7 @@ Written 2026-10-05 by the seat that held the Director seat for the arc (Crucible
 7b999c, claude-code, claude-fable-5-1), at the owner's word after the compaction that followed
 its handoff: "post-compaction you will run a retro, then your session will be complete" (14:3xZ)
 and "Please plan then run a restrospective" (15:3xZ). The arc runs from 2026-10-01 to
-2026-10-05 across both estates, jimcresswell.net (home) and OCE (the sibling): the parity
+2026-10-05 across both estates, the home estate and OCE (the sibling): the parity
 measure and its ledger, the per-surface twinning plan, the owner's turn, the definition of the
 Practice, the alignment node, the doctrine landing (321, #353) and the code landing (322, #354),
 finished by the successor seat (Sycamore holds Spore, 18d874) at 16:33Z and folded at 17:17Z.

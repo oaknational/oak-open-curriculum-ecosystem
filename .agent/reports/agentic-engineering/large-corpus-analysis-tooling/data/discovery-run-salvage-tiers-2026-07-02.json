@@ -1348,7 +1348,7 @@
     },
     {
       "candidateId": "C166",
-      "pattern": "The main-branch merge gate requires @jimCresswell code-owner approval (--admin forbidden), but the MEMORY.md index-line summary ('clean agent merge prohibited') over-generalised its own full-memory nuance, nearly triggering an unnecessary --admin question on an owner-authored clean PR; commit and push authority were later delegated to the agent while main-merge code-owner approval stayed.",
+      "pattern": "The main-branch merge gate requires @<owner> code-owner approval (--admin forbidden), but the MEMORY.md index-line summary ('clean agent merge prohibited') over-generalised its own full-memory nuance, nearly triggering an unnecessary --admin question on an owner-authored clean PR; commit and push authority were later delegated to the agent while main-merge code-owner approval stayed.",
       "kind": "trajectory",
       "distinctWindows": 1,
       "supportingLeafCount": 2

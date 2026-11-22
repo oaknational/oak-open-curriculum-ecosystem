@@ -216,7 +216,7 @@ consumer. The ratified reconciliation is:
   an owner-directed staging exception, not evidence that expiry is
   prevented.
 - The concrete MCP-476 successor branch
-  `jimcresswell/mcp-476-claim-freshness-session-instrument` owns the
+  `<owner>/mcp-476-claim-freshness-session-instrument` owns the
   generic SessionStart shim, expiry/pin-drift checker, allow-listed
   collector, health-probe extension, and their proofs. It is the sole
   enforcement consumer.
