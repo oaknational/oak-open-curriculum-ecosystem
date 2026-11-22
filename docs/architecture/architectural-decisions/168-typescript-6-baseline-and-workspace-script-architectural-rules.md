@@ -490,7 +490,7 @@ tsconfig.build.json` pattern. The choice of `tsup` for JS emit
   promote-to-`src/` — §5's only prescribed cure — does not exist for it, and a
   rule that can forbid but not redirect produces silently dead tests.
 
-  Reviewer credit: Matt (`mantagen`) rejected an earlier attempt to fix this by
+  Reviewer credit: Matt (the second code owner) rejected an earlier attempt to fix this by
   updating the `runtime-only-scripts/README.md` alone, on the grounds that a
   README cannot amend an accepted ADR. He was right, and the fuller defect only
   surfaced because the amendment was written where the rule actually lives.

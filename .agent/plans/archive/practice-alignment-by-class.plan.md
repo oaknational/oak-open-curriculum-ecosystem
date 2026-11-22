@@ -15,7 +15,7 @@ ratified_where: >-
   pull requests (Recommended)"; on the sizing past the four-hour line, "Proceed at about five
   hours over two sittings (Recommended)"; on the family's gate placement, "Light commit, full
   push, both estates (Recommended)"; on the family conformance check, "Include it (Recommended)".
-  The card's text is in the jimcresswell.net napkin block of 2026-10-04, a sibling-estate
+  The card's text is in the sibling estate's napkin block of 2026-10-04, a sibling-estate
   surface named here and not linked; this frontmatter is the record of the word in each estate.
 serves: best-of-each-practice
 impact_areas:
@@ -27,7 +27,7 @@ last_updated: 2026-10-05
 
 # Practice alignment by class
 
-**Disposition (2026-10-05): archived at its finish** by the n=1 seat Sycamore holds Spore (18d874): todo 1 landed as the doctrine landing in both estates (321 at `SHA:4992af38` in jimcresswell.net; #353 at `SHA:d70baa1d0` in OCE); todo 2 as the code landing in both (322 at `SHA:d3647a9d`; #354 at `SHA:ef42bd11f`), with the byte proof posted on each; todo 3 is the strategic node's §Delivery finish line of this date. The remainders the landings named live in their descriptions and are ordinary work, never a standing lane.
+**Disposition (2026-10-05): archived at its finish** by the n=1 seat Sycamore holds Spore (18d874): todo 1 landed as the doctrine landing in both estates (321 at `SHA:4992af38` in the sibling estate; #353 at `SHA:d70baa1d0` in OCE); todo 2 as the code landing in both (322 at `SHA:d3647a9d`; #354 at `SHA:ef42bd11f`), with the byte proof posted on each; todo 3 is the strategic node's §Delivery finish line of this date. The remainders the landings named live in their descriptions and are ordinary work, never a standing lane.
 
 The owner's words that bind this node. 2026-10-04, by card: "Ratify as canonical", the five-layer
 definition now in PDR-143 §Decision and `practice.md`; and, verbatim: "The broad approach should

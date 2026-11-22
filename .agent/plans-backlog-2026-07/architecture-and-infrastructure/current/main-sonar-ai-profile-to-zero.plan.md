@@ -246,7 +246,7 @@ tree. **Proof**: `pnpm lint` clean + branch Sonar.
 
 Root `pnpm check` green; branch Sonar gate **green at zero open issues** (prove
 zero issues, not merely a green gate — the new-code window can mask). Merge to
-`main` via **@jimCresswell code-owner approval** (no `--admin`, no `--no-verify`).
+`main` via **the owner's code-owner approval** (no `--admin`, no `--no-verify`).
 Run `/oak-consolidate-docs`; mine durable lessons; archive the plan.
 
 ## Quality Gates

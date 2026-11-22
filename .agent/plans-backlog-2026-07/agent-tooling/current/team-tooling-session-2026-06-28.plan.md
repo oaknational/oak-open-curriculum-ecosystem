@@ -71,7 +71,7 @@ outcomes and traces every lane to them; the per-lane work lives in the reference
   (4) the **O4/OQ5 decision late**, deliberately fed by the build lanes' lived liveness experience —
   the session is the experiment that grounds the model.
 - **Owner-interface discipline**: the Director is the single owner-interface (PDR-117 routing). The
-  **code-owner merge gate is the owner's** (@jimCresswell) — the Director drives each PR to
+  **code-owner merge gate is the owner's** (the owner's account) — the Director drives each PR to
   merge-ready; the owner clicks. No `--admin`, no `--no-verify`.
 
 ## Sequencing and bootstrap (the session dogfoods its own tool)

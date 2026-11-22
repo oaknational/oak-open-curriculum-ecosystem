@@ -95,7 +95,7 @@ travels: the plasmid trinity (practice, lineage, bootstrap), verification, two
 entry points, changelog, provenance, decision records, and the Practice Box for
 inbound material. `provenance.yml` records chains through at least eight
 repositories (the curriculum ecosystem, algo-experiments, new-cv, castr,
-jimcresswell.net, pine-scripts, a Cloudinary icon proof of concept, a schema
+the sibling estate, pine-scripts, a Cloudinary icon proof of concept, a schema
 transformation library). Exchange has two modes on one substrate:
 *transformation* (dead material taken up at a pin) and *conjugation* (two live
 seats on two estates repairing each other's drift, receipted in-session). The

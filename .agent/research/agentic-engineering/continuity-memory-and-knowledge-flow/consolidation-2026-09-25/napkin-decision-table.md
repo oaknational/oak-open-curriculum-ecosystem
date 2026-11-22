@@ -184,7 +184,7 @@ read `origin/engraph`; those reads are marked.
 | A100 | 1286 | Swallow | tool-gap | "`comms send` prints JSON whose last line is `}`, so the event id is read back with `ls -t`." | none | "ls -t", "last line is" and "prints JSON" in the `register`, `comms-channels` and `use-agent-comms-log`: absent. | `agent-tools` comms send; `use-agent-comms-log`. | a8 |
 | A101 | 1287-1288 | Swallow | observation (a candidate) | "Crickets reading one shared frame FILE get an identical frame by construction, at a fraction of the tokens of eight inline copies. A candidate for the Cricket skill's Claude dispatch." | "the Cricket skill's Claude dispatch" | "shared frame" and "frame file" in `cricket` §Claude dispatch (:110-121): absent. | `cricket` §Claude dispatch | a8 |
 | A102 | 1327-1331 | Swallow | lesson | A read-only Cricket read the older working-tree copy and called a `git show` citation false: "a role with only `Read` cannot resolve a git ref". Cure: "say the quote is from `git show <sha>:<path>`, or copy that file into scratch and cite the scratch path." | "the next frame" | "git show", "scratch" and "git ref" in `cricket` and `.agent/sub-agents/templates/cricket-judgement.md`: absent. | `cricket`; the `cricket-judgement` template. | a9 |
-| A103 | 1343-1348 | Swallow | correction | "the gate semaphore is built, in the other estate" (jimcresswell.net PR 162). "The move: "not built" is a claim about one estate; check the sibling estate before calling a ruled mechanism missing." | "the exchange's batch three" (as the carrier) | "not built" and "sibling estate": absent (unrelated hits only). Batch three is present but UNTRACKED at `.agent/practice-core/incoming/jcnet-batch-3/host-gate-slot.md`:1. `commit skill`:293 still reads "until it lands". | none named for the move. `commit skill`:293 and `no-unbounded-host-load` item 6 carry the stale "unbuilt" state. | a9 |
+| A103 | 1343-1348 | Swallow | correction | "the gate semaphore is built, in the other estate" (the sibling estate's PR 162). "The move: "not built" is a claim about one estate; check the sibling estate before calling a ruled mechanism missing." | "the exchange's batch three" (as the carrier) | "not built" and "sibling estate": absent (unrelated hits only). Batch three is present but UNTRACKED at `.agent/practice-core/incoming/jcnet-batch-3/host-gate-slot.md`:1. `commit skill`:293 still reads "until it lands". | none named for the move. `commit skill`:293 and `no-unbounded-host-load` item 6 carry the stale "unbuilt" state. | a9 |
 | A104 | 1350-1352 | Swallow | lesson | "A heartbeat label baked into the loop goes stale while the state moves on." Cure: "Read the label from a file each tick, or restart the loop at every state change." | none | The restart half is present at `liveness-heartbeat-cron.md`:188-189 and :220-221. "label from a file": absent. | `liveness-heartbeat-cron` | a9 |
 | A105 | 1356-1358; 1456-1459 | Swallow; Marten | decision; observation | A hold, or a wait on a peer, needs a default or a release condition. **L1356-1358:** "A hold with no default is a stall waiting to happen." **L1456-1459:** "A lane waiting on a peer needs a release condition, and this seat's two retained claims had none until the handoff record proposed one." | PDR-063 (the authority used); the handoff record | "stall waiting" and "hold with no default": absent. The PDR-063 mechanism is present at :334-336, and the decision is at `codex-dialogues record`:128. "release condition" and "waiting on a peer" in rules, skills, PDRs and directives: absent. The proposal exists only in a gitignored handoff record (:238). | PDR-063 | a9 |
 | A106 | 1359-1361 | Swallow | observation | "The door's round one came back clean from both legs. The reviews that did the work came before external review (the code-expert, then the test-expert and security-expert re-reads)." | none | "before external review" and "the reviews that did the work": absent. That the door was PR 190's is an inference from a gitignored handoff record. | none named (see E.6 for the converse) | a9 |
@@ -431,7 +431,7 @@ under their review dates", which are held elsewhere.
   review object" (a7).
 - **Host gates.**
   - The host-gates lock candidate at L1247-1251 is corrected at L1301-1311 (a8).
-  - L1308 "The semaphore is not built" is corrected at L1343-1348: it was built in jimcresswell.net
+  - L1308 "The semaphore is not built" is corrected at L1343-1348: it was built in the sibling estate
     PR 162 and arrives through the untracked `incoming/jcnet-batch-3`. `commit skill`:293 still says
     "until it lands" (a9).
   - L1265-1268 ("needs a claim, not a read … host gates have no claim area") sits against
@@ -584,7 +584,7 @@ ADR-180 §6 (:122), ADR-127 (:54) and ADR-144 (:34).
 - #180 `3a1d47873`; #181 `98e059ac5`; #183 `0d6924427`; #184 `507d13931`; #186 `418671f16`
 - #188 `fcbaa9bf5`; #189 `a0a2fead4`; #190 `45c838297`; #193 `07d80ec02`; #194; #196 `1a4450a69`
 - #209 `17d030cb0`, on `engraph` only
-- jimcresswell.net #162
+- the sibling estate #162
 
 **Unresolved references.**
 
