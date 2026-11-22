@@ -1331,13 +1331,21 @@ inside a rule name).
   lines in 14 files; the report read 541 lines in 26 directories after it. Before each
   commit the diff is checked by script for a placeholder outside a code span and for a
   substituted phrase that follows an article.
+  The fourth surface landed as oaknational#1058 on 2026-11-22: the archived Sonar evidence
+  directory, where two recorded JSON files carried each finding's author as a mail address.
+  The two values became `owner-noreply@example.invalid` and `owner-personal@example.invalid`.
+  The report read 403 lines in 25 directories after it. A personal mail address is a kind
+  the validator does not find without a local list; a search for one common mail domain
+  found two more files, one rapid-comms record and one archived plan under
+  `.agent/plans-old-archive/archive/completed`, to go with their surfaces.
 
   What remains, in order:
 
   1. Dated records (todo 4), one surface per pull request, largest first by the report:
-     the agentic-engineering reports (139 lines), the archived Sonar evidence directory (138
-     lines in two files, likely recorded data), the rapid-comms records (93), the other
-     reports, the plan archives. Sized by
+     the agentic-engineering reports (139 lines in 14 files), the rapid-comms records (93 in
+     25), the other reports (about 120 across several directories), the plan archives and
+     backlog (about 35), research and the two decision records the report still lists.
+     Sized by
      `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`. The
      replacements used so far: an account as a mention becomes "the owner" or "a code
      owner"; a branch prefixed with an account takes `<owner>/` when inside a code span
