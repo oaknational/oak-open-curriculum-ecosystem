@@ -29,7 +29,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "jim.cresswell@gmail.com",
+      "author": "owner-personal@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -72,7 +72,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "jim.cresswell@gmail.com",
+      "author": "owner-personal@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -114,7 +114,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "jim.cresswell@gmail.com",
+      "author": "owner-personal@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -157,7 +157,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "jim.cresswell@gmail.com",
+      "author": "owner-personal@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -201,7 +201,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "jim.cresswell@gmail.com",
+      "author": "owner-personal@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -243,7 +243,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -285,7 +285,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -327,7 +327,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -369,7 +369,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -411,7 +411,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -453,7 +453,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -651,7 +651,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.",
       "effort": "6min",
       "debt": "6min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -932,7 +932,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 24 to the 15 allowed.",
       "effort": "14min",
       "debt": "14min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -974,7 +974,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1016,7 +1016,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1059,7 +1059,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1102,7 +1102,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1145,7 +1145,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1187,7 +1187,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1229,7 +1229,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1271,7 +1271,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1313,7 +1313,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1355,7 +1355,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1397,7 +1397,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1439,7 +1439,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1481,7 +1481,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1523,7 +1523,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1565,7 +1565,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1607,7 +1607,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1649,7 +1649,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1691,7 +1691,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1733,7 +1733,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1775,7 +1775,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1818,7 +1818,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1861,7 +1861,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1904,7 +1904,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -1947,7 +1947,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -1990,7 +1990,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -2033,7 +2033,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -2287,7 +2287,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.",
       "effort": "11min",
       "debt": "11min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -2386,7 +2386,7 @@
       "message": "Refactor this code to not nest functions more than 4 levels deep.",
       "effort": "20min",
       "debt": "20min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -2484,7 +2484,7 @@
       "message": "Refactor this code to not nest functions more than 4 levels deep.",
       "effort": "20min",
       "debt": "20min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -2582,7 +2582,7 @@
       "message": "Refactor this code to not nest functions more than 4 levels deep.",
       "effort": "20min",
       "debt": "20min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -2623,7 +2623,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -2665,7 +2665,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -2707,7 +2707,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -2750,7 +2750,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -2792,7 +2792,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -2834,7 +2834,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -2876,7 +2876,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -2918,7 +2918,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -3087,7 +3087,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.",
       "effort": "11min",
       "debt": "11min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -4151,7 +4151,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 145 to the 15 allowed.",
       "effort": "2h15min",
       "debt": "2h15min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -4192,7 +4192,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -4234,7 +4234,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -4276,7 +4276,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -4318,7 +4318,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -4360,7 +4360,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -4403,7 +4403,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -4445,7 +4445,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -4487,7 +4487,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -4529,7 +4529,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -4571,7 +4571,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -4740,7 +4740,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.",
       "effort": "6min",
       "debt": "6min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -4781,7 +4781,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -4823,7 +4823,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -4865,7 +4865,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -4907,7 +4907,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -5832,7 +5832,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 123 to the 15 allowed.",
       "effort": "1h53min",
       "debt": "1h53min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -5874,7 +5874,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -6127,7 +6127,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 33 to the 15 allowed.",
       "effort": "23min",
       "debt": "23min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -6168,7 +6168,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6210,7 +6210,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6252,7 +6252,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6294,7 +6294,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -6336,7 +6336,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -6378,7 +6378,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -6477,7 +6477,7 @@
       "message": "Refactor this code to not nest functions more than 4 levels deep.",
       "effort": "20min",
       "debt": "20min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -6518,7 +6518,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6560,7 +6560,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -6602,7 +6602,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6645,7 +6645,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6687,7 +6687,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6730,7 +6730,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -6899,7 +6899,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.",
       "effort": "8min",
       "debt": "8min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -6940,7 +6940,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -6982,7 +6982,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7024,7 +7024,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7066,7 +7066,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -7108,7 +7108,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7150,7 +7150,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -7192,7 +7192,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -7234,7 +7234,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7276,7 +7276,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7318,7 +7318,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7360,7 +7360,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7402,7 +7402,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7444,7 +7444,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7486,7 +7486,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -7528,7 +7528,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -7570,7 +7570,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -7612,7 +7612,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -7809,7 +7809,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 23 to the 15 allowed.",
       "effort": "13min",
       "debt": "13min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -7850,7 +7850,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -7892,7 +7892,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8061,7 +8061,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.",
       "effort": "6min",
       "debt": "6min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -8102,7 +8102,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8144,7 +8144,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8186,7 +8186,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8439,7 +8439,7 @@
       "message": "Refactor this function to reduce its Cognitive Complexity from 30 to the 15 allowed.",
       "effort": "20min",
       "debt": "20min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "brain-overload"
       ],
@@ -8480,7 +8480,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8522,7 +8522,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8564,7 +8564,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8606,7 +8606,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8648,7 +8648,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -8690,7 +8690,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -8732,7 +8732,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -8774,7 +8774,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -8816,7 +8816,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -8858,7 +8858,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -8900,7 +8900,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8942,7 +8942,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -8984,7 +8984,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9027,7 +9027,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9069,7 +9069,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9111,7 +9111,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9153,7 +9153,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9195,7 +9195,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9237,7 +9237,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9279,7 +9279,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9321,7 +9321,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9363,7 +9363,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9405,7 +9405,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9447,7 +9447,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9489,7 +9489,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9531,7 +9531,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9573,7 +9573,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9615,7 +9615,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9657,7 +9657,7 @@
       "message": "Remove this use of the \"void\" operator.",
       "effort": "5min",
       "debt": "5min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "confusing",
         "type-dependent"
@@ -9699,7 +9699,7 @@
       "message": "Provide a compare function to avoid sorting elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9741,7 +9741,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
@@ -9783,7 +9783,7 @@
       "message": "Provide a compare function that depends on \"String.localeCompare\", to reliably sort elements alphabetically.",
       "effort": "10min",
       "debt": "10min",
-      "author": "1314980+jimcresswell@users.noreply.github.com",
+      "author": "owner-noreply@example.invalid",
       "tags": [
         "bad-practice",
         "type-dependent"
