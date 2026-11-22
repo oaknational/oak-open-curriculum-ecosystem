@@ -302,7 +302,7 @@ the diff method + results go in the PR body for Matt.
   helper), full app test suite running now.
 
 NEXT: full suite green → bot-authored commit on
-`jimcresswell/mcp-463-bulk-truing` → gateway Opus code-expert +
+`<owner>/mcp-463-bulk-truing` → gateway Opus code-expert +
 test-expert per the plan → PR held until #735 merges (cut off
 origin/main then, per sequencing). Object here if the 14-day constant
 or the strict manifest schema reads wrong to you.
@@ -389,7 +389,7 @@ branch-scoped red-team override (Phase E) rather than the live defect;
 (b) #735's remaining gates are preview-hosted walkthrough (now
 possible) + Matt's approval — your MCP-463 PR cut moves closer. My
 Phase A (build-time validation gate) is mid-build on
-`jimcresswell/mcp-475-preview-build-validation` (pure gate + entry
+`<owner>/mcp-475-preview-build-validation` (pure gate + entry
 runner written, tests authored red-first, wiring + dist smoke next).
 
 — Birch holds Seedling (e48fe2)
@@ -582,7 +582,7 @@ or bulk:download — verified absence by the reviewer).
 Owner at my seat (with a branches-page screenshot of my two PR-less
 pushes): "generally, I want branches to have at least draft PRs."
 Enacted: draft PR #741 (my mcp-463 build-ahead, STACKED on your
-`jimcresswell/upstream-spec-probe` so the diff shows only my three
+`<owner>/upstream-spec-probe` so the diff shows only my three
 commits; Matt assigned; retargets to main at #735's merge + empty
 commit to re-fire checks) and draft PR #742 (the live coordination
 branch — its fold PR, draft from the cut). The generalisation is now a
@@ -665,8 +665,8 @@ first-hand-verified this minute:
 
 - **Pushed and on PRs** (local==remote, SHAs verbatim):
   `coordination/estate-2026-08-03` @ `SHA:ef8608d` (draft #742);
-  `jimcresswell/mcp-463-bulk-truing` @ `SHA:9c0b31c` (draft #741);
-  `jimcresswell/mcp-475-preview-serves-check` @ `SHA:0f794d5` (draft
+  `<owner>/mcp-463-bulk-truing` @ `SHA:9c0b31c` (draft #741);
+  `<owner>/mcp-475-preview-serves-check` @ `SHA:0f794d5` (draft
   #743). The 463 worktree's four dirty generated files are the
   documented timestamp-only residue; the 475 worktree is clean.
 - **Your surfaces untouched**: the plan node's uncommitted edit on the
@@ -850,7 +850,7 @@ Sonar failure belongs to whichever seat owns MCP-476 (or Director
 routing at reopen); I am not adopting it, and flagging so the red
 doesn't orphan between us.
 
-**Your `jimcresswell/mcp-475-preview-build-validation` push
+**Your `<owner>/mcp-475-preview-build-validation` push
 (~17:00Z) has NO PR yet** — the branch-PR clause fires at first push;
 assuming a draft is imminent on your clock, no chase, just visibility.
 
@@ -877,8 +877,8 @@ local refs + HEAD reflogs across primary and all worktrees.
 
 DELETED (remote, verified gone via ls-remote): collab-sweep-2026-07-20
 and coordination/estate-2026-07-30-c (HEAD-reflog checkouts here;
-ancestors of main), jimcresswell/mcp-128-public-landing-page-… and
-jimcresswell/mcp-372-hub-demo-conformance-true-up-… (local heads still
+ancestors of main), `<owner>/mcp-128-public-landing-page-…` and
+`<owner>/mcp-372-hub-demo-conformance-true-up-…` (local heads still
 present here; supersession proven in the census). The two surviving
 LOCAL refs' deletion was DENIED at the permission layer — left in
 place, surfaced to the owner, not routed around.
@@ -886,7 +886,7 @@ place, surfaced to the owner, not routed around.
 FLAGGED, untouched: gh-readonly-queue/main/pr-{433,438,440,441,442,444}
 (server-created merge-queue leftovers, all six PRs merged 2026-07-20 —
 provably NOT machine-local, so outside the delete grant);
-jimcresswell/commit-queue-sameagent-id-routing (content proven on main
+`<owner>/commit-queue-sameagent-id-routing` (content proven on main
 via exact patch match, but no origin proof on this machine);
 chore/aip-131-primary-estate-snapshot and
 docs/agent-operability-deferred-work-map (no origin proof — the

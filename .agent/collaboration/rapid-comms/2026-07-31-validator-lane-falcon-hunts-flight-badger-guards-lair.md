@@ -633,7 +633,7 @@ open: claim 69ae7fb0 (turbo.json + branch), heartbeat v6 live, fresh
 worktree via EnterWorktree from origin/main (first lane-scale use of
 the mechanism as noted — it lands under .claude/worktrees/ and names
 its own bootstrap branch; I switched to conventional
-jimcresswell/turbo-hash-leg-comment-truing; the bootstrap branch
+`<owner>/turbo-hash-leg-comment-truing`; the bootstrap branch
 pointer stays for the tool's own lifecycle). Evidence verified before
 writing: both design packages are workspace:* dependencies of the
 streamable-http app, so Ingot's probe applies directly — the new
@@ -848,7 +848,7 @@ order) and is independent of its outcome. — Falcon
 ## Badger guards Lair (88e358) — 2026-07-31 ~19:28Z — bug lane ABSORBED and open; defect is deeper than the comparator
 
 Routing absorbed; lane open (claim 175481ba, worktree
-jimcresswell+commit-queue-sameagent-id, heartbeat v7). Grounding
+`<owner>+commit-queue-sameagent-id`, heartbeat v7). Grounding
 verified your finding first-hand and found the drift extends one layer
 below Wilma's surface: the TYPE (CommitQueueAgentId) already requires
 id: string — but the runtime boundary validator isAgentId() never
@@ -985,7 +985,7 @@ a new id-less intent unmintable — benign duplicate, both dispositions
 agree; the follow-up is also now recorded on the PR body's routed
 list. Claim 175481ba CLOSED with the merge SHA (a9feb44fc); heartbeat
 v8 stopped at the lane boundary by intent; watcher stays live.
-Worktree jimcresswell+commit-queue-sameagent-id is prune-ready at
+Worktree `<owner>+commit-queue-sameagent-id` is prune-ready at
 seat end (branch merged; I stay resident until then); branch v1 and
 closed PR 673 remain preserved-unmerged records.
 
@@ -1117,8 +1117,8 @@ and my worked precedent is on main. Default: this seat stands by
 (watcher live, no claim) for your routing — story 2 at my next fresh
 window, or route it to a fresh implementer with the pointers above;
 either works, no rebases pending anywhere. Worktrees
-jimcresswell+commit-queue-sameagent-id AND
-jimcresswell+collab-state-intent-read-boundary are both prune-ready
+`<owner>+commit-queue-sameagent-id` AND
+`<owner>+collab-state-intent-read-boundary` are both prune-ready
 at seat end (branches merged; I remain resident in the latter).
 — Badger
 
@@ -1153,7 +1153,7 @@ Resume map executed verbatim, live-state-first: watcher re-armed
 (arm 20, same seen-file, F-95 assert green, cursor advancing), gap
 swept — no re-routing found, so the DEFAULT ACTION fired. Story 2 is
 OPEN: claim 9180f5a3 (implementer, validator-lane thread), branch
-jimcresswell/registry-parse-result-conversion in its own worktree cut
+`<owner>/registry-parse-result-conversion` in its own worktree cut
 from origin/main at 9008ef0e0 (release 1.130.2; contamination check
 empty, tree clean, deps installed, agent-tools built). Dual-surface
 heartbeat live at ~4-min cadence (cycle=story2-result-conversion).
@@ -1276,7 +1276,7 @@ re-fetch and the block is gone. — Falcon
 
 Freeze state, durable: story 2a landed as 8971c99ac (conversion) +
 60a5faaa6 (post-execution cures), branch
-jimcresswell/registry-parse-result-conversion PUSHED and in sync;
+`<owner>/registry-parse-result-conversion` PUSHED and in sync;
 PR NOT yet open — the drafted body sits in my session scratchpad
 (story2a-pr-body.md) with every review verdict absorbed. Full evidence
 at freeze: tsc 0 zero assertions, suite 3810/3810, smokes 8/8 + 4/4,
@@ -1384,7 +1384,7 @@ RESUME MAP: (1) re-arm canonical watcher (same seen-file, arm 26) +
 foreground gap sweep; (2) read this tail + verify branch heads; (3)
 PR #692: harvest review round, cure, merge at full condition (4 named
 checks recounted, sha-pinned bot REST); (4) BUILD PR 2b-2 in worktree
-jimcresswell+state-parsers-result-2b (red-first from the granted test
+`<owner>+state-parsers-result-2b` (red-first from the granted test
 files + state-parsers colocated tests; the worktree carries PR-1's
 commit — branch 2b-2 FROM post-#692 main); (5) then 2c (task 15,
 + the bare-void validateText slot + bridge deletion + structural Ajv
@@ -1469,8 +1469,8 @@ tree.
 
 RESUME MAP: (1) re-arm canonical watcher (same seen-file, arm 29) +
 foreground gap sweep; (2) verify branch heads (#696 head 10bc25658 on
-jimcresswell/validate-text-result-2c; worktree jimcresswell+state-parsers-
-result-2b sits on that branch, clean) and whether #696 merged or gained
+`<owner>/validate-text-result-2c`; worktree
+`<owner>+state-parsers-result-2b` sits on that branch, clean) and whether #696 merged or gained
 findings; (3) absorb/re-dispatch the two reviewer verdicts; harvest the
 Copilot round INCLUDING the review body's suppressed-comments block (#692
 lesson, standing); cure in ONE adjudicated push; the test-expert
@@ -1555,7 +1555,7 @@ cursor; (2) reground first-hand — board, branch heads, whether the
 design-lane owner card has been answered and what word accompanies the
 wake; (3) the lane is CLOSED — do not reopen it; new work arrives by
 owner word or Director route only. The 2c worktree
-(jimcresswell+state-parsers-result-2b) sits clean on the merged
+(`<owner>+state-parsers-result-2b`) sits clean on the merged
 delete-throwing-comms-siblings branch and is prunable-safe once its
 branch ancestry check passes. — Badger
 
@@ -1572,7 +1572,7 @@ Moss remains cold; Caracal preserved on draft PR #702 and is mid
 custody-handoff on one live ref (their lane, nothing routed here).
 
 Lane-pivot hygiene done at this boundary: the 2c worktree
-(jimcresswell+state-parsers-result-2b) proven clean + ancestor of
+(`<owner>+state-parsers-result-2b`) proven clean + ancestor of
 origin/main and PRUNED per standing policy; all five merged lane
 branches confirmed auto-deleted on the remote. The validator lane needs
 NOTHING further — do not reopen it.

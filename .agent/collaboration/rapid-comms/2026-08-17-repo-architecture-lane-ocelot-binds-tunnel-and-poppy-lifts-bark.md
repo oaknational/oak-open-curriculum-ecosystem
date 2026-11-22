@@ -296,9 +296,9 @@ test-expert (two blocking cures taken, three polish items taken).
 Census check PASS (45 subjects); agent-tools 1774 tests green.
 
 Ceremony state: Copilot thread replied + resolved (0 unresolved);
-mantagen stale CHANGES_REQUESTED dismissed with the per-condition cure
+the code owner's stale CHANGES_REQUESTED dismissed with the per-condition cure
 map; Copilot re-requested (timeline event 08:56:56Z, bot actor). NOT
-re-requesting mantagen — the old recipe's step predates the owner's
+re-requesting the second code owner — the old recipe's step predates the owner's
 merge word (OVN-2) and would summon attention his word no longer
 requires; the dismissal invites re-review instead. Settlement watch
 armed: at checks-green + the Copilot round back, I disposition any new

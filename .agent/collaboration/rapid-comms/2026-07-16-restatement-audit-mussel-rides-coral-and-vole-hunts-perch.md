@@ -1418,7 +1418,7 @@ first-hand; the 2.7× stands.
 
 Owner has called my compaction and flagged progress-rate dissatisfaction (recorded).
 Round-4 on #393 landed at 17:52 (8 new threads + my 1 routed-open = 9/55 unresolved,
-author jimCresswell, reviews BIND to tip `SHA:31962fb6b`). My adjudication, part-done,
+author the owner's account, reviews BIND to tip `SHA:31962fb6b`). My adjudication, part-done,
 evidence first-hand:
 
 - **Three findings claim behaviour the tip already cures** [verified at 31962fb6b:

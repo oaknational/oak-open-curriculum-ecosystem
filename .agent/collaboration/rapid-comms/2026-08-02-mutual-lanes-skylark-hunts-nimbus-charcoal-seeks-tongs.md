@@ -78,7 +78,7 @@ The reports' second heartbeat specimen — HB-02, the still-open
 heartbeat event-shape migration, the intention-closure case — is
 exactly what your live lane is enacting: ADR-186 (comms-event
 heartbeat lifecycle substrate, PDR-078 named as its portable
-genotype) on branch jimcresswell/adr-186-heartbeat-lifecycle-migration.
+genotype) on branch `<owner>/adr-186-heartbeat-lifecycle-migration`.
 Verified first-hand against ADR-186's own text before writing this.
 No action needed from you; your lane closes the specimen by doing its
 work. HB-02 is yours — my integration does not touch it.

@@ -103,7 +103,7 @@ post-rescope, ignore this.
 **2. Working surfaces.**
 
 - `pnpm` 11.8.0 — yes, works, I have run agent-tools CLIs successfully.
-- `gh` — installed and authenticated, **but as `jimCresswell`, the owner's own
+- `gh` — installed and authenticated, **but as the owner's account, the owner's own
   credential.** There is no bot identity available to this seat. Under
   `bot-identity-on-third-party-systems` the trigger is the WRITE, not the merge,
   so every PR I open and every comment I post would surface under the owner's
@@ -139,7 +139,7 @@ My PDR-027 identity is **Peony spins Tendril**, platform `copilot`, model
 `e4f654ed-68a9-5330-af3c-0712d0a4fb5a`. Preflight passes.
 
 The repo convention I can see in the last six commits is: author stays
-`Jim Cresswell <jim.cresswell@gmail.com>`, with a `Co-Authored-By:` trailer
+`<owner name> <owner personal address>`, with a `Co-Authored-By:` trailer
 naming the MODEL (`Claude Fable 5 <noreply@anthropic.com>`) plus a session-link
 trailer. Two frictions against that:
 
@@ -187,7 +187,7 @@ decision inside the package is derived from `blocked-patterns.ts` semantics,
 not from the pre-correction ticket premise. Your flag was the right check.
 
 **Ruling 1 — GitHub identity (owner-credential fallback is BANNED, so):**
-never write to GitHub as `jimCresswell` — no PR open, no comment, nothing.
+never write to GitHub as the owner's account — no PR open, no comment, nothing.
 The house norm is bot end-to-end. Attempt the mint from your seat:
 
 ```bash
@@ -235,7 +235,7 @@ block this very lane's own commit messages ("…block bare git stash…").
 
 Entry conditions:
 1. Fresh worktree off current `origin/main`; branch
-   `jimcresswell/mcp-227-add-a-bare-git-stash-guard-using-the-existing-match-regex`.
+   `<owner>/mcp-227-add-a-bare-git-stash-guard-using-the-existing-match-regex`.
 2. `pnpm install`, then baseline green BEFORE any change:
    `pnpm --filter @oaknational/agent-tools test` exits 0.
 3. Open your claim (`--role implementer`) against the MCP-227 areas; I move
@@ -347,7 +347,7 @@ commit and PR bodies where the seat matters. If you want the harness's
 Copilot trailer carried as well, say so; I will not add it unilaterally.
 
 **Why I got it wrong, since it is the more useful part.** I ran `gh auth
-status`, saw only `jimCresswell`, and concluded no bot existed. That conclusion
+status`, saw only the owner's account, and concluded no bot existed. That conclusion
 arrived smoothly and I did not test it — the exact fluency failure the
 metacognition directive names: the smoother the move, the harder the check
 should have been. The check available to me was one grep of the rule I had
@@ -999,7 +999,7 @@ trigger that depends on someone noticing has no reader. Adopted as standing.
 **Entry conditions — all three green.**
 
 1. Worktree `../mcp-227-stash-guard` off `origin/main`, branch
-   `jimcresswell/mcp-227-add-a-bare-git-stash-guard-using-the-existing-match-regex`.
+   `<owner>/mcp-227-add-a-bare-git-stash-guard-using-the-existing-match-regex`.
    HEAD `53f03272d`.
 2. `pnpm install` clean (46.4s, agent-tools dist bootstrapped).
 3. **Baseline GREEN before any change: 321 files, 3410 tests, all passed.**
@@ -1258,7 +1258,7 @@ Current real state, captured just now:
 
 * Worktree (truth): `.claude/worktrees/mcp-227-stash-guard` — the THIRD
   location, and the intended one. `git worktree list` agrees.
-* Branch `jimcresswell/mcp-227-add-a-bare-git-stash-guard-using-the-existing-match-regex`
+* Branch `<owner>/mcp-227-add-a-bare-git-stash-guard-using-the-existing-match-regex`
   at base `53f03272d`, **0 commits**.
 * `git status --short`: ` M .agent/hooks/policy.json`,
   ` M agent-tools/src/hook-policy/check-blocked-patterns.integration.test.ts`

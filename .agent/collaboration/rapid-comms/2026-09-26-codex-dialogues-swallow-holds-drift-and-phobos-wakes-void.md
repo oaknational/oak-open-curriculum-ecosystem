@@ -38,7 +38,7 @@ estate's rules that bind the slice: tests describe behaviour, never config or ca
 (the owner's word, strict, no exemption); no `throw` in new code (the Result pattern from
 `@oaknational/result`); knip refuses unused exports; eslint `max-lines` 250; stage by explicit
 pathspec; the owner is the commit author
-(`--author="Jim Cresswell <1314980+jimCresswell@users.noreply.github.com>"`);
+(`--author="<owner name> <owner noreply address>"`);
 `pnpm exec commitlint --strict` on the message before committing; the push is
 `pnpm --silent agent-tools merge-bot push --json` from the worktree; never `--no-verify`,
 `--amend` or a forced push. Pre- and post-execution code-expert review are the estate's rules;
