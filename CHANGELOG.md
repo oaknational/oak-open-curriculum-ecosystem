@@ -1,3 +1,5 @@
+## [1.189.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.189.0...v1.189.1) (2026-11-22)
+
 # [1.189.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.188.10...v1.189.0) (2026-11-22)
 
 
