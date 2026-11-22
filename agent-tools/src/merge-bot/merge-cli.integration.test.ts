@@ -76,6 +76,13 @@ function mergeFetch(
           }),
       });
     }
+    if (url.endsWith('/issues/42/comments')) {
+      return Promise.resolve({
+        status: 201,
+        json: () =>
+          Promise.resolve({ id: 9100, html_url: 'https://example.invalid/pull/42#c9100' }),
+      });
+    }
     if (url.endsWith('/pulls/42/merge')) {
       return Promise.resolve({
         status: input.mergeStatus ?? 200,
@@ -412,6 +419,70 @@ describe('runMergeBotCli merge', () => {
       out.text(),
       'A6 sentinel: re-adjudicate amendment A6 before removing the sweep from usage',
     ).toContain('merge-base deletion sweep');
+  });
+});
+
+const REASON_ARGS = ['--pr', '42', '--no-review-reason-file', 'why.md'] as const;
+
+/** Green on everything, reviewed by nobody, nobody asked. */
+function unreviewed(): PrStateReading {
+  return settledReading({ author: 'a-person', expectedReviewers: [], reviews: [] });
+}
+
+/** A file reader giving the reason file's text for `why.md`, the private key for every other path. */
+function filesWith(reason: string | Error): Pick<MergeBotCliInput, 'readFileImpl'> {
+  return {
+    readFileImpl: (path: string): Promise<string> => {
+      if (path !== 'why.md') {
+        return Promise.resolve(privateKey);
+      }
+      return reason instanceof Error ? Promise.reject(reason) : Promise.resolve(reason);
+    },
+  };
+}
+
+describe('runMergeBotCli merge — no review, on a reason the caller states', () => {
+  it('merges a green, unreviewed pull request: the reason posted on it first, exit 0', async () => {
+    const run = runMerge({
+      args: REASON_ARGS,
+      readings: [unreviewed()],
+      overrides: filesWith('Records only: one date in one plan.\n'),
+    });
+
+    expect(await run.exit).toBe(0);
+    const comment = run.urls.findIndex((url) => url.endsWith('/issues/42/comments'));
+    const merge = run.urls.findIndex((url) => url.endsWith('/pulls/42/merge'));
+    expect(comment).toBeGreaterThanOrEqual(0);
+    expect(merge).toBeGreaterThan(comment);
+    expect(run.bodies.find((sent) => sent.url.endsWith('/issues/42/comments'))?.body).toContain(
+      'Records only: one date in one plan.',
+    );
+    expect(run.errText()).toContain('merged with no review');
+  });
+
+  it('refuses an empty reason file before minting: exit 3, nothing sent', async () => {
+    const run = runMerge({
+      args: REASON_ARGS,
+      readings: [unreviewed()],
+      overrides: filesWith(' \n'),
+    });
+
+    expect(await run.exit).toBe(3);
+    expect(run.errText()).toContain('--no-review-reason-file');
+    expect(run.errText()).toContain('empty');
+    expect(run.urls).toEqual([]);
+  });
+
+  it('fails when the reason file cannot be read, before minting: exit 1, nothing sent', async () => {
+    const run = runMerge({
+      args: REASON_ARGS,
+      readings: [unreviewed()],
+      overrides: filesWith(new Error('ENOENT: no such file')),
+    });
+
+    expect(await run.exit).toBe(1);
+    expect(run.errText()).toContain('why.md');
+    expect(run.urls).toEqual([]);
   });
 });
 

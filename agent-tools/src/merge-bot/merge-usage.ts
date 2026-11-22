@@ -13,9 +13,11 @@ export const DEFAULT_MAX_POLLS = 90;
 /** 50 minutes: the whole budget must end well inside GitHub's one-hour installation-token TTL. */
 export const MAX_BUDGET_SECONDS = 3000;
 
-export const MERGE_USAGE = `merge-bot merge --pr <number> [--json] [--interval <seconds>] [--max-polls <n>]
-  Merges the PR via the sanctioned REST path when — and only when — the
-  settlement verdict is SETTLE-READY, whatever paths the PR changes;
+export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-file <path>] [--json]
+                [--interval <seconds>] [--max-polls <n>]
+  Merges the PR via the sanctioned REST path when the settlement verdict is
+  SETTLE-READY, whatever paths the PR changes, and otherwise only on the
+  stated reason for no review described below;
   merge-commit method always (refusing when repo settings disallow merge
   commits, never a squash fallback), the VERDICTED tip's sha in the body (a
   moved tip answers 409 — an operational failure, exit 1 — never an
@@ -37,7 +39,16 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--json] [--interval <
   agent run, a round asked of a bot reviewer; a request of a person is not
   waited for), one review of any commit of the pull request must exist (a
   skip notice is not a review), and every review thread must be resolved.
-  With no review the command refuses and says so; request one.
+  With no review the command refuses and says so. A review is owed where
+  the change's complexity justifies one: request one, or, when the change
+  is simple enough to need none, pass --no-review-reason-file <path>. The
+  file's text is posted on the pull request as the record, before the
+  merge call; an empty file refuses, and a reason that cannot be posted
+  stops the merge. The reason stands in for the missing review ALONE: red
+  checks, open threads, a draft or a review in progress refuse as before,
+  and a pull request that has a review, or a reviewer who owes a round, is
+  never merged on the reason. The text is posted verbatim, so an @name in
+  it notifies that person; a second attempt posts the reason again.
   --json puts EXACTLY the outcome object on stdout; progress moves to
   stderr.
   Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —

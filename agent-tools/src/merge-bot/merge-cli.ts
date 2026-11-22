@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+
 import { ok, type Result } from '@oaknational/result';
 
 import type { ReadPrStateOptions } from '../pr-watch/state-gh.js';
@@ -10,6 +12,7 @@ import {
   mergeDeadlineFrom,
   type MergeDeadline,
 } from './merge-deadline.js';
+import { readNoReviewReason } from './merge-no-review.js';
 import { reportOutcome, writeProgress } from './merge-report.js';
 import { ReadingUnavailableError, runMergeExecution, type MergeExecutionInput } from './merge.js';
 import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-config.js';
@@ -81,23 +84,38 @@ export async function runMergeAction(
     input.stdout.write(MERGE_USAGE);
     return 0;
   }
+  const stop = (message: string, exit: number): number => {
+    input.stderr.write(`merge-bot merge: ${message}\n`);
+    return exit;
+  };
   const parsed = parseMergeArgs(rest);
   if (!parsed.ok) {
-    input.stderr.write(`merge-bot merge: ${parsed.error.message}\n`);
-    return 2;
+    return stop(parsed.error.message, 2);
   }
   const bot = resolveBot(input.identityInput);
   if (!bot.ok) {
-    input.stderr.write(`merge-bot merge: ${bot.error.message}\n`);
-    return 2;
+    return stop(bot.error.message, 2);
+  }
+  // The reason for a merge with no review is settled BEFORE the mint: a file
+  // that cannot be read, or says nothing, never mints a token it will not use.
+  const read = input.readFileImpl ?? ((file: string) => readFile(file, 'utf8'));
+  const reason = await readNoReviewReason(parsed.value.noReviewReasonFile, read);
+  if (reason.kind === 'stop') {
+    return stop(reason.message, reason.exit);
   }
   input.stderr.write(SWEEP_NOTE);
   const run = await mintWithDeadline(bot.value.identity, input);
   if (!run.ok) {
-    input.stderr.write(`merge-bot merge: ${run.error.message}\n`);
-    return 1;
+    return stop(run.error.message, 1);
   }
-  return pollUntilActionable({ parsed: parsed.value, ...bot.value, run: run.value, input });
+  const noReviewReason = reason.reason;
+  return pollUntilActionable({
+    parsed: parsed.value,
+    ...bot.value,
+    run: run.value,
+    input,
+    noReviewReason,
+  });
 }
 
 // The identity and the bot's login (its app slug): the door proves the
@@ -162,6 +180,7 @@ async function pollUntilActionable(context: {
   readonly appSlug: string;
   readonly run: MintedRun;
   readonly input: MergeActionInput;
+  readonly noReviewReason: string | undefined;
 }): Promise<number> {
   const { parsed, input } = context;
   const sleep =
@@ -188,6 +207,7 @@ async function pollUntilActionable(context: {
       appSlug: context.appSlug,
       prNumber: parsed.prNumber,
       nowIso: at,
+      noReviewReason: context.noReviewReason,
       seams,
     });
     const retry = retryLabel(outcome, poll, parsed.maxPolls);

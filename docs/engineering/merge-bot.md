@@ -54,7 +54,15 @@ takes no reviewer list. It reads the reviews from the pull request:
   empty-bodied review (the API creates one per thread reply, so a pull
   request whose author dispositioned findings carries its own) are not
   reviews, and none anchors the quiet window. With no review the verdict is
-  `SILENT-WAIT-NO-REVIEWER` and the command refuses; request a review.
+  `SILENT-WAIT-NO-REVIEWER` and the command refuses.
+- **A review is owed where the change's complexity justifies one.** The
+  merging seat makes that judgement. For a change simple enough to need no
+  review it passes `--no-review-reason-file <path>`: the command posts the
+  file's text on the pull request as the record, then merges. The reason
+  stands in for the missing review alone. Red checks, open threads, a draft
+  or a review in progress refuse as they do without it; a pull request that
+  has a review is merged as reviewed; an empty file refuses; and a reason
+  that cannot be posted stops the merge.
 - **Every review is dealt with.** Every review thread is resolved, and the
   merging seat reads and dispositions a review body's findings before it
   calls the command.

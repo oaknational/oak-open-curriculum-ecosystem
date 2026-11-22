@@ -11,7 +11,8 @@ import {
  * The argv contract for `merge-bot merge`. Split from `merge-cli.ts` to keep
  * both files inside the size and complexity gates (the same seam
  * `resolve-config.ts` records for mint-token). The command takes no reviewer
- * list: the reviews are read from the pull request.
+ * list: the reviews are read from the pull request. It takes one path, the
+ * file holding the caller's reason for a merge with no review.
  */
 
 export interface MergeArgs {
@@ -19,7 +20,12 @@ export interface MergeArgs {
   readonly json: boolean;
   readonly intervalSeconds: number;
   readonly maxPolls: number;
+  /** The file holding the caller's reason for merging with no review; undefined when it gives none. */
+  readonly noReviewReasonFile: string | undefined;
 }
+
+/** The one flag that takes a path: the reason for a merge with no review. */
+const REASON_FILE_FLAG = '--no-review-reason-file';
 
 const SINGLE_FLAGS = ['--pr', '--interval', '--max-polls'] as const;
 type SingleFlag = (typeof SINGLE_FLAGS)[number];
@@ -53,6 +59,22 @@ function requirePositiveInt(flag: string, value: string): Result<number, Error> 
 interface CollectedMergeFlags {
   readonly singles: Partial<Record<SingleFlag, number>>;
   json: boolean;
+  reasonFile: string | undefined;
+}
+
+/** Record the reason file's path: a value, not blank, given once. */
+function recordReasonFile(
+  state: CollectedMergeFlags,
+  value: string | undefined,
+): Result<undefined, Error> {
+  if (value === undefined || value.startsWith('--') || value.trim() === '') {
+    return err(new Error(`${REASON_FILE_FLAG} needs a value\n${MERGE_USAGE}`));
+  }
+  if (state.reasonFile !== undefined) {
+    return err(new Error(`${REASON_FILE_FLAG} given more than once — pass it exactly once`));
+  }
+  state.reasonFile = value;
+  return ok(undefined);
 }
 
 function recordSingle(
@@ -78,6 +100,9 @@ function consumeValueFlag(
   flag: string,
   value: string | undefined,
 ): Result<undefined, Error> {
+  if (flag === REASON_FILE_FLAG) {
+    return recordReasonFile(state, value);
+  }
   if (!isSingleFlag(flag)) {
     return err(new Error(`unknown flag "${flag}"\n${MERGE_USAGE}`));
   }
@@ -88,7 +113,7 @@ function consumeValueFlag(
 }
 
 function collectMergeFlags(rest: readonly string[]): Result<CollectedMergeFlags, Error> {
-  const state: CollectedMergeFlags = { singles: {}, json: false };
+  const state: CollectedMergeFlags = { singles: {}, json: false, reasonFile: undefined };
   for (let index = 0; index < rest.length; index += 1) {
     const flag = rest[index] ?? '';
     if (flag === '--json') {
@@ -109,7 +134,7 @@ export function parseMergeArgs(rest: readonly string[]): Result<MergeArgs, Error
   if (!collected.ok) {
     return collected;
   }
-  const { singles, json } = collected.value;
+  const { singles, json, reasonFile: noReviewReasonFile } = collected.value;
   const prNumber = singles['--pr'];
   if (prNumber === undefined) {
     return err(new Error(`--pr is required\n${MERGE_USAGE}`));
@@ -126,5 +151,5 @@ export function parseMergeArgs(rest: readonly string[]): Result<MergeArgs, Error
       ),
     );
   }
-  return ok({ prNumber, json, intervalSeconds, maxPolls });
+  return ok({ prNumber, json, intervalSeconds, maxPolls, noReviewReasonFile });
 }

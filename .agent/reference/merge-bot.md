@@ -53,7 +53,15 @@ takes no reviewer list. It reads the reviews from the pull request:
   asked of them. A skip notice, a vendor's failed-run body and an
   empty-bodied review (the API creates one per thread reply) are not
   reviews. With no review the verdict is `SILENT-WAIT-NO-REVIEWER` and the
-  command refuses; request a review.
+  command refuses.
+- **A review is owed where the change's complexity justifies one**, and
+  the merging seat makes that judgement. For a change simple enough to need
+  none, `merge-bot merge --pr <n> --no-review-reason-file <path>` posts the
+  file's text on the pull request as the record and then merges. The reason
+  stands in for the missing review alone: every other gate holds, a pull
+  request that has a review is merged as reviewed, an empty file refuses,
+  and a reason that cannot be posted stops the merge. Reviews after the
+  first are requested on their value, never by default.
 - **Every review is dealt with.** Every review thread is resolved, and the
   merging seat reads and dispositions a review body's findings before it
   calls the command.
@@ -298,7 +306,21 @@ previous request's review is still in flight, when it registers nothing
 either (both verified live, 2026-09-13; the operator form re-verified
 2026-09-27). Where an API call names the reviewer, its login is
 `copilot-pull-request-reviewer[bot]`; omitting the `[bot]` suffix returns
-422 (2026-08-12). Read the timeline after any request: silence from the
+422 (2026-08-12). Two more routes were tried under the bot's token on
+2026-11-22 and neither works. `POST
+/repos/{owner}/{repo}/pulls/{n}/copilot-code-review`, the pull request's own
+Copilot review endpoint, answers 422: "The actor does not have a Copilot
+license that includes code review"; a GitHub App holds no licence. A
+comment by the bot reading "@copilot please review" drew no reaction, review
+or run in five minutes. The base branch's automatic review rule
+(`copilot_code_review` with `review_on_push`) does not reach these pull
+requests either: GitHub makes the automatic request in the name of the pull
+request's author, one or two seconds after it opens, and an author that is
+a GitHub App holds no licence, so nothing is requested and nothing says so.
+A Copilot review of a bot-authored pull request is
+therefore requested by a person, or not at all; with
+`--no-review-reason-file` a simple change needs none. Read the timeline
+after any request: silence from the
 request call is not a registered request. The request, once registered, is
 what the settlement reads as the round in flight: it is visible only on
 the GraphQL `reviewRequests` connection (gh's `pr view --json

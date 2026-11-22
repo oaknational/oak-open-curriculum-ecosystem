@@ -1321,7 +1321,11 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    for any single reviewer.
    CRITICAL first-round rule: before anyone has reviewed and with no round
    asked of a bot, the EXPECTED reviewer set is empty, and an empty set
-   never settles: the tool reads SILENT-WAIT-NO-REVIEWER and refuses. A bot
+   never settles: the tool reads SILENT-WAIT-NO-REVIEWER and refuses. A
+   review is owed where the change's complexity justifies one, and the
+   judgement is the merging seat's: for a change simple enough to need
+   none, `merge-bot merge --no-review-reason-file <path>` posts the reason
+   on the pull request and merges, every other gate holding. A bot
    the repository reviews with automatically joins the set when its round
    is asked or its review lands, and is OWED from the request until it
    posts or the checks-green timeout fires. PDR-140's loop discipline
@@ -1400,7 +1404,8 @@ create` on such a branch exits non-zero with "a pull request for branch …
    reviews other than the pull request's own author. It is read from the
    full review harvest and the request history, never from `latestReviews`.
    An initial tip nobody has reviewed and no bot is reviewing has an empty
-   set, which reads SILENT-WAIT-NO-REVIEWER and never merge-ready.
+   set, which reads SILENT-WAIT-NO-REVIEWER and is merge-ready only on the
+   seat's stated reason for no review (`--no-review-reason-file`).
 4. **Round settled; merge-ready.** A round is SETTLED when every expected
    reviewer leg reads SATISFIED or SKIPPED for the current tip AND the
    round's boundary reads closed from MEASURED state: no expected reviewer
