@@ -158,13 +158,14 @@ function skippedRoundVerdict(
 // A pull request nobody has reviewed and nobody is asked to review never
 // settles on its own: a review is requested, or the merge command is given
 // the caller's reason for none (`merge-bot/merge-no-review.ts`). The
-// set is read from the pull request, so it is empty exactly then; a skip
-// notice or a failed-run body is not a review (`expected-reviewers.ts`).
+// set names who holds a round, so it can be empty while a review the set
+// leaves out exists (`expected-reviewers.ts`, `reviewsByOthers`); the merge
+// command checks for those before a reason stands in, and says what it found.
 function noReviewVerdict(reading: PrStateReading): PrVerdict {
   return {
     state: 'SILENT-WAIT-NO-REVIEWER',
     evidence: [
-      'no review: nobody has reviewed any commit of this pull request and no review is requested or in progress — request one, or give merge-bot merge the reason this change needs none (--no-review-reason-file)',
+      'no reviewer: no review with a body exists on any commit of this pull request and none is requested or in progress — request one, or give merge-bot merge the reason this change needs none (--no-review-reason-file); a merge refused with a reason given says what stood in its way',
       ...readingEvidence(reading),
     ],
   };

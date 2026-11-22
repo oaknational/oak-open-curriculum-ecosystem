@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { CODEX_CONNECTOR_LOGIN } from '../pr-watch/logins.js';
+import type { RoundRequest } from '../pr-watch/round-requests.js';
 import { runMergeExecution } from './merge.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import { makeInput } from './test-helpers/merge-execution-input.js';
@@ -11,14 +13,34 @@ import { failureMessage } from './test-helpers/result-failure.js';
  * ports (no process, no network). What is proven: the reason is posted on
  * the pull request BEFORE the merge call, a failed post stops the merge,
  * the merged outcome says the merge had no review, and a pull request that
- * has a review is merged as reviewed with nothing posted.
+ * has a review is merged as reviewed with nothing posted. The reason stands
+ * in only where the reading shows no review and none that can have started
+ * unseen, and a refusal says what stood in the way.
  */
 
 const REASON = 'Records only: one date in one plan.';
 
+/** A time before the injected clock (2026-08-06T09:00:00Z). */
+const BEFORE_NOW = '2026-08-06T08:30:00Z';
+
 /** Green on everything, reviewed by nobody, nobody asked. */
 const unreviewed = (): ReturnType<typeof settledReading> =>
   settledReading({ author: 'a-person', expectedReviewers: [], reviews: [] });
+
+/** The same pull request, marked ready at the time given: the event the Codex connector takes as its cue. */
+const round = (at: string): RoundRequest => ({
+  reviewer: CODEX_CONNECTOR_LOGIN,
+  at,
+  implied: true,
+});
+
+const markedReadyAt = (at: string): ReturnType<typeof settledReading> =>
+  settledReading({
+    author: 'a-person',
+    expectedReviewers: [],
+    reviews: [],
+    roundRequests: [{ reviewer: CODEX_CONNECTOR_LOGIN, at, implied: true }],
+  });
 
 const COMMENT = 'POST /issues/42/comments';
 const MERGE = 'PUT /pulls/42/merge';
@@ -283,6 +305,162 @@ describe('runMergeExecution, a merge with no review', () => {
 
     expect(failureMessage(outcome)).toContain('500');
     expect(github.lines).not.toContain('PUT /pulls/42/merge');
+  });
+
+  it.each([
+    { what: 'an approval with an empty body', author: 'a-colleague', state: 'APPROVED', body: '' },
+    { what: 'a comment on a line', author: 'a-colleague', state: 'COMMENTED', body: '' },
+    { what: 'the reader’s own draft', author: 'a-reader', state: 'PENDING', body: 'Half.' },
+    {
+      what: 'a change request whose body reads like a skip notice',
+      author: 'a-colleague',
+      state: 'CHANGES_REQUESTED',
+      body: 'I was unable to review the migration. Do not merge this.',
+    },
+    { what: 'a review by a deleted account', author: 'unknown', state: 'COMMENTED', body: 'No.' },
+  ])(
+    'refuses when the reviewer set is empty and the pull request still carries $what',
+    async ({ author, state, body }) => {
+      const github = recordingFetch();
+      const review = { author, state, body, commitOid: 'c0ffee', submittedAt: BEFORE_NOW };
+      const reading = settledReading({
+        author: 'a-person',
+        expectedReviewers: [],
+        reviews: [review],
+      });
+
+      const outcome = await runMergeExecution(
+        makeInput(reading, github.fetchImpl, { noReviewReason: REASON }),
+      );
+
+      expect(refusedOn(outcome)).toBe('SILENT-WAIT-NO-REVIEWER');
+      expect(JSON.stringify(outcome)).toContain(`review by another account (${author})`);
+      expect(github.lines).not.toContain(COMMENT);
+      expect(github.lines).not.toContain(MERGE);
+    },
+  );
+
+  it('merges past a review bot’s skip notice: a notice that no review occurred is no review', async () => {
+    const github = recordingFetch();
+    const notice = {
+      author: 'claude',
+      state: 'COMMENTED',
+      body: 'Code review skipped: your organization has no extra usage available.',
+      commitOid: 'c0ffee',
+      submittedAt: BEFORE_NOW,
+    };
+    const reading = settledReading({
+      author: 'a-person',
+      expectedReviewers: [],
+      reviews: [notice],
+    });
+
+    const outcome = await runMergeExecution(
+      makeInput(reading, github.fetchImpl, { noReviewReason: REASON }),
+    );
+
+    expect(outcome).toMatchObject({ ok: true, value: { kind: 'merged' } });
+  });
+
+  it('refuses within one quiet window of the pull request being marked ready: an automatic review can have started and not show yet', async () => {
+    const github = recordingFetch();
+
+    const outcome = await runMergeExecution(
+      makeInput(markedReadyAt('2026-08-06T08:55:00Z'), github.fetchImpl, {
+        noReviewReason: REASON,
+      }),
+    );
+
+    expect(refusedOn(outcome)).toBe('SILENT-WAIT-NO-REVIEWER');
+    expect(JSON.stringify(outcome)).toContain('marked ready at 2026-08-06T08:55:00Z');
+    expect(JSON.stringify(outcome)).toContain('2026-08-06T09:05:00.000Z');
+    expect(github.lines).not.toContain(COMMENT);
+    expect(github.lines).not.toContain(MERGE);
+  });
+
+  it('merges once a quiet window has passed since the pull request was marked ready', async () => {
+    const github = recordingFetch();
+
+    const outcome = await runMergeExecution(
+      makeInput(markedReadyAt('2026-08-06T08:40:00Z'), github.fetchImpl, {
+        noReviewReason: REASON,
+      }),
+    );
+
+    expect(outcome).toMatchObject({ ok: true, value: { kind: 'merged' } });
+  });
+
+  it.each([
+    { at: '2026-08-06T08:50:00Z', outcome: 'refuses at exactly one quiet window', merged: false },
+    { at: '2026-08-06T08:49:59Z', outcome: 'merges one second past it', merged: true },
+  ])('$outcome since the pull request was marked ready', async ({ at, merged }) => {
+    const github = recordingFetch();
+
+    await runMergeExecution(
+      makeInput(markedReadyAt(at), github.fetchImpl, { noReviewReason: REASON }),
+    );
+
+    expect(github.lines.includes(MERGE)).toBe(merged);
+  });
+
+  it('holds on the latest of several ready events, whatever their order', async () => {
+    const github = recordingFetch();
+    const reading = settledReading({
+      author: 'a-person',
+      expectedReviewers: [],
+      reviews: [],
+      roundRequests: [round('2026-08-06T08:57:00Z'), round('2026-08-06T08:20:00Z')],
+    });
+
+    const outcome = await runMergeExecution(
+      makeInput(reading, github.fetchImpl, { noReviewReason: REASON }),
+    );
+
+    expect(JSON.stringify(outcome)).toContain('marked ready at 2026-08-06T08:57:00Z');
+    expect(github.lines).not.toContain(MERGE);
+  });
+
+  it('refuses within one quiet window of the checks going green: a pull request opened ready has no ready event', async () => {
+    const github = recordingFetch();
+    const reading = settledReading({
+      author: 'a-person',
+      expectedReviewers: [],
+      reviews: [],
+      checksGreenAt: '2026-08-06T08:59:30Z',
+    });
+
+    const outcome = await runMergeExecution(
+      makeInput(reading, github.fetchImpl, { noReviewReason: REASON }),
+    );
+
+    expect(JSON.stringify(outcome)).toContain('went green at 2026-08-06T08:59:30Z');
+    expect(github.lines).not.toContain(MERGE);
+  });
+
+  it('holds when a cue’s time cannot be read', async () => {
+    const github = recordingFetch();
+
+    await runMergeExecution(
+      makeInput(markedReadyAt('not-a-time'), github.fetchImpl, { noReviewReason: REASON }),
+    );
+
+    expect(github.lines).not.toContain(MERGE);
+  });
+
+  it('says why the reason cannot stand in when a reviewer exists', async () => {
+    const github = recordingFetch();
+    const reading = settledReading({
+      author: 'a-person',
+      expectedReviewers: ['copilot-pull-request-reviewer', 'claude'],
+      checksGreenAt: '2026-08-06T08:58:00Z',
+    });
+
+    const outcome = await runMergeExecution(
+      makeInput(reading, github.fetchImpl, { noReviewReason: REASON }),
+    );
+
+    expect(JSON.stringify(outcome)).toContain('cannot stand in for a review');
+    expect(JSON.stringify(outcome)).toContain('copilot-pull-request-reviewer, claude');
   });
 
   it('merges a reviewed pull request as reviewed, posting nothing, when a reason is also given', async () => {

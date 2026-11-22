@@ -71,21 +71,34 @@ export interface MergeDecisionInput {
    */
   readonly noReviewReason: string | undefined;
   /**
-   * Nobody has reviewed the pull request and no review is asked of anybody:
-   * the reading's expected reviewer set is empty. The verdict's state name
-   * cannot say this by itself, because `SILENT-WAIT-NO-REVIEWER` is also what
-   * a pull request reads when it HAS reviewers and one of them owes a round
-   * nobody has requested (`pr-watch/most-blocking-leg.ts`); a reason must
-   * never merge past a review that exists or is on its way.
+   * What stands in the way of merging with no review, in words for the
+   * refusal, or undefined when the reading shows no review and none that can
+   * have started unseen (`merge-no-review.ts`, `noReviewObstacle`). The
+   * verdict's state name cannot say this by itself: `SILENT-WAIT-NO-REVIEWER`
+   * is also what a pull request reads when it HAS reviewers and one of them
+   * owes a round nobody has requested (`pr-watch/most-blocking-leg.ts`), and
+   * a reason must never merge past a review that exists or is on its way.
    */
-  readonly nobodyReviewsOrIsAsked: boolean;
+  readonly noReviewObstacle: string | undefined;
 }
 
 /** The caller's reason, when the missing review is all that stands in the way; undefined otherwise. */
 function reasonStandingInForReview(input: MergeDecisionInput): string | undefined {
   const unreviewed =
-    input.verdict.state === 'SILENT-WAIT-NO-REVIEWER' && input.nobodyReviewsOrIsAsked;
+    input.verdict.state === 'SILENT-WAIT-NO-REVIEWER' && input.noReviewObstacle === undefined;
   return unreviewed ? input.noReviewReason : undefined;
+}
+
+/**
+ * The refusal's words for a verdict that does not merge. A caller that gave
+ * a reason is told what stood in its way, whatever the verdict: a reason
+ * set aside without a word reads as a reason that was never read.
+ */
+function unsettledReason(input: MergeDecisionInput): string {
+  const { verdict, noReviewReason, noReviewObstacle } = input;
+  return noReviewReason !== undefined && noReviewObstacle !== undefined
+    ? `verdict ${verdict.state} — the reason given cannot stand in for a review: ${noReviewObstacle}`
+    : `verdict ${verdict.state} — only SETTLE-READY merges`;
 }
 
 export function decideMergeAction(input: MergeDecisionInput): MergeDecision {
@@ -100,7 +113,7 @@ export function decideMergeAction(input: MergeDecisionInput): MergeDecision {
   if (input.verdict.state !== 'SETTLE-READY' && reason === undefined) {
     return {
       kind: 'refuse',
-      reason: `verdict ${input.verdict.state} — only SETTLE-READY merges`,
+      reason: unsettledReason(input),
       awaitsSettlement: verdictAwaitsSettlement(input.verdict.state),
     };
   }

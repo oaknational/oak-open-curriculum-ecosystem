@@ -473,7 +473,7 @@ describe('runMergeBotCli merge — no review, on a reason the caller states', ()
     expect(run.urls).toEqual([]);
   });
 
-  it('puts the refusal object on stdout under --json when the reason file is empty', async () => {
+  it('puts a refusal with every key of the command’s refusal on stdout under --json when the reason file is empty: no verdict was read, so none is named', async () => {
     const run = runMerge({
       args: [...REASON_ARGS, '--json'],
       readings: [unreviewed()],
@@ -481,7 +481,15 @@ describe('runMergeBotCli merge — no review, on a reason the caller states', ()
     });
 
     expect(await run.exit).toBe(3);
-    expect(JSON.parse(run.out())).toMatchObject({ kind: 'refused' });
+    expect(JSON.parse(run.out())).toStrictEqual({
+      kind: 'refused',
+      reason:
+        '--no-review-reason-file why.md is empty; the reason is posted on the pull request, so it must say something',
+      verdictState: null,
+      awaitsSettlement: false,
+      evidence: [],
+    });
+    expect(run.errText()).toContain('merge-bot merge: refused: --no-review-reason-file');
     expect(run.urls).toEqual([]);
   });
 

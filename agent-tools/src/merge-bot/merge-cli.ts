@@ -12,8 +12,8 @@ import {
   mergeDeadlineFrom,
   type MergeDeadline,
 } from './merge-deadline.js';
-import { readNoReviewReason, reportReasonStop } from './merge-no-review.js';
-import { reportOutcome, writeProgress } from './merge-report.js';
+import { readNoReviewReason } from './merge-no-review.js';
+import { reportOutcome, reportStopBeforeReading, writeProgress } from './merge-report.js';
 import { ReadingUnavailableError, runMergeExecution, type MergeExecutionInput } from './merge.js';
 import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-config.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
@@ -101,7 +101,7 @@ export async function runMergeAction(
   const read = input.readFileImpl ?? ((file: string) => readFile(file, 'utf8'));
   const reason = await readNoReviewReason(parsed.value.noReviewReasonFile, read);
   if (reason.kind === 'stop') {
-    return reportReasonStop(reason, parsed.value.json, input);
+    return reportStopBeforeReading(reason, parsed.value.json, input);
   }
   input.stderr.write(SWEEP_NOTE);
   const run = await mintWithDeadline(bot.value.identity, input);

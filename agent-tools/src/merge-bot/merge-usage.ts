@@ -1,3 +1,4 @@
+import { QUIET_WINDOW_MS } from '../pr-watch/reviewer-legs.js';
 import { SETTLEMENT_WAIT_STATES } from './merge-decision.js';
 
 /**
@@ -45,15 +46,24 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-fi
   file's text is posted on the pull request as the record, before the
   merge call; an empty file refuses, and a reason that cannot be posted
   stops the merge. The reason stands in for the missing review ALONE: red
-  checks, open threads, a draft or a review in progress refuse as before,
-  and a pull request that has a review, or a reviewer who owes a round, is
-  never merged on the reason; nor is one whose review-run listing could
-  not be read in full, since a review may be running unseen. The text is
-  posted verbatim, so a reason containing an @ refuses (an @name notifies
-  a person or asks a review bot for a round). No quiet window applies:
-  it follows a review. A second attempt posts the reason again.
+  checks, open threads, a draft or a review in progress refuse as before.
+  So does anything that shows a review exists or can have started unseen,
+  and a refusal with a reason given says which: a reviewer who owes a
+  round; a review-run listing not read in full; a review by another
+  account, an approval or a change request with an empty body and a
+  comment on a line among them (a notice that no review occurred is not
+  one); and a pull request marked ready, or gone green, within the last
+  ${QUIET_WINDOW_MS / 60_000} minutes, since an automatic reviewer starts on such an event and
+  shows nothing until it reports. Another account's draft and a comment
+  saying a review is under way cannot be seen and do not hold the merge.
+  The text is posted verbatim, so a
+  reason containing an @ refuses (an @name notifies a person or asks a
+  review bot for a round). A second attempt posts the reason again. A
+  review can still arrive between the reading and the merge call, as on
+  every merge: the call is pinned to the commit, not to the reviews.
   --json puts EXACTLY the outcome object on stdout; progress moves to
-  stderr.
+  stderr. A refusal raised before the pull request is read (the reason
+  file) has a refusal's keys, with verdictState null and no evidence.
   Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —
   an already-MERGED PR exits 3.
   The pr-lifecycle merge-base deletion sweep is NOT discharged by this

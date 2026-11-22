@@ -1330,7 +1330,11 @@ c[n-1] >= c[n-2]` (two consecutive non-decreasing transitions across
    judgement is the merging seat's: for a change simple enough to need
    none, `merge-bot merge --no-review-reason-file <path>` posts the reason
    on the pull request and merges. Checks, threads and draft state hold as
-   before; there is no quiet window, since the window follows a review. A bot
+   before, and the tool refuses, saying why, while anything shows a review
+   exists or can have started unseen: a review by another account (a
+   notice that no review occurred is not one), a review-run listing not
+   read in full, or a pull request marked ready or gone green within the
+   last quiet window. A bot
    the repository reviews with automatically joins the set when its round
    is asked or its review lands, and is OWED from the request until it
    posts or the checks-green timeout fires. PDR-140's loop discipline

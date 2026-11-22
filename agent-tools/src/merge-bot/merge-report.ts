@@ -12,7 +12,9 @@ import type { MergeOutcome } from './merge.js';
  * — the loop decides, this file speaks — so both stay inside the size gates.
  *
  * Under `--json`, stdout carries EXACTLY the outcome object a machine parses;
- * progress and grounds are diagnostics and go to stderr.
+ * progress and grounds are diagnostics and go to stderr. A refusal raised
+ * before the pull request is read has the same keys, with `verdictState`
+ * null and no evidence.
  */
 
 /** The two sinks the reporter writes to; `MergeActionInput` satisfies it structurally. */
@@ -68,6 +70,47 @@ function writeRefusal(
   }
   streams.stderr.write(`merge-bot merge: refused: ${outcome.reason}\n`);
   writeEvidence(outcome.evidence, streams);
+}
+
+/**
+ * A refusal raised before the pull request is read: every key of the
+ * command's refusal, and no verdict, because none was read.
+ */
+type RefusalBeforeReading = Omit<Extract<MergeOutcome, { kind: 'refused' }>, 'verdictState'> & {
+  readonly verdictState: null;
+};
+
+/**
+ * Report what stopped the run before the pull request was read, and answer
+ * with its exit code: 1 for an operational failure, 3 for a refusal. Under
+ * `--json` a refusal puts its object on stdout, as every refusal of the
+ * command does.
+ *
+ * @param stop - The exit code and what to say.
+ * @param json - Whether stdout carries the outcome object.
+ * @param streams - The two sinks.
+ */
+export function reportStopBeforeReading(
+  stop: { readonly exit: 1 | 3; readonly message: string },
+  json: boolean,
+  streams: MergeStreams,
+): number {
+  if (stop.exit === 1) {
+    streams.stderr.write(`merge-bot merge: ${stop.message}\n`);
+    return 1;
+  }
+  if (json) {
+    const refusal: RefusalBeforeReading = {
+      kind: 'refused',
+      reason: stop.message,
+      verdictState: null,
+      awaitsSettlement: false,
+      evidence: [],
+    };
+    streams.stdout.write(`${JSON.stringify(refusal)}\n`);
+  }
+  streams.stderr.write(`merge-bot merge: refused: ${stop.message}\n`);
+  return 3;
 }
 
 /** Report a TERMINAL poll outcome and answer with its exit code. */

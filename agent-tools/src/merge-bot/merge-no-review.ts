@@ -1,6 +1,9 @@
 import { ok, type Result } from '@oaknational/result';
 
+import { reviewsByOthers } from '../pr-watch/expected-reviewers.js';
 import { printable } from '../pr-watch/printable.js';
+import { QUIET_WINDOW_MS } from '../pr-watch/reviewer-legs.js';
+import type { RoundRequest } from '../pr-watch/round-requests.js';
 import type { PrStateReading, PrVerdict } from '../pr-watch/state-types.js';
 import type { MergeDecision } from './merge-decision.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
@@ -63,7 +66,7 @@ export async function readNoReviewReason(
     : {
         kind: 'stop',
         exit: 3,
-        message: `refused: ${REASON_FILE_FLAG} ${printable(path)} ${fault}`,
+        message: `${REASON_FILE_FLAG} ${printable(path)} ${fault}`,
       };
 }
 
@@ -84,38 +87,84 @@ function reasonFault(text: string): string | undefined {
 }
 
 /**
- * Report what stopped the run before the mint, and answer with its exit
- * code. Under `--json` a refusal also puts its object on stdout, as every
- * typed refusal of the command does.
+ * What stands in the way of merging this pull request with no review, in
+ * words for the refusal; undefined when the reading shows no review and
+ * none that can have started unseen. Four things stand in the way:
+ *
+ * - a reviewer in the expected set: a review exists or a round is asked;
+ * - a review-run listing not read in full, which cannot show that no review
+ *   is running;
+ * - a review by another account that the set leaves out (`reviewsByOthers`):
+ *   an approval or a change request with an empty body, a comment on a
+ *   line, a review by a deleted account;
+ * - one quiet window not yet passed since the pull request was last marked
+ *   ready or its checks went green, whichever is later. An automatic
+ *   reviewer starts on such an event and the pull request shows nothing of
+ *   it until it reports. A pull request opened ready carries no ready
+ *   event, so the checks' time is its only cue.
+ *
+ * What the reading cannot show, and so does not hold the merge: another
+ * account's draft (GitHub shows a draft to its author alone), a comment in
+ * the conversation that says a review is under way, and a reviewer slower
+ * than the window. The reading is what the pull request showed when it was
+ * read. A review or a request can still arrive between the reading and the
+ * merge call, as on every merge by the command: the merge call is pinned to
+ * the commit, not to the reviews, and no second reading makes GitHub's
+ * separate calls one. A pending request of a person does not hold the pull
+ * request back, which is the command's rule for every merge; the record
+ * says "not reviewed" and never "nobody was asked".
+ *
+ * @param reading - The pull request as read.
+ * @param nowIso - The clock the merge runs on.
  */
-export function reportReasonStop(
-  stop: Extract<NoReviewReasonRead, { kind: 'stop' }>,
-  json: boolean,
-  streams: {
-    readonly stdout: Pick<NodeJS.WriteStream, 'write'>;
-    readonly stderr: Pick<NodeJS.WriteStream, 'write'>;
-  },
-): number {
-  if (json && stop.exit === 3) {
-    streams.stdout.write(`${JSON.stringify({ kind: 'refused', reason: stop.message })}\n`);
+export function noReviewObstacle(reading: PrStateReading, nowIso: string): string | undefined {
+  const { expectedReviewers, reviewRuns } = reading;
+  if (expectedReviewers.length > 0) {
+    return `a reviewer exists (${printable(expectedReviewers.join(', '))})`;
   }
-  streams.stderr.write(`merge-bot merge: ${stop.message}\n`);
-  return stop.exit;
+  if (reviewRuns.kind !== 'read' || reviewRuns.truncated === true) {
+    return `the review runs were not read in full, so a review in progress cannot be ruled out; ${REQUEST_INSTEAD}`;
+  }
+  const others = new Set(reviewsByOthers(reading.author, reading.reviews).map((r) => r.author));
+  if (others.size > 0) {
+    return `the pull request carries a review by another account (${printable([...others].join(', '))}); ${REQUEST_INSTEAD}`;
+  }
+  return tooSoonObstacle(reading, nowIso);
 }
 
+/** Whether one quiet window has not yet passed; an unreadable time (NaN) holds. */
+function withinWindow(elapsedMs: number): boolean {
+  return Number.isNaN(elapsedMs) || elapsedMs <= QUIET_WINDOW_MS;
+}
+
+/** The way forward when a reason cannot stand in and time will not change that. */
+const REQUEST_INSTEAD = 'request a review, and the pull request merges as reviewed';
+
 /**
- * Whether the reading shows, for certain, a pull request nobody has
- * reviewed and nobody is reviewing: the expected reviewer set is empty, and
- * the review runs were read in full. An unavailable or truncated run
- * listing cannot show that no review is running, so it never qualifies.
- * A pending request of a person does not hold the pull request back, which
- * is the command's rule for every merge; the record says "not reviewed"
- * and never "nobody was asked".
+ * The latest cue an automatic reviewer starts on (a ready-for-review event,
+ * the checks going green), while one quiet window has not passed since it.
+ * A time that cannot be read holds, as an unread time does everywhere in the
+ * settlement.
  */
-export function unreviewedForCertain(reading: PrStateReading): boolean {
-  const { expectedReviewers, reviewRuns } = reading;
-  const runsReadInFull = reviewRuns.kind === 'read' && reviewRuns.truncated !== true;
-  return expectedReviewers.length === 0 && runsReadInFull;
+function tooSoonObstacle(reading: PrStateReading, nowIso: string): string | undefined {
+  const ready = reading.roundRequests
+    .filter((round: RoundRequest) => round.implied === true)
+    .map((round) => ({ at: round.at, what: 'was marked ready' }));
+  const green =
+    reading.checksGreenAt === null ? [] : [{ at: reading.checksGreenAt, what: 'went green' }];
+  const now = Date.parse(nowIso);
+  const cue = [...ready, ...green]
+    .filter(({ at }) => withinWindow(now - Date.parse(at)))
+    .sort((left, right) => left.at.localeCompare(right.at))
+    .at(-1);
+  if (cue === undefined) {
+    return undefined;
+  }
+  const passes = Date.parse(cue.at) + QUIET_WINDOW_MS;
+  const after = Number.isNaN(passes)
+    ? 'a time that could not be read'
+    : new Date(passes).toISOString();
+  return `the pull request ${cue.what} at ${printable(cue.at)}: an automatic review can have started and not show yet, so a reason stands in only after ${after}`;
 }
 
 /** The comment's text for a reason. */

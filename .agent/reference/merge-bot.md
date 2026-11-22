@@ -61,12 +61,23 @@ takes no reviewer list. It reads the reviews from the pull request:
   none, `merge-bot merge --pr <n> --no-review-reason-file <path>` posts the
   file's text on the pull request as the record and then merges. The reason
   stands in for the missing review alone. Checks, threads, draft state and a
-  review in progress refuse as before; a review-run listing not read in
-  full refuses, because it cannot show that no review is running; a pull
-  request with a review, or a reviewer who owes a round, is never merged on
-  the reason. An empty file refuses, and so does a reason containing an
-  `@`; a reason that cannot be posted stops the merge. There is no quiet
-  window on this path, since the window follows a review. Reviews after the
+  review in progress refuse as before. So does anything that shows a review
+  exists or can have started unseen, and a refusal with a reason given says
+  which: a reviewer who owes a round; a review-run listing not read in
+  full; a review by another account, an empty-bodied approval and a comment
+  on a line among them, though not a notice that no review occurred; and a
+  pull request marked ready, or gone green, within the last quiet window,
+  since an automatic reviewer starts on such an event and shows nothing
+  until it reports. Another account's draft and a comment saying a review
+  is under way cannot be seen and do not hold the merge. An empty file
+  refuses, and so does a reason containing an `@`; a reason that cannot be
+  posted stops the merge. A review can still arrive between the reading and
+  the merge call, as on every merge: the call is pinned to the commit, not
+  to the reviews. Where the repository reviews every pull request
+  automatically at open, the reviewer set is empty only when that review
+  was never asked, and this path is the way out then; once a round is
+  asked, or a connector has commented, the reason no longer applies and a
+  review is requested. Reviews after the
   first are requested on their value, never by default.
 - **Every review is dealt with.** Every review thread is resolved, and the
   merging seat reads and dispositions a review body's findings before it
@@ -312,20 +323,25 @@ previous request's review is still in flight, when it registers nothing
 either (both verified live, 2026-09-13; the operator form re-verified
 2026-09-27). Where an API call names the reviewer, its login is
 `copilot-pull-request-reviewer[bot]`; omitting the `[bot]` suffix returns
-422 (2026-08-12). Two more routes were tried under the bot's token on
-2026-11-22 and neither works. `POST
-/repos/{owner}/{repo}/pulls/{n}/copilot-code-review`, the pull request's own
-Copilot review endpoint, answers 422: "The actor does not have a Copilot
-license that includes code review"; a GitHub App holds no licence. A
-comment by the bot reading "@copilot please review" drew no reaction, review
-or run in five minutes. The base branch's automatic review rule
-(`copilot_code_review` with `review_on_push`) does not reach these pull
-requests either: GitHub makes the automatic request in the name of the pull
-request's author, one or two seconds after it opens, and an author that is
-a GitHub App holds no licence, so nothing is requested and nothing says so.
-A Copilot review of a bot-authored pull request is
-therefore requested by a person, or not at all; with
-`--no-review-reason-file` a simple change needs none. Read the timeline
+422 (2026-08-12). Whether Copilot reviews a pull request that a GitHub App
+opened is set by an organisation Copilot policy, "Allow members without a
+Copilot license to use Copilot code review in GitHub.com". It is off by
+default and the API does not show its state. With it off (observed
+2026-11-22): `POST /repos/{owner}/{repo}/pulls/{n}/copilot-code-review`, the
+pull request's own Copilot review endpoint, answers 422 under the bot's
+token, and its text names both causes, a missing "Copilot license that
+includes code review" and the organisation's policy; the base branch's
+automatic review rule (`copilot_code_review`) requests nothing, because
+GitHub makes that request in the name of the pull request's author one or
+two seconds after the event, and nothing says that it did not; and a
+comment by the bot reading "@copilot please review" drew no reaction,
+review or run in five minutes. With it on (observed the same day): the
+automatic request is made in the bot's name and the review is billed to
+the organisation. An account on a ruleset's bypass list is given no
+automatic review by that ruleset, so which ruleset carries the rule, and
+who is on its bypass list, sets who is reviewed at open and who on every
+push. Where no review was ever asked of a simple change,
+`--no-review-reason-file` merges it without one. Read the timeline
 after any request: silence from the
 request call is not a registered request. The request, once registered, is
 what the settlement reads as the round in flight: it is visible only on
