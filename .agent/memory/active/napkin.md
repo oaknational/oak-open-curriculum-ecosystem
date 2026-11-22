@@ -278,3 +278,15 @@ The account with its sources is the addendum to the reunification retrospective 
   changelog says `exempt`) from GitHub's own reference pages.
 - **Surprise:** `merge-bot merge` exits at once when GitHub has not yet computed mergeability
   for a new tip; a second run a minute later waits as usual.
+- **Mistake (mine):** I wrote into the thread record that a pull request description could
+  only be edited through a person's sign-in. `.agent/reference/merge-bot.md` documents the
+  bot route (a minted token and a `PATCH`), and I had edited that page the same day. Copilot
+  caught it on oaknational#1072. A record that names a gap in a tool is checked against the
+  tool's reference page before it is written.
+- **Surprise:** the owner asked me to discard an uncommitted file in the primary checkout
+  with `git checkout --`, and the repository's hook refused it for an agent whatever the
+  owner had said. `git pull --ff-only` then refused as well, though the file's content was
+  identical to the incoming commit's: git compares the working file with the index, not with
+  the result. The owner's word does not lift a hook; the act went back to the owner.
+- **Mistake (mine):** I appended the wrap's block to the thread record with a shell heredoc.
+  Tracked files are edited with the edit tool. The text is as intended; the route was wrong.

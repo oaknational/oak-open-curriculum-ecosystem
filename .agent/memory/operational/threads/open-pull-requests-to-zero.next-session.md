@@ -1979,3 +1979,47 @@ it; the hand-on entry of the earlier seat is the order of work they answer.
   change until it is fast-forwarded and rebuilt. It carries an uncommitted change to
   `.claude/settings.json` (enabled plugins) that is not this seat's, so the seat left the
   primary as it found it.
+
+### Update 2026-11-22, the wrap and the owner's next instruction (Petrel mends Pinnacle, ea9cea)
+
+- **Landed against the target.** The target was this estate's own open pull requests at
+  zero, by the owner's ruling recorded above. It is met: oaknational#1072, the preservation
+  fold, merged on 2026-11-22 (`97c30072d`), and no pull request by this estate's bot is open.
+  The colleagues' open pull requests are left as they are.
+- **One finding on #1072, upheld.** Copilot read the record's line on editing a pull request
+  description and pointed at the bot route in `.agent/reference/merge-bot.md`. The record was
+  corrected in `cc217fc46`. The lesson is in the napkin: a record that names a gap in a tool
+  is checked against the tool's reference page first.
+- **The owner's next instruction, 2026-11-22, for the session after the compaction.** In the
+  owner's words: the session "will use pnpm -r outdated and pnpm audit and check the GitHub
+  action versions to make sure that everything is using the latest stable version. Organise
+  by risk, and thoroughly validate the impact of changes". The method is the
+  `dependency-currency` skill (`.agent/skills/dependency-currency/`): survey, triage every
+  bump by measured risk tier, one type-affecting major at a time with its proof, audit to
+  zero by annotated override floors, and SHA-pinned actions refreshed against verified
+  stable tags. The held majors are listed in `docs/engineering/build-system.md`; read that
+  list before proposing a major. `update-dependencies` holds the mechanism decision tree.
+  My reading, not the owner's words: this is its own lane and its own pull requests, one
+  concern each and one open at a time, on lane branches cut from `origin/main`; it is not
+  work for the coordination branch.
+- **The primary checkout is still behind `origin/main`.** The owner asked this seat to
+  discard the uncommitted `.claude/settings.json` there and fast-forward. The repository's
+  hook refused `git checkout --` under `never-use-git-to-remove-work`, and the fast-forward
+  then refused because that file is modified, though its content is identical to
+  `origin/main`'s (checked by `diff`, exit 0). `pnpm install` ran and changed nothing. The
+  discard is the owner's to run, or a seat's after the owner's fresh word on the hook; the
+  dependency lane does not need the primary checkout, since it works in a lane worktree cut
+  from `origin/main`.
+- **Follow-ups recorded above and not started, unchanged by this entry:** the merge door's
+  poll loop and a time-only refusal; the reviewer templates' line-by-line reading; the
+  `ci-policy.md` page against CI and ADR-043; the bypass-list paragraph in
+  `.agent/reference/merge-bot.md`, which still says the cause "is not found"; a typed verb
+  to edit a pull request description; a retrospective on oaknational#1065, offered and not
+  run. The v1 API migration waits for the owner's express request.
+- **Processes.** This seat holds no claim, watcher, monitor, scheduled prompt or background
+  agent at the wrap. A seat resuming arms the comms watcher by the start-right procedure.
+- **What this entry cannot show.** The session was compacted once before this entry, so the
+  entry's account of the work before #1072's last commit rests on the records written then
+  and on a summary. Outside readers caught what this seat's own scans missed twice: the
+  pushes under the owner's account, and the description route. Both were statements about
+  which credential or route a write takes; that is where to point a second reader.

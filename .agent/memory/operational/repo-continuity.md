@@ -482,6 +482,14 @@ not the current session-priority lane. Reactivation is owner-directed.
 
 ## Next Safe Steps
 
+STATE, 2026-11-22 (Petrel mends Pinnacle, ea9cea, the solo seat on thread `open-pull-requests-to-zero`,
+wrapped at the owner's word before a compaction): this estate's own open pull requests are at zero and the
+colleagues' are left alone by the owner's ruling. Next safe step, at the owner's instruction of the same day: a
+dependency-currency pass by the `dependency-currency` skill (`pnpm -r outdated`, `pnpm audit`, the GitHub
+action versions), organised by risk with each change's impact validated, on lane branches cut from
+`origin/main`, one concern per pull request. The thread record's newest block holds the instruction verbatim,
+the state of the primary checkout and the follow-ups not started.
+
 STATE, 2026-10-13T13:0xZ (Walrus seeks Maelstrom, 9585cc, the reviewer seat at n=1, at its compaction
 boundary at the owner's word): the review lane for pull request #356 is open under claim `b13d5c39`;
 the discovery is reported. Next safe steps for that seat, in order, from the thread record

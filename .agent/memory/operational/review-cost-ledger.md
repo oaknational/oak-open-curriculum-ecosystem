@@ -295,6 +295,8 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-22 | oaknational#1069 | 2 | 10.9 / 40 | within | 1 | agreed | the `request-review` verb on `merge-bot pull-request`; Copilot at open: one finding (a sentence contradicting the identity rule), upheld and cured in one push; that push was reviewed automatically, no finding |
 | 2026-11-22 | oaknational#1070 | 1 | 0 / 40 | within | 0 | agreed | eight validator headers and the review configuration's evidence line; one Copilot review at open: no finding |
 | 2026-11-22 | oaknational#1071 | 2 | 16.18 / 40 | within | 1 | agreed | the foundation page's linked pages, a one-hour contradiction check, with the owner's settings change added at the owner's word; Copilot at open: three findings, all upheld and cured in one push; that push was reviewed automatically: two findings, one upheld and cured, one declined with its reason. The second cure push, the first made as the bot with both bot apps exempt, drew no review |
+| 2026-11-22 | oaknational#1068 | 2 | 10.08 / 40 | within | 1 | agreed | the coordination branch's closing fold; one Copilot review at open and one by the bot's `request-review` call at ready, which returned one finding (the description written at the draft's first commit had gone stale), upheld and answered by comment; the bot's push drew no automatic review |
+| 2026-11-22 | oaknational#1072 | 1 | 0 / 40 | within | 1 | agreed | the knowledge sweep's fold; one Copilot review at open, the first bot pull request opened with both bot apps exempt: one finding (the record denied a bot route for editing a description that the merge-bot reference documents), upheld and cured in one push; neither later bot push drew a review |
 
 ## Weight changes
 
