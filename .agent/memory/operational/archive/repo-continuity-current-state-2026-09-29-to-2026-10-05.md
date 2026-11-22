@@ -2,7 +2,7 @@
 
 Moved byte-identical from `.agent/memory/operational/repo-continuity.md` §Current State on 2026-10-14 by the third
 dedicated two-estate consolidation (Flint guards Vapor, 9b835d, working this estate non-resident from
-jimcresswell.net on lane docs/consolidation-3): the finished state entries from the Director lane's close to the code landing's merge in both estates (`practice-alignment-by-class` at its finish), every one landed, merged or handed on; the forward-asks they still named are compacted in the live file's §Next Safe Steps state of 2026-10-14. The body below is lines 68 to 292 of the file as
+the sibling estate on lane docs/consolidation-3): the finished state entries from the Director lane's close to the code landing's merge in both estates (`practice-alignment-by-class` at its finish), every one landed, merged or handed on; the forward-asks they still named are compacted in the live file's §Next Safe Steps state of 2026-10-14. The body below is lines 68 to 292 of the file as
 committed at that lane's tip before the move, cut whole and compared byte for byte before the live file
 was written.
 
@@ -32,9 +32,9 @@ was written.
   live state is the Director handoff's §STATE 2026-10-05 00:3xZ; the next safe step is the
   merge of #353 when a review binds its tip, then the code landing (Crucible binds Slag, 7b999c).
 - **2026-10-04T19:0xZ: the Practice's canonical definition landed on engraph (#351,
-  `SHA:82cb7fba4`) and on jimcresswell.net main (319, `SHA:02178ff0b`), the same bytes; the
+  `SHA:82cb7fba4`) and on the sibling estate's main (319, `SHA:02178ff0b`), the same bytes; the
   successor node `practice-alignment-by-class` ratified by four card answers and on this
-  coordination branch; the next safe step is its doctrine landing, jimcresswell.net first**
+  coordination branch; the next safe step is its doctrine landing, the sibling estate first**
   (Crucible binds Slag, 7b999c). The live state is the Director handoff's §STATE 2026-10-04 19:0xZ.
 - **2026-10-04T13:5xZ: `practice-system-review` ratified by the owner (card answer 13:3xZ) in
   its reshaped four-hour form; the layer pass read and the draft page written; the coordination

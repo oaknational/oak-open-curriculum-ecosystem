@@ -351,7 +351,7 @@ instinct the rulings ledger (plan S2) formalises.
 
 ## 2026-08-14 ~11:5xZ — PR-886 drive COMPLETE (Smith hunts Obsidian, e98f17)
 
-- MERGED by the owner directly (jimCresswell, 2026-08-14T11:39:49Z, merge
+- MERGED by the owner directly (the owner's account, 2026-08-14T11:39:49Z, merge
   commit c0a6c08d3, branch tip ab608269b). Task 9 closed. Thirteen review
   rounds ran (adversarial panel x2 lenses, architecture-expert-fred,
   Copilot x10 content rounds, round 13 clean); 55 findings harvested
@@ -394,7 +394,7 @@ in priority order (the owner's SKILLS-FIRST ruling governs):
   directory class); then wave 2 per PR #890 comments 5293457222 (link
   ledger) + 5293529733 (config additions) + task #10; then the eval
   programme to EVERY Practice skill (plan WS8 + pilot convention
-  estate-wide). mantagen re-review stands requested; Copilot re-request at
+  estate-wide). The second code owner re-review stands requested; Copilot re-request at
   the cured tip.
 - (c) PROFANITY-FILTER in-repo plan node to AUTHOR (ledger PROF-FILTER,
   owner verbatim there): validator with fixed-hash target-word list (hashes
@@ -405,7 +405,7 @@ in priority order (the owner's SKILLS-FIRST ruling governs):
   compare our open PRs vs other contributors' new PRs for clashes.
   Inventory banked at the freeze: ours #890 (skills wave 1), #889
   (census, Nautilus), #774 (illustrative, never merges); theirs #891
-  luke-arnold-oak NATIVE-WINDOWS ESTATE FIX — intersects the ratified
+  a colleague's NATIVE-WINDOWS ESTATE FIX — intersects the ratified
   cross-platform node's research-first rider (XPLAT row); FLAG at the
   comparison, verdict needed on rider-vs-contribution; #892 plugin skill
   feedback DRAFT — touches BUNDLED SKILL COPIES, direct WS7 clash
@@ -501,7 +501,7 @@ Owner resume order (ledger XPLAT-4) executed ahead of the freeze map's (a)/(b):
   `3f006ca87`; merge method merge). The tip was FROZEN by ARC broadcast
   after the fold reviewer refused a moving diff (it grew 61→64 files
   under live lane commits) — freeze honoured by all lanes. Two review
-  rounds from mantagen (owner-confirmed this hour: Matt's BOT on his
+  rounds from the second code owner (owner-confirmed this hour: Matt's BOT on his
   account) were both correct, both cured (round 1: description rewritten
   to the actual diff-vs-main claim; round 2: XPLAT-4 authority split +
   frozen-tip description truing), then DISMISSED under the owner's
@@ -728,7 +728,7 @@ RESUME MAP, priority order:
 - (a) DEMO DELIVERED inside the window: MCP-620 both workstreams
   demo-ready and witnessed (W1 EMC² amplification `0cd8906ad`, W2
   /tokens page `e0a85e842`, committed on lane branch
-  `jimcresswell/mcp-620-emc-amplification-token-reference-page-demo-motion`,
+  `<owner>/mcp-620-emc-amplification-token-reference-page-demo-motion`,
   UNPUSHED by design). The OWNER VIEWED the demo and gave feedback
   DIRECT at Yarrow's seat (his word at this seat ~10:5xZ: "I have
   given feedback to Yarrow") — the feedback substance lives at their
@@ -741,15 +741,15 @@ RESUME MAP, priority order:
   single-resolution cut, probabilistic sha6 wording in four carriers,
   24h rule now prescribes the minted form + parse contract — the
   rule's stale estate-form prescription was an F-161 recreation risk,
-  cured). Round 2 DISMISSED at honest cure; mantagen ROUND 3
+  cured). Round 2 DISMISSED at honest cure; the second code owner ROUND 3
   RE-REQUESTED — at its arrival: harvest full, disposition, then
-  `merge-bot merge --pr 899 --expect mantagen` at SETTLE-READY (the
+  `merge-bot merge --pr 899 --expect <code-owner>` at SETTLE-READY (the
   state machine refused a premature merge with
   SILENT-WAIT-NO-REVIEWER: a review must BIND the current tip; a
   dismissed round binds nothing).
 - (c) PR #905 (MCP-612; bot-authored replacement of mis-authored #904
   — ambient-credential breach cured, failure-mode event `5472dbad`):
-  checks 17/17 green, Sonar passed; mantagen FIVE-FINDING
+  checks 17/17 green, Sonar passed; the second code owner FIVE-FINDING
   CHANGES_REQUESTED round OUTSTANDING (split-write crash-atomicity;
   NaN-timestamp silent deletion; FIFO order change; claim-open
   TOCTOU; worktree-decoy validation — file:line in the review). ROUTE
@@ -789,7 +789,7 @@ re-armed on the exit notification). Freeze-map disposition:
   (directive `3eda8a27`, absorption ack in full; verify-first contract,
   QUEUE-LOCAL legacy-use grading on finding 3, MCP-620 support standby
   keeps precedence). Post-merge acceptances 2+3 stay on this board.
-- (b→done) #899: mantagen round 3 (two blockers) cured at `eaa75e6e7`
+- (b→done) #899: the second code owner round 3 (two blockers) cured at `eaa75e6e7`
   (fold step 9 single-BASE resolution; probabilistic sha6 wording in
   the cut skill + both adapters; carrier sweep clean), dismissed at
   honest cure, round 4 APPROVED binding the tip, MERGED `791266135`
@@ -824,7 +824,7 @@ freeze broadcast is intentional. RESUME MAP, priority order:
   VERIFIED that statuses:write on the build job would let build-time
   code mint a green run-quality-gates (both attribute to app 15368) —
   the dedicated job is the cure; never move the token back. Awaits
-  Copilot + mantagen rounds; merge leg at settled. MCP-626's OTHER arm
+  Copilot + the second code owner rounds; merge leg at settled. MCP-626's OTHER arm
   (schema-cache refresh 0.7.0→0.11.0, pnpm sdk-codegen:refresh) is a
   separate slice, untouched. MCP-627 (new): live ruleset has
   strict_required_status_checks OFF vs ADR-204's ratified ON.
@@ -833,7 +833,7 @@ freeze broadcast is intentional. RESUME MAP, priority order:
   Copilot rounds harvested and dispositioned (incl. one REFUTED with
   vitest-source evidence: VITEST_MAX_WORKERS IS read by v4), awaiting
   BINDING rounds — dismissed rounds bind nothing and Copilot never
-  approves, so mantagen's cadence (NOT on-demand, owner calibration)
+  approves, so the second code owner's cadence (NOT on-demand, owner calibration)
   or human approval settles them; merge-bot recomputes at any try.
   MCP-625 carries the deferred owner-only-write symlink bug (verified
   pre-existing on main) + two small residues.
@@ -1203,7 +1203,7 @@ direct owner word (no Director seated; the week-sleep ended at owner word 2026-0
   Claims `6ce14377` (this seat), `f04cd57b` and `645b9e0b` closed; the #908 Copilot thread
   replied to and resolved. Kiln merged main into `handoff/jim-september` at `ba7e37d78`
   (their event 14:24Z; the fold's 156 napkin lines carried and processed).
-  **The lane: MCP-661**, branch `jimcresswell/mcp-661-split-delivery-plan` from main at
+  **The lane: MCP-661**, branch `<owner>/mcp-661-split-delivery-plan` from main at
   `777e9131c`, claim `188c28b1`, one PR carrying (a) these record true-ups, (b) the uncured
   #915 items, (c) the split delivery plan node `oak-open-curriculum-mcp-extraction`
   (serving `toolkit-re-architecture`). Dispositions of the routings above on that branch:
@@ -1234,7 +1234,7 @@ direct owner word (no Director seated; the week-sleep ended at owner word 2026-0
   sized the work at 30 to 90 minutes; the node carries per-todo estimates (85 minutes of
   authoring plus two gates) and a named drop candidate.
 - **Where the seat-facing state is.** The primary checkout is on
-  `jimcresswell/mcp-673-strategy-corpus-consistency` at `9aa5e011e` = origin, clean, at the
+  `<owner>/mcp-673-strategy-corpus-consistency` at `9aa5e011e` = origin, clean, at the
   owner's word ("We can work in the primary checkout for this one"); the MCP-661 worktree is
   removed and its branch deleted (merged). Claim `2c11756e` (this seat, the corpus files)
   closes with this handoff; the next session opens its own. No Director seated; n=1.
@@ -1456,7 +1456,7 @@ direct owner word (no Director seated; the week-sleep ended at owner word 2026-0
   evidence anchors, the check's mechanism, and the five open points) with a pointer from the
   design plan's W0.2(b); this entry. Nothing else. Merged as the bot under pr-lifecycle §5 with
   no owner action.
-- **Attribution corrected at the wrap.** GitHub records #959 as merged by jimCresswell at
+- **Attribution corrected at the wrap.** GitHub records #959 as merged by the owner's account at
   12:16:23Z after his APPROVED review; the lead's REST merge call at the same moment returned
   `merged: true` with the same sha (ec7cb3fa8), so the earlier entries' "REST as the bot" for #959
   is an inference the API refutes — the owner merged #959 by hand. #962 (b3c9742f8) and #961
@@ -1465,7 +1465,7 @@ direct owner word (no Director seated; the week-sleep ended at owner word 2026-0
   for this pull request's files open until its merge; worktrees `mcp-673-consolidation` and
   `mcp-673-true-ups` pruned; `mcp-673-wrap` (this branch) pruned at its merge; the primary
   checkout still on the merged #959 branch; the local branch
-  `jimcresswell/mcp-673-adr-oak-product-extraction` left in place (a peer's surface; the owner
+  `<owner>/mcp-673-adr-oak-product-extraction` left in place (a peer's surface; the owner
   refused its removal by the lead).
 
 ## 2026-09-03 ~15:xxZ — OWNER RULINGS LANDED FROM A SOLO SEAT (Flounder turns Estuary, c5cc2c, implementer)
@@ -1808,14 +1808,14 @@ tip, or an open pull request already). Ten were unsafe; the procedure is now the
 | --- | --- | --- | --- |
 | no-prompts | fix/unattended-seats-never-prompt-2026-09-09 | the #100 split cure, uncommitted | committed SHA:d08ab1af8, pushed to #100 |
 | pr-943-engraph | chore/continuity-kiln-2026-09-02 | four kiln-session records of 2026-09-02, staged | SHA:f9d423bdc; draft #124 (two bare URLs wrapped for MD034) |
-| design-plan-truings | jimcresswell/design-plan-ratification-and-truings | one report of 2026-08-05, staged | SHA:4e030a535; draft #119 |
-| fix-pnpm-path | jimcresswell/jim-next-2026-08-04 | one commit, the jim-next return map | pushed; draft #120 |
+| design-plan-truings | `<owner>/design-plan-ratification-and-truings` | one report of 2026-08-05, staged | SHA:4e030a535; draft #119 |
+| fix-pnpm-path | `<owner>/jim-next-2026-08-04` | one commit, the jim-next return map | pushed; draft #120 |
 | pr-888-cure | docs/windows-via-wsl | four README commits, Windows via WSL | pushed; draft #121 |
-| w01-census | jimcresswell/design-w01-census | one commit, the W0.1 census artefacts | pushed; draft #122 |
+| w01-census | `<owner>/design-w01-census` | one commit, the W0.1 census artefacts | pushed; draft #122 |
 | pr-891-macos-validation | claude/objective-nightingale-b4ba25 | fifteen windows-support commits + an untracked runner | SHA:5dd76c612; draft #123 |
-| mcp-567-vendor-symlinks | jimcresswell/mcp-567-vendor-skill-symlinks | one modified integration test (MCP-567) | REFUSED by the pre-commit gate: six of its cases fail on that tree; patch conserved |
-| vitest-config-workspace | jimcresswell/vitest-config-workspace | two staged eslint config changes | REFUSED by the pre-commit gate: the relative-packages error fires in three workspaces; patch conserved |
-| mcp-487-sanitise | jimcresswell/mcp-487-sanitise-numeric-input | one commit (MCP-487), local only | REFUSED by the pre-push validators (the MCP content-source validator fails on that August tree); format-patch conserved |
+| mcp-567-vendor-symlinks | `<owner>/mcp-567-vendor-skill-symlinks` | one modified integration test (MCP-567) | REFUSED by the pre-commit gate: six of its cases fail on that tree; patch conserved |
+| vitest-config-workspace | `<owner>/vitest-config-workspace` | two staged eslint config changes | REFUSED by the pre-commit gate: the relative-packages error fires in three workspaces; patch conserved |
+| mcp-487-sanitise | `<owner>/mcp-487-sanitise-numeric-input` | one commit (MCP-487), local only | REFUSED by the pre-push validators (the MCP content-source validator fails on that August tree); format-patch conserved |
 
 The three refusals are NOT safe by the owner's definition. Their diffs are conserved as patch
 files beside the Director's seat record (`instruments-2de368/refused-*.patch`, machine-local) —
@@ -2542,7 +2542,7 @@ seat are RUNNING — the front door on #139 and the reviewer wake — and will n
 "you are not currently acting as a Director, you are a sole operator, I mention this in case it allows you to
 drop some ceremony" (dropped: no title in signatures, no broadcasts, no team bootstrap). "there are two agents
 operating on this machine, you are the only agent in the OCE checkout, and Cauldron herds Lustre (880ff9) is
-operating in the […]/jimcresswell.net checkout" (the machine-local prefix elided by this record)" (a third, Coal weaves Pumice, f67c69, in
+operating in the […]/[the sibling estate's] checkout" (the machine-local prefix elided by this record)" (a third, Coal weaves Pumice, f67c69, in
 castr). "Lustre is working on transplanting the Practice to their repo … some communication at some points may
 be helpful" (exchanged by SendMessage; nine findings received, each verified here before disposition). "reflect
 deeply on the state and direction of the pull requests" (the reflection: fourteen rounds with zero rejections;
@@ -3009,7 +3009,7 @@ tracked records, a missing cut-recipe fallback). Pickups: start-right invokes th
 the sync tool lands (it landed as #145, which carried no start-right edit; the binding is the
 2026-09-15 successor branch's first doctrine commit); step 11's pending-checks sentence landed in this branch's first records commit.
 
-Delivered at the owner's word: the delta note for the jimcresswell.net transplant (base
+Delivered at the owner's word: the delta note for the sibling estate's transplant (base
 `e477e62f7`) into that repository's Practice Box with its paired delivery event; Cauldron herds
 Lustre (880ff9) messaged with the path, and replied: received and read, routed as that
 Practice's update pass (a three-way read against the transfer base after their closure's
@@ -3176,7 +3176,7 @@ Pickups:
 The owner's word: "review the work in the unpushed branches, if it is valuable push it to a draft
 PR, otherwise delete it. The next PR for attention is 147".
 
-**The two unpushed branches, deleted.** `jimcresswell/mcp-673-adr-oak-product-extraction` carried
+**The two unpushed branches, deleted.** `<owner>/mcp-673-adr-oak-product-extraction` carried
 the Proposed draft of ADR-227, which engraph holds Accepted; `chore/continuity-kiln-2026-09-02`
 carried continuity records whose every line is on engraph, most re-wrapped in the 2026-09-02
 napkin archive. The comparison is recorded in comms `fb503c04` before the deletion. Nothing on
@@ -3461,13 +3461,13 @@ session starts.
    - the owed-items records PR (pickup 5);
    - the eight local defects from the 1.181.3 sync.
 5. **Scheduled maintenance: TypeScript strictness to the target set.** Owner direction, relayed at
-   15:13Z by Cauldron herds Lustre (880ff9, the jimcresswell.net Director) as directed event
+   15:13Z by Cauldron herds Lustre (880ff9, the sibling estate's Director) as directed event
    `42fe1d6f-7d2a-4fe8-9f9d-f36bc7ea2928` in that repository's stream. The owner's words, verbatim:
    *"I would like the typescript strictness levels brought up to the highest levels we are aiming
    for after the next slices, but to schedule it as maintenance, I am happy with that label because
    it should always have been that strict, it drifted over time."*
 
-   **When.** Cauldron's reading is that it runs after the jimcresswell.net strictness slices now in
+   **When.** Cauldron's reading is that it runs after the sibling estate's strictness slices now in
    flight land (its #94, #95 and those after), so this estate inherits a proven method. It needs a
    plan node; none is authored yet.
 

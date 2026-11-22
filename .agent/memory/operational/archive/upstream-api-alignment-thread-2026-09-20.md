@@ -104,7 +104,7 @@ untouched here beyond that.
 Ticket **MCP-590** (MCP team, First Major Release project, related MCP-204/MCP-100)
 realises the ratified Bucket-1 plan. Worked in worktree
 `.claude/worktrees/mcp-590-restricted-switch` (branch
-`jimcresswell/mcp-590-restricted-exclusion-switch`, off origin/main `d105b4ab2`),
+`<owner>/mcp-590-restricted-exclusion-switch`, off origin/main `d105b4ab2`),
 KEPT on disk for slices 2/3.
 
 - **Slice 1 — configurable restricted-exclusion switch (default exclude): SHIPPED
@@ -358,7 +358,7 @@ MCP-265 ground-truth re-truing (17/89 expectations upstream-restricted; two hard
 queries explained; add the fail-loud guard). Post-submission sequenced: MCP-203, MCP-205
 (+MCP-252 anomaly counters), MCP-213, MCP-214/215, MCP-253.
 
-Ops: worktree mcp-203-bulk-rework on jimcresswell/mcp-153-ingest-run at origin/main
+Ops: worktree mcp-203-bulk-rework on `<owner>/mcp-153-ingest-run` at origin/main
 (clean, no commits); both datasets in its bulk-downloads{,-archive-2026-06}; Redis
 container oak-search-redis left running; ES MCP access arrives at next session restart
 (owner-added) — prefer it over the curl+env path for future index work.
@@ -371,7 +371,7 @@ THE CONTROLLING RESUME MAP is the delivery plan node
 
 State frozen at the boundary (~10:55Z, gates re-trued ~11:00Z): MCP-462
 delivered to review as draft PR #735 (head `bcdc62373`, bot-authored,
-52 files) — Matt (`mantagen`) assignee + requested reviewer per the
+52 files) — Matt (a code owner) assignee + requested reviewer per the
 owner's pass-to-Matt word; Copilot requested; MCP-462 In Progress.
 MCP-463 (ADR-222 interim bulk truing + the untracked-data freshness
 check) is the next act, sequenced after #735 merges — ALL owner-wait

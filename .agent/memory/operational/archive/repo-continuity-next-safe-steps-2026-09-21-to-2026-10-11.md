@@ -2,12 +2,12 @@
 
 Moved byte-identical from `.agent/memory/operational/repo-continuity.md` §Next Safe Steps on 2026-10-14 by the third
 dedicated two-estate consolidation (Flint guards Vapor, 9b835d, working this estate non-resident from
-jimcresswell.net on lane docs/consolidation-3): the STATE blocks of 2026-10-02 to 2026-10-11, the PICKUP blocks of 2026-09-29 and 2026-10-01, and the three-estate Practice exchange's pickup of 2026-09-21 with its dated entries to 2026-09-29; each superseded by the state above it in the file's own words or by the landings the §Current State archive records. The work they still held is compacted in the live file's §Next Safe Steps state of 2026-10-14. The body below is lines 548 to 2648 of the file as
+the sibling estate on lane docs/consolidation-3): the STATE blocks of 2026-10-02 to 2026-10-11, the PICKUP blocks of 2026-09-29 and 2026-10-01, and the three-estate Practice exchange's pickup of 2026-09-21 with its dated entries to 2026-09-29; each superseded by the state above it in the file's own words or by the landings the §Current State archive records. The work they still held is compacted in the live file's §Next Safe Steps state of 2026-10-14. The body below is lines 548 to 2648 of the file as
 committed at that lane's tip before the move, cut whole and compared byte for byte before the live file
 was written.
 
 STATE, 2026-10-11T11:4xZ (Corsair weaves Seabed, 459358, the third dedicated two-estate consolidation's
-curating seat, working this estate non-resident from jimcresswell.net, retiring at the owner's word; the
+curating seat, working this estate non-resident from the sibling estate, retiring at the owner's word; the
 owner names the successor): the consolidation is mid-pass and handed off under PDR-063. The pickup is the
 sibling estate's thread record `two-estate-consolidation.next-session.md` (its 11:4xZ and 11:2xZ blocks),
 this estate's napkin block of 11:2xZ, and the untracked handoff record under
@@ -394,25 +394,25 @@ contract, its §Recount run at 14:58Z and matching.
   the bot (tree identical to engraph).
 - **The seven local-only branches (the Director's check-in 16, readings sent 16:37Z):** three
   superseded (`docs/codex-support-concept-exploration` by PR 211's lane;
-  `docs/copilot-cli-practice-citizenship` by its own account; `jimcresswell/mcp-506-sdk-v2-spike-plan`
+  `docs/copilot-cli-practice-citizenship` by its own account; `<owner>/mcp-506-sdk-v2-spike-plan`
   byte-identical on engraph), two surviving only there (`docs/first-class-copilot-agent-support`,
-  `fix/claude-hook-hardening`), two Oak-line ticket branches (`jimcresswell/mcp-372-…`,
-  `jimcresswell/mcp-487-sanitise-numeric-input`); none deleted, the owner's card decides, and
-  `jimcresswell/design-plan-ratification-and-truings` is superseded too: its report landed on
+  `fix/claude-hook-hardening`), two Oak-line ticket branches (`<owner>/mcp-372-…`,
+  `<owner>/mcp-487-sanitise-numeric-input`); none deleted, the owner's card decides, and
+  `<owner>/design-plan-ratification-and-truings` is superseded too: its report landed on
   engraph 2026-08-05 (33599297d) and grew through three later commits, so the conservation lane
   opened at 17:10Z was unwound without a commit (reading corrected to the Director 17:2xZ).
 - **The owner's word on the branches (native chat to the Director, 17:2xZ, relayed 17:20:21Z,
   verbatim): "1. Approve 2. Delete all 3. Try passing my approval to Gale and see if that does
   the job, I absolutely need all seats to be able to push without me".** Item 2 is this card.
-  Done at 17:2xZ: the remote `jimcresswell/design-plan-ratification-and-truings` deleted as the
+  Done at 17:2xZ: the remote `<owner>/design-plan-ratification-and-truings` deleted as the
   bot (REST DELETE, read back 404; tip 4e030a535). Refused: this seat's harness denied
   `git branch -D` for the eight local branches, and the Director deleted them by its own hand at
   17:25:41Z (its broadcast of 17:25:54Z); their tips, for the reflog and this record:
   `docs/codex-support-concept-exploration` 327ef6abb, `docs/copilot-cli-practice-citizenship`
   f96149836, `docs/first-class-copilot-agent-support` 4ead1345b, `fix/claude-hook-hardening`
-  c4fae0b83, `jimcresswell/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the`
-  30d0e81c5, `jimcresswell/mcp-487-sanitise-numeric-input` 9b6da6178,
-  `jimcresswell/mcp-506-sdk-v2-spike-plan` cdf422566, and the local copy of the design-plan
+  c4fae0b83, `<owner>/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the`
+  30d0e81c5, `<owner>/mcp-487-sanitise-numeric-input` 9b6da6178,
+  `<owner>/mcp-506-sdk-v2-spike-plan` cdf422566, and the local copy of the design-plan
   branch 4e030a535. `claude/objective-nightingale-b4ba25` is not on the card.
 - **Batch six (the second estate's delivery of 17:25:04Z, 22 files in `jcnet-batch-6`, every blob id
   verified, acknowledged as 8cc5ef38):** 21 notes read whole. Nine land as small PRs this seat runs
@@ -799,8 +799,8 @@ contract, its §Recount run at 14:58Z and matching.
   cure; the package scope and fixtures renamed) sits UNCOMMITTED in oce-wt-j2-docs-validators by
   the owner's WIP word, backed up as a patch beside the handoff; its first-run measurement of the
   second estate's name on live surfaces: 19 manifests carry the owner's contact domain (not a
-  leak), three doctrine files and one fixture carry the repository name (the needles jimcresswell/
-  jimcresswell.net, jcdotnet and @jimcresswell/; the verdict for the body). Four napkin entries:
+  leak), three doctrine files and one fixture carry the repository name (the needles: its owner-and-name
+  path, its short name and its package scope; the verdict for the body). Four napkin entries:
   the door closed the heartbeat's anchor claim and the loop failed silently for sixteen minutes; a
   settlement script derived without the leg re-requests; files left staged on a shared primary rode
   a peer's commit, and a fixed pathspec swept a peer's edit the other way; a shared primary's gate
@@ -2095,7 +2095,7 @@ disposition without pr-lifecycle's bar marker and signature.
    `agent-tools/src/session-metadata/window-registry.ts` so `session-metadata` reads this seat's
    context without a stand-in entry;
 4. scheduled maintenance: TypeScript strictness to the owner's target set, after the
-   jimcresswell.net strictness slices land. The direction was relayed 2026-09-16 by Cauldron herds
+   sibling estate's strictness slices land. The direction was relayed 2026-09-16 by Cauldron herds
    Lustre; its full substance is in the estate-coordination record's §"Tool and code lanes
    owed" item 7.
 

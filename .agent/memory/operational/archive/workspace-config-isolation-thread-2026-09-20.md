@@ -58,7 +58,7 @@ below is the frozen cure record.
 ## CURE A LANDED 2026-08-12 ~16:35Z — #865 pushed, superseded by the round-4 block above (Wren calls Downdraft 6b29b5)
 
 - **Cure A is IMPLEMENTED, gated, and PUSHED.** Head
-  `jimcresswell/mcp-570-skill-validation-jurisdiction` is now `d3d38ce6a`
+  `<owner>/mcp-570-skill-validation-jurisdiction` is now `d3d38ce6a`
   (`1a98b0807..d3d38ce6a`, fast-forward). The stage-before-clear defect (round-3
   defect 1) is cured: a pre-clear preflight (new
   `agent-tools/src/skills-adapter-generate/emission-refusals.ts`) computes the
@@ -181,7 +181,7 @@ below is the frozen cure record.
   alone"); clear.ts removal-phase returns partial teardown on failure; adapter
   emission refuses a non-round-trippable canonical (backtick/newline). Gates
   green, disposition posted (issuecomment-5267636545), Director confirmed.
-  The mantagen CHANGES_REQUESTED (6 defects + 3 test-gaps, on the OLD head
+  The second code owner's CHANGES_REQUESTED (6 defects + 3 test-gaps, on the OLD head
   `2ff1eb025`) is fully cured and STALE against the current head. Update-branch
   leg done (Director-routed): merged post-864 origin/main (merge commit
   `4979d1b6b`, no conflicts), idempotence recheck GREEN on the merged tree
@@ -190,7 +190,7 @@ below is the frozen cure record.
   re-requests Copilot at
   `4979d1b6b`, recounts unfiltered, bot-merges at CI-settled. Disposition posted
   (issuecomment-5267145133); cured signal broadcast to the Director (event
-  dfb0dc9d). Merge is Director-side: dismiss the stale mantagen round with the
+  dfb0dc9d). Merge is Director-side: dismiss the stale code-owner round with the
   disposition as evidence (review-path-dismiss-cure doctrine), then bot
   REST-merge at CI-settled (fresh CodeQL + Sonar re-run on the new head).
 - **The cures** (two commits: `323805abf` reinstate skills-lock.json;
@@ -215,7 +215,7 @@ below is the frozen cure record.
   lexical path unlinks the symlink; no Node `openat` to close it); the
   guard→`rm` ancestor race is the standard Node path-op limit.
 - **Worktree `mcp-570-skill-jurisdiction` KEPT** on disk until merged (branch
-  `jimcresswell/mcp-570-skill-validation-jurisdiction`). Session exited it
+  `<owner>/mcp-570-skill-validation-jurisdiction`). Session exited it
   (keep) to push from primary (worktree-isolation guard blocks push/comms/watch
   from a linked worktree). Claim 34eaba6f still held.
 - **QUEUE AFTER #865 MERGES** (unchanged): board re-check with the Director →
@@ -233,7 +233,7 @@ below is the frozen cure record.
   `pnpx skills add` is reported stale by check and DELETED by the next
   generate. That violated testing-strategy.md:59 ("NEVER test external
   functionality, that is not under our control"), which already forbade it.
-- **MCP-570 SHIPPED — PR #865** (`jimcresswell/mcp-570-skill-validation-jurisdiction`
+- **MCP-570 SHIPPED — PR #865** (`<owner>/mcp-570-skill-validation-jurisdiction`
   → main, head SHA:2ff1eb025), bot-authored, jimbot label, Copilot
   requested. Executes the ratified plan
   `.agent/plans/delivery/skill-classes-and-validation-jurisdiction.plan.md`
@@ -255,7 +255,7 @@ below is the frozen cure record.
   ("#865 merges at Wren's settled signal; second lander of 864/865
   regenerates skills projections before recount"). Worktree
   `.claude/worktrees/mcp-570-skill-jurisdiction` (branch
-  `jimcresswell/mcp-570-skill-validation-jurisdiction`) KEPT on disk until
+  `<owner>/mcp-570-skill-validation-jurisdiction`) KEPT on disk until
   merged; MCP-570 → Done at merge. Claim 34eaba6f RETAINED
   stopped-seat-held (this seat resumes it).
 - **MCP-567 disposition**: REVERSED — reversal comment on the Linear
@@ -305,7 +305,7 @@ below is the frozen cure record.
   AFTER the lane smalls land.
 - **#851 INTERLUDE (Director-routed, complete at this seat)**: the
   skill-carriage cure arc ran here 2026-08-11 ~16:5x–19:1xZ — three
-  commits on `jimcresswell/skill-standard-s1a-carriage` (head
+  commits on `<owner>/skill-standard-s1a-carriage` (head
   `e28ab7367`): every Warden blocker + suppressed batch cured with the
   Warden's probes as executable red cases; the internal opus round's
   critical (emission over incomplete discovery) cured as wholesale
@@ -325,7 +325,7 @@ below is the frozen cure record.
 - **#850 MERGED `3afe99113`** (2026-08-11 16:19Z, owner-armed
   auto-merge, merge-commit method, his approval 16:18Z). The resumed
   drive's record: a ROUND-4 CHANGES_REQUESTED from the owner's PR
-  Review Warden seat (Marlin binds Wave, posted under `mantagen` at
+  Review Warden seat (Marlin binds Wave, posted under the second code owner's account at
   his direction) found the bare `$TURBO_ROOT$/` root input
   misclassified dead — cured `bca591fb5` after in-repo probe
   confirmation (1,006 → 93,515 dry-run inputs; the trailing-slash
@@ -511,7 +511,7 @@ below is the frozen cure record.
   todo 2 ∥ todo 4 → todo 5 → H1→H2→H3→H4 → todo 6.
 - **In flight**: S1 = MCP-542 executed at `653d170ec` (worktree
   `.claude/worktrees/mcp-542-turbo-globs`, branch
-  `jimcresswell/mcp-542-turbo-zero-match-globs`): derivation under
+  `<owner>/mcp-542-turbo-zero-match-globs`): derivation under
   the pinned matcher settled the yaml dispute (ALIVE — `**` matches
   zero segments per turbo's own dry run) and deleted exactly the
   three js/cjs/mjs entries; ≥1-tracked-match validator leg with

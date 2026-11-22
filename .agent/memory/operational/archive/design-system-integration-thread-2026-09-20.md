@@ -78,7 +78,7 @@ subsections that close the seat, and the wind-down record `645b9e0b-design-lane-
 
 - **Worktree**: `oak-open-curriculum-ecosystem-worktrees/aip-137-hub-migration`
   (sibling of the primary checkout), branch
-  `jimcresswell/aip-137-hub-migration-kit-and-theme-mapping`, tip `SHA:19267a2fc`,
+  `<owner>/aip-137-hub-migration-kit-and-theme-mapping`, tip `SHA:19267a2fc`,
   pushed. **PR #413**, stacked on #411's branch — auto-retargets to `main` when #411
   merges. PR body carries both slices + review-focus table.
 - **Landed**: slice 1 (`SHA:4f12befa0`) — hub consumes
@@ -174,7 +174,7 @@ PR3-gate lane close (distinct from Salmon's hub lane above). Full self-contained
 read it first; the pointers below are hypotheses, recompute live.
 
 - **PR3 cycle 3 (four-theme contrast gate) LANDED as PR #423** — branch
-  `jimcresswell/aip-137-pr3-cycle3-four-theme-gate`, tip `SHA:bb274cc2e`, pushed, 5 commits,
+  `<owner>/aip-137-pr3-cycle3-four-theme-gate`, tip `SHA:bb274cc2e`, pushed, 5 commits,
   auto-merge NOT armed (unreviewed). Live gate green: 34/34 pairs × 4 themes (HC AAA, rest
   AA), matching the Stage-A report Part 2 fixture. `design-tokens-core` gained a fixpoint
   resolver + `toHexComparand` + a WCAG `WcagLevel` param; `oak-design-tokens` gained the
@@ -230,7 +230,7 @@ First consumer of the design system from a Node/Express server. Recompute live s
 pickup; the facts below were verified first-hand this session.
 
 - **Landed**: `SHA:a549d491d` on
-  `jimcresswell/mcp-128-public-landing-page-at-production-values-oak-family-design`, pushed
+  `<owner>/mcp-128-public-landing-page-at-production-values-oak-family-design`, pushed
   (remote ref verified equal to HEAD). No PR — the owner holds the copy, and the Director's
   standing order routes submission-surface changes through that seat before landing.
 - **Doctrine**: [ADR-217](../../../../docs/architecture/architectural-decisions/217-server-rendered-html-in-the-mcp-app.md)
@@ -376,7 +376,7 @@ successor (Triton→Lavender), retired at owner word; claim 68088465 pending suc
   `.agent/state/collaboration/handoffs/thyme-weaves-hedgerow-to-sycamore-herds-xylem-2026-07-30.md`
   (claim-addressed via `claims set-handoff`).
 - **Worktree**: `oak-open-curriculum-ecosystem-worktrees/design-showcase-lane`, branch
-  `jimcresswell/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the` at
+  `<owner>/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the` at
   `5a7d4406c` (current main), ZERO commits — safe to re-cut; no unpushed work anywhere.
 - **Gate not yet discharged**: the slice-1 pre-execution code-expert review (two dispatches
   died on the 06:12–06:15Z Opus 529 burst) — the successor's first act before any code.
@@ -390,7 +390,7 @@ successor (Triton→Lavender), retired at owner word; claim 68088465 pending suc
   — THAT record is the authoritative resume state; this entry is the pointer.
 - **Durable**: slice 1 in PR #644 (OPEN by design; Sonar duplication red clears only
   at the PR-2 both-copies deletion). Kit TS-source runtime + `choice()` + toolchain
-  pushed on `jimcresswell/mcp-372-kit-ts-source-runtime-and-choice-accessor` at
+  pushed on `<owner>/mcp-372-kit-ts-source-runtime-and-choice-accessor` at
   `SHA:95bdfee3a` (commits `05ed8482c` hook env fix + `95bdfee3a` kit content; full
   gate suites green). Scaffold branch `checkpoint/mcp-372-pr1-lockfile-2026-07-30`
   local-only, delete after PR 1 lands.
@@ -463,7 +463,7 @@ successor (Triton→Lavender), retired at owner word; claim 68088465 pending suc
   re-derived config deltas rides the PR-2 branch at
   `.agent/reports/design/2026-08-02-pr2-theme-store-pre-execution-review.md`
   (worktree design-showcase-lane, branch
-  `jimcresswell/mcp-372-shared-theme-store-extraction` off `58e5be461`).
+  `<owner>/mcp-372-shared-theme-store-extraction` off `58e5be461`).
   The D1/D2/D3/D5 temp file is unrecoverable (encrypted transcript); its
   applied form survives in the pause record + the absorption record.
 
@@ -550,9 +550,9 @@ successor (Triton→Lavender), retired at owner word; claim 68088465 pending suc
   brand voice toolkit v2.0 → OGL by provenance.
 - Remaining at this seat: #709 adjudication fold (lane input); MCP
   true-ups at embargo end. Claim `44616c39` HELD. Merged local branches
-  (`jimcresswell/mcp-372-design-docs-pass`,
-  `jimcresswell/mcp-372-hub-parity-guard-consolidation`,
-  `jimcresswell/mcp-372-shared-theme-store-extraction`) are owner-one-click
+  (`<owner>/mcp-372-design-docs-pass`,
+  `<owner>/mcp-372-hub-parity-guard-consolidation`,
+  `<owner>/mcp-372-shared-theme-store-extraction`) are owner-one-click
   deletions (branch -D is permission-denied at the seat).
 - **#709 ADJUDICATED (2026-08-02, recorded on the PR)**: SUPERSEDE for the
   design lane (its design-consumption substance landed via ADR-217, #710,
@@ -855,7 +855,7 @@ adjudication (`.agent/reports/design/plan-review-2026-08-02/`, on origin at
 ## Session update 2026-08-03 ~06:50Z (Corsair hunts Surf, 4d3282 — PR1 COMMITTED + PUSHED)
 
 - **PR1 landed on its branch**: commit `a17ee7000` pushed and
-  ls-remote-verified on `origin/jimcresswell/pds-identity-w0-census-validator`
+  ls-remote-verified on `origin/<owner>/pds-identity-w0-census-validator`
   through the FULL pre-commit + pre-push chains. Contents: the
   identity-naming validator split at the meaningful seam
   (`validate-identity-naming-tokens.ts` = forbidden vocabulary + scanning;
@@ -910,7 +910,7 @@ CONTINUES post-compaction. Claims `953f9f8c` + `6dff4c64` RETAINED.
 **RESUME STATE, exact — PR #729 cure round is MID-FLIGHT:**
 
 - PR #729 open (bot-opened, Copilot requested at open), branch
-  `jimcresswell/pds-identity-w0-census-validator`, remote tip `2d33851b2`
+  `<owner>/pds-identity-w0-census-validator`, remote tip `2d33851b2`
   (bot-authored). Code-expert round-1 verdict: CHANGES REQUESTED (report
   in this session's dispatch; substance mirrored in the cure list below).
   A dispatched test-expert AND the cure implementer BOTH wedged inside
@@ -1205,7 +1205,7 @@ no-handover-commits.
   findings, comment 5218785245, delegated decisions in the handoff record §3 — do not
   re-open) → slice 2 ddr-graph validator → slice 3 completion-plan §Review record truing
   → slice 4 (#787 merge; #806 OWNER-CARD only, review-gated; #737 cure + re-request
-  mantagen). The SEALED two-act payload (combined window `a729c466` + capability-floor
+  the second code owner). The SEALED two-act payload (combined window `a729c466` + capability-floor
   rewrite) opens ONLY at the owner's work-word.
 - **Window posture binding this tenure**: owner away ~10h from 20:30Z; pace SLOWLY;
   pre-approval lifts no standing rule; constitutively-owner items hold to morning with a
@@ -1290,7 +1290,7 @@ no-handover-commits.
   with the mandated delta-verify (`wf_034bd28a-b2f` + scoped re-verify):
   round 1 six blockers all cured in-window, round 2 CLEAN, slope 6 → 0.
   THE ZERO BAR IS MET.
-- **PR #828** (`jimcresswell/design-combined-window-cures`, commit
+- **PR #828** (`<owner>/design-combined-window-cures`, commit
   `b82e44192`, bot-pushed/bot-opened, full gate green incl. the
   identity-naming ratchet): the plan + the durable round-2 record
   `re-review-2026-08-06.md`. Copilot requested as selective bonus. Merge
@@ -1438,7 +1438,7 @@ no-handover-commits.
   `0cfdd701` PROCEED (both dissents verified-dissolved at their seat; one
   tightening adopted into the rubric: EVERY expert leg on opus).
 - **PR-A built, pre-reviewed, and OPEN: #830** (branch
-  `jimcresswell/design-w07-rubric-register`, worktree `w07-instrument`).
+  `<owner>/design-w07-rubric-register`, worktree `w07-instrument`).
   Lands: rubric v0 (seven criteria; ordered-calm verbatim;
   FAIL-blocks-render + rule-3 routing; Oak-only sections, W0.10 mints the
   rest), the wow-verdict register (zod boundary on the hub precedent;
@@ -1557,7 +1557,7 @@ no-handover-commits.
 
 - **The calibration ran end to end in one window**: worktree
   `w07-calibration` cut off the #830 merge commit (branch
-  `jimcresswell/design-w07-calibration`); eight-page corpus staged
+  `<owner>/design-w07-calibration`); eight-page corpus staged
   ANONYMISED in scratch (`page-N/`, randomised, sibling assets carried);
   four must-fail fixtures authored with neutral names, each scoped to
   its targeted criteria; seat leg recorded and SEALED before dispatch
@@ -1651,7 +1651,7 @@ no-handover-commits.
   PDR-082; re-arm the ARC tail either way if the channel is open).
 - **CENSUS STATE (resume gated on the pull-forward node's completion,
   its todo 5)**: worktree `w01-census` LIVE, branch
-  `jimcresswell/design-w01-census` at base `8f473f867`, carrying TWO
+  `<owner>/design-w01-census` at base `8f473f867`, carrying TWO
   untracked files — `packages/design/oak-design-tokens/src/design-census/census-types.ts`
   (slice A's types, authored) and `W01-CYCLE-PLAN-v2.md` (the
   adjudicated cycle plan v2, conserved from session scratch: homes per
@@ -1778,7 +1778,7 @@ RESUME MAP (execute in order):
    F-95 assert, foreground gap sweep (watcher buffer + ARC channel +
    canonical stream since 2026-08-09T13:55:59Z), heartbeat pair (claim 645b9e0b,
    intent identity-switchboard-first-pixels, branch
-   jimcresswell/design-identity-switchboard-pr1, cycle label per the
+   `<owner>/design-identity-switchboard-pr1`, cycle label per the
    live state), peer-liveness read.
 2. Read #834 first-hand: checks on c0d415726 (Sonar leg included — the
    swap should hold the duplication clearance; re-fire via empty commit
@@ -1860,7 +1860,7 @@ RESUME MAP (execute in order):
 1. Resume ceremony per start-right — RE-ARM everything: canonical
    all-channels watcher from PRIMARY, F-95 assert, heartbeat pair
    (claim 645b9e0b, intent identity-switchboard-first-pixels, branch
-   jimcresswell/design-identity-switchboard-pr1, cycle label
+   `<owner>/design-identity-switchboard-pr1`, cycle label
    pr1b-cure-round-6), foreground gap sweep since
    2026-08-09T17:05:00Z, peer-liveness read.
 2. #834 cure round 6: read FIRST-HAND the adjudicated packet (PR
@@ -1899,7 +1899,7 @@ ESLint gate; M4 group-gone release proof; M5 sentinel on the attach
 path; M6 lease self+liveness; M7 real-IO proof homes; M8 in-page fonts
 bound, no AbortSignal), ALL adjudicated into the addendum before code.
 
-LANDED AND PUSHED on jimcresswell/design-identity-switchboard-pr1:
+LANDED AND PUSHED on `<owner>/design-identity-switchboard-pr1`:
 
 - SHA:aacc4ea58 slice 1 — BV-1 strictObject ×3 red-first; BV-2
   Result-typed resolveBase + allowLoopbackOrigin; R6 call sites.
@@ -2131,7 +2131,7 @@ STATE, all first-hand:
 
 - **#834 MERGED** `6804726e2` — `packages/libs/fidelity-review` is on main.
 - **PR-2 lane LIVE**: worktree `identity-switchboard-pr2`, branch
-  `jimcresswell/design-identity-switchboard-pr2`, cut from a verified-clean
+  `<owner>/design-identity-switchboard-pr2`, cut from a verified-clean
   `origin/main`. FOUR files uncommitted and GREEN (build, type-check,
   identity ratchet all pass; lint/authored-css/tests NOT yet run).
 - **2 of 10 specimen regions render** (utility, masthead) with the brand
@@ -2443,7 +2443,7 @@ cure landed there; minimal repro isolated ancestry, not the element.
 The rebuilt identity-switchboard estate is a DRAFT PR: #846, head
 efe69380, bot-authored. Everything above (outline → verdicts → rebuild →
 matrix → register → doctrine) is landed and pushed on
-jimcresswell/design-identity-switchboard-pr2. Draft solely against the
+`<owner>/design-identity-switchboard-pr2`. Draft solely against the
 org review-credit wall; Copilot request silently dropped (repo-wide
 condition, recorded). Next session: un-draft when credits return, absorb
 review, then the queued domain items (design-system-usage re-truing/
@@ -2662,7 +2662,7 @@ all processes." Claim `645b9e0b-afea-4743-8cc6-5dad3ad39575` RETAINED.
 An INDEX, not a summary.
 
 STATE, first-hand at freeze: PR #846 branch
-`jimcresswell/design-identity-switchboard-pr2` at `995e7e08c` — clean,
+`<owner>/design-identity-switchboard-pr2` at `995e7e08c` — clean,
 local == remote. Coordination `coordination/2026-08-11-7b3df0` at
 `87978266b` + this entry. Sonar on PR #846: ONE open MAJOR — S6845
 (owner-gated, per-site accept with the PR #565 precedent at his word).
@@ -3043,7 +3043,7 @@ purge of orphaned components (Switchboard-on-front, Hero, TypeSpecimen,
 ButtonsSpecimen, TagsSpecimen, CardSpecimen — knip forces same-commit
 deletion; provenance listed in the commit).
 
-PUSHED STATE: branch jimcresswell/design-identity-switchboard-pr2 at
+PUSHED STATE: branch `<owner>/design-identity-switchboard-pr2` at
 `1f730517a` (specimen keyboard cure, slice 1: hero headline takes the
 skip target; census cells; mutant-proven). A11y suite 42 green / 6
 declared pds masthead reds (removal = masthead cure, task #18).
@@ -3075,13 +3075,13 @@ humans, agent-optimised for agents.
 RE-ARM AT RESUME: watcher (canonical invocation, heartbeat-excluded,
 3600s backstop, re-arm on exit + sweep) + F-75 diff poll + heartbeat
 pair on the retained claim (comms leg: intent design-lane-pr-846,
-branch jimcresswell/design-identity-switchboard-pr2, cycle label
+branch `<owner>/design-identity-switchboard-pr2`, cycle label
 tight-scope-showcase; claims leg: --active absolute path, --now
 required). Dev server only when pixels are being shown.
 
 ## SESSION CLOSE 2026-08-13 evening (Swordfish wakes Trench, d0274e — owner-called close-out; successor picks up the lane)
 
-- THE RESUME MAP IS THE RATIFIED PLAN: `.agent/plans/delivery/design-showcase-experience.plan.md` (owner-ratified 2026-08-13, commit 96115d142 + true-up 76a0d9e13, PR-2 branch, pushed). Execution opens at W1 (kit responsive foundations) then W2 (composition rebuild from scratch). Branch jimcresswell/design-identity-switchboard-pr2 tip 76a0d9e13 == origin, tree clean. PR #846 draft. Playwright: 48 green + exactly six declared pds masthead reds (any OTHER red is new information). Landed today: a967f8979 (tight-scope landing, narrow-first picker, complete pds rename across demo+kit, test re-target).
+- THE RESUME MAP IS THE RATIFIED PLAN: `.agent/plans/delivery/design-showcase-experience.plan.md` (owner-ratified 2026-08-13, commit 96115d142 + true-up 76a0d9e13, PR-2 branch, pushed). Execution opens at W1 (kit responsive foundations) then W2 (composition rebuild from scratch). Branch `<owner>/design-identity-switchboard-pr2` tip 76a0d9e13 == origin, tree clean. PR #846 draft. Playwright: 48 green + exactly six declared pds masthead reds (any OTHER red is new information). Landed today: a967f8979 (tight-scope landing, narrow-first picker, complete pds rename across demo+kit, test re-target).
 - ASSUMPTIONS THE SUCCESSOR MUST QUESTION (owner instruction at close): (1) worktree copies of coordination-authored corpus LAG — check the coordination branch before trusting any status/relationship claim read from the PR-2 branch (proven instance: the pr-846-review-fleet row, cured 76a0d9e13); (2) the ratified plan's citations were fleet+Director+owner checked but re-verify load-bearing ones at pickup — one staleness survived ratification by hours; (3) the guard hypothesis (worktree agent-tools/dist built 17:17 → enforcement began) is corroborated, not cured — watcher/comms writes may still be blocked; interim protocol = cross-session send + warden append + ARC read at boundaries; (4) the radio-control ruling and the R13 correction are owner-verbatim in the plan's rulings table and per-user memory — read the quotes, never a paraphrase; (5) whether the switching page re-affirms or reverses identity non-persistence + client-side-switch-not-production was delegated to the plan author and NOT seat-verified — check the plan's W3 before building; (6) session task-board specs for old bundles (#17/#18) predate the plan — the PLAN governs, tasks are pointers; (7) pixels: the owner approved the landing and picker AT his screenshot moments; nothing after 76a0d9e13 has been shown to him; (8) this seat's earlier ARC/record timestamps were local-time-written-as-Z.
 - Day's owner rulings all carried in the plan's rulings table R1-R13 + per-user memory (authority-identifiable-and-appropriate is THE generator memory; css-owns-appearance-including-visual-order carries the envelope correction verbatim; lowest-effective-level generalisation in R10 + ratified_where).
 - Estate: the outgoing identity = zero in design surfaces (census 19 residual .agent carriers routed to Director); comms watcher DOWN at this seat since ~17:17 (guard); heartbeat pair honest until stopped at this close; MEMORY.md per-user index owes a careful compaction (19.7KB > 17.1 target).
@@ -3231,7 +3231,7 @@ visual work requires visual assessment — "verdicts on visual design
 work without visual validation or proof are at best insufficient, at
 worst, utterly and avoidably incorrect, without value and actively
 misleading"; "that means screenshots, via playwright or whatever means
-you prefer"; standing rules — never request Matt (mantagen) as a
+you prefer"; standing rules — never request Matt (a code owner) as a
 reviewer; never tag anyone in a Linear ticket without express request.
 
 **PICKUP ROWS (dispositioned, in priority order):**
@@ -3327,7 +3327,7 @@ artifact, URL in the session wrap-up).
   amended; (7) `design-system-completion` stripped of authority, knowledge
   conserved.
 - **Records-truth pass EXECUTED (MCP-613)**: commit `6e88cb407` on lane
-  branch `jimcresswell/mcp-613-design-lane-records-truth-pass-cure-the-owed-true-ups-ledger`
+  branch `<owner>/mcp-613-design-lane-records-truth-pass-cure-the-owed-true-ups-ledger`
   (worktree `mcp-613-records-truth-pass`, cut from origin/main at
   1.171.0). Contents: guard claim struck (brand.css §1b + CHANGELOG); R16
   landed verbatim as a rulings row; a dated landed-state surface in the
@@ -3372,7 +3372,7 @@ artifact, URL in the session wrap-up).
   `tango-identity-pack.plan.md` (born-sketch, delivery, serves the
   strategic node, beneficial edge to design-showcase-experience) plus the
   paired readiness-review record, committed `714509339` on
-  `jimcresswell/mcp-615-tango-identity-pack-plan-node` (worktree
+  `<owner>/mcp-615-tango-identity-pack-plan-node` (worktree
   `mcp-615-tango-pack-node`, cut from local origin/main `05cca303f`; a
   SECOND EnterWorktree mis-base fixed forward — `scrap/mcp-615-mis-based`
   awaits owner one-click deletion). Gates: pre-commit chain green,
@@ -3462,7 +3462,7 @@ artifact, URL in the session wrap-up).
 ## Session close 2026-08-17 ~20:05Z (Yarrow stirs Undergrowth, ab1066 — additive; T1a-i LANDED; overnight stand-down, claim RETAINED)
 
 - **T1a-i LANDED at `cd84e490c`** on
-  `jimcresswell/mcp-616-t1a-identities-tier-boundary-leg` (worktree
+  `<owner>/mcp-616-t1a-identities-tier-boundary-leg` (worktree
   `mcp-616-t1a-identities-tier`, off origin/main `05cca303f`): the
   `packages/design/identities/*` tier (glob + tier README + design-index
   row) + the `validate-boundaries` structural leg (pure module
@@ -3587,14 +3587,14 @@ artifact, URL in the session wrap-up).
   CI leg) → every finding cured or dispositioned → ONE multi-ref bot
   push (gate suite paid once): **#907 `62df2091c`, #908 `41db188a0`,
   #909 `83c95cc03`, #910 `4d74164b5`** → 8 threads replied+resolved,
-  4 mantagen rounds dismissed-at-cure (verified), response comment per
+  4 code-owner rounds dismissed-at-cure (verified), response comment per
   PR (author read-back jimbot-oakington-iii[bot] on every write),
   Copilot RE-REQUESTED on #907/#909 (timeline-bound), #910 body scope
   note updated, token deleted.
 - **Working record**: `.agent/reports/design/pr-round-ledger-2026-08-18.md`
   (committed this parcel) — the state machine's tally store, expected
   reviewer set (claude[bot]+Codex = quota skip markers, re-check per
-  round; mantagen NOT on-demand, dismiss-at-cure; Copilot on-demand on
+  round; the second code owner NOT on-demand, dismiss-at-cure; Copilot on-demand on
   907/909), round-1 dispositions, and the carried gateway residue with
   named homes.
 - **Load-bearing diagnoses** (napkin carries the generators): the CI
@@ -3618,7 +3618,7 @@ artifact, URL in the session wrap-up).
   owner/Director redirects.
 - **Morning resume order**: (1) re-arm per start-right; (2) harvest
   round 2 (pr-lifecycle phases 3–7; the ledger is the tally store;
-  batch one adjudicated round per push; dismiss-at-cure for mantagen;
+  batch one adjudicated round per push; dismiss-at-cure for the second code owner;
   merges per merge rulings at the Director's seat); (3) the owner's
   four visual fixes as the next BUILD round (composition control rows;
   tokens two-column-as-norm; the hard no-overflow rule — the
@@ -3648,7 +3648,7 @@ artifact, URL in the session wrap-up).
   minting NO timeline events — verify writes on the system's proof
   surface).
 - **Act 2 — the owner's four visual items BUILT** and shipped as
-  **draft PR #912** (branch `jimcresswell/mcp-620-visual-feedback-round`,
+  **draft PR #912** (branch `<owner>/mcp-620-visual-feedback-round`,
   four parcels `290eb8070`/`f77af9e9e`/`e46c36477`/`b114d5206`,
   STACKED on #907): control rows; token rows flowing two columns under
   spanning headers (table + scroll container + round-2 overflow hook
