@@ -1603,12 +1603,15 @@ inside a rule name).
   outage, the policy off, or a quota. oaknational#1065 keeps the option for that case and
   its documents are to say so.
 - **oaknational#1065, Copilot's second round, on `f917e7929`: four findings.** The push that
-  carried the first cures was reviewed automatically, in the bot's name, two seconds after
-  it landed; that was before the rulesets changed. Each finding was checked in the code.
-  - _An automatic Codex review can be under way and not show._ Upheld. The connector is
-    installed on Oak's repository (it has commented on 621 pull requests, the last on
-    2026-11-03), takes a ready-for-review event as its cue, and is counted a reviewer only
-    once it comments. Cure: the option does not apply within one quiet window of the last
+  carried the first cures was followed by a review request in the bot's name, with no
+  request call by the seat; the rulesets changed ten minutes later (their `updated_at` is
+  10:48 UTC, the request 10:38). That the request was the on-push rule's, and came two
+  seconds after the push landed, is read from those times and is an inference. Each finding
+  was checked in the code.
+  - _An automatic Codex review can be under way and not show._ Upheld. The connector has
+    commented on 621 pull requests of Oak's repository, the last on 2026-11-03; that it is
+    still installed is inferred from that. It takes a ready-for-review event as its cue and
+    is counted a reviewer only once it comments. Cure: the option does not apply within one quiet window of the last
     ready-for-review event, and the function is renamed so its name claims no certainty.
   - _The reviewer set leaves out some reviews._ Upheld. An approval or a change request with
     an empty body, a draft in progress and a review by a deleted account are none of them in
@@ -1640,12 +1643,13 @@ inside a rule name).
     and the name `unreviewedForCertain`, which claimed a certainty its reading cannot give.
     The check that would have caught each: name the observation the statement rests on, and
     read that.
-  - _Decisions on the cures that follow._ One pull request trues the statements: the seven
+  - _Decisions on the cures that follow._ One pull request trues the statements: the eight
     validator headers that say the gate runs at the commit hook (`identity-naming`,
     `notion-fence`, `machine-local-paths`, `lifecycle-scripts`, `claim-freshness`,
-    `policy-reappraisal`, `pretooluse-guard-routing`), the comment on `reviewConfiguration`,
-    and the evidence line, which is to say that an author on a ruleset's bypass list is not
-    reviewed by it. Not done: splitting the verdict name `SILENT-WAIT-NO-REVIEWER` in two.
+    `policy-reappraisal`, `pretooluse-guard-routing`, `workspace-config-isolation`; the
+    third also names `repo-validators:check` where it runs in `docs-validators:check`), the
+    comment on `reviewConfiguration`, and the evidence line, which is to say that an author
+    on a ruleset's bypass list is not reviewed by it. Not done: splitting the verdict name `SILENT-WAIT-NO-REVIEWER` in two.
     The verdict set is a contract, the one known trap is closed (the no-review option reads
     the reviewer set, not the name), and no second consumer has tripped on it.
   - _Associations from the free play, none of them a finding._ The June reports on review
@@ -1673,3 +1677,38 @@ inside a rule name).
   session of its own with a plan node not yet written: the pages the foundation page links
   to and the Practice's definitions. Under the names plan: the reviewer templates not yet
   read line by line. Not started without the owner's express request: the v1 migration.
+  This seat's open claim on `agent-tools/src/merge-bot/**` closes when the verb lands.
+- **The code reviewer's reading of the cures, before the commit (`ca3a04f65`).** Eleven
+  findings, each checked. Cured: an approval or a change request by another account was
+  still merged past when its body read like a skip notice, a failed-run notice or a signed
+  reply, so those three are now trusted on a `COMMENTED` review alone; a deleted account is
+  never the author's own; the checks going green is a second cue beside the ready event,
+  for a pull request opened ready; a time that cannot be read holds; a refusal with a
+  reason given says what stood in the way under any verdict and names the way forward; the
+  window's edge, several ready events and each of these are tested; five statements in the
+  usage text and the documents that the code contradicted. Stated and not cured: another
+  account's draft is not in the harvest; a comment saying a review is under way is not
+  read; an App and a person whose login is the App's slug read as one account; the
+  time-based refusal is terminal, so the caller runs the command again. Left as they are:
+  a review run that ended seconds ago has no window of its own; a full list of a hundred
+  review runs closes the path for that sign-in (it did so before this change); the exported
+  outcome type does not carry the null verdict state.
+- **A bot push is still reviewed automatically.** Seen 2026-11-22: the cure push to
+  oaknational#1065 landed at 11:29 UTC and a Copilot review was requested in the bot's name
+  at 11:29:41, forty minutes after the rulesets changed, with the bot's app on the bypass
+  list of the one ruleset that carries `review_on_push: true`. So a place on a ruleset's
+  bypass list does not stop that ruleset's automatic review, or not for an App. The
+  owner's design (bots reviewed at open, then only on request) is not what the rulesets
+  give; every bot push is a billed review. Put to the owner; the rulesets are the owner's.
+- **A finding for a lane of its own.** Any comment by the Codex connector makes it a
+  reviewer (`state-compose.ts`), a usage-limits notice included, where the same notice from
+  another bot as a review object makes nobody one. A connector with no credit that answers
+  every ready event with that notice would hold every pull request at a leg nobody serves.
+  Not seen on Oak's repository since 2026-11-03. No change made.
+- **The code owners file gates nothing.** Read 2026-11-22: its default line names four
+  accounts on every path, and the default branch's ruleset requires no approval and no code
+  owner review. The line's one effect is the review request, and its notification, to four
+  people on every pull request that leaves draft.
+- **What this record cannot show.** It was written after a compaction, from the summary the
+  compaction left and from what was read again afterwards. Anything the earlier context held
+  and the summary dropped is in the session transcript only.
