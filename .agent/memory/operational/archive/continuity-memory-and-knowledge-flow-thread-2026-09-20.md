@@ -52,7 +52,7 @@ owns the *memory/context substrate* lane it spawned from the 2026-07-03
   memory (`verified-correct-is-not-a-proportionality-test`) deleted; (3) done
   the same day: PDR-141 Accepted (owner-ratified, `dd813b6ef`) and the
   seeded profile ratified with three owner additions (Castr and
-  jimcresswell.net as consumers, British English always, Oak systems off
+  the sibling estate as consumers, British English always, Oak systems off
   limits on Engraph forks always); (4) the three pickup fixtures posted on
   #144 become tests when a recorded input reaches them. The first drain (2026-07-05) was complete end-to-end
   (all strata; index empty, live-only, untruncated; every entry file

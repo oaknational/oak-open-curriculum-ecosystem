@@ -267,7 +267,7 @@ in the estate beats three with a new vendor account.
 
 | PR | State |
 |---|---|
-| **#902** operator-local tier + identity action-class split | **OPEN, all 15 checks PASS**, `BLOCKED` on the code-owner gate only, review requested from `mantagen` |
+| **#902** operator-local tier + identity action-class split | **OPEN, all 15 checks PASS**, `BLOCKED` on the code-owner gate only, review requested from `<code-owner>` |
 | #900 owner-liaison seat brief | open, draft, retention only |
 | #867, #761 | open, ours, unchanged — #761 still 1000+ behind with conflicts, unanswered |
 
@@ -280,25 +280,25 @@ word, and only the wrap's metaloss pass caught it. **Inherited claims are claims
 ### The PR Review Warden seat is armed, with merge authority
 
 Owner instruction: *"i want to set up a colpilot agent to be doing code reviews …
-watching for any open PRs with 'mantagen' requested review … reviewing as identity
-'mantagen' and should turn on automerge too"*.
+watching for any open PRs with '[his account]' requested review … reviewing as identity
+'[his account]' and should turn on automerge too"*.
 
 - Worktree `oak-pr-review-warden` on `chore/pr-review-warden`, **fast-forwarded from
   668-behind to `05cca303f`**, installed, built, `.env.local` copied, bare `eslint`
-  proven to resolve, `gh` confirmed as `mantagen`.
+  proven to resolve, `gh` confirmed as `<code-owner>`.
 - **Seat brief revision 2** at
   `.agent/state/collaboration/handoffs/pr-review-warden-seat-brief.md` (machine-local).
   Revision 1's *"Never merge"* is **withdrawn by the owner**.
 - **Auto-merge authorised** under six conditions (approved, all threads resolved,
-  checks green, not a draft, not `mantagen`-authored, no open findings), `--merge` only
+  checks green, not a draft, not `<code-owner>`-authored, no open findings), `--merge` only
   (repo is merge-commit-only), never `--admin`. **Hands off and route to the Director**
   for release/CI/ruleset config, credentials or auth guards, `.agent/` doctrine, and
   anything deleting or disabling a gate.
 - **The self-review wall bites immediately:** GitHub forbids a PR's author from
-  reviewing it, so posting as `mantagen` the warden can only *comment* on MG's own PRs
+  reviewing it, so posting as `<code-owner>` the warden can only *comment* on MG's own PRs
   (#772, #768, #750) — it cannot approve or usefully arm auto-merge there.
 - Queue was **0** at setup — control-probed against 15 open PRs, a true zero, with every
-  requested review pointing at `jimCresswell`. It is now **1**: PR #902.
+  requested review pointing at the other code owner. It is now **1**: PR #902.
 
 ### Owner facts settled today — do not re-ask
 
@@ -307,7 +307,7 @@ watching for any open PRs with 'mantagen' requested review … reviewing as iden
   **The consequence that matters more than the dates: route anything MG-needing the
   SAME DAY it is discovered, never batched.** Thursday is fine; Friday afternoon costs
   nine days. This supersedes the record's earlier "20 August".
-- **Credential split, verbatim:** *"emgee-bot for commits/PR raises … mantagen for
+- **Credential split, verbatim:** *"emgee-bot for commits/PR raises … [his own account] for
   reviews/approvals."* Landed as **tracked doctrine** in
   `bot-identity-on-third-party-systems` §"The action-class split" (PR #902), general
   rather than per-seat. This **resolves** the review-warden-grant tension earlier
@@ -530,7 +530,7 @@ pure 2xx check that cannot distinguish them, and cannot express MCP-481's AC2 at
    `gh`-is-not-ambient class. **Carry the token line verbatim in any brief**; briefing
    "use emgeebot, it's ambient" is the git half and caused two of the six.
 2. **Answering a review is not finished until emgeebot re-requests review from
-   `mantagen`** — otherwise it never re-enters his filtered queue. #880 sat answered
+   `<code-owner>`** — otherwise it never re-enters his filtered queue. #880 sat answered
    and green for **four days**, invisible. Verify against the queue search, never the
    POST's echo.
 
@@ -602,7 +602,7 @@ here. Do not chase it and do not re-ask who owns it.
 | PR | State |
 |---|---|
 | **#878** MCP-580 canonical `/healthz` | **MERGED and LIVE** — production returns `200`, `no-store`. |
-| **#880** MCP-594 client attribution | Open, all checks green, blocked on MG's own `CHANGES_REQUESTED`; request moved to `jimCresswell`. |
+| **#880** MCP-594 client attribution | Open, all checks green, blocked on MG's own `CHANGES_REQUESTED`; request moved to the other code owner. |
 | **#881** MCP-301 public documentation | Open. 24 claims sourced, 7 gaps as owner options. |
 | **#882** knowledge + consolidation | Open, based on the coordination branch. |
 | **#883** MCP-595 carousel | Open, 19/19 green, awaiting Aakesh's name verification. |
@@ -729,7 +729,7 @@ forgotten.
   worktrees: spawn-created ones pass the pre-commit gate; a hand-rolled one
   cannot, and the failure presents as a `next/font/google` build error.
 - **`gh` is authenticated as the owner even though git is ambient emgeebot.** A
-  bare `gh pr create` authors as `mantagen` and silently drops the reviewer
+  bare `gh pr create` authors as `<code-owner>` and silently drops the reviewer
   request, leaving the code-owner gate unsatisfiable. Mint a token; verify with
   `--json author,reviewRequests`. Five instances to date.
 - **A non-existent path under `/mcp/` returns 406, not 404.** Any check written

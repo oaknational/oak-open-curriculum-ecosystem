@@ -2,7 +2,7 @@
 
 Moved byte-identical from `.agent/memory/operational/repo-continuity.md` §Next Safe Steps on 2026-10-14 by the third
 dedicated two-estate consolidation (Flint guards Vapor, 9b835d, working this estate non-resident from
-jimcresswell.net on lane docs/consolidation-3): two sections whose lanes are retired by their own words, their records intact under `threads/paused/` and `threads/retired/`. The two bodies below are lines 2699 to 2705 and 2742 to 2751 of the file as
+the sibling estate on lane docs/consolidation-3): two sections whose lanes are retired by their own words, their records intact under `threads/paused/` and `threads/retired/`. The two bodies below are lines 2699 to 2705 and 2742 to 2751 of the file as
 committed at that lane's tip before the move, cut whole and compared byte for byte before the live file
 was written.
 

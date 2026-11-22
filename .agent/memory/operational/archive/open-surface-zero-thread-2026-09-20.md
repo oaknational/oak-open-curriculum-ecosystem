@@ -89,7 +89,7 @@ immediately. Preserve pushed work through a PR or an explicit disposition.
 - `.claude/worktrees/pr745-reconcile`: clean; local head equals the locally recorded remote tip
   `99a98d6aab38882934682bb7c7954ed7431a7c80`; PR merged.
 - `.claude/worktrees/agent-ae83805b5d032d770`: clean; local head equals locally recorded remote
-  `origin/jimcresswell/deploy-reliability-plan-node` at
+  `origin/<owner>/deploy-reliability-plan-node` at
   `83fe7845c5c42ed3c35c5310e70bc9a05c9828b9`; PR merged.
 - `.claude/worktrees/codeql-action-4.37.6-atomic`: clean; its configured upstream is incorrectly
   `origin/main`, but the locally recorded PR remote ref equals local head
@@ -159,8 +159,8 @@ immediately. Preserve pushed work through a PR or an explicit disposition.
   relayed by Kiln holds Slag; the 2026-09-01 sentence here that called the owner's approval
   "the one leg only he can satisfy" was wrong and was transmitted to the owner twice on
   2026-09-02 before the correction); Copilot reviews on every push (`review_on_push: true`),
-  so it is the expected reviewer for the settlement read. CODEOWNERS auto-requested `jimCresswell` and
-  `mantagen` (GitHub's mechanism; mantagen is a colleague on trust, never chased). Copilot's
+  so it is the expected reviewer for the settlement read. CODEOWNERS auto-requested both code
+  owners (GitHub's mechanism; the second is a colleague on trust, never chased). Copilot's
   request bound at 12:24:44Z (timeline). Codex is at its usage limit — a scope-declared skip.
   Instruments: `pnpm agent-tools:pr-watch 945 --repo oaknational/oak-open-curriculum-ecosystem --watch`;
   `pnpm agent-tools pr state 945 --expect copilot-pull-request-reviewer` (read
@@ -271,7 +271,7 @@ immediately. Preserve pushed work through a PR or an explicit disposition.
   `IssuerMismatchError` module-private; an app delta-review map over `max-lines`, cured by
   homing the two entries in the auth-surface map).
 - Worktree `oak-open-curriculum-ecosystem-worktrees/pr-943-engraph`; draft PR **#946** under
-  the bot (assigned `mantagen`, plain-language body); the withdrawn disclaim-only draft is
+  the bot (assigned to a code owner, plain-language body); the withdrawn disclaim-only draft is
   preserved as a patch in the implementing session's scratchpad only — its substance is on the
   ticket and in the node's history; the tree carries none of it.
 - **State 2026-09-02 ~09:0xZ (trued after the owner-held proof day):** the review round

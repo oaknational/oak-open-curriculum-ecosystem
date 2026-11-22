@@ -145,7 +145,7 @@ merge_class: index-narrative-tables
 
 State (all first-hand-verified at the wrap): #714 fold review 12/13
 threads resolved; the thirteenth (generator walk) resolves at the PR
-\#731 merge. \#731 (branch `jimcresswell/parallax-family-generator`
+\#731 merge. \#731 (branch `<owner>/parallax-family-generator`
 at d271622b4, three commits off the coordination branch) carries the
 R1-adopted WS6 pair: Parallax relocated to `.agent/skills/parallax/`,
 family-aware discovery (discovery.ts shared by generator+checker),

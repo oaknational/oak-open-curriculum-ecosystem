@@ -330,7 +330,7 @@ the re-label is recorded here, and that archive stays verbatim.
 > **LIVE FLEET AT THIS WRITING (one peer):** **Willow holds Compost** (`3a2054`, copilot-cli),
 > claim `dcbefb47`, role `reviewer` — the PR Review Warden, on worktree
 > `oak-pr-review-warden-gpt5` / branch `chore/pr-review-warden-gpt5`, holding a **21-PR**
-> `review-requested:mantagen` queue (independently measured by both seats). Its seat brief is
+> `review-requested:<code-owner>` queue (independently measured by both seats). Its seat brief is
 > revision 3 at `.agent/state/collaboration/handoffs/pr-review-warden-seat-brief.md` (untracked).
 > Two implementer lanes were dispatched and have reported: OWA #4454's review findings (landed,
 > `b390edc289`) and MCP-103's content workspace (step zero done, awaiting an owner ruling).
