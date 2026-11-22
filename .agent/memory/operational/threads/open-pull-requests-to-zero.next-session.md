@@ -1601,7 +1601,9 @@ inside a rule name).
 - **The no-review option is a fallback now.** With one automatic review at open on every pull
   request, the reviewer set is empty only when that review was never asked: the vendor's
   outage, the policy off, or a quota. oaknational#1065 keeps the option for that case and
-  its documents are to say so.
+  its documents are to say so. An empty reviewer set is not enough for the option to apply:
+  as merged, it also refuses while a review can have started unseen (the second round's
+  first finding, below).
 - **oaknational#1065, Copilot's second round, on `f917e7929`: four findings.** The push that
   carried the first cures was followed by a review request in the bot's name, with no
   request call by the seat; the rulesets changed ten minutes later (their `updated_at` is
@@ -1625,8 +1627,9 @@ inside a rule name).
   - _The refusal object under `--json` has a different shape._ Upheld. Cure: the same keys as
     every refusal, with `verdictState: null` because no verdict was read.
 - **The cure push is the second settlement push and the last.** The review-cost survey reads
-  oaknational#1065 at `warn`, 26.25 of 40. No third round is requested: the cures are read by
-  the code reviewer before the commit. That push is also the first by a bot since the
+  oaknational#1065 at `warn`, 26.25 of 40, a reading taken before the cure push; the ledger's
+  row holds the settled value, 42.65 of 40, after an automatic third round. No third round
+  is requested: the cures are read by the code reviewer before the commit. That push is also the first by a bot since the
   rulesets changed, so it shows whether a bot push is still reviewed automatically.
 - **Every bot pull request asks four people for a review.** When the pull request is marked
   ready, GitHub requests the code owners, in the bot's name; the code owners file names them
@@ -1662,7 +1665,8 @@ inside a rule name).
     it should be easier than that" was a prompt to look for the documented path, and it was
     right. Three review passes over the no-review option (the code reviewer before the
     commit, Copilot twice) gave twelve findings with none in common, so a further pass says
-    little about how many remain. Set aside: the bypass list read as a deprivation (forced),
+    little about how many remain. That count is from before the cure push; the code
+    reviewer's reading of the cures then gave eleven more and Copilot's third round one. Set aside: the bypass list read as a deprivation (forced),
     and stacking local lanes (nothing in it).
   - _What the world has yet to show._ A bot pull request asked of Copilot once at open and
     not on a later push. A person's push reviewed again, with the person covered by both

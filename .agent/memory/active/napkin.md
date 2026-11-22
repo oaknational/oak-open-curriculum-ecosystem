@@ -231,6 +231,8 @@ The account with its sources is the addendum to the reunification retrospective 
 - **Surprise (2026-11-22):** three review passes over one merge-gate change (the code reviewer
   before the commit, Copilot twice) gave twelve findings with none in common. Reviewers
   sample different regions, so a clean pass by one says little about what another finds.
+  Counted before the cure push; the code reviewer's reading of the cures then gave eleven
+  more and Copilot's third round one.
 - **Mistake (2026-11-22):** I wrote "forty-four requests from eleven pull requests" in a
   record from three timelines and a guess at the rest. The count was fifty-two from
   thirteen. A number in a record is counted before it is written.
