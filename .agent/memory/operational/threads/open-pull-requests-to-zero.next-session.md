@@ -1931,8 +1931,10 @@ it; the hand-on entry of the earlier seat is the order of work they answer.
   the review came back with one finding.
 - **A gap in the bot's tooling, found on oaknational#1068.** `merge-bot pull-request` has no
   verb that edits a pull request's title or description. A description written at a draft's
-  first commit goes stale as a coordination branch accrues, a reviewer raises it, and the
-  only cures are a comment or an edit through a person's sign-in. Not started.
+  first commit goes stale as a coordination branch accrues and a reviewer raises it. The edit
+  is still the bot's to make: `.agent/reference/merge-bot.md` gives the route, a token minted
+  with `mint-token --scope pull-request-work` and a `PATCH` of the pull request. This seat
+  answered by comment on #1068 and did not use that route. The typed verb is not started.
 - **How the tooling behaved, for a seat's timing.** A push through the hook took three to six
   minutes; CI took eight to fourteen, once twenty-five with one job slow to start; the merge
   door then waits a quiet window of about four minutes. One pull request from push to merge
