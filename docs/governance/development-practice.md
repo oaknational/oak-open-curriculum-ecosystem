@@ -15,7 +15,10 @@ NEVER disable checks of any kind, ever.
 
 ## Quality Gates
 
-The quality gates must be run after all major changes, and before each commit:
+The quality gates run in the Git hooks and again in CI. The commit hook runs
+the format, Markdown and lint checks on what the commit changes; the push hook
+runs `pnpm check`, the whole set, before anything leaves the machine. The
+commands below are the parts, for reading a failure and curing it:
 
 - `pnpm sdk-codegen` - Type generation
 - `pnpm build` - Build
@@ -30,9 +33,8 @@ Locally we can also run
 - `pnpm test:e2e` - E2E tests (use mocks and dependency injection; no service
   credentials required)
 
-For AI agent execution order, follow directive-defined one-gate-at-a-time runs
-from the grounding directives/prompts first; aggregate commands remain
-convenience workflows for local human development.
+An AI agent does not run the gates by hand beside the hooks; the commit and the
+push run them ([AGENT.md](../../.agent/directives/AGENT.md) §Commands).
 
 Where the quality gates reveal an issue, the issue must be fixed,
 regardless of the location or cause. There is no such thing as an
@@ -319,7 +321,7 @@ the current understanding.
 ### Commit Messages
 
 - [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format
-- Enforced by `commitlint` pre-commit hook
+- Enforced by `commitlint` in the `commit-msg` hook
 - Examples: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`
 
 ## Documentation Practice
