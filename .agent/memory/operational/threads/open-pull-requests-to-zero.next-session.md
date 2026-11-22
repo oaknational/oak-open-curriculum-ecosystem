@@ -1771,3 +1771,28 @@ inside a rule name).
 - **What this record cannot show.** It was written after a compaction, from the summary the
   compaction left and from what was read again afterwards. Anything the earlier context held
   and the summary dropped is in the session transcript only.
+
+### Update 2026-11-22, the pickup (Petrel mends Pinnacle, ea9cea)
+
+- **The fold landed as oaknational#1067** (`c5d24f077` is `main` after it) and the branch
+  rotated to `coordination/2026-11-22-c5d24f`. moved for teachers: nothing in this window /
+  moved for the Practice: the names cleanup closed with its validator in the gates, a merge
+  on a stated reason for no review, and the foundation page's section on unattended work.
+  Copilot's review at ready gave four findings, all upheld and cured in one push: four
+  passages gave a count, a cost or a condition as it stood before oaknational#1065's cure
+  push, with nothing to say a later passage settled it. The tool's clock: checks green 26.7
+  minutes after the ready-mark, two rounds, merged at 28.0 minutes.
+- **One finding from the second round, upheld and routed to item 2 of the order of work.**
+  That item says the evidence line is "to say that an author on a ruleset's bypass list is
+  not reviewed by it". The record itself holds two bot pushes reviewed despite the bypass
+  list. The line is to state the configuration (which ruleset carries the rule, and that
+  the author is on its bypass list) and claim nothing about whether a review follows.
+- **The owner asked for item 4's documentation session in one hour, planning included.** The
+  plan node is `foundation-linked-pages-agree`, a sketch on the branch
+  `docs/foundation-linked-pages-agree`: a contradiction check of nine human-facing pages
+  the foundation page links to, one pull request. A probe sized it: three hits in about
+  2,100 lines, one a confirmed contradiction (`.agent/hooks/README.md` says the commit hook
+  runs the build).
+- **The seat's reading of the afternoon, given to the owner:** items 1, 2 and 4 of the order
+  of work land today; item 3 (a refusal the poll loop may outwait) and item 5 (the reviewer
+  templates) stay as recorded follow-ups.
