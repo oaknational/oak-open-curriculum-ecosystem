@@ -1856,6 +1856,119 @@ inside a rule name).
   cure above; and one observation to make at the next bot pull request, that it is still
   reviewed once at open. Offered to the owner and not run: a retrospective on
   oaknational#1065. Held for the owner's express request: the v1 migration.
+
+### Update 2026-11-22, the knowledge sweep before a compaction and a change of account (Petrel mends Pinnacle, ea9cea)
+
+At the owner's word: "make sure all thought, memory, and context are preserved in the repo. We
+are going to compact and change account". This entry holds what only the session's context or
+the account's private memory held. A seat that picks up reads this update and the one before
+it; the hand-on entry of the earlier seat is the order of work they answer.
+
+- **Whose pull requests go to zero: the owner's ruling, 2026-11-22.** "Only our PRs should
+  get to zero, we should leave [two colleagues']" (the owner named the two code owners; their
+  names are replaced here). The target in this thread's name counts the pull requests this
+  estate's own seats and bot open. A colleague's pull request is left as it is: a seat does
+  not close it, merge it, push to it, mark it or comment on it to move it along. The seat's
+  reading, not the owner's words: the same holds for one opened by a colleague's bot and for
+  Dependabot's. Read that day, every open pull request on the repository apart from this
+  seat's own was one of those; the seat touched none of them.
+- **Seen after the cure: the review at open still happens for a bot.** The first pull request
+  the bot opened after both bot apps were set to `exempt` was asked of Copilot at open in the
+  bot's name (17:15:52 UTC, 2026-11-22). That answers the observation left open in the
+  update above.
+- **State at the sweep.** `main` is `e1ca739a4` after oaknational#1068, the closing fold. This
+  seat has no open pull request, no claim, no queue entry, and no watcher, heartbeat or
+  scheduled prompt. Every lane branch and worktree of the day is retired. The coordination
+  worktree (`.claude/worktrees/coordination-2026-10-28-32c907`) is where coordination records
+  are written; its branch is cut fresh from `main` after each fold, and the branch's own
+  state is in its pull request, never in this record.
+- **The primary checkout, as left.** `main` there is at `fc46095dc`, behind `origin/main`,
+  with `.claude/settings.json` modified and uncommitted. Its content is identical to what
+  oaknational#1071 merged (checked with a diff before that commit). A fast-forward is refused
+  until that local copy is discarded, which loses nothing and is the owner's act or done at
+  the owner's word; then `git pull --ff-only` and `pnpm install`. Until then the tool built
+  in the primary has neither `request-review` nor the corrected evidence line: run those from
+  a worktree built from `main`.
+- **What the independent reviewer found beyond the cure, kept for the next reading of the
+  rulesets.** As read on 2026-11-22 from the rulesets API, every rule on `main` comes from a
+  repository ruleset; no organisation ruleset and no classic branch protection reaches it.
+  - "Protect default branch" (13402577): active; the Copilot rule with `review_on_push: false`
+    and `review_draft_pull_requests: true`, beside deletion, non-fast-forward, pull request
+    (no approval count, thread resolution), code scanning, code quality and four required
+    status checks; bypass: the owner's account, a second code owner and the release bot's
+    app, all in mode `always`. It is the ruleset that gives every pull request its one review
+    at open, a draft included.
+  - "Code Quality Copilot review for default branch" (19474916): active since 10:48 UTC that
+    day; the Copilot rule alone, `review_on_push: true`; bypass: the two bot apps (4352989,
+    this checkout's bot, and 4482842), `exempt` since 15:51 UTC.
+  - "Code-owner review gate" (19395183): active; code owner review required; five bypass
+    actors, this checkout's bot among them and the second bot not.
+  - "release tag protections" (17845755): tags only.
+  - The reviewer's warning: the bots are never added to the bypass list of 13402577 to stop a
+    review, since that would also free them from the required checks, the pull request
+    requirement and the blocks on deletion and forced pushes.
+  - The fallback, had `exempt` not worked, and still the route if a bot's review at open is
+    ever to be on request too: move the Copilot rule out of 13402577 into a ruleset of its
+    own, exempt the bots there, and have the bot ask once at open with `request-review`.
+  - Still unknown: whether GitHub reads the account that pushed or the pull request's author
+    when it decides an exemption (a person's push to a bot's pull request would show it);
+    how two Copilot rules on one branch combine (GitHub's page says the settings "apply if
+    either the author's settings or an applicable ruleset turns them on", and does not say
+    whether a ruleset an actor is exempt from is applicable).
+  - The sources read: GitHub's changelog of 2026-11-06 ("exempt actors in the list will not
+    receive an automatic review from Copilot"), of 2026-09-23 and of 2026-08-07 on Copilot
+    code review, and of 2025-09-10 on ruleset exemptions; the REST reference for repository
+    rules ("When bypass_mode is exempt, rules will not be run for that actor"); the
+    documentation pages on configuring automatic review and on rulesets.
+  - Before the organisation policy was on, the Copilot requests on bot pull requests at the
+    ready-mark were explicit requests made through the owner's sign-in, about five seconds
+    after ready. They were not automatic.
+  - The reviewer's working files (timelines, the activity log, a join script) were in the
+    session's scratch directory and are not kept: each is one read of the GitHub API away.
+- **Observed on oaknational#1068, the verb's first use for its purpose.** The bot's push at
+  16:29:44 UTC drew no automatic request; the ready-mark at 16:30:00 drew the four code owner
+  requests and none of Copilot; the seat's `request-review` call registered at 16:30:05 and
+  the review came back with one finding.
+- **A gap in the bot's tooling, found on oaknational#1068.** `merge-bot pull-request` has no
+  verb that edits a pull request's title or description. A description written at a draft's
+  first commit goes stale as a coordination branch accrues and a reviewer raises it. The edit
+  is still the bot's to make: `.agent/reference/merge-bot.md` gives the route, a token minted
+  with `mint-token --scope pull-request-work` and a `PATCH` of the pull request. This seat
+  answered by comment on #1068 and did not use that route. The typed verb is not started.
+- **How the tooling behaved, for a seat's timing.** A push through the hook took three to six
+  minutes; CI took eight to fourteen, once twenty-five with one job slow to start; the merge
+  door then waits a quiet window of about four minutes. One pull request from push to merge
+  was fifteen to thirty minutes. `merge-bot merge` exits at once when GitHub has not yet
+  computed mergeability for a new tip, and waits as usual on a second run a minute later.
+  Run through `pnpm`, a typed refusal (exit 3) is reported by the wrapper as exit 1; the
+  refusal's own line is the reading. The session's background-task monitor ends at thirty
+  minutes, so the comms watcher was re-armed six times in an afternoon.
+- **How the afternoon was sized, since the estimates held.** The owner asked whether the
+  order of work would fit the afternoon. The seat's first answer put the documentation
+  session at half a day from its wording; a two-minute search sized it at an hour, and it
+  took one. The four pull requests of the order of work and two folds took about three hours
+  of wall time, most of it waiting on gates.
+- **The plan node's ratification.** The owner's answer was given by question prompt, the
+  option "Ratify, run it now", after the seat had put the same question twice in ordinary
+  output and had no answer: a question for the owner goes through the question tool.
+- **A second seat was live on this machine,** on another repository of the owner's, and
+  coordinated by direct message, writing nothing here. Its state is in its own repository's
+  records.
+- **One owner ruling held only in the account's private memory, copied as the earlier seat
+  copied the rest.** 2026-11-21, said of another repository of the owner's; this seat's
+  reading is that it holds wherever a seat is responsible for a repository. A list of
+  problems found is never reported with no decision. "Subagents DO NOT make decisions, they
+  provide information to be checked, you make decisions, and when you are unsure I make
+  decisions"; "we don't wave away issues, if it's a 'won't fix' that is fine, with a
+  reason". Each thing a sub-agent or a reviewer reports is checked first-hand and is fixed,
+  put to the owner by question prompt, or closed as won't-fix with its reason.
+- **Two notes this seat added to the private memory, now here.** A push goes through
+  `merge-bot push --branch <name>`, and the repository's activity log is read after a
+  session's first push. The bot asks Copilot with `merge-bot pull-request request-review`,
+  which replaces the request through the owner's sign-in recorded above for 2026-11-22.
+- **What this entry cannot show.** It is what the seat attended to. The session ran without a
+  compaction, so nothing was rebuilt from a summary; a thing the seat never noticed is not
+  here. The pull requests' own threads hold every review finding and its answer in full.
 - **A follow-up from that check, not started: `docs/engineering/ci-policy.md` against CI.**
   The page says "CI does NOT regenerate types" and that CI builds with
   `pnpm build --only`; `.github/workflows/ci.yml` runs `turbo run sdk-codegen build`.
