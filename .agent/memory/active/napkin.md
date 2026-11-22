@@ -239,6 +239,12 @@ The account with its sources is the addendum to the reunification retrospective 
   bytes were what I meant and the checks passed, but the edit hooks never saw the change.
   What pulled me there: six replacements across five files looked like one act. They are
   six edits.
+- **Mistake (2026-11-22):** I told the owner the code owners file "gates nothing" and
+  recommended removing its default line, from one ruleset's pull request rule. A fourth
+  ruleset requires code owner review. I had named the generator an hour earlier (a statement
+  about the system read as the system) and did it again: "the ruleset" was one of four. A
+  claim that something gates nothing is a negative over every ruleset, so list them all,
+  parents included, before making it.
 - **Surprise (2026-11-22):** the lint limits on one function (twenty statements, fifty lines)
   refused three attempts to squeeze a change in by rearranging lines. Each attempt moved the
   count from one limit to the other. Extracting a named helper passed at once. A limit hit

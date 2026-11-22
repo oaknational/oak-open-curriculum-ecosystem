@@ -1705,10 +1705,25 @@ inside a rule name).
   another bot as a review object makes nobody one. A connector with no credit that answers
   every ready event with that notice would hold every pull request at a leg nobody serves.
   Not seen on Oak's repository since 2026-11-03. No change made.
-- **The code owners file gates nothing.** Read 2026-11-22: its default line names four
-  accounts on every path, and the default branch's ruleset requires no approval and no code
-  owner review. The line's one effect is the review request, and its notification, to four
-  people on every pull request that leaves draft.
+- **The code owners file is a gate, and this seat said it was not.** Its default line names
+  four accounts on every path. "Protect default branch" requires no code owner review, and
+  from that one ruleset the seat told the owner the file "gates nothing" and recommended
+  removing the line; the owner chose that by question prompt. A fourth ruleset, "Code-owner
+  review gate (bot-exempt by owner ruling 2026-07-21)" (19395183), is active and requires
+  code owner review, with five bypass actors, this seat's bot among them and the second
+  bot not. Removing the default line would lift that gate for everyone not on the list.
+  The recommendation is withdrawn, no pull request is opened, and the question goes back
+  to the owner with the fact. Listing every ruleset, parents included, would have shown it.
+- **The owner's two answers, by question prompt, 2026-11-22.** The code owners file stays as
+  it is: the four requests on each bot pull request continue. The rulesets stay as they
+  are: bot pushes are reviewed and billed for now, the seat keeps cure pushes to one a
+  round and notes whether the next bot pushes are reviewed too.
+- **The bypass list and the automatic review, as read 2026-11-22.** GitHub's changelog of
+  2026-11-06 says the rule "now supports the bypass list" so that exempt actors "will not
+  receive an automatic review"; the configuration page says nothing of it. The rules API
+  shows two Copilot rules applying to the default branch, both from this repository's
+  rulesets, and no organisation ruleset. The observed review on the bot's push contradicts
+  the changelog's sentence for an App on the list; the cause is not found.
 - **What this record cannot show.** It was written after a compaction, from the summary the
   compaction left and from what was read again afterwards. Anything the earlier context held
   and the summary dropped is in the session transcript only.
