@@ -1,3 +1,16 @@
+# [1.189.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.188.10...v1.189.0) (2026-11-22)
+
+
+### Bug Fixes
+
+* **agent-tools:** close four gaps in the merge on a stated reason ([f917e79](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f917e7929efdebf4f43cf8e5c0fc7157bae7c3e4))
+* **agent-tools:** refuse a no-review merge while a review can exist unseen ([ca3a04f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ca3a04f6507e6da3708a3e0584ec19bdab64b059))
+
+
+### Features
+
+* **agent-tools:** merge a simple pull request on a stated reason for no review ([d7a5eed](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/d7a5eedc912546f1807de890298fb38b8f3764ea))
+
 ## [1.188.10](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.188.9...v1.188.10) (2026-11-22)
 
 ## [1.188.9](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.188.8...v1.188.9) (2026-11-22)
