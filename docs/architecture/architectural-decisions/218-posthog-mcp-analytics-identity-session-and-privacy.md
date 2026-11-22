@@ -649,7 +649,7 @@ recreated one layer up inside its own cure. The readability decision therefore
 belongs at the reader boundary, which is the only place that can see which
 container it was handed, and the reader reports it explicitly rather than letting
 an empty value list stand for both facts. Corrected on review, 2026-08-13
-(reviewer `mantagen`, agent-authored by Vesta hunts Expanse).
+(reviewer: the second code owner, agent-authored by Vesta hunts Expanse).
 
 **The value is an unverified self-declaration.** Any client can send
 `user-agent: claude-code/…`; leading-token anchoring makes accidental

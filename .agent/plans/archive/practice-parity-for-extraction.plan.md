@@ -57,7 +57,7 @@ removals judged are carried out.
 1. **The consolidation's tail lands and nothing stays outside a default branch.** The three
    OCE slices still to land (s, the first-batch skills leftover, y; q merged at 19:16Z as
    `SHA:d51669d2f`, read first-hand), the write-list table and
-   the notebooks' move in jimcresswell.net (the node `write-list-residue-and-notebook-close`,
+   the notebooks' move in the sibling estate (the node `write-list-residue-and-notebook-close`,
    which this node now governs), the two folds (each a merge of the default branch, never a
    rebase), the two omnibus branches deleted on the content script's zero.
 2. **The small carries begin at ratification.** A carry is one capability one repository
@@ -73,13 +73,13 @@ removals judged are carried out.
    PDR-082 and PDR-132 moved to a host record with the Core validator that refuses a
    host-named heading. Two gaps first listed as small are ledger rows instead, sized at
    authoring: the pr-watch content binding (202 lines imported by 22 files in OCE, whose
-   pr-watch has been restructured around it, so the carry is an adaptation of jimcresswell.net's
+   pr-watch has been restructured around it, so the carry is an adaptation of the sibling estate's
    state machine, not a copy) and the runbook index (OCE's is product operations under
-   PDR-120; jimcresswell.net has one runbook and no operations docs, so its likely reading is
+   PDR-120; the sibling estate has one runbook and no operations docs, so its likely reading is
    host-local with the PDR-120 pointer). The two
    large gaps already known, the three documentation validators with their three core helpers
    (into OCE; the preservation commit in the port's worktree is their starting point) and the
-   skill-evals runner (into jimcresswell.net), are ledger rows: each takes its verdict at the
+   skill-evals runner (into the sibling estate), are ledger rows: each takes its verdict at the
    ledger, carry or host-local, where the owner reads it, because those two are where carrying
    by copy and carrying by the package differ most.
 3. **The measure: one slice per repository, the same bytes.** First the survey covers the whole
@@ -214,7 +214,7 @@ to a second review round that a first-time-right read would have caught.
 | Step | Work | Size | Who, when |
 | --- | --- | --- | --- |
 | 1 | the three OCE slices with their cure scripts; the write-list table and the notebooks; the two folds | about one hour on each side | the implementers, from the start |
-| 2 | the two small carries, smallest closure first | minutes each | the OCE seat after its slices (the registry rows); the jimcresswell.net seat after its tail (the amendment entries and the validator, then OCE's copy) |
+| 2 | the two small carries, smallest closure first | minutes each | the OCE seat after its slices (the registry rows); the sibling estate's seat after its tail (the amendment entries and the validator, then OCE's copy) |
 | 3 | the measure: the generator's map and the per-file rule, the rerun, the dry-run merge, the ledger over its hunks | about one hour, the Director, one pull request per repository | from the start, while reading each landing |
 | 4 | the ledger's carries | derived at the ledger; the two large gaps under an hour each if carried; a ledger above twenty carries reopens the node | after 3 merges, in closure order |
 | 5 | the PDR-019 amendment and the PDR-143 trim | half an hour, the Director, one pull request per repository | with 3 |
@@ -228,8 +228,8 @@ The owner's word of 2026-10-02 20:0xZ, verbatim, on the bound above: "I am going
 Estimate, kept current here by the Director at each boundary (its history is this file's): at 07:1xZ
 on 2026-10-03 every step that needs no owner word is landed on both default branches (the tails, the
 folds, the registry rows, the host-tagged entries with the Core heading gate, the records), the
-ledger is at its door in both estates (OCE #344, jimcresswell.net 306, the same bytes, both
-settlement pushes spent), and one owed twin outside the ledger landed overnight (jimcresswell.net
+ledger is at its door in both estates (OCE #344, the sibling estate 306, the same bytes, both
+settlement pushes spent), and one owed twin outside the ledger landed overnight (the sibling estate
 310, the heading gate's three cures as the same bytes). The ledger derives 28 carries against this
 node's twenty, so the node stands reopened with the owner on row O10. Sized from the closures:
 fifteen queued pull requests at about eight seat-hours; the five owner rows (C19, C22, C26, C27,
@@ -253,7 +253,7 @@ Plan to finish, sized at 13:0xZ on 2026-10-03 at the owner's word that the work 
 implementer seats and the Director. Today's target is the doctrine aligned, because the shared
 doctrine is the Practice itself: (a) the ledger merged in both estates after each default branch
 merges into its lane, two merges, forty minutes; (b) the doctrine-text carries as one pull request
-per estate (into jimcresswell.net C7, C11 to C16, C24; into OCE C8, C10, C4 with C20, C21), about
+per estate (into the sibling estate C7, C11 to C16, C24; into OCE C8, C10, C4 with C20, C21), about
 ninety minutes each with review; (c) the shared text by surface, each open ledger row's recorded
 reading landed and twinned by content, in this order: rules (46 hunks), directives (39), skills
 (49), sub-agents (56), Practice Core (12, read first-hand by the Director), hooks (5), the 68 clean
@@ -261,7 +261,7 @@ merges riding their surfaces and the six contradictions as joint cures; about tw
 surface and thirty minutes to twin it, fifteen seat-hours, the two seats authoring alternate
 surfaces and twinning each other's, about eight hours of wall-clock; the rerun at each fold counts
 rows open of total. Tomorrow: the code carries, one pull request each with their tests (into
-jimcresswell.net C3, C17, C23, C25 with C19, C26, and C28 in two to three; into OCE C19 and C27 from
+the sibling estate C3, C17, C23, C25 with C19, C26, and C28 in two to three; into OCE C19 and C27 from
 the J2 worktree's staged files), about ten seat-hours, and C5, C6 and C22 on the Codex dialogues
 tally (O7). The ledger's next revision, the Director's deliverable today after the merges, records
 today's rerun, C9 closed, the three unread hunks as rows, the thirteen owner decisions, the tool
@@ -272,16 +272,16 @@ reason, the count line N of N at the tips it names; estimated at the end of tomo
 with today's doctrine target reported at the evening fold as rows open of total.
 
 Where it stands at supersession, 2026-10-03 20:0xZ, recorded by the Director. Landed on both
-default branches: 306 and #344 (the ledger), 310, 311 (C7, C11 to C16 into jimcresswell.net, main
+default branches: 306 and #344 (the ledger), 310, 311 (C7, C11 to C16 into the sibling estate, main
 `SHA:c4d376535`), the fold #342 (engraph `SHA:e790eab33`, then #344 at `SHA:f0f1aacb7`), the plan
 correction on both coordination branches; rows open of total 194 of 209. At their doors:
-jimcresswell.net 312 and OCE #350 (the ledger's revision, five review findings to decide), 318
+the sibling estate 312 and OCE #350 (the ledger's revision, five review findings to decide), 318
 (C24, the specification family, read sound), the hooks surface pushed at `SHA:c6262b00` and
 unopened; OCE #349 (the doctrine batch, C8, C10, C4 with C20, C21) with its last cure
 `SHA:fe05f463a` committed and unpushed, the directives surface (39 rows) at `SHA:1d77e8b03` and the
 sub-agents surface (56 rows) committed in their lanes and unopened; the OCE implementer's session
 finished at the owner's word with its handoff record at the claim's pointer. Not started: rules
-(48 rows), skills (49) and Practice Core (12) in jimcresswell.net; every twin; the code carries.
+(48 rows), skills (49) and Practice Core (12) in the sibling estate; every twin; the code carries.
 Superseded by `practice-system-review` (the frontmatter's `superseded_by`), the review of both
 estates as one system, ratified 2026-10-04. The two-landings sketch written first as this node's
 successor is kept, unratified and implemented by nothing, as a perspective no longer held; it
