@@ -159,8 +159,12 @@ Your assurance does not rest on trusting an agent's self-report:
 - **PDRs are the architectural source of truth for the Practice.** Practice decision records. ADRs encode what is decided for this repo
   while PDRs encode what is decided for the Practice as a whole. ADRs are specific; PDRs are portable and broadly applicable principles.
   If you enjoy biology, PDRs are the genotype; ADRs are the phenotype.
-- **PRs are the human checkpoint.** Review the outcome and the evidence in the PR
-  description; the process that produced it is already gated.
+- **PRs are the checkpoint.** An agent's PR is merged by the agent, through the merge
+  tool, once every check is green and every review thread is resolved; a review, by a
+  person or a review bot, is asked for where the change's complexity justifies one
+  ([Unattended Work](../foundation/agentic-engineering-system.md#unattended-work--what-an-agent-can-and-cannot-do)).
+  Read the outcome and the evidence in the PR description; the process that produced
+  it is already gated.
 - **Your word beats the plan.** Owner direction outranks any recorded plan or prior ruling
   — agents are required to treat your current word as the live truth and re-true the
   records that lag it.
