@@ -307,6 +307,7 @@ The conversation writes are the typed command, which mints the token itself:
 pnpm agent-tools merge-bot pull-request open --branch <name> --title <text> --body-file <path> --wip-limit <n>
 pnpm agent-tools merge-bot pull-request reply --pr <n> --comment <id> --body-file <path>
 pnpm agent-tools merge-bot pull-request resolve --pr <n> --thread <node-id>
+pnpm agent-tools merge-bot pull-request request-review --pr <n>
 ```
 
 Reads may use any credential — attribution matters for writes. Agents keep
@@ -314,33 +315,40 @@ signing reply bodies with their agent tuple: the bot identity says "an
 agent did this", the signature says which one. A maintainer acting from
 their own hands uses their own credential — that contrast is the point.
 
-**Requesting the Copilot reviewer is the one write the bot cannot make
-here.** A `requested_reviewers` POST for `copilot-pull-request-reviewer`
-under the bot token registers nothing on the pull request; the owner's own
-CLI credential registers it on the timeline within a minute
-(`gh pr edit <n> --add-reviewer @copilot` as the operator), unless the
-previous request's review is still in flight, when it registers nothing
-either (both verified live, 2026-09-13; the operator form re-verified
-2026-09-27). Where an API call names the reviewer, its login is
-`copilot-pull-request-reviewer[bot]`; omitting the `[bot]` suffix returns
-422 (2026-08-12). Whether Copilot reviews a pull request that a GitHub App
-opened is set by an organisation Copilot policy, "Allow members without a
-Copilot license to use Copilot code review in GitHub.com". It is off by
-default and the API does not show its state. With it off (observed
-2026-11-22): `POST /repos/{owner}/{repo}/pulls/{n}/copilot-code-review`, the
-pull request's own Copilot review endpoint, answers 422 under the bot's
-token, and its text names both causes, a missing "Copilot license that
-includes code review" and the organisation's policy; the base branch's
-automatic review rule (`copilot_code_review`) requests nothing, because
-GitHub makes that request in the name of the pull request's author one or
-two seconds after the event, and nothing says that it did not; and a
-comment by the bot reading "@copilot please review" drew no reaction,
-review or run in five minutes. With it on (observed the same day): the
-automatic request is made in the bot's name and the review is billed to
-the organisation. An account on a ruleset's bypass list is given no
-automatic review by that ruleset, so which ruleset carries the rule, and
-who is on its bypass list, sets who is reviewed at open and who on every
-push. Where no review was ever asked of a simple change,
+**The bot asks the Copilot reviewer with `merge-bot pull-request
+request-review --pr <n>`.** The verb is one POST to the pull request's own
+Copilot review endpoint, `/repos/{owner}/{repo}/pulls/{n}/copilot-code-review`,
+under the bot's token. Observed live on a draft pull request, 2026-11-22,
+after its automatic review had finished: the call answered 201 and the
+timeline showed `review_requested` of Copilot in the bot's name two seconds
+later; a second call made while that review was pending was refused as
+already pending. The verb asks Copilot and nobody else. It depends on an organisation Copilot policy, "Allow members
+without a Copilot license to use Copilot code review in GitHub.com", which
+is off by default and whose state the API does not show. With the policy
+off (observed 2026-11-22) the endpoint answers 422 under the bot's token,
+its text naming both causes, a missing "Copilot license that includes code
+review" and the organisation's policy; the base branch's automatic review
+rule (`copilot_code_review`) requests nothing for a pull request the bot
+opened, because GitHub makes that request in the name of the pull
+request's author, and nothing says that it did not; and a comment by the
+bot reading "@copilot please review" drew no reaction, review or run in
+five minutes. With the policy on (observed the same day) the automatic
+request at open is made in the bot's name (the bot opens every pull
+request as a draft), and each review is billed to the organisation. Two other routes
+exist and differ: a `requested_reviewers` POST for
+`copilot-pull-request-reviewer` under the bot token registers nothing on
+the pull request (verified live, 2026-09-13), and where an API call names
+the reviewer its login is `copilot-pull-request-reviewer[bot]`, the
+`[bot]` suffix required (2026-08-12); a person's own sign-in registers the
+request within a minute (`gh pr edit <n> --add-reviewer @copilot`), under
+that person's name on the timeline, unless the previous request's review
+is still in flight. GitHub documents that an account on a ruleset's bypass
+list is given no automatic review by that ruleset; observed here on
+2026-11-22, two pushes by the bot were each reviewed automatically while
+its app was on the bypass list of the one ruleset reviewing on push, and
+the cause is not found. So a ruleset's bypass list is read as
+configuration, and whether a push was reviewed is read from the pull
+request's timeline. Where no review was ever asked of a simple change,
 `--no-review-reason-file` merges it without one. Read the timeline
 after any request: silence from the
 request call is not a registered request. The request, once registered, is

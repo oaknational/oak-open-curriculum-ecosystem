@@ -318,13 +318,14 @@ and are **not used** by this path; you never need to generate the secret.
 
 ## Agent actions run as the bot — attribution by identity
 
-The bot's Copilot review request registers: the REST `requested_reviewers`
-call under the app's pull-request-work token returns 201, `review_requested
-Copilot` fires on the pull request's timeline, and the review arrives
-(verified on four pull requests on 2026-08-06 and on every request of
-2026-09-25). The committer identity rule's Copilot row reads this record: the
-request is the bot's, and the owner's 2026-08-06 grant of the operator
-credential for it has nothing left to license here.
+The bot's Copilot review request registers. It is
+`merge-bot pull-request request-review --pr <n>`: one call to the pull
+request's own Copilot review endpoint under the bot's token, which answers
+201, after which `review_requested Copilot` appears on the pull request's
+timeline in the bot's name (observed on this repository, 2026-11-22, with
+the organisation's Copilot policy for members without a licence turned on).
+The committer identity rule's Copilot row reads this record: the request is
+the bot's.
 
 Any PR mutation performed **by an agent** runs under the bot token, so the
 platform record itself says which actions were a human's and which were an
@@ -482,6 +483,7 @@ pnpm agent-tools merge-bot pull-request comment --pr <n> --body-file <path>
 pnpm agent-tools merge-bot pull-request reply --pr <n> --comment <id> --body-file <path>
 pnpm agent-tools merge-bot pull-request resolve --pr <n> --thread <node-id>
 pnpm agent-tools merge-bot pull-request ready --pr <n>
+pnpm agent-tools merge-bot pull-request request-review --pr <n>
 pnpm agent-tools merge-bot pull-request close --pr <n> --reason-file <path>
 pnpm agent-tools merge-bot pull-request dispatch-workflow --workflow <file-name>
 ```

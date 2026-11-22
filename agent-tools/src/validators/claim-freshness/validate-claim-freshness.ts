@@ -16,8 +16,9 @@ import { assessFreshnessRows, decideFreshnessOutcome } from './validate-claim-fr
  * obligations and declared not-tracked rows. Expiry, pin drift, and
  * enforcement are session-open concerns owned by landing 2.
  *
- * Wired into root `repo-validators:check`, so it runs on every pre-commit,
- * pre-push, and CI run alongside the sibling validators.
+ * Wired into root `repo-validators:check`, which `pnpm check` runs at the
+ * push hook and CI runs in its static checks, alongside the sibling
+ * validators. The commit hook does not run it.
  *
  * @packageDocumentation
  */

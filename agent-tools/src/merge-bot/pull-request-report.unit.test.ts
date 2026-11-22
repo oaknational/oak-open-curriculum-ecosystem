@@ -28,6 +28,7 @@ const DONE: readonly { readonly outcome: PullRequestOutcome; readonly names: str
   },
   { outcome: { kind: 'resolved', pr: 42, thread: 'PRRT_kwDOAbc' }, names: 'PRRT_kwDOAbc' },
   { outcome: { kind: 'ready', pr: 42 }, names: '#42' },
+  { outcome: { kind: 'review-requested', pr: 42, reviewer: 'copilot' }, names: '#42 of copilot' },
   { outcome: { kind: 'closed', pr: 42, commentId: 9003 }, names: '9003' },
   {
     outcome: { kind: 'dispatched', workflow: 'upstream-carrier.yml', ref: 'trunk' },

@@ -8,13 +8,13 @@ import { realFetch } from './github-fetch.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import { printable } from '../pr-watch/printable.js';
 import { parsePullRequestArgs } from './pull-request-args.js';
+import { bareWrite, isBareRequest } from './pull-request-bare-writes.js';
 import { dispatchWorkflow, workflowFile } from './pull-request-dispatch.js';
 import {
   closePullRequest,
   commentOnPullRequest,
   replyToReviewComment,
 } from './pull-request-github.js';
-import { markReadyForReview, resolveReviewThread } from './pull-request-graphql.js';
 import { openPullRequest } from './pull-request-open.js';
 import {
   exitCodeFor,
@@ -37,7 +37,7 @@ import type { TokenScopeName } from './token-scopes.js';
  * The `merge-bot pull-request` action: the bot's writes on a pull request's
  * conversation, and its workflow dispatch, at the front door. The argv
  * contract is `pull-request-args.ts`; the writes are `pull-request-open.ts`,
- * `pull-request-github.ts`, `pull-request-graphql.ts` and
+ * `pull-request-github.ts`, `pull-request-bare-writes.ts` and
  * `pull-request-dispatch.ts`; the report is `pull-request-report.ts`. Exit
  * map: 0 done, 1 operational failure, 2 usage, 3 typed refusal.
  *
@@ -130,16 +130,6 @@ function bodiedWrite(request: BodiedRequest, repo: BotRepository, body: string):
   return (token, fetchImpl) => closePullRequest(fetchImpl, token, repo, request.pr, body);
 }
 
-/** The write for a verb that sends no body and names a pull request. */
-function bareWrite(
-  request: Extract<PullRequestRequest, { verb: 'resolve' | 'ready' }>,
-  repo: BotRepository,
-): Write {
-  return request.verb === 'resolve'
-    ? (token, fetchImpl) => resolveReviewThread(fetchImpl, token, repo, request.pr, request.thread)
-    : (token, fetchImpl) => markReadyForReview(fetchImpl, token, repo, request.pr);
-}
-
 /** The dispatch, once the file name passes its shape check; a name outside it is the refusal. */
 function dispatchPrepared(workflow: string, identity: BotIdentity): Prepared {
   const file = workflowFile(workflow);
@@ -187,7 +177,7 @@ async function prepare(
   if (request.verb === 'dispatch-workflow') {
     return dispatchPrepared(request.workflow, identity.value);
   }
-  if (request.verb === 'resolve' || request.verb === 'ready') {
+  if (isBareRequest(request)) {
     return { kind: 'ready', identity: identity.value, write: bareWrite(request, identity.value) };
   }
   return bodiedPrepared(request, identity.value, input);

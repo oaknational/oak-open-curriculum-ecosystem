@@ -62,4 +62,22 @@ describe('parseReviewConfiguration', () => {
     expect(configured).toContain('review_on_push=false');
     expect(configured).toContain('review_draft_pull_requests=true');
   });
+
+  it('says whose switches the configured line carries and that no bypass list was read', () => {
+    const configured = reviewConfigurationEvidence({
+      kind: 'configured',
+      reviewOnPush: true,
+      reviewDraft: true,
+    });
+    expect(configured).toContain('of any ruleset on the base branch');
+    expect(configured).toContain('bypass lists not read');
+  });
+
+  it.each([
+    { kind: 'unread', reason: 'no gh' } as const,
+    { kind: 'absent' } as const,
+    { kind: 'configured', reviewOnPush: true, reviewDraft: false } as const,
+  ])('claims nothing about a reviewer leg when the configuration is $kind', (configuration) => {
+    expect(reviewConfigurationEvidence(configuration)).not.toMatch(/owed|leg/iu);
+  });
 });

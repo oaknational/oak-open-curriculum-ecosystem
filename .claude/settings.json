@@ -330,11 +330,13 @@
     "refreshInterval": 10
   },
   "enabledPlugins": {
-    "sentry@claude-plugins-official": true,
+    "sentry@claude-plugins-official": false,
     "mcp-server-dev@claude-plugins-official": true,
     "sonarqube@claude-plugins-official": true,
     "linear@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true,
-    "posthog@claude-plugins-official": true
+    "posthog@claude-plugins-official": true,
+    "vercel@claude-plugins-official": true,
+    "elastic@anthropic-plugin-directory": true
   }
 }

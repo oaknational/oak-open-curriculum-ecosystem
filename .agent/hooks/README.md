@@ -117,7 +117,7 @@ Failure semantics:
   `--`. One `argv` entry therefore names a destructive MODE rather than
   one spelling of it; the option tables live beside the matcher in
   `agent-tools/src/hook-policy/`, and a pattern the tables cannot parse fails
-  the canonical-policy test at commit time rather than matching nothing in
+  the canonical-policy test at the push gate rather than matching nothing in
   production.
 
   What `argv` sees: the words as the command receives them (quotes removed,
@@ -230,14 +230,14 @@ block that says "no, and here is the concept to reappraise" triggers the right
 response. Detection — whether a block fires — depends only on `patterns` +
 path-scope + the added-not-in-prior check, never on the `reappraisal`.
 
-**`reappraisal` is enforced at commit-time, not load time.** The load-time
+**`reappraisal` is enforced at the push gate and in CI, not at load time.** The load-time
 schema (`agent-tools/src/hook-policy/types.ts` `ScopedContentBlockGroupSchema`)
 leaves `reappraisal` optional, so a missing value never throws and fails the
 guard closed — which would brick the worktree on a stale-`dist`/new-policy
 mismatch. Presence is enforced where blocking is safe instead: the
 `validate-policy-reappraisal` repo validator
 (`agent-tools/src/validators/policy-reappraisal/`), wired into
-`repo-validators:check`, fails the commit/push/CI run if any group lacks a
+`repo-validators:check`, fails the push and the CI run if any group lacks a
 non-empty `reappraisal`. The deny builder defaults a generic reappraisal as a
 runtime safety net if one is ever absent.
 
@@ -254,8 +254,9 @@ guaranteed at two points:
 
 - **Install** — the root `package.json` `postinstall` builds `agent-tools`, so a
   fresh clone has the artefact before the first agent session.
-- **Commit** — `.husky/pre-commit` runs `build` (turbo-cached, a no-op when the
-  guard source is unchanged), so committed guard-source changes are compiled.
+- **Push** — `.husky/pre-push` runs `pnpm check`, which runs `build`
+  (turbo-cached, a no-op when the guard source is unchanged), so pushed
+  guard-source changes are compiled. The commit hook runs no build.
 
 **Invariant:** after editing a hook-guard source file
 (`agent-tools/src/hook-policy/*.ts`, `policy-loader.ts`, or any other source

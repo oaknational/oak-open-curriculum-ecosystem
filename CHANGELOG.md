@@ -1,3 +1,19 @@
+## [1.190.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.0...v1.190.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* **agent-tools:** state what the gates and the review reading do ([f5505d2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f5505d2704481b9bd7e47302cd0c88eb951db777))
+
+# [1.190.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.189.2...v1.190.0) (2026-11-22)
+
+
+### Features
+
+* **agent-tools:** let the merge bot ask Copilot for a review ([32abc98](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/32abc98df5b150b271e08d56b62a54c61b4681c8))
+
+## [1.189.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.189.1...v1.189.2) (2026-11-22)
+
 ## [1.189.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.189.0...v1.189.1) (2026-11-22)
 
 # [1.189.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.188.10...v1.189.0) (2026-11-22)
