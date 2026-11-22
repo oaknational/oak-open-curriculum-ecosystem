@@ -1740,8 +1740,8 @@ inside a rule name).
   the changelog's sentence for an App on the list; the cause is not found.
 - **For the session that picks this up, at the owner's word to hand on (2026-11-22).** This
   seat has no open pull request, no claim, no watcher, heartbeat, monitor or scheduled
-  prompt. First act: fold this coordination branch, which is past its lifetime and holds
-  the records of 2026-11-21 and 22. Then, in order:
+  prompt. The records of 2026-11-21 and 22 reach the default branch with this entry. Picked
+  up on 2026-11-22 by Petrel mends Pinnacle (ea9cea). The order of work:
   1. The `request-review` verb, by the owner's answer of 2026-11-22 ("Land it next
      session"): bring `feat/merge-bot-request-review` up to `main` by a merge (its worktree
      is `.claude/worktrees/bot-request-review`), prove the verb with one live call now that
