@@ -283,6 +283,7 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-22 | oaknational#1056 | 1 | 0 / 40 | within | 0 | agreed | role words for accounts in the operational memory archive, 133 lines in 16 files; one Copilot finding (four substitutions broke the grammar), upheld and cured in one push |
 | 2026-11-22 | oaknational#1057 | 1 | 0 / 40 | within | 0 | agreed | role words for accounts in the active memory archive, 59 lines in 14 files; the diff checked by script for the fault #1056's review found; one Copilot review: no finding |
 | 2026-11-22 | oaknational#1058 | 1 | 0 / 40 | within | 0 | agreed | author addresses in two recorded Sonar JSON files replaced with two placeholder addresses, 285 values; one Copilot review: no finding |
+| 2026-11-22 | oaknational#1059 | 1 | 0 / 40 | within | 0 | agreed | role words for accounts in the rapid-comms records, 95 lines in 25 files; one Copilot review: no finding |
 
 ## Weight changes
 

@@ -1338,13 +1338,18 @@ inside a rule name).
   the validator does not find without a local list; a search for one common mail domain
   found two more files, one rapid-comms record and one archived plan under
   `.agent/plans-old-archive/archive/completed`, to go with their surfaces.
+  The fifth surface landed as oaknational#1059 on 2026-11-22: the rapid-comms records, 95
+  lines in 25 files, the personal address in one of them included. The report read 310
+  lines in 24 directories after it. The seat stopped there for the session; no lane, claim
+  or pull request of its own is open.
 
   What remains, in order:
 
   1. Dated records (todo 4), one surface per pull request, largest first by the report:
-     the agentic-engineering reports (139 lines in 14 files), the rapid-comms records (93 in
-     25), the other reports (about 120 across several directories), the plan archives and
-     backlog (about 35), research and the two decision records the report still lists.
+     the agentic-engineering reports (139 lines in 14 files, with 31 more in their data
+     directories), the other reports (about 90 across several directories), the plan
+     archives, delivery plans and backlog (about 35, with the archived plan that holds a
+     personal address), research and the two decision records the report still lists.
      Sized by
      `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`. The
      replacements used so far: an account as a mention becomes "the owner" or "a code
