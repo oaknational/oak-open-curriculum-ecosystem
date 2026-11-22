@@ -40,9 +40,11 @@ pnpm agent-tools merge-bot merge --pr <n>
 ```
 
 It mints its own least-privilege token (`pull-request-merge`), reads the
-settlement verdict, and merges ONLY on SETTLE-READY — merge-commit method
+settlement verdict, and merges on SETTLE-READY — merge-commit method
 always, the VERDICTED tip's sha pinned in the call (a moved tip answers
-409), refusing by verdict name on everything else with exit 3. The command
+409), refusing by verdict name on everything else with exit 3. The one
+other merge is of a pull request nobody has reviewed, on the seat's stated
+reason (below). The command
 takes no reviewer list. It reads the reviews from the pull request:
 
 - **A review in progress is waited for.** A running review check holds the
@@ -54,7 +56,33 @@ takes no reviewer list. It reads the reviews from the pull request:
   empty-bodied review (the API creates one per thread reply, so a pull
   request whose author dispositioned findings carries its own) are not
   reviews, and none anchors the quiet window. With no review the verdict is
-  `SILENT-WAIT-NO-REVIEWER` and the command refuses; request a review.
+  `SILENT-WAIT-NO-REVIEWER` and the command refuses.
+- **A review is owed where the change's complexity justifies one.** The
+  merging seat makes that judgement. For a change simple enough to need no
+  review it passes `--no-review-reason-file <path>`: the command posts the
+  file's text on the pull request as the record, then merges. The reason
+  stands in for the missing review alone. Red checks, open threads, a draft
+  or a review in progress refuse as they do without it. So does anything
+  that shows a review exists or can have started unseen, and a refusal with
+  a reason given says which: a reviewer who owes a round; a review-run
+  listing that could not be read in full; a review by another account,
+  among them the kinds the reviewer set leaves out (an approval or a change
+  request with an empty body, a comment on a line), though not a notice
+  that no review occurred; and a pull request marked ready, or whose checks
+  went green, within the last quiet window, because an automatic reviewer
+  starts on such an event and the pull request shows nothing of it until it
+  reports. Two things the command cannot see do not hold the merge: another
+  account's draft, which GitHub shows to its author alone, and a comment
+  that says a review is under way. An empty file refuses, and so does a reason
+  containing an `@`, which would notify a person or ask a review bot for a
+  round; a reason that cannot be posted stops the merge. The record says
+  the pull request has not been reviewed; a pending request of a person
+  does not hold it, as for every merge. A review can still arrive between
+  the reading and the merge call, as on every merge by the command: the
+  call is pinned to the commit, not to the reviews. Where a repository
+  reviews every pull request automatically when it opens, the reviewer set
+  is empty only when that review was never asked, and this path is the way
+  out when it does not come.
 - **Every review is dealt with.** Every review thread is resolved, and the
   merging seat reads and dispositions a review body's findings before it
   calls the command.

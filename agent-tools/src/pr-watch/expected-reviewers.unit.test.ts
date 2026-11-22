@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { expectedReviewersOf } from './expected-reviewers.js';
+import { expectedReviewersOf, reviewsByOthers } from './expected-reviewers.js';
 import { CODEX_CONNECTOR_LOGIN } from './logins.js';
 import type { HarvestedReview } from './reviewer-legs.js';
 import type { RoundRequest } from './round-requests.js';
@@ -8,7 +8,8 @@ import type { RoundRequest } from './round-requests.js';
 /**
  * The reviewers a pull request shows, over literal inputs: the bots a round
  * is asked of, and the authors of landed reviews that say a review occurred.
- * Nothing declares the set.
+ * Nothing declares the set. Beside it, every review that is someone else's
+ * word on the pull request, which the set is narrower than.
  */
 
 const TIP = 'a'.repeat(40);
@@ -142,5 +143,64 @@ describe('expectedReviewersOf', () => {
     expect(
       expectedReviewersOf({ ...NONE, reviews: [review('a-person', 'Looks right.', 'APPROVED')] }),
     ).toEqual(['a-person']);
+  });
+});
+
+describe('reviewsByOthers', () => {
+  it.each([
+    ['an approval with an empty body', review('a-colleague', '', 'APPROVED')],
+    ['a change request with an empty body', review('a-colleague', '', 'CHANGES_REQUESTED')],
+    ['a comment on a line, whose review has an empty body', review('a-colleague', '')],
+    [
+      'the reader’s own draft, the one draft GitHub shows it',
+      review('a-person', 'Half.', 'PENDING'),
+    ],
+    ['a review by a deleted account', review('unknown', 'This is wrong.')],
+    [
+      'a change request whose body reads like a skip notice',
+      review(
+        'a-colleague',
+        'I was unable to review the migration. Do not merge.',
+        'CHANGES_REQUESTED',
+      ),
+    ],
+    [
+      'an approval whose body ends like a signed reply',
+      review('a-colleague', 'Fine.\n\n— Moth mends Dreamscape (92e9d6)', 'APPROVED'),
+    ],
+  ])('counts what the reviewer set leaves out: %s', (_what, leftOut) => {
+    expect(expectedReviewersOf({ ...NONE, reviews: [leftOut] })).toEqual([]);
+    expect(reviewsByOthers(NONE.author, [leftOut])).toEqual([leftOut]);
+  });
+
+  it('counts a deleted account’s review on a deleted account’s pull request: two deleted accounts share a name', () => {
+    const other = review('unknown', '', 'CHANGES_REQUESTED');
+    expect(reviewsByOthers('unknown', [other])).toEqual([other]);
+  });
+
+  it('counts a real review the set also counts', () => {
+    const real = review(COPILOT, 'Reviewed.');
+    expect(reviewsByOthers(NONE.author, [real])).toEqual([real]);
+  });
+
+  it.each([
+    ['the author’s own reply on a thread', review('a-merge-bot[bot]', '')],
+    [
+      'a skip notice',
+      review('claude', 'Code review skipped: your organization has no extra usage available.'),
+    ],
+    [
+      'a vendor’s failed-run notice',
+      review(
+        COPILOT,
+        'Copilot encountered an error and was unable to review this pull request. You can try again by re-requesting a review.',
+      ),
+    ],
+    [
+      'the agent’s signed reply under a shared sign-in',
+      review('a-person', 'Fixed at source.\n\n— Moth mends Dreamscape (92e9d6)'),
+    ],
+  ])('leaves out what is nobody’s review: %s', (_what, notOne) => {
+    expect(reviewsByOthers(NONE.author, [notOne])).toEqual([]);
   });
 });

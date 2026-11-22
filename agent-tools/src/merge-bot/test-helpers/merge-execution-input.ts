@@ -21,6 +21,7 @@ export function makeInput(
     appSlug: 'acme-bot',
     prNumber: 42,
     nowIso: '2026-08-06T09:00:00Z',
+    noReviewReason: undefined,
     seams: {
       mint: () =>
         Promise.resolve(

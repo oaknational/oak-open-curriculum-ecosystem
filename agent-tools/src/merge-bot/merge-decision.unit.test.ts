@@ -4,9 +4,10 @@ import { PR_VERDICT_STATES, type PrVerdict } from '../pr-watch/state-types.js';
 import { decideMergeAction, verdictAwaitsSettlement } from './merge-decision.js';
 
 /**
- * The verdict→action mapping is the heart of `merge-bot merge`: it acts only
- * on SETTLE-READY, and every other outcome is a typed refusal carrying the
- * verdict's own evidence. The estate's never-squash ruling and the
+ * The verdict→action mapping is the heart of `merge-bot merge`: it acts on
+ * SETTLE-READY, and on a green pull request nobody has reviewed when the
+ * caller gives its reason for no review; every other outcome is a typed
+ * refusal carrying the verdict's own evidence. The estate's never-squash ruling and the
  * tip-consistency guarantee are pinned here as behaviour, not prose.
  */
 
@@ -15,16 +16,127 @@ const SETTLE_READY: PrVerdict = {
   evidence: ['every expected reviewer leg settled; quiet window elapsed'],
 };
 
+/** Green on everything but the review: nobody has reviewed and nobody is asked to. */
+const NO_REVIEW: PrVerdict = {
+  state: 'SILENT-WAIT-NO-REVIEWER',
+  evidence: ['no review: nobody has reviewed any commit of this pull request'],
+};
+
+/** What stands in the way of a merge with no review, as the caller words it. */
+const REVIEWER_EXISTS = 'a reviewer exists (a-review-bot)';
+
 const baseInput = {
   verdict: SETTLE_READY,
   allowMergeCommit: true,
+  noReviewReason: undefined,
+  noReviewObstacle: REVIEWER_EXISTS,
 } as const;
 
 describe('decideMergeAction', () => {
   it('merges a settled verdict when merge commits are allowed, told no reviewer', () => {
     const decision = decideMergeAction(baseInput);
 
-    expect(decision).toEqual({ kind: 'merge' });
+    expect(decision).toEqual({ kind: 'merge', withoutReview: false });
+  });
+
+  it('merges a green pull request nobody has reviewed when a reason for no review is given', () => {
+    const decision = decideMergeAction({
+      ...baseInput,
+      verdict: NO_REVIEW,
+      noReviewReason: 'Records only: a date in one plan.',
+      noReviewObstacle: undefined,
+    });
+
+    expect(decision).toEqual({
+      kind: 'merge',
+      withoutReview: true,
+      reason: 'Records only: a date in one plan.',
+    });
+  });
+
+  it('refuses a pull request nobody has reviewed when no reason is given', () => {
+    const decision = decideMergeAction({
+      ...baseInput,
+      verdict: NO_REVIEW,
+      noReviewObstacle: undefined,
+    });
+
+    expect(decision).toMatchObject({ kind: 'refuse', awaitsSettlement: false });
+  });
+
+  it('refuses a reason when something stands in its way, and says what: a review exists or can be on its way', () => {
+    const decision = decideMergeAction({
+      ...baseInput,
+      verdict: NO_REVIEW,
+      noReviewReason: 'a reason',
+    });
+
+    expect(decision).toStrictEqual({
+      kind: 'refuse',
+      reason: `verdict SILENT-WAIT-NO-REVIEWER — the reason given cannot stand in for a review: ${REVIEWER_EXISTS}`,
+      awaitsSettlement: false,
+    });
+  });
+
+  it('says what stood in a reason’s way under any verdict: a reason is never set aside without a word', () => {
+    const decision = decideMergeAction({
+      ...baseInput,
+      verdict: { state: 'SETTLED-NO-REVIEW', evidence: [] },
+      noReviewReason: 'a reason',
+    });
+
+    expect(decision).toMatchObject({
+      kind: 'refuse',
+      reason: `verdict SETTLED-NO-REVIEW — the reason given cannot stand in for a review: ${REVIEWER_EXISTS}`,
+    });
+  });
+
+  it('refuses the same verdict with no reason given in the verdict’s own words', () => {
+    const decision = decideMergeAction({ ...baseInput, verdict: NO_REVIEW });
+
+    expect(decision).toStrictEqual({
+      kind: 'refuse',
+      reason: 'verdict SILENT-WAIT-NO-REVIEWER — only SETTLE-READY merges',
+      awaitsSettlement: false,
+    });
+  });
+
+  it('reads a reviewed, settled pull request as reviewed even when a reason is given', () => {
+    const decision = decideMergeAction({ ...baseInput, noReviewReason: 'not needed' });
+
+    expect(decision).toEqual({ kind: 'merge', withoutReview: false });
+  });
+
+  it.each(
+    PR_VERDICT_STATES.filter(
+      (state) =>
+        state !== 'SETTLE-READY' && state !== 'MERGED' && state !== 'SILENT-WAIT-NO-REVIEWER',
+    ),
+  )('opens nothing but the missing review: %s still refuses with a reason given', (state) => {
+    const decision = decideMergeAction({
+      ...baseInput,
+      verdict: { state, evidence: [] },
+      noReviewReason: 'a reason',
+      noReviewObstacle: undefined,
+    });
+
+    expect(decision).toStrictEqual({
+      kind: 'refuse',
+      reason: `verdict ${state} — only SETTLE-READY merges`,
+      awaitsSettlement: verdictAwaitsSettlement(state),
+    });
+  });
+
+  it('keeps the never-squash gate on a merge without review', () => {
+    const decision = decideMergeAction({
+      verdict: NO_REVIEW,
+      allowMergeCommit: false,
+      noReviewReason: 'a reason',
+      noReviewObstacle: undefined,
+    });
+
+    expect(decision).toMatchObject({ kind: 'refuse', awaitsSettlement: false });
+    expect(JSON.stringify(decision)).toContain('merge commits');
   });
 
   it.each(PR_VERDICT_STATES.filter((state) => state !== 'SETTLE-READY' && state !== 'MERGED'))(

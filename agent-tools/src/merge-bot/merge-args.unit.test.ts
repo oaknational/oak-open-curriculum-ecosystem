@@ -79,6 +79,32 @@ describe('parseMergeArgs', () => {
     expect(parseMergeArgs([...PR_ARGS, '--interval', '60', '--max-polls', '50']).ok).toBe(true);
   });
 
+  it('takes the file holding the reason for a merge with no review, and none by default', () => {
+    expect(parseMergeArgs([...PR_ARGS, '--no-review-reason-file', 'why.md'])).toMatchObject({
+      ok: true,
+      value: { prNumber: 42, noReviewReasonFile: 'why.md' },
+    });
+    expect(parseMergeArgs([...PR_ARGS])).toMatchObject({
+      ok: true,
+      value: { noReviewReasonFile: undefined },
+    });
+  });
+
+  it.each([
+    { args: ['--no-review-reason-file'], says: 'needs a value' },
+    { args: ['--no-review-reason-file', '--json'], says: 'needs a value' },
+    { args: ['--no-review-reason-file', ' '], says: 'needs a value' },
+    {
+      args: ['--no-review-reason-file', 'a.md', '--no-review-reason-file', 'b.md'],
+      says: 'more than once',
+    },
+  ])('refuses a reason-file flag given as $args', ({ args, says }) => {
+    const refusal = refusalOf([...PR_ARGS, ...args]);
+
+    expect(refusal).toContain('--no-review-reason-file');
+    expect(refusal).toContain(says);
+  });
+
   it('refuses a repeated single-valued flag and unknown flags', () => {
     expect(refusalOf([...PR_ARGS, '--pr', '43'])).toContain('more than once');
     expect(refusalOf([...PR_ARGS, '--wat', 'x'])).toContain('--wat');
