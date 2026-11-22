@@ -14,7 +14,7 @@ import type { BotRepository } from './resolve-identity.js';
  * status is the answer. The `requested_reviewers` endpoint is not used: a
  * request for the Copilot reviewer made there under a bot token registers
  * nothing on the pull request. Copilot is the only reviewer this verb can
- * ask: a person is asked by a person.
+ * ask.
  */
 
 const LABEL = 'POST /repos/{owner}/{repo}/pulls/{n}/copilot-code-review';

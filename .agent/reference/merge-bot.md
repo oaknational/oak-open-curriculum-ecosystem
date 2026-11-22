@@ -322,8 +322,7 @@ under the bot's token. Observed live on a draft pull request, 2026-11-22,
 after its automatic review had finished: the call answered 201 and the
 timeline showed `review_requested` of Copilot in the bot's name two seconds
 later; a second call made while that review was pending was refused as
-already pending. The verb asks Copilot and nobody else: a person is asked
-by a person. It depends on an organisation Copilot policy, "Allow members
+already pending. The verb asks Copilot and nobody else. It depends on an organisation Copilot policy, "Allow members
 without a Copilot license to use Copilot code review in GitHub.com", which
 is off by default and whose state the API does not show. With the policy
 off (observed 2026-11-22) the endpoint answers 422 under the bot's token,
