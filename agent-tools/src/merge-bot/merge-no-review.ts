@@ -65,7 +65,7 @@ export async function readNoReviewReason(
 }
 
 /** The comment's text for a reason. */
-export function noReviewComment(reason: string): string {
+function noReviewComment(reason: string): string {
   return [
     '**No review was requested for this pull request (agent comment).** The agent judged the change simple enough to merge on green checks alone. Its reason:',
     '',
