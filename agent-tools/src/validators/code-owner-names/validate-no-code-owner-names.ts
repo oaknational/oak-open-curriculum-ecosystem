@@ -15,8 +15,9 @@
  * left out, because each is generated and a name in one is cured in the
  * manifest or source that produced it, which is scanned.
  *
- * It runs in the root `repo-validators:check`, so a name fails the commit
- * hook, the push hook and CI alike.
+ * It runs in the root `repo-validators:check`, which `pnpm check` runs at the
+ * push hook and CI runs in its static checks: a name fails the push and the
+ * pull request. The commit hook does not run it.
  *
  * With `--report` the validator prints a count per directory and exits 0, for
  * sizing a cleanup. Without it: exit 0 clean, exit 1 a name was found, exit 2
