@@ -15,9 +15,10 @@ NEVER disable checks of any kind, ever.
 
 ## Quality Gates
 
-The quality gates run in the Git hooks and again in CI. The commit hook runs
-the format, Markdown and lint checks on what the commit changes; the push hook
-runs `pnpm check`, the whole set, before anything leaves the machine. The
+The quality gates run in the Git hooks and again in CI. The commit hook checks
+the format and the Markdown of the staged files and lints the workspaces
+changed since the last commit; the push hook runs `pnpm check`, the whole set,
+before anything leaves the machine. The
 commands below are the parts, for reading a failure and curing it:
 
 - `pnpm sdk-codegen` - Type generation

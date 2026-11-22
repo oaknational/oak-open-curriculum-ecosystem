@@ -43,7 +43,7 @@ of stale statement already found and cured on the foundation page. It returned t
 them a confirmed contradiction: `.agent/hooks/README.md` says the commit hook runs the build, and
 `.husky/pre-commit` runs three staged checks and no build.
 
-The set of pages, fixed here:
+The pages searched, a closed list:
 
 - `.agent/HUMANS.md`
 - `.agent/practice-core/README.md` and `.agent/practice-core/index.md`
@@ -75,7 +75,9 @@ home. The bound is not extended.
 
 ## Acceptance criteria (each with a proof — required)
 
-1. No sentence on the nine pages contradicts the foundation page's checkable claims. Proof,
+1. Every sentence found on the nine pages that contradicts the foundation page's checkable
+   claims is either cured or is a row in the pull request body with the reason it is left and
+   the home it is routed to. Proof,
    `repo-safe`: the pull request body's table lists each claim, the search run for it and its
    result; markdown lint, the format check and the link validator pass in the push hook.
 2. Every statement changed is read against its source in the system. Proof, `repo-safe`: each
