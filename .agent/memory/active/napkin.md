@@ -189,3 +189,14 @@ The account with its sources is the addendum to the reunification retrospective 
 - **Surprise:** the cleanup re-count found people in 19 package manifests (`author` and
   `contributors`), a surface the first count had not named. The owner chose the
   organisation alone for those fields.
+- **Mistake:** in the operational archive (oaknational#1056) a role phrase that begins with
+  an article replaced a bare name, and four places broke: "after the" at a line's end
+  followed by "the sibling estate's", and "no" before "the second code owner". A whole-file
+  replacement of a name hides this. Before the commit, search the changed files for a
+  substituted phrase that follows an article, on the same line or the line before.
+- **Surprise:** a second concurrent `merge-bot merge` call on one pull request waits as the
+  first does; one caller in one background loop, which reads the state before each call,
+  is enough.
+- **Pattern:** for names in records, three shapes cover nearly every line: a role phrase in
+  prose, a placeholder inside a code span (a bare branch name gains the span), and square
+  brackets inside a quoted message.

@@ -1323,12 +1323,16 @@ inside a rule name).
   live memory (archives apart) and experience records, 38 lines in 20 files. The report read
   732 lines in 28 directories after it. A quoted message keeps its words with the account in
   square brackets; a commit author value becomes a placeholder pair inside its code span.
+  The second surface landed as oaknational#1056 on 2026-11-22: the operational memory
+  archive, 133 lines in 16 files; the report read 600 lines in 27 directories after it. In
+  those records the second human code owner is "the second code owner" in prose and
+  `<code-owner>` in a code span.
 
   What remains, in order:
 
   1. Dated records (todo 4), one surface per pull request, largest first by the report:
-     the agentic-engineering reports, the archived Sonar evidence directory, the operational
-     memory archive, the rapid-comms records, the active memory archive. Sized by
+     the agentic-engineering reports, the archived Sonar evidence directory, the rapid-comms
+     records, the active memory archive, the other reports. Sized by
      `pnpm --filter @oaknational/agent-tools validate-no-code-owner-names --report`. The
      replacements used so far: an account as a mention becomes "the owner" or "a code
      owner"; a branch prefixed with an account takes `<owner>/` when inside a code span
