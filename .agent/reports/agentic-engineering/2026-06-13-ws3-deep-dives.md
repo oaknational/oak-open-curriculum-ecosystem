@@ -109,7 +109,7 @@ ship under a throwaway title (the cite-affordance and a `--test` flag that route
 are the activation-enthalpy nudges).
 
 **SC4 — actor-laundering on shared-credential actions (FH, NOTE).** `1bb0efdd`: a CodeQL dismissal
-records `dismissed_by: jimCresswell` (the shared gh credential), not the acting agent Flamebright;
+records `dismissed_by: <owner>` (the shared gh credential), not the acting agent Flamebright;
 provenance exists only in the comms stream. This is why the stream IS the provenance record — and why
 SC1/SC2 matter: the only provenance record is prose-threaded and partly unsound. (The cold-read #5
 "#160 dual-merge-account" claim did NOT reproduce — `2fc69a3f`/`c9b4dc78` both attribute the merge to

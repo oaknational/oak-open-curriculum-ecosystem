@@ -76,8 +76,8 @@ rulings in this window exist only there (section 2 marks them "queued").
 
 | UTC | Who | What | Evidence |
 | --- | --- | --- | --- |
-| 13:06:51 | mantagen | Approved #1023 at `fc45609c8` | [G] |
-| **13:07:12** | **mantagen** | **Merged #1023.** Merge commit `dae303661`, parents `0d8543021` and `fc45609c8`; head branch deleted 13:07:14 | [G] timeline, commit, repository activity |
+| 13:06:51 | the second code owner | Approved #1023 at `fc45609c8` | [G] |
+| **13:07:12** | **the second code owner** | **Merged #1023.** Merge commit `dae303661`, parents `0d8543021` and `fc45609c8`; head branch deleted 13:07:14 | [G] timeline, commit, repository activity |
 | 13:07:24 | seat | Saw the merge 12 s later; deleted the cron; stopped the Monitor | [T] L35698-L35720 |
 | 13:07:54 | seat | Proved `engraph` (`fc45609c8`) an ancestor of Oak's `main` with an empty tree diff | [T] L35745 |
 | 13:08:05 | seat | Question prompt on returning the fork to a mirror | [T] L35750 |
@@ -164,7 +164,7 @@ rulings in this window exist only there (section 2 marks them "queued").
 | --- | --- | --- | --- | --- | --- | --- |
 | Fork #430 | 11-16 13:37:22 | 11-16 13:59:58 | fork's bot | `6a99eb399` | docs | none |
 | Fork #431 | 11-16 22:01:47 | 11-16 22:24:40 | fork's bot | `fc45609c8` | 4 files | none |
-| Oak #1023 | 11-09 12:16:15 | 11-18 13:07:12 | mantagen | `dae303661` | 4,829 files | mantagen 13:06:51 |
+| Oak #1023 | 11-09 12:16:15 | 11-18 13:07:12 | the second code owner | `dae303661` | 4,829 files | the second code owner 13:06:51 |
 | Oak #1026 | 11-18 14:43:14 | 11-18 15:10:15 | Oak's bot | `c18317eac` | 2 files, +4/-2 | owner's account 15:02:46 |
 | Oak #1027 | 11-18 15:18:17 | 11-18 15:47:40 | Oak's bot | `98084eb9a` | 2 files, +5/-14 | none |
 | Oak #1028 | 11-18 15:21:17 | 11-18 15:48:22 | Oak's bot | `81917a322` | 9 files, +517/-7 | none |
@@ -454,7 +454,7 @@ Owner actions typed as shell commands in the session: `git pull` (15:11:20) and 
   the 15:11 and 18:14 analyses, zero open findings. Transcript tool results only.
 - **Production health and the JSON 404** on an unknown address. Transcript only.
 - **Whether the colleague the owner named is the account that merged.** Not established. [I].
-- **Why mantagen merged** when the standing ruling said only the owner merges #1023. The
+- **Why the second code owner merged** when the standing ruling said only the owner merges #1023. The
   transcript holds no owner comment on it.
 - **The fork ruleset's target before 14:25:07.** The seat said it followed the default branch.
 - **The cause of the missed cron ticks** on 2026-11-17.
@@ -467,7 +467,7 @@ Owner actions typed as shell commands in the session: `git pull` (15:11:20) and 
 
 - **Merge instant of #1023**: the merge commit's committer date is 13:07:10; the repository
   activity log says 13:07:11; the pull request's `mergedAt` is 13:07:12.
-- **Approval time**: the seat's report said mantagen approved "at 13:06 UTC"; GitHub says
+- **Approval time**: the seat's report said the second code owner approved "at 13:06 UTC"; GitHub says
   13:06:51. Consistent.
 - **Mistake 4**: the transcript says #1026 needed a human reviewer; GitHub's record of #1027 to
   #1029 says the bot merges without one.

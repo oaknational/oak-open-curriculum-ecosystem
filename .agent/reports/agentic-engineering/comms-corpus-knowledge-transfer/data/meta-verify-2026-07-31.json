@@ -1093,7 +1093,7 @@
       "id": "Bc73",
       "verdict": "home-verified",
       "path": ".github/CODEOWNERS",
-      "evidence": "CODEOWNERS line 2/5: '* @jimCresswell @mantagen' confirms the @mantagen addition from the PR #569 remediation; the design-bundle untrack + gitignore is the merged-main state (bundle not present as tracked design blobs on current tree)."
+      "evidence": "CODEOWNERS line 2/5: '* @<owner> @<code-owner>' confirms the @<code-owner> addition from the PR #569 remediation; the design-bundle untrack + gitignore is the merged-main state (bundle not present as tracked design blobs on current tree)."
     },
     {
       "id": "Bc74",

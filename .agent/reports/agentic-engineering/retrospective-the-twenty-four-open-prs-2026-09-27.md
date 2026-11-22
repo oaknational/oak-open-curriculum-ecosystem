@@ -35,23 +35,23 @@ or the record it names.
 | 2026-09-25T22:07:22Z | app/el-graphael | 15 | 233 | 2026-09-25T18:33:25Z |
 | 2026-09-25T22:24:18Z | app/el-graphael | 3 | 242 | 2026-09-25T20:46:35Z |
 | 2026-09-26T10:32:37Z | app/el-graphael | 3 | 241 | 2026-09-25T20:39:35Z |
-| 2026-09-26T10:35:07Z | jimCresswell | 1 | 240 | 2026-09-25T20:12:53Z |
-| 2026-09-26T10:41:59Z | jimCresswell | 1 | 211 | 2026-09-25T11:57:03Z |
-| 2026-09-26T10:42:36Z | jimCresswell | 1 | 229 | 2026-09-25T18:01:35Z |
-| 2026-09-26T10:43:00Z | jimCresswell | 1 | 235 | 2026-09-25T18:38:25Z |
-| 2026-09-26T10:43:27Z | jimCresswell | 1 | 243 | 2026-09-25T21:48:03Z |
-| 2026-09-26T10:43:52Z | jimCresswell | 1 | 247 | 2026-09-26T09:56:29Z |
-| 2026-09-26T10:44:38Z | jimCresswell | 2 | 226 | 2026-09-25T17:52:31Z |
-| 2026-09-26T10:45:28Z | jimCresswell | 3 | 231 | 2026-09-25T18:23:29Z |
-| 2026-09-26T10:46:01Z | jimCresswell | 3 | 236 | 2026-09-25T18:56:17Z |
-| 2026-09-26T10:47:06Z | jimCresswell | 4 | 220 | 2026-09-25T16:14:09Z |
-| 2026-09-26T10:47:31Z | jimCresswell | 4 | 232 | 2026-09-25T18:32:35Z |
-| 2026-09-26T10:48:39Z | jimCresswell | 5 | 237 | 2026-09-25T19:02:05Z |
-| 2026-09-26T10:50:00Z | jimCresswell | 7 | 216 | 2026-09-25T15:40:47Z |
-| 2026-09-26T11:13:48Z | jimCresswell | 11 | 234 | 2026-09-25T18:35:52Z |
-| 2026-09-26T11:14:18Z | jimCresswell | 14 | 244 | 2026-09-25T22:11:21Z |
-| 2026-09-26T11:14:32Z | jimCresswell | 20 | 238 | 2026-09-25T19:09:43Z |
-| 2026-09-26T11:14:53Z | jimCresswell | 23 | 218 | 2026-09-25T15:49:01Z |
+| 2026-09-26T10:35:07Z | the owner's account | 1 | 240 | 2026-09-25T20:12:53Z |
+| 2026-09-26T10:41:59Z | the owner's account | 1 | 211 | 2026-09-25T11:57:03Z |
+| 2026-09-26T10:42:36Z | the owner's account | 1 | 229 | 2026-09-25T18:01:35Z |
+| 2026-09-26T10:43:00Z | the owner's account | 1 | 235 | 2026-09-25T18:38:25Z |
+| 2026-09-26T10:43:27Z | the owner's account | 1 | 243 | 2026-09-25T21:48:03Z |
+| 2026-09-26T10:43:52Z | the owner's account | 1 | 247 | 2026-09-26T09:56:29Z |
+| 2026-09-26T10:44:38Z | the owner's account | 2 | 226 | 2026-09-25T17:52:31Z |
+| 2026-09-26T10:45:28Z | the owner's account | 3 | 231 | 2026-09-25T18:23:29Z |
+| 2026-09-26T10:46:01Z | the owner's account | 3 | 236 | 2026-09-25T18:56:17Z |
+| 2026-09-26T10:47:06Z | the owner's account | 4 | 220 | 2026-09-25T16:14:09Z |
+| 2026-09-26T10:47:31Z | the owner's account | 4 | 232 | 2026-09-25T18:32:35Z |
+| 2026-09-26T10:48:39Z | the owner's account | 5 | 237 | 2026-09-25T19:02:05Z |
+| 2026-09-26T10:50:00Z | the owner's account | 7 | 216 | 2026-09-25T15:40:47Z |
+| 2026-09-26T11:13:48Z | the owner's account | 11 | 234 | 2026-09-25T18:35:52Z |
+| 2026-09-26T11:14:18Z | the owner's account | 14 | 244 | 2026-09-25T22:11:21Z |
+| 2026-09-26T11:14:32Z | the owner's account | 20 | 238 | 2026-09-25T19:09:43Z |
+| 2026-09-26T11:14:53Z | the owner's account | 23 | 218 | 2026-09-25T15:49:01Z |
 | 2026-09-26T12:09:25Z | app/el-graphael | 16 | 223 | 2026-09-25T17:11:20Z |
 | 2026-09-26T12:35:57Z | app/el-graphael | 1 | 248 | 2026-09-26T11:03:46Z |
 | 2026-09-26T13:08:50Z | app/el-graphael | 12 | 224 | 2026-09-25T17:41:11Z |
@@ -70,7 +70,7 @@ or the record it names.
 | 2026-09-27T09:06:12Z | app/el-graphael | 45 | 245 | 2026-09-25T22:23:24Z |
 
 The table above: every lineage landing from 22:00Z on 2026-09-25 to the drain's last row, with
-the merging hand (`app/el-graphael` is the estate's merge bot, the seats' door; `jimCresswell` is
+the merging hand (`app/el-graphael` is the estate's merge bot, the seats' door; `<owner>` is
 the owner by hand). Read against it:
 
 - 2026-09-25, 00:22Z to 22:24Z: twenty-one landings through the door (the merged list read from gh
@@ -328,7 +328,7 @@ understanding amends the record additively).
 
 1. The plan report cited in the sources paragraph,
    `.agent/reports/agentic-engineering/2026-09-26-the-estates-programme-plan.md`, lives in JC.net
-   (`jimCresswell/jimcresswell.net`), not in this repository; a reader who follows the path here
+   (the sibling estate's repository), not in this repository; a reader who follows the path here
    finds nothing. Read the sources paragraph with that qualifier. The signed line read it as a
    missing qualifier below the bar; the re-read put it over the bar (a reader acting on the record
    is misled by the path); cured here.
