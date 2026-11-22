@@ -22,7 +22,9 @@ last_updated: 2026-11-22
 A colleague who follows the first line of an agent pull request to
 `docs/foundation/agentic-engineering-system.md`, and then follows one of its links, reads nothing
 that contradicts that page or what the system does: who reviews, what each hook and gate runs, who
-merges, what an unattended agent can and cannot do, and what "the Practice" is.
+merges, what an unattended agent can and cannot do, and what "the Practice" is. A
+contradiction that cannot be cured inside the time bound is named in the pull request with the
+reason it is left and the home it is routed to.
 
 ## User groups and value
 
