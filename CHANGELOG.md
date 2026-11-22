@@ -1,3 +1,10 @@
+## [1.190.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.0...v1.190.1) (2026-11-22)
+
+
+### Bug Fixes
+
+* **agent-tools:** state what the gates and the review reading do ([f5505d2](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/f5505d2704481b9bd7e47302cd0c88eb951db777))
+
 # [1.190.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.189.2...v1.190.0) (2026-11-22)
 
 
