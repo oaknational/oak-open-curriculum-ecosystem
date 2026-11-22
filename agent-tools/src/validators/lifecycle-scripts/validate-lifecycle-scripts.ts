@@ -22,8 +22,9 @@ import {
  * orchestrator. The canonical bootstrap form runs workspace source directly,
  * `tsx agent-tools/src/bootstrap/bootstrap.ts`; `prepare` may run `husky`.
  *
- * Wired into root `repo-validators:check`, so it runs on every pre-commit and
- * pre-push alongside the sibling validators.
+ * Wired into root `repo-validators:check`, which `pnpm check` runs at the
+ * push hook and CI runs in its static checks, alongside the sibling
+ * validators. The commit hook does not run it.
  *
  * @packageDocumentation
  */

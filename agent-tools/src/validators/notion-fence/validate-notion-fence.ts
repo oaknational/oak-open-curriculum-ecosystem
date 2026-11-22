@@ -16,8 +16,9 @@ import { scanForFenceViolations, type FenceViolation } from './validate-notion-f
  *
  * Scans every git-tracked text file for Notion workspace-page hosts and
  * for the fenced strategy page's ID (hash-matched — see the helpers'
- * docs). Runs in `repo-validators:check`, so it binds at pre-commit,
- * pre-push, and CI static-checks. The construction and human layers are
+ * docs). Runs in `repo-validators:check`, so it binds at the push hook
+ * (through `pnpm check`) and in CI's static checks; the commit hook does
+ * not run it. The construction and human layers are
  * stated in `.agent/rules/notion-strategy-page-fence.md`.
  *
  * @packageDocumentation

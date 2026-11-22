@@ -26,8 +26,9 @@ import {
  * content guard) or reach for a sibling destructive command (the Bash guard)
  * (PDR-044 §Innate immunity, as amended).
  *
- * Wired into root `repo-validators:check`, so it runs on every pre-commit,
- * pre-push, and CI run alongside the sibling validators.
+ * Wired into root `repo-validators:check`, which `pnpm check` runs at the
+ * push hook and CI runs in its static checks, alongside the sibling
+ * validators. The commit hook does not run it.
  *
  * @packageDocumentation
  */
