@@ -15,6 +15,9 @@
  * left out, because each is generated and a name in one is cured in the
  * manifest or source that produced it, which is scanned.
  *
+ * It runs in the root `repo-validators:check`, so a name fails the commit
+ * hook, the push hook and CI alike.
+ *
  * With `--report` the validator prints a count per directory and exits 0, for
  * sizing a cleanup. Without it: exit 0 clean, exit 1 a name was found, exit 2
  * the scan could not be made (the code-owners file or the local list is there
