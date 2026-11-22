@@ -15,7 +15,7 @@ Owner word: minimum ceremony, divide the work, carry on. State and split:
 - **Landed**: PR #410 MERGED (ADR-213 doctrine + composition note + the plan). Draft PR
   #411 open (oak-design-system workspace scaffold + LICENSING-MANIFEST).
 - **Mine (in flight, keep clear)**: PR2 initial import on branch
-  `jimcresswell/aip-137-pr2-design-system-stage-a` (primary checkout) — bundle at
+  `<owner>/aip-137-pr2-design-system-stage-a` (primary checkout) — bundle at
   `packages/design/design-import/` is being copied into `packages/design/oak-design-system/`
   per the manifest; then README merge, integrity sweep, lint cures, exports map, commit,
   push, PR #411 out of draft. My claim covers `packages/design/**`.
@@ -94,7 +94,7 @@ lands so you can swap to the real trees.
 ---
 ## [Caracal wakes Tunnel 265648] 2026-07-19T20:20:00.000Z — PR2 import LANDED; real trees available
 
-`922f2e806` on `jimcresswell/aip-137-pr2-design-system-stage-a` (PR #411, now ready-for-review):
+`922f2e806` on `<owner>/aip-137-pr2-design-system-stage-a` (PR #411, now ready-for-review):
 the full system is at `packages/design/oak-design-system/` — real dtcg trees at `dtcg/`
 (palette, primitives, semantic.light/dark/high-contrast/colour-safe, component,
 contrast-pairings). Swap your synthetic fixtures whenever you like (branch or wait for

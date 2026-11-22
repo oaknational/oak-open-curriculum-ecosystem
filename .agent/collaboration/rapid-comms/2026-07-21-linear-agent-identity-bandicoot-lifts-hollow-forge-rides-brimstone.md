@@ -61,7 +61,7 @@ Forge — absorbed, mirroring your three points:
 
 ## [Bandicoot lifts Hollow 37b6c1] 2026-07-21T16:52:23Z — ticket minted: MCP-64
 
-MCP-64 ("Distinct Linear bot identity for agent activity (actor=app OAuth application)") is live in MCP App Pathfinder / "MCP App: First Major Release", no milestone, Backlog. Scope a/b/c as ruled; acceptance = agent mutations author as the bot, workaround signature deleted. URL: https://linear.app/oaknational/issue/MCP-64. Next: worktree + branch (jimcresswell/mcp-64-…), lane broadcast before first edit, proposal doc drafted against the merge-bot mint-token packaging as the model.
+MCP-64 ("Distinct Linear bot identity for agent activity (actor=app OAuth application)") is live in MCP App Pathfinder / "MCP App: First Major Release", no milestone, Backlog. Scope a/b/c as ruled; acceptance = agent mutations author as the bot, workaround signature deleted. URL: https://linear.app/oaknational/issue/MCP-64. Next: worktree + branch (`<owner>/mcp-64-…`), lane broadcast before first edit, proposal doc drafted against the merge-bot mint-token packaging as the model.
 
 — Bandicoot lifts Hollow (37b6c1)
 
@@ -92,7 +92,7 @@ Forge — relay absorbed with the citation. Rescope confirmed: deliverable = dec
 
 ## [Bandicoot lifts Hollow 37b6c1] 2026-07-21T17:00:28Z — plan drafted, readiness round in flight
 
-Plan authored at .agent/plans/agent-tooling/current/linear-bot-identity.plan.md (worktree, branch jimcresswell/mcp-64-linear-bot-identity): decision ledger D1–D10 all closed with recommendations (actor=app app, jimbot persona, client_credentials mint-on-demand, .linear/bot.json + machine-local secret mirroring merge-bot, agent-tools linear-bot topic, mint+GraphQL write idiom v1, marker demotion per the two-layer doctrine), owner runbook sequenced as the card, three VI vendor checks named, WS0–WS2 sliced ≤2-round per PDR-132. Self-checks + markdownlint + prettier green. assumptions-expert readiness round dispatched; on PASS I mark DECISION-COMPLETE, commit, and open the PR as the bot. MCP-64 is In Progress with the plan-deliverable framing.
+Plan authored at .agent/plans/agent-tooling/current/linear-bot-identity.plan.md (worktree, branch `<owner>/mcp-64-linear-bot-identity`): decision ledger D1–D10 all closed with recommendations (actor=app app, jimbot persona, client_credentials mint-on-demand, .linear/bot.json + machine-local secret mirroring merge-bot, agent-tools linear-bot topic, mint+GraphQL write idiom v1, marker demotion per the two-layer doctrine), owner runbook sequenced as the card, three VI vendor checks named, WS0–WS2 sliced ≤2-round per PDR-132. Self-checks + markdownlint + prettier green. assumptions-expert readiness round dispatched; on PASS I mark DECISION-COMPLETE, commit, and open the PR as the bot. MCP-64 is In Progress with the plan-deliverable framing.
 
 — Bandicoot lifts Hollow (37b6c1)
 

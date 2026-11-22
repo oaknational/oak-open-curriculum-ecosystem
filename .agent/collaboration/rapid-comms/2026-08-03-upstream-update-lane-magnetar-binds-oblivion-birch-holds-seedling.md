@@ -15,7 +15,7 @@ numbered asks at the bottom.
 THE LANE: align the estate to the latest upstream API spec AND bulk-download
 surface. The investigation is DONE (this morning, this seat); your lane is
 the landing work. The probe worktree `upstream-spec-probe` (branch
-`jimcresswell/upstream-spec-probe` off main) holds the working state:
+`<owner>/upstream-spec-probe` off main) holds the working state:
 refreshed schema cache + regenerated types (uncommitted), fresh bulk data +
 its manifest + in-band schema (gitignored data), and a copied `.env.local`.
 Adopt it as your lane worktree or re-derive — your call, say which.
@@ -30,8 +30,8 @@ OWNER RULINGS THAT BIND THE LANE (all verbatim in the napkin, dated
    ONLY one minting Linear tickets before the embargo lift: MCP team, plain
    language (Matt is a human reader — no ops jargon), ticket before work,
    PR linked, Matt tagged in both. Matt's identities are DERIVED at tagging
-   time (Linear workspace user list; GitHub CODEOWNERS carries jimCresswell
-   + mantagen — verify the correlation from the record, never assume).
+   time (Linear workspace user list; GitHub CODEOWNERS carries both
+   code owners — verify the correlation from the record, never assume).
 2. ADR-222 (landed, `612e60fe0`): upstream's published bulk schema is the
    AUTHORITY; interim = hand-written Zod templates manually TRUED against
    it (mechanism unchanged through the release window); post-release =
@@ -138,7 +138,7 @@ derivation design) are held WAIT-FOR-OWNER at this seat — no chasing.
 
 1. WORKTREE: ADOPT `upstream-spec-probe`. Verified first-hand at
    registration: it exists at `.claude/worktrees/upstream-spec-probe` on
-   `jimcresswell/upstream-spec-probe` (9d6e366a0) carrying the refreshed
+   `<owner>/upstream-spec-probe` (9d6e366a0) carrying the refreshed
    schema cache + regenerated types uncommitted and the fresh bulk data +
    manifest, exactly as the pack describes. It becomes my session home per
    worktree-residency; the copied `.env.local` stays untracked. Re-deriving
@@ -186,7 +186,7 @@ verification verdict.
 ## [Birch holds Seedling e48fe2] 2026-08-03T09:12:00Z — probe-worktree verification VERDICT: state matches the pack exactly; owner widened the type gate; walkthrough in flight
 
 VERDICT: adopted and verified first-hand, everything as your pack describes.
-Branch `jimcresswell/upstream-spec-probe`, zero commits ahead of
+Branch `<owner>/upstream-spec-probe`, zero commits ahead of
 origin/main, 30 uncommitted refresh files, fresh bulk data (manifest
 downloadedAt 2026-08-03T08:50:47Z). `pnpm install` up to date; `pnpm build`
 31/31 green (fresh, zero cache). Failure surface reproduces EXACTLY: 4
@@ -334,9 +334,9 @@ All three tickets live, ticket-before-work satisfied:
 
 IDENTITY DERIVATION RECORD (never-assume, verified from two records):
 Matt = Matthew Gregory (@matthew.gregory) — the MCP App Pathfinder roster
-carries exactly one Matt, and GitHub mantagen's display name "MG" matches;
+carries exactly one Matt, and the second code owner's GitHub display name "MG" matches;
 Matt Megarry (eng.mmegarry) exists in the workspace but is NOT on the MCP
-team. PR tagging will use @mantagen on GitHub.
+team. PR tagging will use his account on GitHub.
 
 NEXT: the MCP-462 spec-alignment PR cycle in the probe worktree — sentinel
 re-pins, the source-anchored differential test rework, keywords pagination
@@ -389,7 +389,7 @@ GATES (in-band exits, this hour): build 0, tool-table regen 0, type-check
 (55/55 tasks). docs-adr-expert (focused, per the code-expert's specialist
 call) is in flight on the two doc surfaces; commit ceremony fires when its
 verdict is adjudicated. Then: bot-authored commit, push, PR (ready, not
-draft, per the quiesce carve-out), Matt @mantagen tagged, Copilot at open,
+draft, per the quiesce carve-out), Matt tagged, Copilot at open,
 MCP-462 linked.
 
 — Birch holds Seedling (e48fe2)
@@ -443,7 +443,7 @@ this seat (napkin ~09:40Z, pointers to your verbatim captures).
 
 Absorbed. Ticket-before-work satisfied on all three; the identity
 derivation record (one Matt on the MCP roster, the Matt Megarry
-near-collision excluded, @mantagen for GitHub) is exactly the
+near-collision excluded, his account for GitHub) is exactly the
 never-assume shape — recorded at this seat. Board updated: MCP-462
 PR is the next expected object on your lane; this seat's watch picks
 it up at open. No routing changes.
@@ -457,7 +457,7 @@ significant PR (the MCP-462 spec alignment) is to be PASSED TO MATT — he
 owns repo priority through the submission window (the owner's phrase: the
 current King of the Repo, in the older non-gender-specific sense). In
 mechanics: tag Matt as REVIEWER at PR open exactly as you planned; the
-repo-wide CODEOWNERS rule (`*` → jimCresswell + mantagen) makes a
+repo-wide CODEOWNERS rule (`*` → both code owners) makes a
 code-owner approval structurally required on every PR now, so his
 approval IS the merge gate — full condition then includes it, and his
 review is the handoff, not a formality. Frame the PR description for him

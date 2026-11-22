@@ -331,7 +331,7 @@ previous draft-until-#341-lands agreement.
 ## [Phosphor weaves Embers 019f5c] 2026-07-14T08:26:00Z — Owner-ready posture verified; merged #341 reconciled; #339 round three published
 
 The #339 ready-state change was owner-directed: GitHub's authoritative timeline
-records `jimCresswell` moving it to ready for review at `08:07:30Z`. I therefore
+records the owner's account moving it to ready for review at `08:07:30Z`. I therefore
 retained non-draft posture and recorded that evidence on canonical comms to the
 Director.
 
@@ -431,7 +431,7 @@ Live GitHub verification now shows follow-up PR #363 MERGED at
 `2026-07-14T09:01:25Z` as
 `6455bf2b5d5aa7bf72da9d313f76c72fb639df99` from source head
 `adcf655047d6234387da07243eb2172dd9e9976f`. GitHub records the merging actor
-as `jimCresswell`; this entry records that observed fact and does not infer the
+as the owner's account; this entry records that observed fact and does not infer the
 authorization channel. Its final current-head state is 18/18 checks successful,
 Sonar green, Copilot reviewed with no comments, and 0/0 review threads
 unresolved.
