@@ -8,6 +8,7 @@ import { realFetch } from './github-fetch.js';
 import { readMergeSettings, putMerge } from './merge-github-api.js';
 import { readExecutor } from './merge-read-env.js';
 import { resolveVerdict } from './merge-door-checks.js';
+import { mergeGrounds, noReviewObstacle } from './merge-no-review.js';
 import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-config.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import type { BotIdentity } from './resolve-identity.js';
@@ -53,6 +54,8 @@ export interface MergeExecutionInput {
   readonly appSlug: string;
   readonly prNumber: number;
   readonly nowIso: string;
+  /** The caller's reason for merging with no review, when it gives one (`merge-no-review.ts`). */
+  readonly noReviewReason: string | undefined;
   readonly seams: MergeExecutionSeams;
 }
 
@@ -176,21 +179,28 @@ async function gateAndMerge(context: {
 }): Promise<Result<MergeOutcome, Error>> {
   const { input, reading, token } = context;
   const fetchImpl = input.seams.fetchImpl ?? realFetch();
+  const target = { identity: input.identity, prNumber: input.prNumber };
+  const obstacle = noReviewObstacle(reading, input.nowIso);
   const resolved = await resolveVerdict({
     reading,
     appSlug: input.appSlug,
     nowIso: input.nowIso,
+    mayMergeUnreviewed: input.noReviewReason !== undefined && obstacle === undefined,
     fetchImpl,
     token,
-    target: { identity: input.identity, prNumber: input.prNumber },
+    target,
   });
   if (!resolved.ok) {
-    const message = `door reading failed: ${resolved.error.message}`;
-    return err(new ReadingUnavailableError(message, { cause: resolved.error }));
+    return doorReadingFailed(resolved.error);
   }
   const verdict = resolved.value;
   const decide = (allowMergeCommit: boolean): MergeDecision =>
-    decideMergeAction({ verdict, allowMergeCommit });
+    decideMergeAction({
+      verdict,
+      allowMergeCommit,
+      noReviewReason: input.noReviewReason,
+      noReviewObstacle: obstacle,
+    });
 
   const eligible = decide(true);
   if (eligible.kind === 'refuse') {
@@ -204,18 +214,27 @@ async function gateAndMerge(context: {
   if (decision.kind === 'refuse') {
     return refused(decision, verdict);
   }
-  return mergeVerdicted({ fetchImpl, token, input, reading, verdict });
+  // A merge with no review puts its reason on the pull request BEFORE the merge call.
+  const grounds = await mergeGrounds({ decision, verdict, fetchImpl, token, ...target });
+  return grounds.ok
+    ? mergeVerdicted({ fetchImpl, token, input, reading, evidence: grounds.value })
+    : grounds;
 }
 
-/** The merge PUT at the verdicted tip; the outcome's evidence is the verdict's lines. */
+/** A failed door reading, as the transient class the poll loop retries. */
+function doorReadingFailed(cause: Error): Result<never, Error> {
+  return err(new ReadingUnavailableError(`door reading failed: ${cause.message}`, { cause }));
+}
+
+/** The merge PUT at the verdicted tip; the outcome carries the grounds it merged on. */
 async function mergeVerdicted(context: {
   readonly fetchImpl: GithubApiFetch;
   readonly token: string;
   readonly input: MergeExecutionInput;
   readonly reading: PrStateReading;
-  readonly verdict: PrVerdict;
+  readonly evidence: readonly string[];
 }): Promise<Result<MergeOutcome, Error>> {
-  const { fetchImpl, token, input, reading, verdict } = context;
+  const { fetchImpl, token, input, reading, evidence } = context;
   const merged = await putMerge(fetchImpl, token, {
     identity: input.identity,
     prNumber: input.prNumber,
@@ -224,5 +243,5 @@ async function mergeVerdicted(context: {
   if (!merged.ok) {
     return merged;
   }
-  return ok({ kind: 'merged', sha: merged.value, evidence: verdict.evidence });
+  return ok({ kind: 'merged', sha: merged.value, evidence });
 }

@@ -82,3 +82,44 @@ export function expectedReviewersOf(input: ExpectedReviewersInput): string[] {
     return true;
   });
 }
+
+/**
+ * Every review that is someone else's word on the pull request. Wider than
+ * the reviewer set on purpose. The set names who holds a round, so it leaves
+ * out an approval or a change request with an empty body, a comment on a
+ * line (whose review has an empty body) and a review by a deleted account.
+ * A caller that must know that nobody has reviewed counts those.
+ *
+ * Left out: the author's own reviews, and a COMMENTED review whose body is a
+ * skip notice, a vendor's failed-run notice or the agent's own signed reply.
+ * Those three are read from the body's text, so they are trusted on a
+ * comment alone: an approval, a change request, a dismissed review or a
+ * draft counts whatever its body says. A deleted account is never the
+ * author's own, since two deleted accounts share one name. An App and a
+ * person whose login is the App's slug cannot be told apart in the harvest
+ * and read as one account. A draft by any account but the reader's own is
+ * not in the harvest at all: GitHub shows a draft to its author alone.
+ *
+ * @param author - The pull request's author, as `gh pr view` spells it.
+ * @param reviews - The full review harvest.
+ */
+export function reviewsByOthers(
+  author: string,
+  reviews: readonly HarvestedReview[],
+): HarvestedReview[] {
+  return reviews.filter((review) => !isAuthorsOwn(author, review) && !isNoticeComment(review));
+}
+
+function isAuthorsOwn(author: string, review: HarvestedReview): boolean {
+  return review.author !== 'unknown' && accountOf(review.author) === accountOf(author);
+}
+
+/** A COMMENTED review whose body says that no review occurred, or is the agent's own reply. */
+function isNoticeComment(review: HarvestedReview): boolean {
+  return (
+    review.state === 'COMMENTED' &&
+    (isSignedSelfReply(review.body) ||
+      isSkipMarker(review.body) ||
+      isVendorErrorReview(review.body))
+  );
+}
