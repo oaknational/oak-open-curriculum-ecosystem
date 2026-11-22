@@ -1678,6 +1678,10 @@ inside a rule name).
   to and the Practice's definitions. Under the names plan: the reviewer templates not yet
   read line by line. Not started without the owner's express request: the v1 migration.
   This seat's open claim on `agent-tools/src/merge-bot/**` closes when the verb lands.
+  This queue is as it stood at the window's close. The hand-on entry at the end of this
+  update carries the order that replaced it: the first two items landed as oaknational#1065
+  and #1066, the claim was closed at the hand-on, and the fold was the picking-up seat's
+  first act.
 - **The code reviewer's reading of the cures, before the commit (`ca3a04f65`).** Eleven
   findings, each checked. Cured: an approval or a change request by another account was
   still merged past when its body read like a skip notice, a failed-run notice or a signed
