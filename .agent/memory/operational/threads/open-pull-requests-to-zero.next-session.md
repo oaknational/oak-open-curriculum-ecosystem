@@ -1738,6 +1738,28 @@ inside a rule name).
   shows two Copilot rules applying to the default branch, both from this repository's
   rulesets, and no organisation ruleset. The observed review on the bot's push contradicts
   the changelog's sentence for an App on the list; the cause is not found.
+- **For the session that picks this up, at the owner's word to hand on (2026-11-22).** This
+  seat has no open pull request, no claim, no watcher, heartbeat, monitor or scheduled
+  prompt. First act: fold this coordination branch, which is past its lifetime and holds
+  the records of 2026-11-21 and 22. Then, in order:
+  1. The `request-review` verb, by the owner's answer of 2026-11-22 ("Land it next
+     session"): bring `feat/merge-bot-request-review` up to `main` by a merge (its worktree
+     is `.claude/worktrees/bot-request-review`), prove the verb with one live call now that
+     the organisation policy is on, and merge it. It then serves a second review without a
+     push, and the day on-push review is turned off for bots. The paragraph in
+     `.agent/reference/merge-bot.md` headed "Requesting the Copilot reviewer is the one
+     write the bot cannot make here" is rewritten from what that call shows.
+  2. One pull request that trues the statements listed under "Decisions on the cures that
+     follow" above. Nothing of it is started.
+  3. The follow-up from oaknational#1065's third round: a refusal the poll loop may outwait.
+  4. A plan node for the documentation session the owner set apart, then that session.
+  5. Under the names plan, the reviewer templates not yet read line by line.
+  To be read from the world when it happens: whether a colleague's push is reviewed again,
+  and whether bot pushes go on being reviewed despite the bypass list. From now on the
+  first line of an agent pull request links its last words to the foundation page. Each
+  bot pull request still asks four people for a review at ready; the owner has ruled that
+  stays. oaknational#1065 was a long arc for one flag (three vendor rounds, one local
+  review, cost over budget); a retrospective is offered to the owner and not run.
 - **What this record cannot show.** It was written after a compaction, from the summary the
   compaction left and from what was read again afterwards. Anything the earlier context held
   and the summary dropped is in the session transcript only.
