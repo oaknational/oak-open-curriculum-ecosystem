@@ -107,9 +107,10 @@ export interface PrStateReading extends BindingHead {
   readonly reviewRuns: ReviewRunsLeg;
   /**
    * The base branch's automatic-review configuration (the `copilot_code_review`
-   * rule, read from the rules API with the reading): what the vendor reviews
-   * on its own, so a leg is owed only where the configuration or a request
-   * says so. `unread` keeps every expected leg owed, named as such.
+   * rule, read from the rules API with the reading): what the rulesets say
+   * the vendor reviews on its own. It is printed as evidence with each
+   * verdict and decides no leg; the legs are computed from the pull
+   * request's history. `unread` is named with its reason.
    */
   readonly reviewConfiguration: ReviewConfiguration;
 }

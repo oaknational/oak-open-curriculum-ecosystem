@@ -6,29 +6,27 @@ import { parseWithSchema } from '../core/schema-parse.js';
 /**
  * The repository's automatic-review configuration, read from the base
  * branch's rules (`GET /repos/{owner}/{repo}/rules/branches/{branch}`, the
- * `copilot_code_review` rule): what the vendor reviews on its own, so a leg
- * is owed only where the configuration or a request says so. The tooling
- * once assumed a review on every push; when the owner reduced Copilot's
- * reviews at GitHub to the ready-mark alone (2026-10-15), every later tip
- * read OWED with nothing coming, and no code-class pull request could merge
- * after a settlement push without a hand-made request (the owner's framing,
- * 2026-10-16: read the configuration and derive what is owed from it).
+ * `copilot_code_review` rule): what the rulesets say the vendor reviews on
+ * its own. The reading is evidence and nothing more: its one consumer is
+ * the evidence line below, printed with every reviewer-leg verdict. No leg
+ * is decided from it. The legs are computed from the pull request's own
+ * history, its reviews and the rounds asked (`reviewer-legs.ts`), so a
+ * review the configuration brings is seen when its request appears there.
  *
  * The source read is the repository's: its rulesets, which the rules API
- * exposes. An author's personal Copilot setting (automatic review of the
- * author's own pushes) is a separate source no API exposes to the tooling;
- * it is read empirically, by whether later tips receive a review nobody
- * requested (none did on three settlement pushes of 2026-10-16), and an
- * author who enables it makes every later tip owed by the review it brings,
- * which the request surface shows within seconds and the legs read as OWED.
+ * exposes. Two things that also decide whether a review follows a push are
+ * not read: each ruleset's bypass list, and an author's personal Copilot
+ * setting, which no API exposes to the tooling. So the line states what a
+ * ruleset on the base branch carries, never whether a given author's push
+ * is reviewed; that is read from the pull request's timeline.
  *
  * @packageDocumentation
  */
 
 /**
  * Three states, each named: the rules were not read (why), no Copilot rule
- * binds the branch, or the rule's two switches. `unread` keeps the legs
- * conservative (owed until a review binds the tip), never a silent pass.
+ * binds the branch, or the rule's two switches. `unread` is named with its
+ * reason, never shown as an unconfigured branch.
  */
 export type ReviewConfiguration =
   | { readonly kind: 'unread'; readonly reason: string }
@@ -74,13 +72,18 @@ export function parseReviewConfiguration(value: unknown): Result<ReviewConfigura
   });
 }
 
-/** One evidence line naming what the configuration says, or why it is unknown. */
+/**
+ * One evidence line naming what the configuration says, or why it is
+ * unknown. It claims nothing about any leg, and the configured line says
+ * that the switches are those of any ruleset on the base branch, with no
+ * bypass list read.
+ */
 export function reviewConfigurationEvidence(configuration: ReviewConfiguration): string {
   if (configuration.kind === 'unread') {
-    return `review configuration unread (${configuration.reason}): every expected leg stays owed until a review binds the tip`;
+    return `review configuration unread (${configuration.reason})`;
   }
   if (configuration.kind === 'absent') {
-    return 'review configuration: no copilot_code_review rule on the base branch; every expected leg owed until a review binds the tip';
+    return 'review configuration: no copilot_code_review rule on the base branch';
   }
-  return `review configuration: copilot_code_review review_on_push=${String(configuration.reviewOnPush)} review_draft_pull_requests=${String(configuration.reviewDraft)}`;
+  return `review configuration: copilot_code_review review_on_push=${String(configuration.reviewOnPush)} review_draft_pull_requests=${String(configuration.reviewDraft)} (of any ruleset on the base branch; bypass lists not read)`;
 }

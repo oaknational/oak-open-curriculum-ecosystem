@@ -25,8 +25,8 @@
  * `--print-counts` emits the live projection as JSON — and ONLY that JSON — on
  * stdout, with every human banner diverted to stderr, so the census authoring
  * source can be piped straight into a file. The exit code is the ordinary
- * verdict either way. Wired into root `repo-validators:check` (pre-commit AND
- * CI). Exit 0 = clean; 1 = findings; 2 = refusal — misconfiguration, git could
+ * verdict either way. Wired into root `repo-validators:check` (the push hook,
+ * through `pnpm check`, AND CI's static checks; not the commit hook). Exit 0 = clean; 1 = findings; 2 = refusal — misconfiguration, git could
  * not list the tracked files (git's dubious-ownership refusal among them), or a
  * tracked file could not be read.
  *

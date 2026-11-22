@@ -13,8 +13,9 @@
  * likewise single-sourced, from `core/tracked-file-scan`, shared with the
  * identity-naming gate.
  *
- * Wired into root `repo-validators:check`, which runs in the pre-commit hook AND
- * in CI via `pnpm check`. Exit 0 = clean; exit 1 = at least one machine-local
+ * Wired into root `docs-validators:check`, which `pnpm check` runs at the
+ * push hook and CI runs in its static checks. The commit hook does not run
+ * it. Exit 0 = clean; exit 1 = at least one machine-local
  * path found; exit 2 = refusal — the policy block is missing, git could not list
  * the tracked files, or a tracked file could not be read (the scan never
  * silently skips a tracked file).

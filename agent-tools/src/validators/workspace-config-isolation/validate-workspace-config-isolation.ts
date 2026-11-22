@@ -16,7 +16,8 @@
  * turbo emits no warning). Predicate semantics live in the helpers
  * module; this bin only performs I/O and composes them.
  *
- * Wired into root `repo-validators:check` (pre-commit + CI). Runs from
+ * Wired into root `repo-validators:check` (the push hook, through
+ * `pnpm check`, and CI; not the commit hook). Runs from
  * source via tsx — the CI static-checks job installs without building,
  * so this file imports nothing from any built workspace package.
  *

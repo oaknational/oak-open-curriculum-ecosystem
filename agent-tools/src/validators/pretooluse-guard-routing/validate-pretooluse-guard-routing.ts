@@ -22,8 +22,9 @@ import {
  * one. This gate locks in shim routing so a silent revert cannot reopen the
  * uncontrolled window.
  *
- * Wired into root `repo-validators:check`, so it runs on every pre-commit and
- * pre-push alongside the sibling validators.
+ * Wired into root `repo-validators:check`, which `pnpm check` runs at the
+ * push hook and CI runs in its static checks, alongside the sibling
+ * validators. The commit hook does not run it.
  *
  * @packageDocumentation
  */
