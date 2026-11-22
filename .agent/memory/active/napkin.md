@@ -251,3 +251,30 @@ The account with its sources is the addendum to the reunification retrospective 
   refused three attempts to squeeze a change in by rearranging lines. Each attempt moved the
   count from one limit to the other. Extracting a named helper passed at once. A limit hit
   twice is asking for a function, not a tighter layout.
+
+## 2026-11-22 — Petrel mends Pinnacle (ea9cea): the pickup's own lessons
+
+- **Mistake (mine):** I pushed nine times with plain `git push`, which authenticates through
+  the machine's keychain as the owner, so the repository's activity log shows the owner's
+  account pushing and creating branches on a Sunday afternoon (oaknational#1067 to #1071).
+  The owner had ruled that day that agent work must read as agent work. The command that
+  pushes as the bot is `merge-bot push`; the napkin entry above this block names it and I
+  read it as a note about exit codes. An independent reviewer found it from the activity
+  log, not me. A push goes through `merge-bot push`, and the activity log is read after the
+  first push of a session.
+- **Surprise:** the same wrong pushes spoiled evidence. Three bot pull requests "reviewed on
+  a bot push despite the bypass list" were pushed by the owner's account, so they showed
+  nothing about the bypass list.
+- **Mistake (mine):** I estimated the documentation session at "at least half a day" from its
+  scope as worded. A two-minute search of the nine pages for the known kinds of stale
+  statement gave three hits, and the owner's one-hour version found six false sentences. An
+  estimate of reading work is made after a search, not before.
+- **Mistake (mine):** my grep for test cases matched `it(` and missed an `it.each(`, and I
+  nearly wrote "four of five rows tested" into a pull request body. I read the file and the
+  fifth was there.
+- **What worked:** a fresh reviewer briefed with observations, the owner's intended design
+  and a list of candidate causes, and told to say where the brief was wrong, corrected six
+  statements in the brief and found the cause candidate (bypass mode `always` where the
+  changelog says `exempt`) from GitHub's own reference pages.
+- **Surprise:** `merge-bot merge` exits at once when GitHub has not yet computed mergeability
+  for a new tip; a second run a minute later waits as usual.

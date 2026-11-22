@@ -1771,3 +1771,98 @@ inside a rule name).
 - **What this record cannot show.** It was written after a compaction, from the summary the
   compaction left and from what was read again afterwards. Anything the earlier context held
   and the summary dropped is in the session transcript only.
+
+### Update 2026-11-22, the pickup (Petrel mends Pinnacle, ea9cea)
+
+- **The fold landed as oaknational#1067** (`c5d24f077` is `main` after it) and the branch
+  rotated to `coordination/2026-11-22-c5d24f`. moved for teachers: nothing in this window /
+  moved for the Practice: the names cleanup closed with its validator in the gates, a merge
+  on a stated reason for no review, and the foundation page's section on unattended work.
+  Copilot's review at ready gave four findings, all upheld and cured in one push: four
+  passages gave a count, a cost or a condition as it stood before oaknational#1065's cure
+  push, with nothing to say a later passage settled it. The tool's clock: checks green 26.7
+  minutes after the ready-mark, two rounds, merged at 28.0 minutes.
+- **One finding from the second round, upheld and routed to item 2 of the order of work.**
+  That item says the evidence line is "to say that an author on a ruleset's bypass list is
+  not reviewed by it". The record itself holds two bot pushes reviewed despite the bypass
+  list. The line is to state the configuration (which ruleset carries the rule, and that
+  the author is on its bypass list) and claim nothing about whether a review follows.
+- **The owner asked for item 4's documentation session in one hour, planning included.** The
+  plan node is `foundation-linked-pages-agree`, a sketch on the branch
+  `docs/foundation-linked-pages-agree`: a contradiction check of nine human-facing pages
+  the foundation page links to, one pull request. A probe sized it: three hits in about
+  2,100 lines, one a confirmed contradiction (`.agent/hooks/README.md` says the commit hook
+  runs the build).
+- **The seat's reading of the afternoon, given to the owner:** items 1, 2 and 4 of the order
+  of work land today; item 3 (a refusal the poll loop may outwait) and item 5 (the reviewer
+  templates) stay as recorded follow-ups.
+- **Item 1 landed as oaknational#1069** (`d355ccee7` is `main` after it): the
+  `request-review` verb. Its one live call was made on the draft oaknational#1068 after that
+  draft's automatic review had finished: 201, and `review_requested` of Copilot by the bot
+  on the timeline two seconds later; a call made while that review was pending was refused
+  as already pending. The reference paragraph, the engineering page and the pull request
+  skill name the verb as the way to ask. Copilot's review at open gave one finding, upheld:
+  "a person is asked by a person" contradicted the identity rule's row for a request of a
+  human reviewer. The cure push was reviewed automatically, with no finding: the third bot
+  push in a row reviewed without a request. The automatic review at open fires on a draft.
+- **Item 2 landed as oaknational#1070** (`238ccc2e9` is `main` after it): the eight
+  validator headers, and the review configuration's evidence line with two comments. Read
+  first-hand before the change: the configuration has one consumer, the evidence line, so
+  the line's `unread` and `absent` forms and the module's own comment made the same false
+  link to what a leg owes; all were corrected. The line now ends "(of any ruleset on the
+  base branch; bypass lists not read)". One Copilot review at open: no finding.
+- **Item 4, in its one-hour form, landed as oaknational#1071** (`a2626680c` is `main` after
+  it). The owner ratified the plan node `foundation-linked-pages-agree` by question prompt on
+  2026-11-22 ("Ratify, run it now"); the node is archived. Nine human-facing pages were
+  searched; six false sentences on three pages were cured (`.agent/hooks/README.md`,
+  `docs/governance/development-practice.md`,
+  `docs/engineering/working-with-this-repo-for-devs.md`); the four definitions of the
+  Practice agree and none changed. Copilot gave five findings over two rounds: four upheld
+  and cured, one declined with its reason (the settings commit below sits outside the
+  stated scope, and is there on the owner's instruction).
+- **The owner's change to `.claude/settings.json` rode oaknational#1071** at the owner's
+  word ("commit the claude settings and add them to the current PR"): the Vercel and Elastic
+  plugins on, the Sentry plugin off, commit `94d465e42`.
+- **Every push of this seat before 15:56 UTC went up under the owner's account.** The seat
+  pushed with plain `git push`, which authenticates through the keychain as the owner. Read
+  in the repository's activity log: nine pushes and branch creations on oaknational#1067 to
+  #1071 are the owner's account, on a Sunday afternoon. The owner was told. `merge-bot push`
+  pushes as the bot and is the only push command for a seat.
+- **Why bot pushes were reviewed, and the cure, 2026-11-22.** At the owner's word an
+  independent reviewer read the configuration and the timelines. On the ruleset "Code
+  Quality Copilot review for default branch" (19474916) both bot apps were on the bypass
+  list in mode `always`; GitHub's reference says `always` still evaluates the ruleset and
+  only `exempt` skips it. The owner set both to `exempt` at 15:51 UTC. The test: the bot
+  pushed to oaknational#1071 at 15:56:54, the activity log shows the bot as the pusher, and
+  no Copilot request appeared in the twenty-six minutes to the merge, where each earlier
+  push drew one within three seconds. The owner's personal automatic review setting is off
+  (the owner's screenshot). Not shown: whether GitHub reads the pusher or the pull request's
+  author for exemption, since both were the bot; and that a bot pull request opened after
+  the change still gets its one review at open. Corrections to earlier entries of this
+  record: the fourth ruleset (17845755) protects release tags and does not reach `main`;
+  ruleset 19474916 was disabled until 10:48 UTC, not edited; three pushes read here as "bot
+  pushes reviewed despite the bypass list" (oaknational#1067, #1069, #1071's first cure)
+  were pushed under the owner's account, so only the two on #1065 and #1066 were the bot's.
+  The paragraph in `.agent/reference/merge-bot.md` that says the cause "is not found" is to
+  be rewritten from this.
+- **With bots exempt, a cure push brings no review.** The merge door then reads Copilot's
+  leg as UNOWED on the review of the earlier commit and merges; a seat that wants the cure
+  read asks with `merge-bot pull-request request-review`.
+- **What is left, none of it started and none blocking feature work.** In the order of the
+  hand-on entry above: its item 3 (a refusal the merge door's poll loop may outwait) and
+  its item 5 (the reviewer templates not yet read line by line, under the names plan).
+  Found since: `docs/engineering/ci-policy.md` against the CI workflow and ADR-043; the
+  paragraph in `.agent/reference/merge-bot.md` on the bypass list, to be rewritten from the
+  cure above; and one observation to make at the next bot pull request, that it is still
+  reviewed once at open. Offered to the owner and not run: a retrospective on
+  oaknational#1065. Held for the owner's express request: the v1 migration.
+- **A follow-up from that check, not started: `docs/engineering/ci-policy.md` against CI.**
+  The page says "CI does NOT regenerate types" and that CI builds with
+  `pnpm build --only`; `.github/workflows/ci.yml` runs `turbo run sdk-codegen build`.
+  ADR-043 (Accepted) says "no regeneration in CI". What code generation reads in CI was not
+  established inside the hour, so which of the page, the decision record and the workflow
+  is to change is undecided. It needs a reading of the code generation task's inputs first.
+- **The primary checkout's `main` is behind `origin/main`** and its built tool has neither
+  change until it is fast-forwarded and rebuilt. It carries an uncommitted change to
+  `.claude/settings.json` (enabled plugins) that is not this seat's, so the seat left the
+  primary as it found it.

@@ -3,7 +3,7 @@ id: foundation-linked-pages-agree
 node_type: delivery
 name: The pages the foundation page links to agree with it
 overview: One pull request that removes every statement on the foundation page's human-facing linked pages that contradicts it or the system, within one hour of seat time.
-status: ratified
+status: archived
 ratified_by: "Jim Cresswell (owner)"
 ratified_date: 2026-11-22
 ratified_where: "The owner's answer by question prompt, 'Ratify, run it now', in the session of Petrel mends Pinnacle (ea9cea), 2026-11-22"
@@ -16,6 +16,12 @@ last_updated: 2026-11-22
 ---
 
 # The pages the foundation page links to agree with it
+
+> **Disposition: complete, archived 2026-11-22.** Carried out as oaknational#1071, whose body
+> holds the table of findings and the four definitions side by side. Six false sentences on
+> three pages were cured. One contradiction is left and routed: `docs/engineering/ci-policy.md`
+> against the CI workflow and ADR-043 on code generation, recorded as a follow-up on the
+> thread record `open-pull-requests-to-zero`.
 
 ## Goal
 
