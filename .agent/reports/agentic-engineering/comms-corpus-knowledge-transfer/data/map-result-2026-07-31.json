@@ -1658,7 +1658,7 @@
           "grounding": [
             {
               "eventId": "bff7b9f7-e838-46c5-a5fb-3264f7362c8b",
-              "quote": "Committed on branch `jimcresswell/arc-colour-statusline-infrastructure-plan`, **PR #426**",
+              "quote": "Committed on branch `<owner>/arc-colour-statusline-infrastructure-plan`, **PR #426**",
               "createdAt": "2026-07-20T09:23:55Z"
             }
           ],
@@ -4126,7 +4126,7 @@
           "id": "w06-L06",
           "window": "w06",
           "category": "obligation",
-          "statement": "MCP-63 frozen branch jimcresswell/mcp-63-posthog-... bare-pushed at dd8df27f8 (no PR) preserving D3 boundary policy + red-first tests + POSTHOG_MODE env schema; whoever revives MCP-63 must read the ticket design record and rewrite the swept-bundle commit narrative.",
+          "statement": "MCP-63 frozen branch <owner>/mcp-63-posthog-... bare-pushed at dd8df27f8 (no PR) preserving D3 boundary policy + red-first tests + POSTHOG_MODE env schema; whoever revives MCP-63 must read the ticket design record and rewrite the swept-bundle commit narrative.",
           "grounding": [
             {
               "eventId": "f0759935-082a-472e-8d82-d159ed8972c3",
@@ -8994,11 +8994,11 @@
           "id": "w11-L43",
           "window": "w11",
           "category": "knowledge",
-          "statement": "A stale MCP-63 spike branch/tag exists on the primary machine at frozen commit dd8df27f8 (jimcresswell/mcp-63-posthog-basic-integration...); its remote was deliberately deleted, preservation vehicle is the annotated tag mcp-63-posthog-spike-frozen \u2014 never build on that branch or tag, evidence only.",
+          "statement": "A stale MCP-63 spike branch/tag exists on the primary machine at frozen commit dd8df27f8 (<owner>/mcp-63-posthog-basic-integration...); its remote was deliberately deleted, preservation vehicle is the annotated tag mcp-63-posthog-spike-frozen \u2014 never build on that branch or tag, evidence only.",
           "grounding": [
             {
               "eventId": "06d905cf-fb24-4206-aa61-5c1ec0869aa6",
-              "quote": "a stale local branch `jimcresswell/mcp-63-posthog-basic-integration-...` exists on the primary machine pointing at the frozen spike commit dd8df27f8 (NOT on origin/main; its remote was deliberately deleted \u2014 the annotated tag `mcp-63-posthog-spike-frozen` is the preservation vehicle)"
+              "quote": "a stale local branch `<owner>/mcp-63-posthog-basic-integration-...` exists on the primary machine pointing at the frozen spike commit dd8df27f8 (NOT on origin/main; its remote was deliberately deleted \u2014 the annotated tag `mcp-63-posthog-spike-frozen` is the preservation vehicle)"
             }
           ],
           "confidence": "high"
@@ -9666,11 +9666,11 @@
           "id": "w17-L05",
           "window": "w17",
           "category": "owner-word",
-          "statement": "Owner authorised the design bundle un-track and CODEOWNERS @mantagen addition as-is on PR #569, after Schooner's byte-level value assessment showed 283/317 blobs already on main and the 34 deltas not valuable beyond main.",
+          "statement": "Owner authorised the design bundle un-track and CODEOWNERS @<code-owner> addition as-is on PR #569, after Schooner's byte-level value assessment showed 283/317 blobs already on main and the 34 deltas not valuable beyond main.",
           "grounding": [
             {
               "eventId": "612deea8-27f5-43c6-9bdd-04da6b59dc62",
-              "quote": "the CODEOWNERS @mantagen addition merges as-is \u2014 his explicit answer",
+              "quote": "the CODEOWNERS @<code-owner> addition merges as-is \u2014 his explicit answer",
               "createdAt": "2026-07-28T21:23:59.050Z"
             }
           ],
@@ -11484,7 +11484,7 @@
           "id": "w16-L38",
           "window": "w16",
           "category": "owner-word",
-          "statement": "Owner correction, verbatim, on Copilot attribution: \"nope, that was one of the team, using my credentials\" \u2014 the 16:07Z actor=jimCresswell Copilot request was an agent acting under owner-authorised, per-PR credentials, not the owner's own hand.",
+          "statement": "Owner correction, verbatim, on Copilot attribution: \"nope, that was one of the team, using my credentials\" \u2014 the 16:07Z actor=<owner> Copilot request was an agent acting under owner-authorised, per-PR credentials, not the owner's own hand.",
           "grounding": [
             {
               "eventId": "f29feb89-aa7f-4d2c-92ea-e9c30d746692",
@@ -11721,11 +11721,11 @@
           "id": "w20-L04",
           "window": "w20",
           "category": "owner-word",
-          "statement": "Owner directed the MCP-360 PR approval in-session (~16:25Z); because jimCresswell is the PR author-of-record, GitHub blocks his own review, so it was recorded as an owner-directed APPROVE via the bot (review 4810577441).",
+          "statement": "Owner directed the MCP-360 PR approval in-session (~16:25Z); because the owner's account is the PR author-of-record, GitHub blocks his own review, so it was recorded as an owner-directed APPROVE via the bot (review 4810577441).",
           "grounding": [
             {
               "eventId": "6826c840-52e7-4748-88bf-9a51c0b85deb",
-              "quote": "the owner directed an approval in-session (~16:25Z); since jimCresswell is the PR author-of-record GitHub blocks his own verdict, so it is recorded as an owner-directed APPROVE review via the bot",
+              "quote": "the owner directed an approval in-session (~16:25Z); since [the owner's account] is the PR author-of-record GitHub blocks his own verdict, so it is recorded as an owner-directed APPROVE review via the bot",
               "createdAt": "2026-07-29T16:22:16Z"
             }
           ],
@@ -12776,11 +12776,11 @@
           "id": "w22-L24",
           "window": "w22",
           "category": "decision",
-          "statement": "PR #638 (MCP-373 docs) merged by Plover hunts Sundog self-merge at commit c95d7955293c from exact reviewed head 24d20f9fb; the outstanding optional mantagen peer-review request was treated as optional under the owner's explicit CI+Copilot merge gate.",
+          "statement": "PR #638 (MCP-373 docs) merged by Plover hunts Sundog self-merge at commit c95d7955293c from exact reviewed head 24d20f9fb; the outstanding optional peer-review request of the second code owner was treated as optional under the owner's explicit CI+Copilot merge gate.",
           "grounding": [
             {
               "eventId": "5188503d-744b-4e0b-83cb-f8a0080eb5b0",
-              "quote": "PR #638 has merged...The outstanding mantagen peer request was treated as optional under the owner's explicit CI + Copilot merge gate.",
+              "quote": "PR #638 has merged...The outstanding [second code owner] peer request was treated as optional under the owner's explicit CI + Copilot merge gate.",
               "createdAt": "2026-07-30T13:22:00Z"
             }
           ],
@@ -13026,11 +13026,11 @@
           "id": "w22-L40",
           "window": "w22",
           "category": "obligation",
-          "statement": "Merged branch jimcresswell/mcp-414-worktree-gates-turbo-git-dir-env-fix awaits an owner one-click delete (permission-gated at the implementer seat).",
+          "statement": "Merged branch <owner>/mcp-414-worktree-gates-turbo-git-dir-env-fix awaits an owner one-click delete (permission-gated at the implementer seat).",
           "grounding": [
             {
               "eventId": "e8caa42a-f4b3-48c0-a6b0-6f47876d6c10",
-              "quote": "the merged branch jimcresswell/mcp-414-worktree-gates-turbo-git-dir-env-fix awaits an owner one-click delete (permission-gated at this seat)",
+              "quote": "the merged branch <owner>/mcp-414-worktree-gates-turbo-git-dir-env-fix awaits an owner one-click delete (permission-gated at this seat)",
               "createdAt": "2026-07-30T11:05:13.583Z"
             }
           ],

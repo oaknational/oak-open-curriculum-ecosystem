@@ -19,7 +19,7 @@ Agents act on GitHub through the owner's shared `gh` credentials, so GitHub
 stamps every agent comment, review, and PR with the owner's login and avatar.
 The current cure — `identify-as-agent-under-shared-credentials` — is a
 **content-layer** marker (a trailer inside the comment body). It patches the
-wrong layer: even when present, the avatar, the `"jimCresswell commented"`
+wrong layer: even when present, the avatar, the `"<owner> commented"`
 header, the notifications, and the audit trail still attribute the action to
 the human, and it depends on per-comment agent discipline with no write-time
 enforcement.
@@ -108,7 +108,7 @@ on the detail layer, not the primary mechanism.
 
 ## Gotcha to weigh before extending beyond comments
 
-Owner-authored PRs currently **auto-satisfy** the `* @jimCresswell` CODEOWNERS
+Owner-authored PRs currently **auto-satisfy** the `* @<owner>` CODEOWNERS
 gate, and self-approval is blocked — a calculus tied to the author identity
 (see the merge-gate memory and recent napkin entries). Commenting/reviewing as
 a bot is low-risk. But if agents also **author PRs** as the bot, "author ==

@@ -43,7 +43,7 @@ without reading a review body.
 | Fork pull requests in the window | 58 (374 to 431): 55 merged, 3 closed | GitHub |
 | Heads pushed to #1023 | 11 (the branch creation and 10 pushes) | GitHub activity |
 | Reviews on #1023 | two bot reviews on 2026-11-09, one `claude[bot]` review, one approval | GitHub |
-| Approval and merge | `mantagen`, approval 13:06:51Z, merge 21 seconds later | GitHub |
+| Approval and merge | `<code-owner>`, approval 13:06:51Z, merge 21 seconds later | GitHub |
 
 ## Where the time went
 
@@ -184,7 +184,7 @@ Observed, and not proposals:
 
 ## What this record cannot see
 
-- Whether the owner authorised the merge by `mantagen`. The standing word was that the owner
+- Whether the owner authorised the merge by `<code-owner>`. The standing word was that the owner
   alone executes it; GitHub records another account. No source read here says more.
 - Why the first merge attempt on pull request 1028 failed; the output was cut.
 - Working time, for any stretch.

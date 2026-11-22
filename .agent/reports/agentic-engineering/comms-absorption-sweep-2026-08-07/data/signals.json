@@ -171,7 +171,7 @@
           "eventIdPrefix": "2ea39c62",
           "createdAt": "2026-07-31T12:50:00Z",
           "author": "Badger guards Lair",
-          "quote": "story 2 COMMITTED e143734f0 AND PUSHED to origin/jimcresswell/plan-ticket-rule-operator-policy",
+          "quote": "story 2 COMMITTED e143734f0 AND PUSHED to origin/<owner>/plan-ticket-rule-operator-policy",
           "homeGuess": ".agent/state/collaboration/handoffs/badger-guards-lair-compaction-freeze-2026-07-31.md",
           "confidence": "high"
         },
@@ -871,7 +871,7 @@
         },
         {
           "category": "failure-mode",
-          "statement": "GitHub connector used to open PR #683 was owner-bound (author jimCresswell) rather than bot-scoped as believed; standing rule set: GitHub WRITE actions on this Codex seat now route only through Director key-turn or a bot-minted token, never the owner-bound connector.",
+          "statement": "GitHub connector used to open PR #683 was owner-bound (author: the owner's account) rather than bot-scoped as believed; standing rule set: GitHub WRITE actions on this Codex seat now route only through Director key-turn or a bot-minted token, never the owner-bound connector.",
           "eventIdPrefix": "8dc207a3",
           "createdAt": "2026-08-01T10:17:05.257Z",
           "author": "Possum turns Nocturne",
@@ -2663,7 +2663,7 @@
           "eventIdPrefix": "b717a967",
           "createdAt": "2026-08-02T20:49:16.238Z",
           "author": "Lichen guards Phloem",
-          "quote": "Git-durable home queued on `jimcresswell/typescript-estate-consolidation-review`: `.agent/reports/typescript-estate-consolidation-review/knowledge-safety-2026-08-02.md`",
+          "quote": "Git-durable home queued on `<owner>/typescript-estate-consolidation-review`: `.agent/reports/typescript-estate-consolidation-review/knowledge-safety-2026-08-02.md`",
           "homeGuess": ".agent/reports/typescript-estate-consolidation-review/knowledge-safety-2026-08-02.md",
           "confidence": "high"
         },
@@ -3443,7 +3443,7 @@
         },
         {
           "category": "coordination-fact",
-          "statement": "PDR-135 was double-minted: Wyvern's PDR-135-quality-gates-are-a-registered-corpus.md (ratified) collided with Lichen guards Phloem's PDR-135-cost-of-change-gradient.md (Proposed, dated 2026-08-02, first-minted, on origin/jimcresswell/typescript-estate-consolidation-review). Resolved by renumbering Wyvern's file to PDR-136 (first-mint allocation rule).",
+          "statement": "PDR-135 was double-minted: Wyvern's PDR-135-quality-gates-are-a-registered-corpus.md (ratified) collided with Lichen guards Phloem's PDR-135-cost-of-change-gradient.md (Proposed, dated 2026-08-02, first-minted, on origin/<owner>/typescript-estate-consolidation-review). Resolved by renumbering Wyvern's file to PDR-136 (first-mint allocation rule).",
           "eventIdPrefix": "5d5bb78e",
           "createdAt": "2026-08-04T13:11:51.882Z",
           "author": "Petrel holds Turbulence",
@@ -3553,7 +3553,7 @@
         },
         {
           "category": "owner-word",
-          "statement": "Owner direction for the week (2026-08-04): Jim is off, extricate fully from Matt's work (never merge mantagen's/emgeebot's PRs, but do review and approve if appropriate), no fleet reviews on Matt's PRs unless asked, CI=true and PNPM_HOME re-point both retired.",
+          "statement": "Owner direction for the week (2026-08-04): Jim is off, extricate fully from Matt's work (never merge the second code owner's/emgeebot's PRs, but do review and approve if appropriate), no fleet reviews on Matt's PRs unless asked, CI=true and PNPM_HOME re-point both retired.",
           "eventIdPrefix": "b5121165",
           "createdAt": "2026-08-04T16:14:17.895Z",
           "author": "Petrel holds Turbulence",
@@ -3573,11 +3573,11 @@
         },
         {
           "category": "dead-seat-residue",
-          "statement": "mcp-463-bulk-truing worktree not pruned as planned \u2014 checked out on the unmerged jimcresswell/mcp-491-gate-ledger-pdr branch (PR #755); needs one attended default-env pnpm install at that lane's next touch to re-true its store binding.",
+          "statement": "mcp-463-bulk-truing worktree not pruned as planned \u2014 checked out on the unmerged <owner>/mcp-491-gate-ledger-pdr branch (PR #755); needs one attended default-env pnpm install at that lane's next touch to re-true its store binding.",
           "eventIdPrefix": "b5121165",
           "createdAt": "2026-08-04T16:14:17.895Z",
           "author": "Petrel holds Turbulence",
-          "quote": "the mcp-463-bulk-truing worktree was NOT pruned \u2014 the prune proof caught it checked out on the UNMERGED jimcresswell/mcp-491-gate-ledger-pdr branch",
+          "quote": "the mcp-463-bulk-truing worktree was NOT pruned \u2014 the prune proof caught it checked out on the UNMERGED <owner>/mcp-491-gate-ledger-pdr branch",
           "homeGuess": null,
           "confidence": "med"
         },

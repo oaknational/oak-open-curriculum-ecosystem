@@ -249,7 +249,7 @@ lane owes to L-Verdict.
    (TDD-proven), per-site base verified first-hand.
 3. The integrated security-expert re-review passed on the dispatch/path seams,
    real-time (no backfill).
-4. The PR merged via @jimCresswell code-owner review; the branch is an ancestor
+4. The PR merged via the owner's code-owner review; the branch is an ancestor
    of `main`.
 
 **Model observation owed:** did the Director's routing of this solo lane (and any
@@ -409,7 +409,7 @@ to prove green.
   criteria before L-DATA-SOURCES can author the policy (new governance, ADR-157
   omits it).
 - Owner signal to launch the WS-B D2-D5 Implementer (L-WS-B).
-- @jimCresswell code-owner review on every PR to `main` (the standing merge gate;
+- The owner's code-owner review on every PR to `main` (the standing merge gate;
   no `--admin`, no clean agent self-merge).
 
 **Beneficial (smooths, not required for minimum shippable shape):**

@@ -158,7 +158,7 @@ Tranche A first — the manual lane's needs; tranche B never blocks it.
   remediation only; acceptance criterion 4 restated as an observable.
 - Tranche A progress 2026-08-17, same seating: todo 1 SHIPPED and MERGED
   as PR #897 (the hook line and CONTRIBUTING's repeat of it — both
-  broken-suggestion sites; code-expert approved, mantagen approved,
+  broken-suggestion sites; code-expert approved, the second code owner approved,
   merge sha `fa0604aa3`).
 - Todo 3 (decision briefs) DELIVERED at the owner card 2026-08-17
   ~12:4xZ, while PRs #891 and #888 were both open — acceptance

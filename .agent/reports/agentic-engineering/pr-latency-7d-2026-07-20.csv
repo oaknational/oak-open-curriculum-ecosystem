@@ -1,90 +1,90 @@
 number,author,title,created_at,ready_at,merged_at,latency_minutes,commits,issue_comments,review_threads,reviews,total_comments,additions,deletions,changed_files
-338,jimCresswell,docs(plans): effectiveness-and-impact collection + assessment-methodology resear,2026-07-09T17:10:02Z,2026-07-09T17:10:02Z,2026-07-13T08:15:23Z,5225.4,4,3,22,28,25,429,30,8
-342,jimCresswell,docs: close out PR #338 and apply its post-merge review findings,2026-07-13T08:27:52Z,2026-07-13T08:27:52Z,2026-07-13T09:02:11Z,34.3,3,3,6,10,9,157,44,8
-343,jimCresswell,docs(plans): name the lifecycle touch points in the assessment-research plan,2026-07-13T09:53:53Z,2026-07-13T09:53:53Z,2026-07-13T10:08:26Z,14.6,2,3,3,6,6,20,0,1
-336,jimCresswell,"docs(practice): cross-estate window — PDR-125 clause batch, PDR-063 authority, i",2026-07-08T20:50:17Z,2026-07-08T20:50:17Z,2026-07-13T12:36:57Z,6706.7,36,4,133,180,137,1041,115,19
-346,jimCresswell,docs(threads): rescue the stranded incoming-box portability-tension follow-up,2026-07-13T12:39:37Z,2026-07-13T12:39:37Z,2026-07-13T12:42:52Z,3.2,1,3,0,2,3,6,1,1
-348,jimCresswell,chore(agents): enable the linear plugin repo-wide and document it for contributo,2026-07-13T13:35:33Z,2026-07-13T13:35:33Z,2026-07-13T13:41:20Z,5.8,1,3,0,2,3,9,1,3
-347,jimCresswell,docs: reconcile the fleet ledger and land the PR #336 post-merge wave fixes,2026-07-13T12:50:06Z,2026-07-13T12:50:06Z,2026-07-13T14:39:48Z,109.7,14,3,77,101,80,593,75,13
-344,jimCresswell,MCP-10: docs(research): explore public alpha teacher workflows,2026-07-13T11:31:32Z,2026-07-13T14:18:15Z,2026-07-13T15:19:55Z,61.7,12,4,7,16,11,1093,0,3
-352,jimCresswell,"MCP-15: docs: land the PR #347 post-merge tail (QUIET state model, wire shapes, ",2026-07-13T14:53:05Z,2026-07-13T14:53:05Z,2026-07-13T15:50:35Z,57.5,9,6,17,30,23,145,45,9
-351,jimCresswell,MCP-6: docs(contributing): clarify Linear-linked pull requests,2026-07-13T14:29:13Z,2026-07-13T14:29:13Z,2026-07-13T16:15:06Z,105.9,5,5,3,9,8,93,25,2
-345,jimCresswell,[MCP-8] docs(mcp): explore facilitation of reviews and evals for all agent influ,2026-07-13T11:35:24Z,2026-07-13T13:55:59Z,2026-07-13T16:28:34Z,152.6,6,4,4,9,8,623,3,3
-353,jimCresswell,"docs(memory): land the session closeout — loss-scan, metaloss, and fleet-audit a",2026-07-13T16:37:55Z,2026-07-13T16:37:55Z,2026-07-13T16:53:27Z,15.5,4,4,6,9,10,179,4,4
-354,jimCresswell,docs(memory): use british spellings in the napkin succession-seat entry,2026-07-13T17:05:10Z,2026-07-13T17:05:10Z,2026-07-13T17:09:18Z,4.1,1,4,0,2,4,3,3,1
-355,jimCresswell,docs(agent-tooling): record F-138 — commit-queue worktree resolution split,2026-07-13T17:11:46Z,2026-07-13T17:11:46Z,2026-07-13T17:14:39Z,2.9,1,4,3,5,7,76,0,2
-356,jimCresswell,docs(agent-tooling): correct F-138 per the source-verified review round,2026-07-13T17:20:57Z,2026-07-13T17:20:57Z,2026-07-13T17:23:51Z,2.9,1,4,1,3,5,35,6,2
-357,jimCresswell,docs(agent-tooling): reword F-138 to the verified single-root-reuse diagnosis,2026-07-13T17:26:14Z,2026-07-13T17:26:14Z,2026-07-13T17:30:19Z,4.1,1,4,0,2,4,6,4,1
-358,jimCresswell,docs(agent-tooling): record independent F-138 corroboration and candidate bindin,2026-07-13T17:44:26Z,2026-07-13T17:44:26Z,2026-07-13T18:36:41Z,52.2,4,4,4,9,8,14,0,1
-359,jimCresswell,feat(agent): add concept exploration skill,2026-07-13T17:54:48Z,2026-07-13T17:54:48Z,2026-07-14T06:57:25Z,782.6,6,4,13,15,17,133,11,7
-360,jimCresswell,docs(practice): add root skills.md entry point for Linear coding sessions,2026-07-13T18:05:11Z,2026-07-13T18:05:11Z,2026-07-14T07:26:54Z,801.7,9,4,19,27,23,78,46,12
-361,jimCresswell,docs(practice): redraw the three-layer diagram without the false chain,2026-07-14T07:43:26Z,2026-07-14T07:43:26Z,2026-07-14T08:06:36Z,23.2,1,4,0,2,4,13,8,1
-341,jimCresswell,MCP-12: docs(planning): establish federated visibility estate,2026-07-13T07:40:43Z,2026-07-13T17:47:40Z,2026-07-14T08:22:26Z,874.8,12,5,21,33,26,1354,4,2
-363,jimCresswell,MCP-12: docs(report): retain configured plugin identifiers,2026-07-14T08:28:50Z,2026-07-14T08:28:50Z,2026-07-14T09:01:25Z,32.6,1,6,0,2,6,3,1,1
-364,jimCresswell,"chore(continuity): first team-branch reconciliation — Director seat, protocol re",2026-07-14T09:03:23Z,2026-07-14T09:03:23Z,2026-07-14T09:07:05Z,3.7,3,5,17,2,22,551,4,4
-362,jimCresswell,fix(release): publish docs and chore merges as patch versions,2026-07-14T07:52:28Z,2026-07-14T07:52:28Z,2026-07-14T09:52:36Z,120.1,8,10,15,22,25,304,26,4
-339,jimCresswell,MCP-13: docs(tau): plan the telemetry and understanding system overhaul,2026-07-12T00:09:22Z,2026-07-14T08:07:30Z,2026-07-14T10:27:05Z,139.6,28,16,60,26,76,3249,21,12
-366,jimCresswell,fix(agent-tools): split commit-queue registry and git roots (F-138),2026-07-14T09:58:27Z,2026-07-14T09:58:27Z,2026-07-14T10:48:00Z,49.5,8,9,14,15,23,529,31,15
-367,jimCresswell,docs(agent-tooling): register shared comms cursor friction (F-140),2026-07-14T09:59:33Z,2026-07-14T09:59:33Z,2026-07-14T11:06:32Z,67.0,7,10,4,11,14,34,0,1
-368,jimCresswell,docs(tau): repair post-merge review findings,2026-07-14T11:17:20Z,2026-07-14T11:17:20Z,2026-07-14T11:36:17Z,18.9,4,6,10,10,16,85,25,3
-365,jimCresswell,"chore(continuity): second team-branch reconciliation — Cedar r1 capture, seat re",2026-07-14T09:56:16Z,2026-07-14T09:56:16Z,2026-07-14T13:01:55Z,185.7,10,12,78,87,90,499,0,5
-369,jimCresswell,docs(governance): ratify federated visibility evidence boundaries,2026-07-14T12:59:43Z,2026-07-14T12:59:43Z,2026-07-14T13:38:11Z,38.5,6,8,10,11,18,382,97,19
-372,jimCresswell,chore(continuity): reconcile the team branch — 2026-07-14 knowledge tier to main,2026-07-14T13:56:50Z,2026-07-14T13:56:50Z,2026-07-14T14:01:58Z,5.1,4,5,18,21,23,2035,14,13
-373,jimCresswell,docs(research): retire NEO research thread,2026-07-14T14:16:07Z,2026-07-14T14:16:07Z,2026-07-14T14:28:03Z,11.9,3,6,1,4,7,42,34,2
-374,jimCresswell,docs: PR #372 post-merge tail — eleven truings,2026-07-14T14:21:16Z,2026-07-14T14:21:16Z,2026-07-14T15:14:48Z,53.5,4,8,2,7,10,11,11,3
-370,jimCresswell,"r1 pre-S0 tranche: freeze-tool hardening, G3.3 out-subtraction, sitting records ",2026-07-14T13:05:39Z,2026-07-14T13:05:39Z,2026-07-14T16:01:23Z,175.7,11,12,15,24,27,618,143,18
-375,jimCresswell,chore(planning): re-home the six operational registers; record the Walk-A struct,2026-07-14T16:10:16Z,2026-07-14T16:10:16Z,2026-07-14T16:46:01Z,35.8,5,9,14,17,23,283,129,75
-376,jimCresswell,"chore(continuity): the pre-consolidation omnibus — knowledge tier, report re-hom",2026-07-14T16:49:47Z,2026-07-14T16:49:47Z,2026-07-14T17:04:41Z,14.9,4,8,3,8,11,1764,5,11
-377,jimCresswell,chore(continuity): reconcile the team branch — consolidation tier + ratified fre,2026-07-14T19:59:00Z,2026-07-14T19:59:00Z,2026-07-14T20:05:16Z,6.3,5,5,18,2,23,6261,2728,38
-378,jimCresswell,docs: consolidate curriculum architecture and quality planning,2026-07-15T08:26:18Z,2026-07-15T08:26:18Z,2026-07-15T09:37:34Z,71.3,8,7,0,4,7,8878,2933,410
-379,jimCresswell,Not applicable: feat(refounding): freeze the plan corpus at S0,2026-07-15T10:02:46Z,2026-07-15T10:02:46Z,2026-07-15T10:18:47Z,16.0,1,5,0,2,5,213849,0,683
-380,jimCresswell,Not applicable: chore(continuity): recover Quasar's orphaned compaction-prep nap,2026-07-15T10:44:35Z,2026-07-15T10:44:35Z,2026-07-15T11:20:45Z,36.2,2,6,2,3,8,65,0,1
-381,jimCresswell,"Not applicable: chore(continuity): director session handoff, Barnacle calls Spra",2026-07-15T12:01:31Z,2026-07-15T12:01:31Z,2026-07-15T12:49:17Z,47.8,2,6,22,16,28,293,25,6
-382,jimCresswell,docs(plans): preserve compact S1 deterministic evidence,2026-07-15T13:22:56Z,2026-07-15T13:22:56Z,2026-07-15T13:56:17Z,33.4,3,7,3,7,10,229,0,3
-384,jimCresswell,"chore(continuity): batched continuity tranche — disposition-sweep audit, PR #383",2026-07-15T14:11:02Z,2026-07-15T14:11:02Z,2026-07-15T15:36:46Z,85.7,9,11,40,37,51,695,29,11
-386,jimCresswell,docs(plans): land the S2 tiling baseline + audit-mode divergence report,2026-07-15T16:29:17Z,2026-07-15T16:29:17Z,2026-07-15T16:59:27Z,30.2,2,6,6,9,12,14365,1,4
-388,jimCresswell,chore(refounding): ignore the S2 attestation ledger set-aside target,2026-07-15T17:20:02Z,2026-07-15T17:20:02Z,2026-07-15T17:31:41Z,11.7,1,5,0,2,5,5,2,3
-387,jimCresswell,feat(agent-tools): guard every refound entry with a shared arg contract,2026-07-15T16:37:04Z,2026-07-15T17:50:27Z,2026-07-15T20:19:53Z,149.4,6,10,9,15,19,781,440,23
-390,jimCresswell,"docs(refounding): land the r2 lane seed, pilot evidence-pass design, and Walk-A ",2026-07-16T05:51:48Z,2026-07-16T05:51:48Z,2026-07-16T07:11:03Z,79.2,12,11,39,48,50,774,0,6
-391,jimCresswell,docs(refounding): resolve the PR #390 post-merge review round,2026-07-16T07:23:12Z,2026-07-16T07:23:12Z,2026-07-16T09:37:50Z,134.6,3,4,7,11,11,53,16,2
-392,jimCresswell,"docs(skills): pr-lifecycle gains the round tally, non-convergence step-back, and",2026-07-16T08:00:38Z,2026-07-16T08:00:38Z,2026-07-16T19:24:09Z,683.5,16,5,44,59,49,272,67,2
-394,jimCresswell,docs(continuity): true the durable records to the 2026-07-16 state,2026-07-16T11:41:14Z,2026-07-16T11:41:14Z,2026-07-16T20:10:45Z,509.5,21,4,134,154,138,1605,17,13
-389,jimCresswell,feat(refounding): land the window-sample instrument + 30-window manifest (s1-rea,2026-07-15T17:32:47Z,2026-07-16T19:52:31Z,2026-07-16T20:44:04Z,51.5,15,5,39,51,44,3583,1,19
-393,jimCresswell,feat(agent-tools): add the restatement-audit fleet module,2026-07-16T09:30:06Z,2026-07-16T19:51:07Z,2026-07-16T21:12:56Z,81.8,19,7,99,118,106,7061,184,97
-407,jimCresswell,AIP-131: test(agent-tools): conserve rename-endpoint contract residue from PR #3,2026-07-17T08:18:27Z,2026-07-17T08:18:27Z,2026-07-17T08:43:39Z,25.2,2,4,0,2,4,36,24,2
-405,jimCresswell,"AIP-127: chore: coordination branch — the full live estate, rolling to main",2026-07-17T08:03:04Z,2026-07-17T08:03:04Z,2026-07-17T09:19:02Z,76.0,19,4,109,119,113,10660,18,52
-408,jimCresswell,AIP-127: docs(coordination): roll up the post-merge cures and the cricket anchor,2026-07-17T09:38:43Z,2026-07-17T09:38:43Z,2026-07-17T09:51:19Z,12.6,6,4,7,12,11,152,45,18
-410,jimCresswell,"AIP-137: docs(design): ADR-213 design-system integration architecture, compositi",2026-07-19T19:29:20Z,2026-07-19T19:29:20Z,2026-07-19T19:33:16Z,3.9,1,5,10,2,15,1625,7,10
-412,jimCresswell,AIP-137: feat(design): PR3 validation layer for the design-system import boundar,2026-07-19T20:56:26Z,2026-07-19T20:56:26Z,2026-07-19T21:46:04Z,49.6,5,5,10,15,15,1339,27,19
-411,jimCresswell,AIP-137 PR2: feat(design): oak-design-system workspace scaffold + licensing mani,2026-07-19T19:41:49Z,2026-07-19T20:07:16Z,2026-07-20T06:13:41Z,606.4,12,5,49,37,54,38200,29,305
-409,jimCresswell,AIP-126: fix(agent-tools): harden restatement-audit checkpoint boundaries,2026-07-17T21:22:54Z,2026-07-17T21:22:54Z,2026-07-20T06:38:29Z,3435.6,14,7,8,10,15,660,103,14
-418,jimCresswell,AIP-138: ci(deps): ignore TypeScript majors in the dependabot npm group,2026-07-20T06:34:18Z,2026-07-20T06:34:18Z,2026-07-20T07:05:01Z,30.7,3,5,0,4,5,8,0,1
-417,jimCresswell,AIP-137: docs(design): flip ADR-213 to Accepted and true the integration plan,2026-07-20T06:31:40Z,2026-07-20T06:31:40Z,2026-07-20T07:47:25Z,75.8,8,5,10,18,15,45,31,5
-422,jimCresswell,AIP-137: docs(design): true the plan-collection index status for design-system i,2026-07-20T07:51:57Z,2026-07-20T07:51:57Z,2026-07-20T07:58:51Z,6.9,2,5,0,3,5,1,1,1
-423,jimCresswell,AIP-137: feat(design): four-theme contrast gate over the design-system dtcg expo,2026-07-20T07:56:44Z,2026-07-20T07:56:44Z,2026-07-20T09:53:52Z,117.1,14,5,13,18,18,1565,382,29
-427,jimCresswell,feat(agent-tools): relocate usage gauges to the statusline repo-title row,2026-07-20T09:34:53Z,2026-07-20T09:34:53Z,2026-07-20T10:47:54Z,73.0,3,4,4,8,8,96,41,2
-424,jimCresswell,AIP-137: docs(design): land the Stage-B interchange-contract concept exploration,2026-07-20T09:02:31Z,2026-07-20T09:02:47Z,2026-07-20T12:17:52Z,195.1,10,12,19,30,31,316,0,1
-420,jimCresswell,AIP-137: fix(design): localise Roboto Mono — the kit's last runtime network call,2026-07-20T06:40:56Z,2026-07-20T06:40:56Z,2026-07-20T12:41:20Z,360.4,6,5,2,9,7,218,17,11
-426,jimCresswell,docs(plan): ARC-colour statusline infrastructure port plan,2026-07-20T09:22:21Z,2026-07-20T09:22:21Z,2026-07-20T12:42:38Z,200.3,11,4,51,63,55,344,2,3
-428,jimCresswell,docs(architecture): record adr-214 arc-colour statusline infrastructure,2026-07-20T09:50:54Z,2026-07-20T09:50:54Z,2026-07-20T12:42:53Z,172.0,4,4,6,11,10,82,0,2
+338,<owner>,docs(plans): effectiveness-and-impact collection + assessment-methodology resear,2026-07-09T17:10:02Z,2026-07-09T17:10:02Z,2026-07-13T08:15:23Z,5225.4,4,3,22,28,25,429,30,8
+342,<owner>,docs: close out PR #338 and apply its post-merge review findings,2026-07-13T08:27:52Z,2026-07-13T08:27:52Z,2026-07-13T09:02:11Z,34.3,3,3,6,10,9,157,44,8
+343,<owner>,docs(plans): name the lifecycle touch points in the assessment-research plan,2026-07-13T09:53:53Z,2026-07-13T09:53:53Z,2026-07-13T10:08:26Z,14.6,2,3,3,6,6,20,0,1
+336,<owner>,"docs(practice): cross-estate window — PDR-125 clause batch, PDR-063 authority, i",2026-07-08T20:50:17Z,2026-07-08T20:50:17Z,2026-07-13T12:36:57Z,6706.7,36,4,133,180,137,1041,115,19
+346,<owner>,docs(threads): rescue the stranded incoming-box portability-tension follow-up,2026-07-13T12:39:37Z,2026-07-13T12:39:37Z,2026-07-13T12:42:52Z,3.2,1,3,0,2,3,6,1,1
+348,<owner>,chore(agents): enable the linear plugin repo-wide and document it for contributo,2026-07-13T13:35:33Z,2026-07-13T13:35:33Z,2026-07-13T13:41:20Z,5.8,1,3,0,2,3,9,1,3
+347,<owner>,docs: reconcile the fleet ledger and land the PR #336 post-merge wave fixes,2026-07-13T12:50:06Z,2026-07-13T12:50:06Z,2026-07-13T14:39:48Z,109.7,14,3,77,101,80,593,75,13
+344,<owner>,MCP-10: docs(research): explore public alpha teacher workflows,2026-07-13T11:31:32Z,2026-07-13T14:18:15Z,2026-07-13T15:19:55Z,61.7,12,4,7,16,11,1093,0,3
+352,<owner>,"MCP-15: docs: land the PR #347 post-merge tail (QUIET state model, wire shapes, ",2026-07-13T14:53:05Z,2026-07-13T14:53:05Z,2026-07-13T15:50:35Z,57.5,9,6,17,30,23,145,45,9
+351,<owner>,MCP-6: docs(contributing): clarify Linear-linked pull requests,2026-07-13T14:29:13Z,2026-07-13T14:29:13Z,2026-07-13T16:15:06Z,105.9,5,5,3,9,8,93,25,2
+345,<owner>,[MCP-8] docs(mcp): explore facilitation of reviews and evals for all agent influ,2026-07-13T11:35:24Z,2026-07-13T13:55:59Z,2026-07-13T16:28:34Z,152.6,6,4,4,9,8,623,3,3
+353,<owner>,"docs(memory): land the session closeout — loss-scan, metaloss, and fleet-audit a",2026-07-13T16:37:55Z,2026-07-13T16:37:55Z,2026-07-13T16:53:27Z,15.5,4,4,6,9,10,179,4,4
+354,<owner>,docs(memory): use british spellings in the napkin succession-seat entry,2026-07-13T17:05:10Z,2026-07-13T17:05:10Z,2026-07-13T17:09:18Z,4.1,1,4,0,2,4,3,3,1
+355,<owner>,docs(agent-tooling): record F-138 — commit-queue worktree resolution split,2026-07-13T17:11:46Z,2026-07-13T17:11:46Z,2026-07-13T17:14:39Z,2.9,1,4,3,5,7,76,0,2
+356,<owner>,docs(agent-tooling): correct F-138 per the source-verified review round,2026-07-13T17:20:57Z,2026-07-13T17:20:57Z,2026-07-13T17:23:51Z,2.9,1,4,1,3,5,35,6,2
+357,<owner>,docs(agent-tooling): reword F-138 to the verified single-root-reuse diagnosis,2026-07-13T17:26:14Z,2026-07-13T17:26:14Z,2026-07-13T17:30:19Z,4.1,1,4,0,2,4,6,4,1
+358,<owner>,docs(agent-tooling): record independent F-138 corroboration and candidate bindin,2026-07-13T17:44:26Z,2026-07-13T17:44:26Z,2026-07-13T18:36:41Z,52.2,4,4,4,9,8,14,0,1
+359,<owner>,feat(agent): add concept exploration skill,2026-07-13T17:54:48Z,2026-07-13T17:54:48Z,2026-07-14T06:57:25Z,782.6,6,4,13,15,17,133,11,7
+360,<owner>,docs(practice): add root skills.md entry point for Linear coding sessions,2026-07-13T18:05:11Z,2026-07-13T18:05:11Z,2026-07-14T07:26:54Z,801.7,9,4,19,27,23,78,46,12
+361,<owner>,docs(practice): redraw the three-layer diagram without the false chain,2026-07-14T07:43:26Z,2026-07-14T07:43:26Z,2026-07-14T08:06:36Z,23.2,1,4,0,2,4,13,8,1
+341,<owner>,MCP-12: docs(planning): establish federated visibility estate,2026-07-13T07:40:43Z,2026-07-13T17:47:40Z,2026-07-14T08:22:26Z,874.8,12,5,21,33,26,1354,4,2
+363,<owner>,MCP-12: docs(report): retain configured plugin identifiers,2026-07-14T08:28:50Z,2026-07-14T08:28:50Z,2026-07-14T09:01:25Z,32.6,1,6,0,2,6,3,1,1
+364,<owner>,"chore(continuity): first team-branch reconciliation — Director seat, protocol re",2026-07-14T09:03:23Z,2026-07-14T09:03:23Z,2026-07-14T09:07:05Z,3.7,3,5,17,2,22,551,4,4
+362,<owner>,fix(release): publish docs and chore merges as patch versions,2026-07-14T07:52:28Z,2026-07-14T07:52:28Z,2026-07-14T09:52:36Z,120.1,8,10,15,22,25,304,26,4
+339,<owner>,MCP-13: docs(tau): plan the telemetry and understanding system overhaul,2026-07-12T00:09:22Z,2026-07-14T08:07:30Z,2026-07-14T10:27:05Z,139.6,28,16,60,26,76,3249,21,12
+366,<owner>,fix(agent-tools): split commit-queue registry and git roots (F-138),2026-07-14T09:58:27Z,2026-07-14T09:58:27Z,2026-07-14T10:48:00Z,49.5,8,9,14,15,23,529,31,15
+367,<owner>,docs(agent-tooling): register shared comms cursor friction (F-140),2026-07-14T09:59:33Z,2026-07-14T09:59:33Z,2026-07-14T11:06:32Z,67.0,7,10,4,11,14,34,0,1
+368,<owner>,docs(tau): repair post-merge review findings,2026-07-14T11:17:20Z,2026-07-14T11:17:20Z,2026-07-14T11:36:17Z,18.9,4,6,10,10,16,85,25,3
+365,<owner>,"chore(continuity): second team-branch reconciliation — Cedar r1 capture, seat re",2026-07-14T09:56:16Z,2026-07-14T09:56:16Z,2026-07-14T13:01:55Z,185.7,10,12,78,87,90,499,0,5
+369,<owner>,docs(governance): ratify federated visibility evidence boundaries,2026-07-14T12:59:43Z,2026-07-14T12:59:43Z,2026-07-14T13:38:11Z,38.5,6,8,10,11,18,382,97,19
+372,<owner>,chore(continuity): reconcile the team branch — 2026-07-14 knowledge tier to main,2026-07-14T13:56:50Z,2026-07-14T13:56:50Z,2026-07-14T14:01:58Z,5.1,4,5,18,21,23,2035,14,13
+373,<owner>,docs(research): retire NEO research thread,2026-07-14T14:16:07Z,2026-07-14T14:16:07Z,2026-07-14T14:28:03Z,11.9,3,6,1,4,7,42,34,2
+374,<owner>,docs: PR #372 post-merge tail — eleven truings,2026-07-14T14:21:16Z,2026-07-14T14:21:16Z,2026-07-14T15:14:48Z,53.5,4,8,2,7,10,11,11,3
+370,<owner>,"r1 pre-S0 tranche: freeze-tool hardening, G3.3 out-subtraction, sitting records ",2026-07-14T13:05:39Z,2026-07-14T13:05:39Z,2026-07-14T16:01:23Z,175.7,11,12,15,24,27,618,143,18
+375,<owner>,chore(planning): re-home the six operational registers; record the Walk-A struct,2026-07-14T16:10:16Z,2026-07-14T16:10:16Z,2026-07-14T16:46:01Z,35.8,5,9,14,17,23,283,129,75
+376,<owner>,"chore(continuity): the pre-consolidation omnibus — knowledge tier, report re-hom",2026-07-14T16:49:47Z,2026-07-14T16:49:47Z,2026-07-14T17:04:41Z,14.9,4,8,3,8,11,1764,5,11
+377,<owner>,chore(continuity): reconcile the team branch — consolidation tier + ratified fre,2026-07-14T19:59:00Z,2026-07-14T19:59:00Z,2026-07-14T20:05:16Z,6.3,5,5,18,2,23,6261,2728,38
+378,<owner>,docs: consolidate curriculum architecture and quality planning,2026-07-15T08:26:18Z,2026-07-15T08:26:18Z,2026-07-15T09:37:34Z,71.3,8,7,0,4,7,8878,2933,410
+379,<owner>,Not applicable: feat(refounding): freeze the plan corpus at S0,2026-07-15T10:02:46Z,2026-07-15T10:02:46Z,2026-07-15T10:18:47Z,16.0,1,5,0,2,5,213849,0,683
+380,<owner>,Not applicable: chore(continuity): recover Quasar's orphaned compaction-prep nap,2026-07-15T10:44:35Z,2026-07-15T10:44:35Z,2026-07-15T11:20:45Z,36.2,2,6,2,3,8,65,0,1
+381,<owner>,"Not applicable: chore(continuity): director session handoff, Barnacle calls Spra",2026-07-15T12:01:31Z,2026-07-15T12:01:31Z,2026-07-15T12:49:17Z,47.8,2,6,22,16,28,293,25,6
+382,<owner>,docs(plans): preserve compact S1 deterministic evidence,2026-07-15T13:22:56Z,2026-07-15T13:22:56Z,2026-07-15T13:56:17Z,33.4,3,7,3,7,10,229,0,3
+384,<owner>,"chore(continuity): batched continuity tranche — disposition-sweep audit, PR #383",2026-07-15T14:11:02Z,2026-07-15T14:11:02Z,2026-07-15T15:36:46Z,85.7,9,11,40,37,51,695,29,11
+386,<owner>,docs(plans): land the S2 tiling baseline + audit-mode divergence report,2026-07-15T16:29:17Z,2026-07-15T16:29:17Z,2026-07-15T16:59:27Z,30.2,2,6,6,9,12,14365,1,4
+388,<owner>,chore(refounding): ignore the S2 attestation ledger set-aside target,2026-07-15T17:20:02Z,2026-07-15T17:20:02Z,2026-07-15T17:31:41Z,11.7,1,5,0,2,5,5,2,3
+387,<owner>,feat(agent-tools): guard every refound entry with a shared arg contract,2026-07-15T16:37:04Z,2026-07-15T17:50:27Z,2026-07-15T20:19:53Z,149.4,6,10,9,15,19,781,440,23
+390,<owner>,"docs(refounding): land the r2 lane seed, pilot evidence-pass design, and Walk-A ",2026-07-16T05:51:48Z,2026-07-16T05:51:48Z,2026-07-16T07:11:03Z,79.2,12,11,39,48,50,774,0,6
+391,<owner>,docs(refounding): resolve the PR #390 post-merge review round,2026-07-16T07:23:12Z,2026-07-16T07:23:12Z,2026-07-16T09:37:50Z,134.6,3,4,7,11,11,53,16,2
+392,<owner>,"docs(skills): pr-lifecycle gains the round tally, non-convergence step-back, and",2026-07-16T08:00:38Z,2026-07-16T08:00:38Z,2026-07-16T19:24:09Z,683.5,16,5,44,59,49,272,67,2
+394,<owner>,docs(continuity): true the durable records to the 2026-07-16 state,2026-07-16T11:41:14Z,2026-07-16T11:41:14Z,2026-07-16T20:10:45Z,509.5,21,4,134,154,138,1605,17,13
+389,<owner>,feat(refounding): land the window-sample instrument + 30-window manifest (s1-rea,2026-07-15T17:32:47Z,2026-07-16T19:52:31Z,2026-07-16T20:44:04Z,51.5,15,5,39,51,44,3583,1,19
+393,<owner>,feat(agent-tools): add the restatement-audit fleet module,2026-07-16T09:30:06Z,2026-07-16T19:51:07Z,2026-07-16T21:12:56Z,81.8,19,7,99,118,106,7061,184,97
+407,<owner>,AIP-131: test(agent-tools): conserve rename-endpoint contract residue from PR #3,2026-07-17T08:18:27Z,2026-07-17T08:18:27Z,2026-07-17T08:43:39Z,25.2,2,4,0,2,4,36,24,2
+405,<owner>,"AIP-127: chore: coordination branch — the full live estate, rolling to main",2026-07-17T08:03:04Z,2026-07-17T08:03:04Z,2026-07-17T09:19:02Z,76.0,19,4,109,119,113,10660,18,52
+408,<owner>,AIP-127: docs(coordination): roll up the post-merge cures and the cricket anchor,2026-07-17T09:38:43Z,2026-07-17T09:38:43Z,2026-07-17T09:51:19Z,12.6,6,4,7,12,11,152,45,18
+410,<owner>,"AIP-137: docs(design): ADR-213 design-system integration architecture, compositi",2026-07-19T19:29:20Z,2026-07-19T19:29:20Z,2026-07-19T19:33:16Z,3.9,1,5,10,2,15,1625,7,10
+412,<owner>,AIP-137: feat(design): PR3 validation layer for the design-system import boundar,2026-07-19T20:56:26Z,2026-07-19T20:56:26Z,2026-07-19T21:46:04Z,49.6,5,5,10,15,15,1339,27,19
+411,<owner>,AIP-137 PR2: feat(design): oak-design-system workspace scaffold + licensing mani,2026-07-19T19:41:49Z,2026-07-19T20:07:16Z,2026-07-20T06:13:41Z,606.4,12,5,49,37,54,38200,29,305
+409,<owner>,AIP-126: fix(agent-tools): harden restatement-audit checkpoint boundaries,2026-07-17T21:22:54Z,2026-07-17T21:22:54Z,2026-07-20T06:38:29Z,3435.6,14,7,8,10,15,660,103,14
+418,<owner>,AIP-138: ci(deps): ignore TypeScript majors in the dependabot npm group,2026-07-20T06:34:18Z,2026-07-20T06:34:18Z,2026-07-20T07:05:01Z,30.7,3,5,0,4,5,8,0,1
+417,<owner>,AIP-137: docs(design): flip ADR-213 to Accepted and true the integration plan,2026-07-20T06:31:40Z,2026-07-20T06:31:40Z,2026-07-20T07:47:25Z,75.8,8,5,10,18,15,45,31,5
+422,<owner>,AIP-137: docs(design): true the plan-collection index status for design-system i,2026-07-20T07:51:57Z,2026-07-20T07:51:57Z,2026-07-20T07:58:51Z,6.9,2,5,0,3,5,1,1,1
+423,<owner>,AIP-137: feat(design): four-theme contrast gate over the design-system dtcg expo,2026-07-20T07:56:44Z,2026-07-20T07:56:44Z,2026-07-20T09:53:52Z,117.1,14,5,13,18,18,1565,382,29
+427,<owner>,feat(agent-tools): relocate usage gauges to the statusline repo-title row,2026-07-20T09:34:53Z,2026-07-20T09:34:53Z,2026-07-20T10:47:54Z,73.0,3,4,4,8,8,96,41,2
+424,<owner>,AIP-137: docs(design): land the Stage-B interchange-contract concept exploration,2026-07-20T09:02:31Z,2026-07-20T09:02:47Z,2026-07-20T12:17:52Z,195.1,10,12,19,30,31,316,0,1
+420,<owner>,AIP-137: fix(design): localise Roboto Mono — the kit's last runtime network call,2026-07-20T06:40:56Z,2026-07-20T06:40:56Z,2026-07-20T12:41:20Z,360.4,6,5,2,9,7,218,17,11
+426,<owner>,docs(plan): ARC-colour statusline infrastructure port plan,2026-07-20T09:22:21Z,2026-07-20T09:22:21Z,2026-07-20T12:42:38Z,200.3,11,4,51,63,55,344,2,3
+428,<owner>,docs(architecture): record adr-214 arc-colour statusline infrastructure,2026-07-20T09:50:54Z,2026-07-20T09:50:54Z,2026-07-20T12:42:53Z,172.0,4,4,6,11,10,82,0,2
 415,dependabot,chore(deps): bump actions/setup-node from 6.4.0 to 7.0.0,2026-07-20T03:14:59Z,2026-07-20T03:14:59Z,2026-07-20T12:43:30Z,568.5,2,4,0,1,4,2,2,2
-406,jimCresswell,AIP-131: record Codex hook discovery result,2026-07-17T08:05:01Z,2026-07-20T12:44:06Z,2026-07-20T12:45:38Z,1.5,2,4,0,1,4,63,0,1
-431,jimCresswell,AIP-137: fix(design): harden the theme runtime against embed truncation and bad ,2026-07-20T12:28:35Z,2026-07-20T12:28:35Z,2026-07-20T13:08:22Z,39.8,3,5,1,5,6,48,6,3
-413,jimCresswell,AIP-137: feat(hub): consume the design system as the token source (slice 1),2026-07-19T21:36:12Z,2026-07-19T21:36:12Z,2026-07-20T14:09:59Z,993.8,22,5,57,74,62,1492,484,77
-414,jimCresswell,AIP-137: docs(practice): proof-instrument taxonomy concept exploration,2026-07-19T21:49:58Z,2026-07-19T21:49:58Z,2026-07-20T14:54:10Z,1024.2,13,5,12,26,17,247,1,2
-432,jimCresswell,docs(plan): amend the arc-colour estate to the adoption-forward ruling,2026-07-20T13:00:00Z,2026-07-20T13:00:00Z,2026-07-20T16:19:18Z,199.3,11,11,14,25,25,112,80,4
-446,jimCresswell,docs(consolidation): dedicated knowledge-curation pass 2026-07-20 — drive-genera,2026-07-20T17:20:20Z,2026-07-20T17:20:20Z,2026-07-20T19:07:33Z,107.2,57,3,0,1,3,8732,5720,142
-433,jimCresswell,"AIP-143: fix(security): pin gitleaks transport, gate npm install scripts, add S6",2026-07-20T13:57:17Z,2026-07-20T13:57:17Z,2026-07-20T19:13:51Z,316.6,10,5,11,22,16,93,5,3
-438,jimCresswell,fix(hub): controls onto the kit surface and btn-secondary roles (AIP-137 §6 slic,2026-07-20T14:32:57Z,2026-07-20T14:32:57Z,2026-07-20T19:15:36Z,282.6,5,4,14,19,18,39,23,12
-440,jimCresswell,fix(hub): move card and tint surfaces onto kit roles (AIP-137 §6 slice 2),2026-07-20T14:46:13Z,2026-07-20T14:46:13Z,2026-07-20T19:16:00Z,269.8,4,4,6,11,10,46,31,15
-444,jimCresswell,fix(hub): re-point the token-audit authority at the in-repo kit (AIP-137 §7a),2026-07-20T15:40:54Z,2026-07-20T15:40:54Z,2026-07-20T19:16:31Z,215.6,1,4,0,2,4,24,39,2
-442,jimCresswell,AIP-149: docs(design): ADR-213 §2 per-consumer projection amendment + Stage-B pl,2026-07-20T15:06:24Z,2026-07-20T15:06:24Z,2026-07-20T19:16:53Z,250.5,7,5,11,19,16,100,11,2
-441,jimCresswell,feat(agent-tools): sanctioned --exclude-tag on comms watch (F-146) + F-75 pairin,2026-07-20T15:04:22Z,2026-07-20T15:04:22Z,2026-07-20T19:17:15Z,252.9,2,4,4,7,8,840,251,21
-443,jimCresswell,fix(hub): move pedagogy-block surfaces onto kit roles (AIP-137 §6 slice 3),2026-07-20T15:28:18Z,2026-07-20T15:28:18Z,2026-07-20T19:17:34Z,229.3,3,4,5,9,9,44,31,14
-445,jimCresswell,feat(agent-tools): usage gauges join the model row (ws-a-cycle-2),2026-07-20T16:34:05Z,2026-07-20T16:34:05Z,2026-07-20T19:17:53Z,163.8,2,4,1,4,5,56,56,3
-436,jimCresswell,feat(agent-tools): actionable seeding error for missing collaboration state file,2026-07-20T14:10:05Z,2026-07-20T14:10:05Z,2026-07-20T19:18:23Z,308.3,13,3,26,40,29,545,50,19
-419,jimCresswell,AIP-131: docs(continuity): conserve PR 406 facts into the codex hook thread reco,2026-07-20T06:36:59Z,2026-07-20T06:36:59Z,2026-07-20T19:19:27Z,762.5,5,5,4,10,9,33,20,1
-429,jimCresswell,AIP-137: feat(design): dtcg↔CSS consistency validator (cycle-3 deferred item 3),2026-07-20T10:26:13Z,2026-07-20T10:26:13Z,2026-07-20T19:19:49Z,533.6,20,4,20,42,24,1666,55,14
-435,jimCresswell,AIP-144: fix(agent-tools): pre-commit knip leg no longer reads a crash as a pass,2026-07-20T14:09:11Z,2026-07-20T14:09:11Z,2026-07-20T19:20:11Z,311.0,7,4,11,19,15,363,66,10
-447,jimCresswell,AIP-155: docs(practice): fold PDR-131 into pr-lifecycle — arm at settled-READY u,2026-07-20T19:39:38Z,2026-07-20T19:39:38Z,2026-07-20T19:53:37Z,14.0,1,4,0,1,4,25,5,1
-439,jimCresswell,docs: fresh-checkout experience concept-exploration report,2026-07-20T14:34:48Z,2026-07-20T14:45:59Z,2026-07-20T21:24:39Z,398.7,5,5,8,13,13,237,0,2
+406,<owner>,AIP-131: record Codex hook discovery result,2026-07-17T08:05:01Z,2026-07-20T12:44:06Z,2026-07-20T12:45:38Z,1.5,2,4,0,1,4,63,0,1
+431,<owner>,AIP-137: fix(design): harden the theme runtime against embed truncation and bad ,2026-07-20T12:28:35Z,2026-07-20T12:28:35Z,2026-07-20T13:08:22Z,39.8,3,5,1,5,6,48,6,3
+413,<owner>,AIP-137: feat(hub): consume the design system as the token source (slice 1),2026-07-19T21:36:12Z,2026-07-19T21:36:12Z,2026-07-20T14:09:59Z,993.8,22,5,57,74,62,1492,484,77
+414,<owner>,AIP-137: docs(practice): proof-instrument taxonomy concept exploration,2026-07-19T21:49:58Z,2026-07-19T21:49:58Z,2026-07-20T14:54:10Z,1024.2,13,5,12,26,17,247,1,2
+432,<owner>,docs(plan): amend the arc-colour estate to the adoption-forward ruling,2026-07-20T13:00:00Z,2026-07-20T13:00:00Z,2026-07-20T16:19:18Z,199.3,11,11,14,25,25,112,80,4
+446,<owner>,docs(consolidation): dedicated knowledge-curation pass 2026-07-20 — drive-genera,2026-07-20T17:20:20Z,2026-07-20T17:20:20Z,2026-07-20T19:07:33Z,107.2,57,3,0,1,3,8732,5720,142
+433,<owner>,"AIP-143: fix(security): pin gitleaks transport, gate npm install scripts, add S6",2026-07-20T13:57:17Z,2026-07-20T13:57:17Z,2026-07-20T19:13:51Z,316.6,10,5,11,22,16,93,5,3
+438,<owner>,fix(hub): controls onto the kit surface and btn-secondary roles (AIP-137 §6 slic,2026-07-20T14:32:57Z,2026-07-20T14:32:57Z,2026-07-20T19:15:36Z,282.6,5,4,14,19,18,39,23,12
+440,<owner>,fix(hub): move card and tint surfaces onto kit roles (AIP-137 §6 slice 2),2026-07-20T14:46:13Z,2026-07-20T14:46:13Z,2026-07-20T19:16:00Z,269.8,4,4,6,11,10,46,31,15
+444,<owner>,fix(hub): re-point the token-audit authority at the in-repo kit (AIP-137 §7a),2026-07-20T15:40:54Z,2026-07-20T15:40:54Z,2026-07-20T19:16:31Z,215.6,1,4,0,2,4,24,39,2
+442,<owner>,AIP-149: docs(design): ADR-213 §2 per-consumer projection amendment + Stage-B pl,2026-07-20T15:06:24Z,2026-07-20T15:06:24Z,2026-07-20T19:16:53Z,250.5,7,5,11,19,16,100,11,2
+441,<owner>,feat(agent-tools): sanctioned --exclude-tag on comms watch (F-146) + F-75 pairin,2026-07-20T15:04:22Z,2026-07-20T15:04:22Z,2026-07-20T19:17:15Z,252.9,2,4,4,7,8,840,251,21
+443,<owner>,fix(hub): move pedagogy-block surfaces onto kit roles (AIP-137 §6 slice 3),2026-07-20T15:28:18Z,2026-07-20T15:28:18Z,2026-07-20T19:17:34Z,229.3,3,4,5,9,9,44,31,14
+445,<owner>,feat(agent-tools): usage gauges join the model row (ws-a-cycle-2),2026-07-20T16:34:05Z,2026-07-20T16:34:05Z,2026-07-20T19:17:53Z,163.8,2,4,1,4,5,56,56,3
+436,<owner>,feat(agent-tools): actionable seeding error for missing collaboration state file,2026-07-20T14:10:05Z,2026-07-20T14:10:05Z,2026-07-20T19:18:23Z,308.3,13,3,26,40,29,545,50,19
+419,<owner>,AIP-131: docs(continuity): conserve PR 406 facts into the codex hook thread reco,2026-07-20T06:36:59Z,2026-07-20T06:36:59Z,2026-07-20T19:19:27Z,762.5,5,5,4,10,9,33,20,1
+429,<owner>,AIP-137: feat(design): dtcg↔CSS consistency validator (cycle-3 deferred item 3),2026-07-20T10:26:13Z,2026-07-20T10:26:13Z,2026-07-20T19:19:49Z,533.6,20,4,20,42,24,1666,55,14
+435,<owner>,AIP-144: fix(agent-tools): pre-commit knip leg no longer reads a crash as a pass,2026-07-20T14:09:11Z,2026-07-20T14:09:11Z,2026-07-20T19:20:11Z,311.0,7,4,11,19,15,363,66,10
+447,<owner>,AIP-155: docs(practice): fold PDR-131 into pr-lifecycle — arm at settled-READY u,2026-07-20T19:39:38Z,2026-07-20T19:39:38Z,2026-07-20T19:53:37Z,14.0,1,4,0,1,4,25,5,1
+439,<owner>,docs: fresh-checkout experience concept-exploration report,2026-07-20T14:34:48Z,2026-07-20T14:45:59Z,2026-07-20T21:24:39Z,398.7,5,5,8,13,13,237,0,2

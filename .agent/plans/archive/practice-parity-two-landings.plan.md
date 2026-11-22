@@ -65,7 +65,7 @@ is mechanical (`cmp`, the dry-run merge, the validators), so one review per esta
 enough.
 
 1. **The doctrine landing, one branch per estate cut from its default tip.** The lanes already
-   authored today merge into it first (jimcresswell.net: 318, the specification family; the hooks
+   authored today merge into it first (the sibling estate: 318, the specification family; the hooks
    surface at `SHA:c6262b00`; OCE: #349 with its last cure `SHA:fe05f463a`, the directives surface
    at `SHA:1d77e8b03`, the sub-agents surface in its lane). Then, file by file over the ledger's
    rows, each row's recorded reading is applied to the receiver's own file: same meaning takes the
@@ -76,7 +76,7 @@ enough.
    them unread, and no row is written for them. `portability:fix`, `skills:generate` and the
    documentation validators run green on the branch. One push, Copilot once, one settlement push,
    merge through the bot.
-2. **The code landing, one branch per receiving estate.** jimcresswell.net receives C3, C17, C23,
+2. **The code landing, one branch per receiving estate.** The sibling estate receives C3, C17, C23,
    C25 with C19, C26, C22 with C5 and C6, and C28; OCE receives C19 and C27 (from the J2
    worktree's staged files). Each module is copied with its tests and wired (scripts, knip, the
    README rows); the receiver's test suite and `check` pass; the generalisation trailer names each
@@ -104,7 +104,7 @@ by hand; nobody waits on a landing line to proceed.
 
 ## Size
 
-The doctrine landing: jimcresswell.net about two and a half hours of authoring (rules, skills and
+The doctrine landing: the sibling estate about two and a half hours of authoring (rules, skills and
 Practice Core applied from the rows), OCE about one and a half (its three lanes merged in, the
 twins of those three surfaces applied from the same rows), then one review cycle each, about an
 hour. The code landing: about two hours per receiving estate, tests and the review cycle included.
@@ -121,7 +121,7 @@ product work.
 
 ## Todos
 
-1. The jimcresswell.net implementer: the doctrine branch with 318 and the hooks surface merged in;
+1. The sibling estate's implementer: the doctrine branch with 318 and the hooks surface merged in;
    rules, skills and Practice Core applied from the rows; validators green; pushed. Then the code
    branch.
 2. The OCE implementer: the doctrine branch with #349, the directives and the sub-agents lanes

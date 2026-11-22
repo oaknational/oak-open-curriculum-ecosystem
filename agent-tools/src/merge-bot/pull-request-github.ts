@@ -63,7 +63,7 @@ export async function readPullRequest(
 }
 
 /** POST `body` as an issue comment on the pull request's conversation; the comment's id and URL. */
-async function postIssueComment(
+export async function postIssueComment(
   fetchImpl: GithubApiFetch,
   token: string,
   repo: BotRepository,

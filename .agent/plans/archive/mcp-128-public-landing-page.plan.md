@@ -22,7 +22,7 @@ last_updated: 2026-07-26
 ## Outcome (2026-07-26) — delivered, plan archived
 
 The page is built and pushed: `SHA:a549d491d` on
-`jimcresswell/mcp-128-public-landing-page-at-production-values-oak-family-design`.
+`<owner>/mcp-128-public-landing-page-at-production-values-oak-family-design`.
 
 The design the owner iterated with the studio on 2026-07-23 is what shipped —
 Oak site chrome, hero band, connect band, accordion cards, footer — carried into

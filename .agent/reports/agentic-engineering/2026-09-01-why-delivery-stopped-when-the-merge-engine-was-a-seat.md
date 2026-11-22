@@ -104,7 +104,7 @@ This is the finding.
 The branch ruleset `Code-owner review gate (bot-exempt by owner ruling 2026-07-21)`
 (id `19395183`, active) sets `require_code_owner_review=true`,
 `required_approving_review_count=0`, and grants `bypass_mode: always` to four actors:
-two Users (`jimCresswell`, `mantagen`) and two Integrations (the bot apps).
+two Users (`<owner>`, `<code-owner>`) and two Integrations (the bot apps).
 
 Because bypass governs *who may merge*, not *whose PR is exempt*, every PR in this repo
 reads `mergeStateStatus: BLOCKED` by design and only a bypass actor can land it. So the
@@ -116,13 +116,13 @@ but outside this window):
 
 | Week | Who merged |
 |---|---|
-| 2026-07-06 | `jimCresswell`=31 |
-| 2026-07-13 | `jimCresswell`=57 |
-| 2026-07-20 | **`jimbot-oakington-iii`=89**, `jimCresswell`=55 |
-| 2026-07-27 | **`jimbot-oakington-iii`=133**, `jimCresswell`=4 |
-| 2026-08-03 | `jimbot-oakington-iii`=47, `jimCresswell`=14, `mantagen`=12, `emgeebot-oakenfold`=10 |
-| 2026-08-10 | `jimbot-oakington-iii`=33, `jimCresswell`=8, `mantagen`=3 |
-| 2026-08-17 | `jimbot-oakington-iii`=8, `mantagen`=7, `emgeebot-oakenfold`=1 |
+| 2026-07-06 | `<owner>`=31 |
+| 2026-07-13 | `<owner>`=57 |
+| 2026-07-20 | **`jimbot-oakington-iii`=89**, `<owner>`=55 |
+| 2026-07-27 | **`jimbot-oakington-iii`=133**, `<owner>`=4 |
+| 2026-08-03 | `jimbot-oakington-iii`=47, `<owner>`=14, `<code-owner>`=12, `emgeebot-oakenfold`=10 |
+| 2026-08-10 | `jimbot-oakington-iii`=33, `<owner>`=8, `<code-owner>`=3 |
+| 2026-08-17 | `jimbot-oakington-iii`=8, `<code-owner>`=7, `emgeebot-oakenfold`=1 |
 | 2026-08-24 | *(nobody)* |
 | 2026-08-31 | *(nobody)* |
 
