@@ -154,7 +154,7 @@ the most load-bearing because it undercuts the corpus's trustworthiness as a res
   rotation strategy (WS5 — a quarantine/cleanup class) + write-integrity.
 - **SC4 — Provenance contradiction / actor-laundering on shared-credential actions.**
   [FH-CONFIRMED for laundering; #160-contradiction NOT reproduced] `1bb0efdd`: a CodeQL dismissal
-  records `dismissed_by: jimCresswell` (the shared gh credential), not the acting agent Flamebright
+  records `dismissed_by: <owner>` (the shared gh credential), not the acting agent Flamebright
   — provenance exists only in the comms stream. (Matches the standing
   `shared-gh-auth-hides-actor` note.) **Correction to the cold-read #5 claim:** the alleged "two
   incompatible accounts of who merged #160" does NOT reproduce — `2fc69a3f` and `c9b4dc78` both

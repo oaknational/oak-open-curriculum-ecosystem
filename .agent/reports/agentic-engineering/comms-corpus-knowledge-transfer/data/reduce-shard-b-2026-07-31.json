@@ -1242,7 +1242,7 @@
     },
     {
       "id": "Bc73",
-      "statement": "PR #569's accidentally-tracked design bundle (283/317 blobs already on main) caused CodeQL 34 alerts and Sonar failure; owner authorised un-track via git rm --cached plus gitignore and a CODEOWNERS @mantagen addition after a byte-level value assessment.",
+      "statement": "PR #569's accidentally-tracked design bundle (283/317 blobs already on main) caused CodeQL 34 alerts and Sonar failure; owner authorised un-track via git rm --cached plus gitignore and a CODEOWNERS @<code-owner> addition after a byte-level value assessment.",
       "kind": "owner-word",
       "supportingLeafIds": [
         "w17-L05",
@@ -3331,7 +3331,7 @@
     },
     {
       "id": "Bc200",
-      "statement": "Merged branch jimcresswell/mcp-414-worktree-gates-turbo-git-dir-env-fix awaits an owner one-click delete (permission-gated at the implementer seat).",
+      "statement": "Merged branch <owner>/mcp-414-worktree-gates-turbo-git-dir-env-fix awaits an owner one-click delete (permission-gated at the implementer seat).",
       "kind": "obligation",
       "supportingLeafIds": [
         "w22-L40"

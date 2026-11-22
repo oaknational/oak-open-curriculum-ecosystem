@@ -39,14 +39,14 @@ Source keys used below:
 | Oak releases carried | 1.186.4 (#376), 1.186.5 (#380), 1.186.8 (#381, extended from 1.186.7), 1.186.9 (#388), 1.186.10 (#393) | [T] lines 405, 440, 496 to 527, 602, 676 |
 | All fork pull requests in the window (#374 to #431) | 58: 55 merged, 3 closed unmerged (#379, #389, #406); of the merged, 41 authored by the fork's bot app, 14 by the owner | [GH] `gh pr list ... --json number,state,author` counted with `jq` |
 | Pushes to #1023's branch | 1 branch creation plus 10 pushes, so 11 distinct heads, all by Oak's bot | [GH] `gh api "repos/oaknational/.../activity?ref=reunify-oce-forks"` |
-| Review objects on #1023 | 4: `github-code-quality[bot]` (6 inline comments, 2026-11-09), `github-advanced-security[bot]` (1 CodeQL comment, 2026-11-09), `claude[bot]` (1 finding, 2026-11-16T13:47:08Z), `mantagen` APPROVED (2026-11-18T13:06:51Z) | [GH] `gh api .../pulls/1023/reviews`, `.../pulls/1023/comments` |
+| Review objects on #1023 | 4: `github-code-quality[bot]` (6 inline comments, 2026-11-09), `github-advanced-security[bot]` (1 CodeQL comment, 2026-11-09), `claude[bot]` (1 finding, 2026-11-16T13:47:08Z), `<code-owner>` APPROVED (2026-11-18T13:06:51Z) | [GH] `gh api .../pulls/1023/reviews`, `.../pulls/1023/comments` |
 | Review rounds that needed a cure | 2: the first-check findings of 2026-11-09 (cured by #391) and the `claude[bot]` gitleaks finding of 2026-11-16 (cured by #431) | [GH] reviews; #391 body; bot comment 6931282999 |
 | Review threads | 7, all resolved (each marked resolved by the bot that opened it) | [GH] GraphQL `reviewThreads` |
-| Reviewers requested | the owner's account, `mantagen` and two other Oak accounts (requested by the bot at 2026-11-16T13:34:02Z); only `mantagen` left a review | [GH] issue timeline, `review_requested` events |
-| Merged by | `mantagen` (display name "MG"), 21 seconds after that account's approval; the same account deleted the head branch at 13:07:14Z | [GH] `mergedBy`, timeline `merged` and `head_ref_deleted` |
+| Reviewers requested | the owner's account, `<code-owner>` and two other Oak accounts (requested by the bot at 2026-11-16T13:34:02Z); only `<code-owner>` left a review | [GH] issue timeline, `review_requested` events |
+| Merged by | `<code-owner>` (display name "MG"), 21 seconds after that account's approval; the same account deleted the head branch at 13:07:14Z | [GH] `mergedBy`, timeline `merged` and `head_ref_deleted` |
 
 Note on the last row: the record's rule is that only the owner executes this merge ([T] line 733,
-[P] line 18). The owner's GitHub account in this record is `jimCresswell` (it renamed #1023 on
+[P] line 18). The owner's GitHub account in this record is `<owner>` (it renamed #1023 on
 2026-11-11 and re-ran CI on 2026-11-17). See section 7.
 
 ## 2. Dated timeline (UTC)
@@ -119,8 +119,8 @@ Preparation of oaknational#1023:
 | 11-16 22:27:35 | Push 10: head `fc45609c8`. `static-checks` exceeds its 10-minute limit; CI attempt 1 ends cancelled at 22:49 | [GH] run 43970274437 attempt 1, job annotation |
 | 11-16 22:32 | SonarCloud: quality gate passed on the final head | [GH] comment 6931379170 |
 | 11-17 08:19 to 08:24 | Owner re-runs CI twice; attempt 3 succeeds at 08:24:08 | [GH] attempts 2 and 3, `triggering_actor` |
-| 11-18 13:06:51 | `mantagen` approves at `fc45609c8` | [GH] |
-| 11-18 13:07:12 | `mantagen` merges; `dae303661` | [GH] |
+| 11-18 13:06:51 | `<code-owner>` approves at `fc45609c8` | [GH] |
+| 11-18 13:07:12 | `<code-owner>` merges; `dae303661` | [GH] |
 
 ## 3. Obstacles
 
@@ -319,8 +319,8 @@ Claims the GitHub record does not support, or contradicts:
 
 1. **Who merged.** The record's rule is that the owner alone executes the merge ([T] 733, 1005, 1032; [P] 18; the
    upgrade note; the #1023 description: "The repository owner merges this pull request; nobody else does").
-   GitHub records the merge by `mantagen`, which also gave the only approval, 21 seconds earlier. The
-   owner's account in this record, `jimCresswell`, left no review and is not the merging actor. No
+   GitHub records the merge by `<code-owner>`, which also gave the only approval, 21 seconds earlier. The
+   owner's account in this record, `<owner>`, left no review and is not the merging actor. No
    source read here says whether the owner authorised or asked for that merge. This is a gap, not a finding about intent.
 2. **The record stops before the end.** [T]'s last entry is 2026-11-16 ~13:35Z and [N] has no entry by this seat
    after 2026-11-12. Not in the narrative: the `claude[bot]` review (13:47Z), #430, #431, the `static-checks`
