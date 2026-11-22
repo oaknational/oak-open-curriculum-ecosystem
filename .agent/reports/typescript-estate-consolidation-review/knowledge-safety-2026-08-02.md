@@ -188,7 +188,7 @@ complete predicate or transformation and its rejected cases.
 ## Current implementation state
 
 The work runs in a dedicated review worktree on branch
-`jimcresswell/typescript-estate-consolidation-review`, currently at
+`<owner>/typescript-estate-consolidation-review`, currently at
 calibration base `7ea6ba55b16988cfb0cdcb0f485db32f71777628`.
 
 Uncommitted review work currently consists of the ratified plan, evidence

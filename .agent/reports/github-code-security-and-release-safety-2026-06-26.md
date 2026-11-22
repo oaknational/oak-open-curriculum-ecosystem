@@ -24,7 +24,7 @@ release-safe.
   (`fix`/`feat`/`perf`/breaking), `merge to main → CI green → semantic-release
   bumps the root version → Vercel deploys the MCP app to prod`. The **only**
   human judgment gate in that chain is the **PR code-owner review**
-  (`@jimCresswell`). CI + the version-advance check are the technical gates.
+  (`@<owner>`). CI + the version-advance check are the technical gates.
 - **Therefore "auto-merge" is not a new capability — it is the removal of the
   one human gate.** Enabling unattended auto-merge (e.g. for Dependabot PRs)
   in a way that removes the code-owner review would make **CI the sole arbiter
@@ -53,14 +53,14 @@ Already in place (verified):
 | gitleaks secret scan | Runs in CI (`pnpm secrets:scan`) and pre-commit | `ci.yml` step "Run secret scan"; root `package.json` |
 | Dependabot | npm + github-actions, weekly, all-deps grouped, PR limit 5; now ignores `@types/node` major | `.github/dependabot.yml` |
 | Branch protection ruleset | "Protect default branch": code-owner review required, non-fast-forward, deletion blocked, 3 required checks | ruleset `13402577` |
-| CODEOWNERS | `* @jimCresswell` (whole repo) | `.github/CODEOWNERS` |
+| CODEOWNERS | `* @<owner>` (whole repo) | `.github/CODEOWNERS` |
 | Copilot code review | Auto-review on push (`review_on_push: true`) | ruleset `copilot_code_review` |
 | Tag protection | "release tag protections" ruleset | ruleset `17845755` |
 
 Required status checks to merge to `main`: **CodeQL**, **SonarCloud Code
 Analysis**, **run-quality-gates**. (Vercel deploy and Cursor Bugbot run but are
 **not** required.) `required_approving_review_count: 0` but
-`require_code_owner_review: true` — so every PR needs `@jimCresswell`'s
+`require_code_owner_review: true` — so every PR needs `@<owner>`'s
 approving review because CODEOWNERS owns the whole tree.
 
 **Repo is public; org plan is Team (65 seats).** Public visibility means every
@@ -110,7 +110,7 @@ next `fix`/`feat` release.
 ```text
 PR opened
   → CI (CodeQL, SonarCloud, run-quality-gates)  [technical gate]
-  → code-owner review by @jimCresswell          [HUMAN judgment gate]
+  → code-owner review by @<owner>          [HUMAN judgment gate]
   → merge to main
   → CI on main
   → semantic-release (if fix/feat/perf)          [version bump]

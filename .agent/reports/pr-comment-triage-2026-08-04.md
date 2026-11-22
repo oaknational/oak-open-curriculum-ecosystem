@@ -110,7 +110,7 @@ re-derivation cure family (the gate-ledger programme's territory). Clusters
 | §3.1 #748 ruling discharged + env check | OVERSTATED (mildly) | Discharge confirmed from the commit record; the ruling is attested by Matt's commit/comment, not an owner artefact on the PR. Sharpened: posthog IS selected in preview/dev (verified live), so the SENTRY_MODE check is load-bearing, not precautionary |
 | §3.2 #747 residual | UNDERSTATED | Three residues, not one; the TOCTOU window recurses through every subdirectory |
 | §3.3 suppressed-comments blind spot | UNDERSTATED | Five flags on #749, not four; and rev 1 itself swept the channel on only 2 of the 11 PRs that carry it (§5) |
-| §3.4 review-economy re-pricing | UNDERSTATED / over-narrowed | 23 of 24 genuine mantagen verdicts (96%) are agent-authored; 20 of 24 mechanically triggered; but only 11 of 24 are head-change re-reviews — and the economy verdict was measured with the Claude and Codex review channels dark estate-wide on overage limits, which rev 1 classed as noise |
+| §3.4 review-economy re-pricing | UNDERSTATED / over-narrowed | 23 of 24 genuine verdicts by the second code owner (96%) are agent-authored; 20 of 24 mechanically triggered; but only 11 of 24 are head-change re-reviews — and the economy verdict was measured with the Claude and Codex review channels dark estate-wide on overage limits, which rev 1 classed as noise |
 | §2 one-defect-class synthesis | OVERSTATED | Dominant and genuinely shared, but four-plus distinct generators with different cures — §2 above is the corrected structure |
 
 ## 4. Owner-attention items (each on its own line, none discharged by this report)
