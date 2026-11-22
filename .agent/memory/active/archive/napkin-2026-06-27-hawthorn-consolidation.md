@@ -254,7 +254,7 @@ New session observations append below.
   `mergeStateStatus` went BLOCKED→CLEAN once the 5 review threads resolved, and it merged with no approval
   **because it was agent-authored under the owner's shared gh auth and the sole code owner IS the author**
   (the documented author-dependent gate behaviour — GitHub auto-satisfies the gate and forbids
-  self-approval). NOT "these paths aren't code-owner-gated": CODEOWNERS is `* @jimCresswell`, every path is
+  self-approval). NOT "these paths aren't code-owner-gated": CODEOWNERS is one line, `*` and one account, every path is
   gated. I first recorded the path-scoped reading; the loss-scan caught it against
   [[project_main_merge_gate_codeowner]] (which already documents the author-dependent behaviour) — a
   ground-convenient-claims miss (I asserted a convenient explanation without checking the existing memory).
