@@ -5,7 +5,7 @@ Caracal wakes Tunnel `265648` — PR2 implementer; Harrier rides Updraft `416a38
 validation lane).
 **Scope**: adversarial verification of the design-system initial import
 (`packages/design/oak-design-system`, 290 files, local commit `SHA:922f2e806` on
-`jimcresswell/aip-137-pr2-design-system-stage-a`) against the invariants ADR-213 §1 records
+`<owner>/aip-137-pr2-design-system-stage-a`) against the invariants ADR-213 §1 records
 and the licensing manifest declares. Read-only pass; no tree modifications.
 **Method**: six parallel audit dimensions (22 agents total), every non-pass finding
 independently re-verified by an adversarial second agent, and the three highest-stakes

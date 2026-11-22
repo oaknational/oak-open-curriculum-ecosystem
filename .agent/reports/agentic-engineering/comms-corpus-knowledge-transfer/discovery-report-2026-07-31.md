@@ -219,15 +219,15 @@ is free text and nothing normalises it.
 | --- | --- |
 | `coordination/estate-2026-07` | 1380 |
 | `coordination/estate-2026-07-28` | 548 |
-| `jimcresswell/mcp-63-posthog-product-analytics-implementation` | 313 |
+| `<owner>/mcp-63-posthog-product-analytics-implementation` | 313 |
 | `coordination/estate-2026-07-30` | 294 |
-| `jimcresswell/mcp-103-model-behaviour-content-workspace-all-repo-controlled-mcp` | 258 |
-| `jimcresswell/mcp-189-agent-tools-mcp-conformance-mcpjam-suite-wrapper-with-named` | 250 |
+| `<owner>/mcp-103-model-behaviour-content-workspace-all-repo-controlled-mcp` | 258 |
+| `<owner>/mcp-189-agent-tools-mcp-conformance-mcpjam-suite-wrapper-with-named` | 250 |
 | `docs/copilot-cli-practice-citizenship` | 212 |
 | `coordination/estate-2026-07-30-b` | 203 |
 | `mcp-128-restack-stack` | 200 |
-| `jimcresswell/mcp-371-slice-2-showcase-page-identity-theme-switchers` | 176 |
-| `jimcresswell/mcp-302-oak-open-curriculum-plugin` | 123 |
+| `<owner>/mcp-371-slice-2-showcase-page-identity-theme-switchers` | 176 |
+| `<owner>/mcp-302-oak-open-curriculum-plugin` | 123 |
 | `main` | 99 |
 
 Drift instance: 1,380 beats declared the dateless `coordination/estate-2026-07`, which matches

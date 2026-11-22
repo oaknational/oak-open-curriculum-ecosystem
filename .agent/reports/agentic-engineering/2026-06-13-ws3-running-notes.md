@@ -39,7 +39,7 @@ supporting Katydid hunts Roost. Newest entries appended at the bottom.
    concurrency. FH-confirmed anchors: SC1 (above); SC2 citation theatre; SC3 test-events
    (`8013b51a` "delete me", `4fcfcef5` "test-probe", `3cc1fb93` load-bearing-under-test-title);
    CC2 COMMIT_EDITMSG race (`230f3200`); CC1 commit-queue scope leak (`0ba2c822`); E1 epistemic
-   inflation (`e6b30e8c` "5 not 2"); SC4 actor-laundering (`1bb0efdd` dismissed_by=jimCresswell);
+   inflation (`e6b30e8c` "5 not 2"); SC4 actor-laundering (`1bb0efdd` `dismissed_by=<owner>`);
    model-string Babel (15 spellings for ~4 families, corpus-wide); AO1 telemetry-overrides-doctrine
    (`593a93d5` "~36% context" vs written 80%).
 6. **Katydid cross-read adjudication (turn 5→6):** of 5 relayed blind-arisen patterns, 3 confirmed

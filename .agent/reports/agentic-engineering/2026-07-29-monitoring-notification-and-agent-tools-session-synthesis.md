@@ -445,7 +445,7 @@ direction:
   `--agent-name` defect-routing action is included in the final direct handoff.
 - MCP-366 brand work: returned to Osprey; Europa's small commit absorbed.
 - Documentation delivery: this report and the formation letter are published
-  from `jimcresswell/mcp-373-monitoring-session-synthesis`. The PR metadata and
+  from `<owner>/mcp-373-monitoring-session-synthesis`. The PR metadata and
   final handoff carry the exact review URL rather than making this report's
   first commit self-referential.
 - Active workstream claims at publication: none for Europa. The only

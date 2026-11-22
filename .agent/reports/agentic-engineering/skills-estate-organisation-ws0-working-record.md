@@ -1059,7 +1059,7 @@ recording:
 5. **HB-02 is being dispositioned by a live peer lane.** ADR-186
    (comms-event heartbeat lifecycle substrate; PDR-078 its named
    portable genotype) is in flight at Charcoal seeks Tongs on
-   `jimcresswell/adr-186-heartbeat-lifecycle-migration`. Verified
+   `<owner>/adr-186-heartbeat-lifecycle-migration`. Verified
    against ADR-186's own text; noted on the mutual-lanes ARC channel.
    Not this lane's surface.
 

@@ -22,11 +22,11 @@ Three documents carry pieces of the plan today, none current to that restatement
   (decisions), with mechanics and materialisation beside them (design, in the wrong place).
 
 What the day measured: 3,555 Practice artefacts across the two default tips, 975 the same bytes,
-794 different, 343 only in jimcresswell.net, 1,443 only in OCE; the exchange register's 47 rows
+794 different, 343 only in the sibling estate, 1,443 only in OCE; the exchange register's 47 rows
 closed as "measured difference" (recorded, not carried); the survey's generator classes by
 directory and omits the entry points, the install surface, the gates, the harness bindings and
 every directory that mixes definitions with instances. Read first-hand at 19:2xZ: 298 (the
-inventory) merged in jimcresswell.net at `SHA:a35b5f325`; no consolidation or port branch
+inventory) merged in the sibling estate at `SHA:a35b5f325`; no consolidation or port branch
 remains on that remote; the exchange's Boxes are empty on both default tips and both provenance
 chains carry its entries, so its formal close is done.
 
@@ -127,7 +127,7 @@ removals judged are carried out.
 1. **The consolidation's tail lands and nothing stays outside a default branch.** The three
    OCE slices still to land (s, the first-batch skills leftover, y; q merged at 19:16Z as
    `SHA:d51669d2f`, read first-hand), the write-list table and
-   the notebooks' move in jimcresswell.net (the node `write-list-residue-and-notebook-close`,
+   the notebooks' move in the sibling estate (the node `write-list-residue-and-notebook-close`,
    which this node now governs), the two folds (each a merge of the default branch, never a
    rebase), the two omnibus branches deleted on the content script's zero.
 2. **The carries begin at ratification.** A carry is one capability one repository holds and
@@ -136,12 +136,12 @@ removals judged are carried out.
    adopted (the command runs, the gate fires, the validator passes on that tree) before its row
    reads landed. Copied code names its debt to the package in its integrating commit (PDR-143
    §Context). The queue opens with the gaps already named, smallest closure first: the window
-   registry rows (into OCE), the pr-watch content binding (into jimcresswell.net), the runbook
+   registry rows (into OCE), the pr-watch content binding (into the sibling estate), the runbook
    index, the host-tagged amendment entries in PDR-008, PDR-082 and PDR-132 moved to a host
    record with the Core validator that refuses a host-named heading, the three documentation
    validators with their three core helpers (into OCE; the preservation commit in the port's
    worktree is its starting point, so the port is carried, not retired), and the skill-evals
-   runner (into jimcresswell.net; the largest closure, last). The ledger extends this queue; it
+   runner (into the sibling estate; the largest closure, last). The ledger extends this queue; it
    never gates it.
 3. **The survey covers the whole Practice and recomputes from the tree.** A map edit to the
    inventory generator, no new instrument: the prefix list gains the entry points (`AGENTS.md`,
@@ -207,7 +207,7 @@ from extension packs per domain; and PDR-143's moved mechanics and materialisati
 
 ## Size and order
 
-Measured on 2026-10-02: about 19 minutes per landing in jimcresswell.net and 15 in OCE, review
+Measured on 2026-10-02: about 19 minutes per landing in the sibling estate and 15 in OCE, review
 rounds included. Counts below are derived at the ledger and re-derived at each fold, never
 carried from this table.
 
@@ -268,7 +268,7 @@ budget.
 | §Plan-body check, Frame | the bridge claim that the inventory substitutes for the carries | superseded | removed with the node |
 | end state 3 and 4 | the inventory (298, merged) and the IO census (on both coordination branches, folds with step 1) | done | nothing to do |
 | §Out of scope's retirements (the ten owner items, the security lane, the no-IO node) | routings already carried out | done, historical | the records hold them |
-| the size row "1 and 2" | the first-batch skills residue | done in jimcresswell.net (297); OCE's copy in step 1 | rides step 1 |
+| the size row "1 and 2" | the first-batch skills residue | done in the sibling estate (297); OCE's copy in step 1 | rides step 1 |
 
 Verdict: `superseded` by the new node, moved to the archive directory, inbound citations swept
 to plain text in the same commit (`write-list-residue-and-notebook-close.plan.md:24` names it
@@ -327,7 +327,7 @@ record are a moving target.
 ## Execution steps once ratified (not before)
 
 1. Land the node, the finish node's supersession and the two citation sweeps as one records
-   commit per repository (the worktree route in jimcresswell.net while the lock stands).
+   commit per repository (the worktree route in the sibling estate while the lock stands).
 2. Open the carry queue at once in the repository with no open Practice pull request; start
    step 1 with the implementer seats when the owner restarts them.
 3. Step 5's records pull request carries the PDR-019 amendment, the PDR-143 trim, the five
@@ -387,16 +387,16 @@ node's landing: the day's measured landing rate was the rate of ceremony, not of
 Two of the "four small carries" were sized first-hand and are ledger rows instead: the pr-watch
 content binding (202 lines imported by 22 files in OCE, whose pr-watch was restructured around
 it, so the carry is an adaptation, not a copy) and the runbook index (product operations under
-PDR-120 in OCE; jimcresswell.net has one runbook and no operations docs, so its likely reading
+PDR-120 in OCE; the sibling estate has one runbook and no operations docs, so its likely reading
 is host-local). The two that remain are the window registry rows (a twelve-line diff into OCE)
 and the host-tagged amendment entries with their Core validator.
 
 ## The measure's first numbers (19:5xZ, first-hand)
 
 The dry-run merge of the Practice-wide text (directives, rules, skills less evals and fixtures,
-practice-core, sub-agents, hooks) between jimcresswell.net main and OCE's default tip, a
+practice-core, sub-agents, hooks) between the sibling estate's main and OCE's default tip, a
 three-way merge per file with the transplant pin as the base: shared 445; identical 279;
-differing 166; one-sided 46 jimcresswell.net-only and 59 OCE-only. Of the 166 differing, 72 merge
+differing 166; one-sided 46 only in the sibling estate and 59 OCE-only. Of the 166 differing, 72 merge
 clean (the merged text is the landing for both, one pull request per repository), 89 conflict in
 221 hunks (the ledger's doctrine rows), 5 have no base at the pin (both added the file after the
 transplant). The script sits in the session scratchpad and lands with the measure slice.

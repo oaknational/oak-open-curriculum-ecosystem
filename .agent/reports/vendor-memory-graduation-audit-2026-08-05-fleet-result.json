@@ -21,7 +21,7 @@
       {
         "memory": "agent-reviews-matts-prs-on-owner-behalf.md",
         "verdict": "present",
-        "evidence": ".agent/memory/active/napkin.md (2026-08-04 ~14:0xZ entry, Petrel/Turbulence seat) carries the verbatim owner ruling: '\"Don't merge Matt's PRs for him, ever, but do review and if appropriate approve\" — answers Birch's standing-ruling question with NO; merge is Matt's own act; applies to mantagen AND emgeebot-oakenfold[bot]'. .agent/rules/bot-identity-on-third-party-systems.md separately covers the identity mechanics for any agent review.",
+        "evidence": ".agent/memory/active/napkin.md (2026-08-04 ~14:0xZ entry, Petrel/Turbulence seat) carries the verbatim owner ruling: '\"Don't merge Matt's PRs for him, ever, but do review and if appropriate approve\" — answers Birch's standing-ruling question with NO; merge is Matt's own act; applies to the second code owner AND emgeebot-oakenfold[bot]'. .agent/rules/bot-identity-on-third-party-systems.md separately covers the identity mechanics for any agent review.",
         "gap": "Not yet graduated to a standing rule file — currently only in a dated napkin entry, which will eventually archive/rotate out of the actively-read surface. The same napkin entry also records a temporary superseding fact (fleet withdraws from Matt's surfaces 'for the week' as of 2026-08-04) that isn't reconciled anywhere durable either.",
         "suggested_home": "A clause on bot-identity-on-third-party-systems.md or a small standalone rule",
         "graduation_value": "medium"
@@ -70,7 +70,7 @@
         "memory": "bot-identity-always-never-owner-credential-fallback.md",
         "verdict": "partial",
         "evidence": ".agent/rules/bot-identity-on-third-party-systems.md captures almost the entire memory verbatim: the 2026-07-21/23 mandatory-bot-identity ruling, the exceptions-by-user-permission-only clause, and the 2026-08-04 git-identity-scope reversal ('keep the bot identity locally shared, not in version control').",
-        "gap": "The 2026-08-04 standing carve-out — 'I do not have to approve PRs, you can use my identity to do that' (GitHub PR *approvals* only may go under jimCresswell, due to the code-owner review gate ruleset 19395183) — is NOT in the rule file. It exists only in .agent/memory/active/napkin.md (2026-08-04 entry, ~09:xx block referencing ruleset 19395183 bypass actors).",
+        "gap": "The 2026-08-04 standing carve-out — 'I do not have to approve PRs, you can use my identity to do that' (GitHub PR *approvals* only may go under the owner's account, due to the code-owner review gate ruleset 19395183) — is NOT in the rule file. It exists only in .agent/memory/active/napkin.md (2026-08-04 entry, ~09:xx block referencing ruleset 19395183 bypass actors).",
         "suggested_home": "Add the approval-carve-out clause to .agent/rules/bot-identity-on-third-party-systems.md",
         "graduation_value": "high"
       },
@@ -346,7 +346,7 @@
       {
         "memory": "feedback_agent_attribution_format.md",
         "verdict": "present",
-        "evidence": ".agent/rules/identify-as-agent-under-shared-credentials.md line 59/62 carries the exact one-line format: 'Agent-authored on behalf of `<account>` by <agent-name> (<platform>, <model>)' with the identical worked example ('Agent-authored on behalf of `jimCresswell` by Inferno holds Tongs...').",
+        "evidence": ".agent/rules/identify-as-agent-under-shared-credentials.md line 59/62 carries the exact one-line format: 'Agent-authored on behalf of `<account>` by <agent-name> (<platform>, <model>)' with the identical worked example ('Agent-authored on behalf of `<owner>` by Inferno holds Tongs...').",
         "gap": "",
         "suggested_home": "",
         "graduation_value": "none"

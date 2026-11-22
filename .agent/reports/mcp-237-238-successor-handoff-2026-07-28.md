@@ -36,7 +36,7 @@ not dangling. A successor on this lane owns **two slices and nothing else**.
 | MCP-237 | **Committed locally, push in flight** | commit `aaf769f11`, bot-authored, 2 files, +584 |
 | MCP-238 | **Not started** | — |
 
-**Worktree**: branch `jimcresswell/mcp-237-closed-product-analytics-sink`,
+**Worktree**: branch `<owner>/mcp-237-closed-product-analytics-sink`,
 based on `origin/main` at `ebf3b670d`. Resolve its path with
 `git worktree list` rather than assuming a location. Working tree **clean**
 (0 entries) at capture — nothing exists only as uncommitted edits.
@@ -202,7 +202,7 @@ to its own slice rather than adopting this one.
 ## First successor action
 
 1. Read this record and both parent records; the three are complete.
-2. `git ls-remote origin jimcresswell/mcp-237-closed-product-analytics-sink`
+2. `git ls-remote origin <owner>/mcp-237-closed-product-analytics-sink`
    — establish whether the push landed. Do not assume.
 3. If pushed and no PR exists, open the single-story PR, rebuilding its body
    from this record.

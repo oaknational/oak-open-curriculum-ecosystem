@@ -1,12 +1,12 @@
 # The Practice as one system across two estates
 
-A review of the mechanisms by which two estates, jimcresswell.net and OCE, plan, decide,
+A review of the mechanisms by which two estates, the sibling estate and OCE, plan, decide,
 implement, review, deliver and learn, read side by side as one system with two instantiations.
 Written by the Director seat Crucible binds Slag (7b999c) on 2026-10-04 under the delivery node
 `practice-system-review`, at the owner's word of 2026-10-03: "forget what you think you know and
 review the mechanisms in both estates ... everything that isn't 'the product'".
 
-Read at jimcresswell.net `coordination/2026-10-02-24fc05` (main `c4d376535` merged in) and OCE
+Read at the sibling estate's `coordination/2026-10-02-24fc05` (main `c4d376535` merged in) and OCE
 `coordination/2026-10-03-e790ea` (engraph `f0f1aacb7` merged in), from what runs and governs
 first: the root entry points and package scripts, the git hooks, the CI workflows, the shared
 configuration, the Practice directory's layout, the tooling workspace, the custom lint rules, the
