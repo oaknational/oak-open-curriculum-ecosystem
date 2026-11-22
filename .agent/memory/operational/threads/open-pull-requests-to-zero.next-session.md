@@ -1864,6 +1864,18 @@ are going to compact and change account". This entry holds what only the session
 the account's private memory held. A seat that picks up reads this update and the one before
 it; the hand-on entry of the earlier seat is the order of work they answer.
 
+- **Whose pull requests go to zero: the owner's ruling, 2026-11-22.** "Only our PRs should
+  get to zero, we should leave [two colleagues']" (the owner named the two code owners; their
+  names are replaced here). The target in this thread's name counts the pull requests this
+  estate's own seats and bot open. A colleague's pull request is left as it is: a seat does
+  not close it, merge it, push to it, mark it or comment on it to move it along. The seat's
+  reading, not the owner's words: the same holds for one opened by a colleague's bot and for
+  Dependabot's. Read that day, every open pull request on the repository apart from this
+  seat's own was one of those; the seat touched none of them.
+- **Seen after the cure: the review at open still happens for a bot.** The first pull request
+  the bot opened after both bot apps were set to `exempt` was asked of Copilot at open in the
+  bot's name (17:15:52 UTC, 2026-11-22). That answers the observation left open in the
+  update above.
 - **State at the sweep.** `main` is `e1ca739a4` after oaknational#1068, the closing fold. This
   seat has no open pull request, no claim, no queue entry, and no watcher, heartbeat or
   scheduled prompt. Every lane branch and worktree of the day is retired. The coordination
