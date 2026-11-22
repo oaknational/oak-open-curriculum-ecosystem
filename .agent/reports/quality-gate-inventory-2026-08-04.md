@@ -179,7 +179,7 @@ the **tooling's model of the corpus is wrong**.
 
 The second correction was made on resume, 2026-08-04. The original text called this
 finding **"unticketed as of the boundary"**. That claim was wrong and had never been
-checked. PR #731 (`jimcresswell/parallax-family-generator`, opened 2026-08-03T08:45Z —
+checked. PR #731 (`<owner>/parallax-family-generator`, opened 2026-08-03T08:45Z —
 a full day *before* the boundary, draft, CHANGES_REQUESTED) exists precisely to cure
 it, under an owner ruling of 2026-08-02. The verified finding stood; the ownership
 claim attached to it did not, because nothing was searched before asserting it.

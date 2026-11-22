@@ -9,7 +9,7 @@ substance graduates to the thread record at session close.
 - `copilot-pull-request-reviewer` — repo config fires it on push; requested
   via MCP on #907/#909 at open (binding proven by `review_requested`
   timeline events, Director confirmation 15:5xZ). Re-assesses on demand.
-- `mantagen` — Matt's PR Review Warden (agent-authored under MG's account,
+- `<code-owner>` — Matt's PR Review Warden (agent-authored under MG's account,
   self-declared in each review). NOT on-demand: cure honestly, then dismiss
   the stale round per the dismiss-at-cure path; never request re-review.
 - `claude[bot]` — SKIP MARKER this round on all four PRs: org overage spend
@@ -20,13 +20,13 @@ substance graduates to the thread record at session close.
 
 | PR | tip | review findings (threads + bodies) | check legs |
 | --- | --- | --- | --- |
-| #907 | 3b276f0d6 | 12 (6 Copilot threads + 5 mantagen + 1 mantagen axe-matrix-coverage) | Sonar QG FAIL (21 issues); browser-tests FAIL (specimen creature 320px SC 1.4.10 overflow); run-quality-gates FAIL (aggregate) |
-| #908 | a5ccc6ebe | 4 (mantagen body; record-consistency class) | all green |
-| #909 | cd84e490c | 6 (2 Copilot threads + 3 mantagen + 1 mantagen test-shape note) | all green |
-| #910 | 6e88cb407 | 4 (mantagen body; record-truth class) | all green |
+| #907 | 3b276f0d6 | 12 (6 Copilot threads + 5 `<code-owner>` + 1 `<code-owner>` axe-matrix-coverage) | Sonar QG FAIL (21 issues); browser-tests FAIL (specimen creature 320px SC 1.4.10 overflow); run-quality-gates FAIL (aggregate) |
+| #908 | a5ccc6ebe | 4 (`<code-owner>` body; record-consistency class) | all green |
+| #909 | cd84e490c | 6 (2 Copilot threads + 3 `<code-owner>` + 1 `<code-owner>` test-shape note) | all green |
+| #910 | 6e88cb407 | 4 (`<code-owner>` body; record-truth class) | all green |
 
 Cross-review dedupe note (#909): Copilot thread `boundary-inventory.ts:107`
-and mantagen finding 3 state the same data-only-invariant gap — two tally
+and `<code-owner>` finding 3 state the same data-only-invariant gap — two tally
 rows (different reviews), ONE cure.
 
 CI-failure root (#907): a11y spec `specimen-a11y.spec.ts:143` — creature at
@@ -70,7 +70,7 @@ Copilot threads: narrow faces for four layouts; ExhibitThemeApplier
 post-hydration flash; live-token-values head-only observer; focus-ring on
 inverted band; useFrameObservedState gap-state; StripThemeApplier
 first-paint — ALL VERIFY.
-mantagen: scaled-frame target size (2.5.8); tokens thead display:none;
+`<code-owner>`: scaled-frame target size (2.5.8); tokens thead display:none;
 forced-colours radio mark; composition stale accessible content;
 colour-matrix label divergence; axe-matrix coverage of new routes — ALL
 VERIFY.
@@ -99,7 +99,7 @@ CI: creature 320px overflow — reproduce, cure at source.
   fs/manifest failure-as-data) = CLASS P to the NAMED T1b parcel
   (readiness record execution addendum; the fs-adapter injection is what
   makes those script paths honestly testable) — reply cites the home.
-- **#907**: all six Copilot threads FIX; all five mantagen findings +
+- **#907**: all six Copilot threads FIX; all five `<code-owner>` findings +
   the axe-coverage note FIX; Sonar 21/21 addressed (S6845 watch item:
   tabIndex now rides role="region" — the WAI scrollable-region pattern;
   if the next scan re-fires it, per-site disposition with that rationale).
@@ -122,7 +122,7 @@ CI: creature 320px overflow — reproduce, cure at source.
   #909 `83c95cc03`, #910 `4d74164b5`. Every thread replied-with-evidence
   and RESOLVED (6 on #907, 2 on #909); response comment per PR (author
   read-back: jimbot-oakington-iii[bot] on every write); all four
-  mantagen CHANGES_REQUESTED rounds DISMISSED with the cure message
+  `<code-owner>` CHANGES_REQUESTED rounds DISMISSED with the cure message
   (dismiss-at-cure path; verified DISMISSED ×4); Copilot RE-REQUESTED on
   #907/#909 (timeline `review_requested` events verified bound); #910's
   PR body scope note updated for the comment-only ts true-up; token file
@@ -148,7 +148,7 @@ CI: creature 320px overflow — reproduce, cure at source.
 Input state at harvest: Copilot COMMENTED rounds landed on #907 (18:29Z,
 1 thread + 3 suppressed) and #909 (18:30Z, 0 threads + 5 suppressed);
 NO new reviewer input on #908/#910 (they stay all-green on the
-Director's settle board); no new mantagen rounds; claude[bot]/Codex
+Director's settle board); no new `<code-owner>` rounds; claude[bot]/Codex
 skip markers re-checked and standing. #907's CI on the cured tip
 62df2091c: Sonar QG FAIL (3 issues) + browser-tests FAIL +
 run-quality-gates FAIL.
@@ -249,7 +249,7 @@ Director's merge legs.
 
 ## Owner visual-feedback BUILD round (same sitting, ~22:0x–22:4xZ)
 
-Branch `jimcresswell/mcp-620-visual-feedback-round` STACKED on #907's
+Branch `<owner>/mcp-620-visual-feedback-round` STACKED on #907's
 tip 5f1188f0a (never grows #907; PR opens after the gateway verdict,
 draft until #907 merges). All FOUR owner items built and
 rendered-proven:

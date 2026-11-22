@@ -11,7 +11,7 @@ def write_text(path, text):
     with open(path, 'w', encoding='utf-8') as f:
         f.write(text)
 jc, jcref, oce, oceref, base, listing, out = sys.argv[1:8]
-SUBS = [(r'jimcresswell\.net|jimCresswell|JC\.net|jcdotnet', 'HOST'), (r'open-curriculum-ecosystem|EngraphCode|@engraph|engraph', 'HOST'),
+SUBS = [(r'<sibling-site>|<owner>|JC\.net|jcdotnet', 'HOST'), (r'open-curriculum-ecosystem|EngraphCode|@engraph|engraph', 'HOST'),
         (r'oak-open-curriculum|@oaknational|oaknational|Oak National|Oak', 'HOST'), (r'el-graphael|jimbot-of-the-devonshire-jimbots', 'BOT'),
         (r'\bmain\b|\bengraph\b', 'DEFAULT'), (r'castr', 'HOST'), (r'curriculum', 'HOST')]
 def norm(t):

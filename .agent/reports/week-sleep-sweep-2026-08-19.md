@@ -42,11 +42,11 @@ shell reading `PIPESTATUS`) is in the napkin.
   remote tip, carried by draft fold PR **#915** (opened by Poppy at owner
   word; the Director's fold leg marks it ready and lands it — no second PR).
 - **5 dirty at survey time**, each item inspected:
-  - `w01-census` (`jimcresswell/design-w01-census`): untracked
+  - `w01-census` (`<owner>/design-w01-census`): untracked
     `W01-CYCLE-PLAN-v2.md` + `design-census/census-types.ts` — **preserved by
     the design lane** as report artefacts (`0e59bafa9`, pushed, draft PR
     **#918**). Worktree now clean.
-  - `design-plan-truings` (`jimcresswell/design-plan-ratification-and-truings`):
+  - `design-plan-truings` (`<owner>/design-plan-ratification-and-truings`):
     a STAGED copy of `.agent/reports/design/oak-components-capability-floor-2026-08-05.md`
     — an OLDER draft (73 lines, 2026-08-05) of a file that landed on `main`
     in evolved form (94 lines, `74cffbf85`, 2026-08-08 "absorb the PR-review
@@ -56,7 +56,7 @@ shell reading `PIPESTATUS`) is in the napkin.
     #891): untracked `.run-macos-validation.sh`, an 8-line local runner
     (install + `pnpm check` with logs) used for the macOS validation leg.
     Local tooling, not work product. Left in place.
-  - `vitest-config-workspace` (`jimcresswell/vitest-config-workspace`,
+  - `vitest-config-workspace` (`<owner>/vitest-config-workspace`,
     workspace-config-isolation lane, left 2026-08-09..13): two oak-eslint
     edits — enable `import-x/no-relative-packages: 'error'` for config files
     and drop the two `tsup.config` ignore hatches. **Red on its own base**
@@ -66,7 +66,7 @@ shell reading `PIPESTATUS`) is in the napkin.
     (the de-hatch arc is its recorded pickup) and the depcruise boundary
     rules now carry the relative-escape class on `main`. Preserved HERE as
     the full diff (§Appendix A); the worktree is left as found.
-  - `mcp-567-vendor-symlinks` (`jimcresswell/mcp-567-vendor-skill-symlinks`):
+  - `mcp-567-vendor-symlinks` (`<owner>/mcp-567-vendor-skill-symlinks`):
     a 110-line test block appended to
     `carriage-hardening.integration.test.ts` describing vendored-projection
     behaviour through a `lockedIds` option. **Premise removed on `main`**:
@@ -89,9 +89,9 @@ shell reading `PIPESTATUS`) is in the napkin.
 ### Pushed branches without a PR
 
 - **Our fleet (jimbot-authored), now carried by drafts opened at this seat:**
-  - `jimcresswell/mcp-103-content-workspace` (2 commits, 2026-08-06: the
+  - `<owner>/mcp-103-content-workspace` (2 commits, 2026-08-06: the
     generated model-behaviour content review workspace) → draft **#916**.
-  - `jimcresswell/mcp-475-preview-build-validation` (1 commit, 2026-08-03:
+  - `<owner>/mcp-475-preview-build-validation` (1 commit, 2026-08-03:
     fail the Vercel build on an invalid deploy environment) → draft **#917**.
 - **Peer fleets — pushed, PR-less, NOT touched (their call, reported):**
   emgeebot branches `claude/mcp-143-clerk-guards-pr5` (1), `fix/mcp-143-guard-cascade`
@@ -107,10 +107,10 @@ shell reading `PIPESTATUS`) is in the napkin.
   `docs/first-class-copilot-agent-support` (#777/#708/#522),
   `docs/mcp-301-public-documentation` (#881), `feat/mcp-128-landing-public-beta`
   (#773), `fix/claude-hook-hardening` (#778/#705/#403),
-  `jimcresswell/commit-queue-sameagent-id-routing` (#673, content on main),
-  `jimcresswell/jim-next-2026-08-04` (#765), `jimcresswell/mcp-372-…` (#806/#779/#644),
-  `jimcresswell/mcp-487-sanitise-numeric-input` (#752),
-  `jimcresswell/mcp-506-sdk-v2-spike-plan` (#774, content on main).
+  `<owner>/commit-queue-sameagent-id-routing` (#673, content on main),
+  `<owner>/jim-next-2026-08-04` (#765), `<owner>/mcp-372-…` (#806/#779/#644),
+  `<owner>/mcp-487-sanitise-numeric-input` (#752),
+  `<owner>/mcp-506-sdk-v2-spike-plan` (#774, content on main).
   Re-opening them would reverse recorded dispositions; they are pushed.
 - `refs/remotes/pr576` is a local alias of PR #576's head (closed; the frozen
   MCP-63 extraction source, still on GitHub as `refs/pull/576/head`).

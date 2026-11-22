@@ -443,7 +443,7 @@ comment on the zone-wide rule below it.
   #                           labelled "High": that is 25, the most sensitive
   #                           setting, and it would make false positives worse.
   #
-  # Requested in review of PR #551 by @johnrobeds and @rjkward.
+  # Requested in review of PR #551 by two Oak reviewers.
   rules {
     action = "execute"
     action_parameters {
