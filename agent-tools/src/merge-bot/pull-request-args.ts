@@ -20,7 +20,7 @@ import {
 } from './pull-request-request.js';
 
 /**
- * The argv contract for `merge-bot pull-request`: a closed grammar of seven
+ * The argv contract for `merge-bot pull-request`: a closed grammar of eight
  * verbs, each with its own closed flag set (`pull-request-request.ts`),
  * parsed to a typed request. The flag walk and the value grammars are
  * `pull-request-flags.ts`; this file assembles each verb's request. Nothing
@@ -99,7 +99,7 @@ const replyRequest: ExistingBuilder = (pr, collected) => {
   }));
 };
 
-/** Every verb's builder: the two that name no pull request, and the five that do. */
+/** Every verb's builder: the two that name no pull request, and the six that do. */
 const REQUESTS: Readonly<Record<PullRequestVerb, Builder>> = {
   open: openRequest,
   'dispatch-workflow': dispatchRequest,
@@ -121,6 +121,9 @@ const REQUESTS: Readonly<Record<PullRequestVerb, Builder>> = {
     })),
   ),
   ready: withPr((pr, collected) => ok({ verb: 'ready', pr, json: collected.json })),
+  'request-review': withPr((pr, collected) =>
+    ok({ verb: 'request-review', pr, json: collected.json }),
+  ),
   close: withPr((pr, collected) =>
     map(nonBlank(collected, '--reason-file'), (reasonFile) => ({
       verb: 'close',

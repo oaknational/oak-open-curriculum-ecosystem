@@ -333,13 +333,12 @@ ruleset does NOT bind `.design-sync/`, `.agent/plans/`, or
 fired), so absence there is configuration, not a skipped reviewer; and a
 claude[bot] review SKIP is a spend-limit signature, not a blocker — an
 organisation review-overage exhaustion is a capability ceiling to note,
-never a gate to wait on. Request mechanics: the REST
-`requested_reviewers` endpoint's RESPONSE omits the Copilot handle, and
-the request FIRES — the timeline shows `review_requested Copilot` within
-seconds and the review follows (#108, #109, #110, #114, as the bot under
-the pull-request-work token) — so the bare REST endpoint as the bot is the
-request mechanism; verify on the timeline, never on the response or the
-requested-reviewers list. A third scope
+never a gate to wait on. Request mechanics: the bot asks with
+`merge-bot pull-request request-review --pr <n>`, one call to the pull
+request's own Copilot review endpoint, and the timeline shows
+`review_requested Copilot` in the bot's name within seconds; a call made
+while a review is pending is refused. Verify on the timeline, never on the
+response or the requested-reviewers list. A third scope
 fact: Copilot has a changed-file ceiling and says so — on a sibling
 repository it posted only that 544 files exceeded its review limit, naming
 the limit itself (2026-08-08). Key the fallback to that explicit refusal on
@@ -1470,12 +1469,10 @@ create` on such a branch exits non-zero with "a pull request for branch …
    merge-eligible, on any pull request. The Copilot leg, when a review of the tip is wanted for a
    stated reason (Phase 2's review request policy; never by default), is
    obtained by a review request on the tip,
-   `POST repos/{owner}/{repo}/pulls/{n}/requested_reviewers` with
-   `reviewers[]=copilot-pull-request-reviewer[bot]`, under the credential
-   that registers it in the estate (`.agent/reference/merge-bot.md` names
-   it): in OCE the bot's own pull-request-work token returns 201 and the
-   timeline shows `review_requested Copilot` within seconds (first-hand on
-   #108, #109, #110, #114). Verify on the
+   `merge-bot pull-request request-review --pr <n>`, the bot's own call
+   (`.agent/reference/merge-bot.md` records what it depends on and what
+   was observed): the timeline shows `review_requested Copilot` in the
+   bot's name within seconds. Verify on the
    timeline or the GraphQL `reviewRequests` connection, since gh's
    requested-reviewers list never shows a Bot request, and never through
    the draft/ready toggle, which fires nothing on a pull request already

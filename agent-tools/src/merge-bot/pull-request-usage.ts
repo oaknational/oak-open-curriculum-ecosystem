@@ -36,6 +36,12 @@ export const PULL_REQUEST_USAGE = `merge-bot pull-request <verb> [flags] [--json
   ready --pr <n>
     Marks the draft pull request ready for review. Refuses when it is not a
     draft, or is not open.
+  request-review --pr <n>
+    Asks GitHub's Copilot reviewer for a review of the pull request, so the
+    request stands under the bot and not under a person's sign-in. Copilot
+    is the only reviewer it asks. Refuses (exit 3) when a Copilot review is
+    already pending, or when GitHub declines the request (GitHub's reason
+    is printed).
   close --pr <n> --reason-file <path>
     Posts the file as an issue comment, then closes the pull request.
     Refuses before either write when it is not open.
@@ -43,7 +49,8 @@ export const PULL_REQUEST_USAGE = `merge-bot pull-request <verb> [flags] [--json
     Dispatches the workflow at .github/workflows/<file-name> on the
     repository's default branch, under a token minted at the
     workflow-dispatch scope (open mints pull-request-work; comment, reply,
-    resolve, ready and close mint pull-request-conversation).
+    resolve, ready, request-review and close mint
+    pull-request-conversation).
     Refuses (exit 3) a name that is not a plain *.yml or *.yaml basename.
 
   --pr is a positive integer in every verb that takes it.
