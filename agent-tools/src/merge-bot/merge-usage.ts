@@ -35,6 +35,11 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-fi
   naming the deadline) once the wall clock reaches five minutes before the
   minted token's own stated expiry — no merge call is ever fired in a round
   that could straddle it.
+  Each poll line names the checks it read as not finished: reported checks
+  still pending, or, on the bot's own PR once its verdict would otherwise
+  merge, required contexts the tip has not reported. A refusal says the
+  same names after its grounds and carries them as outstandingChecks; its
+  notReported list is empty wherever the rules were not read.
   The reviews are read from the pull request, and the command is told
   none: a review in progress is waited for (a running review check, a live
   agent run, a round asked of a bot reviewer; a request of a person is not
@@ -63,7 +68,8 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-fi
   every merge: the call is pinned to the commit, not to the reviews.
   --json puts EXACTLY the outcome object on stdout; progress moves to
   stderr. A refusal raised before the pull request is read (the reason
-  file) has a refusal's keys, with verdictState null and no evidence.
+  file) has a refusal's keys, with verdictState null, no evidence and no
+  outstanding checks.
   Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —
   an already-MERGED PR exits 3.
   The pr-lifecycle merge-base deletion sweep is NOT discharged by this
