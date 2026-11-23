@@ -2678,6 +2678,20 @@ the push and found one wrong statement and three gaps, all cured in a second com
 push gate then found an exported type nothing imports, cured in a third. Items 3 and 4
 are still local.
 
+State at 22:05Z: 1098 merged (`e8b552d41`; Copilot recommended approval, no finding) and
+1099 merged (`8531a75d6`). 1099's review said, in its summary body and in no thread, that
+the new stop ("start no new work until the question is answered") conflicts with the rule
+that a question raised while the owner is away must not hold a seat. The merge tool
+merged on the settled verdict before this seat read that body. The owner, asked by
+prompt, chose to scope the stop to an owner who is present. The correction is committed
+locally on `docs/sign-off-stop-applies-while-owner-present` and is the next pull request
+after 1100. Item 4 is open as **1100**, ready, with the merge tool polling it.
+
+The three leftover branches of the dependency pass: the owner, verbatim: "I give you
+specific permission to delete any branch that is provably merged or explicitly abandoned.
+The branches are explicitly abandoned". The permission layer still refused the forced
+delete, so the command is with the owner to run.
+
 Items 2 to 4 were prepared during the waits on 1097 and are held locally because one of
 this estate's pull requests is open at a time. Each is pushed, opened and merged in turn.
 The three local branches are in the lane worktree's repository and carry one commit each

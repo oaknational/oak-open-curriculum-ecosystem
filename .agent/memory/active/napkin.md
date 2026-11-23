@@ -459,5 +459,19 @@ The account with its sources is the addendum to the reunification retrospective 
 - **What worked:** preparing the next changes as local commits during a merge wait, with
   the tool holding the open count at one. The wait went to closing and preparing, and
   nothing new reached the forge.
+- **Mistake (found after merge, 1099):** a Copilot review put its one objection in the
+  summary body ("needs a closer look") and opened no thread. The merge tool settled and
+  merged; its grounds said to tally body findings, and I started it before the review
+  existed. The objection was right: a stop I wrote for a present owner contradicted the
+  rule for an absent one. Order from 1101 on: mark ready, wait for the review, read its
+  body, then start the merge tool.
+- **Tool feedback (merge tool):** a review whose summary says "needs a closer look" or
+  "changes recommended" with no thread reads as settled. The summary's verdict line is
+  machine-readable and could hold the merge.
+- **Tool feedback (zsh):** an unquoted variable holding several file names is passed as
+  one argument. ESLint and Prettier answered "no files matching" and my lint step checked
+  nothing until I named the files.
+- **Tool feedback (permissions):** the owner's explicit word to delete named abandoned
+  branches did not lift the permission layer's refusal of a forced branch delete.
 - **Surprise:** I twice read a merge wait as stalled when under five minutes had passed.
   A poll takes about 45 seconds here. Read the clock before reading a wait as slow.

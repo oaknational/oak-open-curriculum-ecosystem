@@ -319,6 +319,9 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1095 | 1 | 0 / 40 | within | 0 | agreed | the open limit counts the clone's own lanes; one review by the estate's code reviewer before the push (no defect; four points applied); one Copilot review: no finding; merged `988117c01` by the bot |
 | 2026-11-23 | oaknational#1096 | 1 | 0 / 40 | within | 1 | agreed | the setup steps for the lane authors; three Copilot findings, each a statement the code does not make, all upheld and cured in one push; merged `827303253` by the bot |
 | 2026-11-23 | oaknational#1097 | 1 | 0 / 40 | within | 1 | agreed | the `pr-lifecycle` count step counts the seat's own lanes; one Copilot finding (the zero caution was too strong for one listing per author), upheld and cured in one push; merged `061e7fee4` by the bot |
+| 2026-11-23 | oaknational#1098 | 1 | 0 / 40 | within | 0 | agreed | the merge tool's poll line names the checks it waits on; one review by the estate's code reviewer before the push (one wrong statement, three gaps, all cured); one Copilot review: approval recommended, no finding; merged `e8b552d41` by the bot |
+| 2026-11-23 | oaknational#1099 | 1 | 0 / 40 | within | 1 | agreed | a class C go-ahead is asked at once, and a pass states its end; one Copilot finding in the review's summary body and in no thread (the stop conflicts with the rule for an absent owner), read after the merge, upheld, the owner asked, cured by 1101; merged `8531a75d6` by the bot |
+| 2026-11-23 | oaknational#1100 | 1 | 0 / 40 | within | 0 | agreed | the fold skill finds the coordination draft by its branch; one Copilot review: approval recommended, no finding; merged `6f314c21d` by the bot |
 
 ## Weight changes
 
