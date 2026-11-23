@@ -2416,3 +2416,58 @@ the owner's word.
 their contexts; their findings are on pull requests 1081 and 1086. The comparison harness
 the second one built is in a session scratch directory and is not kept. Changes on GitHub
 made by the merge tool runs while this record was being written are not in it.
+
+## Update 2026-11-23, after the compaction: what a seat under another account needs
+
+The owner said the account this seat runs under will change soon, and asked that whatever
+the seat holds only in its session be put in local records. This block is that. A seat that
+starts under another account has this file, the report, the napkin and GitHub; it does not
+have this session.
+
+**The question owed to the owner once the open count reads zero.** One question prompt,
+with a recommendation, on whether the dependency pass ends there.
+
+- Recommended: three more pull requests, one at a time, each merged before the next
+  opens. The Clerk clients in range (class C, so a specialist review and the owner's
+  go-ahead by question prompt), `@opentelemetry/api` 1.10 (class B; first understand why
+  the combined trial left two copies of the API in the lockfile, one under
+  `@sentry/opentelemetry`), `@vercel/functions` 3.11.3 (class B; it brings `@vercel/oidc`
+  4). Then the pass ends and the remainder goes on the dependency ticket at the owner's
+  word.
+- The alternatives: end the pass at zero, or work the whole list.
+- With it, a second question: whether a coordination branch keeps a draft pull request
+  open between folds. The fold ceremony opens one for the successor; the owner's unit for
+  zero counts it. No successor draft was opened after this fold, as a deviation from the
+  ceremony made to keep the count at zero. The answer applies to every later fold.
+- The five proposals in the report go to the owner at the same time, for a decision on
+  each. None is started.
+
+**Leftover local branches in the lane worktree, read against `origin/main` after 1081
+merged.** None holds work that is not on `main` in another form.
+
+- `fix/sentry-cookies-not-collected` and `docs/single-tool-filter-debt-record`: nothing
+  ahead of `main`. Safe to delete.
+- `chore/deps-next-react`: one commit ahead, a local save of `next` and `react` on a
+  stacked tree. Pull request 1079 merged those versions.
+- `chore/deps-prettier`: two commits ahead, a local save of `prettier` 3.10.1 and a merge
+  of `main`. Pull request 1083 merged that version from a fresh branch.
+- `chore/deps-runtime-in-range`: one commit ahead, the combined lockfile kept as a
+  reference for the OpenTelemetry question above. Keep it until that question is closed.
+  It is never pushed.
+
+The three with commits ahead cannot be deleted on the ancestry proof; deleting them is the
+owner's call or waits for the lane's close.
+
+**State outside version control that a new account would not carry.**
+
+- The seat's private memory directory is on this machine, keyed to the checkout's path,
+  not to the account. Its notes on the limit, the sign-off rubric and keeping the primary
+  checkout current are each restated in this record or in a tracked rule.
+- The session transcript is a file on this machine under the home directory's Claude
+  projects folder for this checkout. It is the only copy of the reasoning behind the two
+  specialist reviews' summaries and of the hours before the day's first compaction.
+- `.github/merge-bot.json` in the primary checkout is untracked by design and states the
+  label for the owner's bots. A new clone needs it written again.
+- The claim on the dependency lane (`b7576ac5`) is open in the collaboration state and is
+  closed at lane close.
+- Session scratch files (commit messages, logs, pull request bodies) are disposable.
