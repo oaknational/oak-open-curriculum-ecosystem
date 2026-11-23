@@ -103,7 +103,6 @@ export interface SentryOffConfig {
   readonly environment: string;
   readonly environmentSource: SentryEnvironmentSource;
   readonly enableLogs: false;
-  readonly sendDefaultPii: false;
   readonly debug: false;
 }
 
@@ -116,7 +115,6 @@ export interface SentryFixtureConfig {
   readonly gitSha?: string;
   readonly gitShaSource?: GitShaSource;
   readonly enableLogs: boolean;
-  readonly sendDefaultPii: false;
   readonly debug: boolean;
 }
 
@@ -131,7 +129,6 @@ export interface SentryLiveConfig {
   readonly gitShaSource?: GitShaSource;
   readonly tracesSampleRate: number;
   readonly enableLogs: boolean;
-  readonly sendDefaultPii: false;
   readonly debug: boolean;
   /**
    * SDK-side error-message allow-list. Matching events are dropped by

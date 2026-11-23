@@ -132,7 +132,8 @@ export function initializeCoreEndpoints(
      * `registerPrompt`, and `connect` for handler error capture and transport
      * tracing. Unconditional — inert when `Sentry.init()` was never called
      * (`SENTRY_MODE=off`). `recordInputs` / `recordOutputs` default to the
-     * client's `sendDefaultPii` option, which Oak pins to `false`.
+     * client's `dataCollection.genAI` option, which Oak pins to `false` for
+     * both inputs and outputs.
      *
      * @see {@link https://docs.sentry.io/product/insights/ai/mcp/getting-started/}
      */

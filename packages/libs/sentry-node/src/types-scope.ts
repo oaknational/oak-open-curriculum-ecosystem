@@ -23,7 +23,7 @@ export type SentryContextPayload = Readonly<Record<string, SentryPrimitiveValue>
  *
  * @remarks Narrower than Sentry's upstream `User` which has `[key: string]: any`.
  * Constrained to `id` (required, string-only) and optional `username`.
- * No PII fields (email, ip_address) to enforce `sendDefaultPii: false`.
+ * No PII fields (email, ip_address), matching `dataCollection.userInfo: false`.
  */
 export interface SentryUser {
   readonly id: string;
