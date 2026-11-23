@@ -182,6 +182,12 @@ permissions investigation.
 
 ## Who executes the merge
 
+- **The merge tool does not read a change's sign-off class.** It merges on
+  checks, threads and reviewer legs. A class C change
+  ([Production Change Sign-Off](./production-change-sign-off.md): a trust,
+  privacy or request-path boundary) needs the owner's explicit go-ahead on
+  that pull request first, so a seat does not start `merge-bot merge` on one
+  until that go-ahead is on record.
 - **A PR with a live implementer seat lands via that seat's own bot merge**
   (merge-commit method). A merge monitor's standing "merge at settled
   without re-asking" grant covers only orphaned or lane-retired PRs;
