@@ -2692,6 +2692,15 @@ specific permission to delete any branch that is provably merged or explicitly a
 The branches are explicitly abandoned". The permission layer still refused the forced
 delete, so the command is with the owner to run.
 
+State at the end of the queue: 1100 merged (`6f314c21d`) and 1101 merged (`66a994074`),
+the correction that scopes the class C stop to an owner who is present. The queue is
+empty. This estate has no lane pull request open; the coordination draft 1091 stands.
+The lane worktree holds no unpushed commit. Nothing is queued: the next work is the
+owner's to name, and the deep consolidation recorded as due in `repo-continuity.md` is
+the one standing item this seat knows of.
+
+The paragraphs below describe the queue while it was being worked.
+
 Items 2 to 4 were prepared during the waits on 1097 and are held locally because one of
 this estate's pull requests is open at a time. Each is pushed, opened and merged in turn.
 The three local branches are in the lane worktree's repository and carry one commit each

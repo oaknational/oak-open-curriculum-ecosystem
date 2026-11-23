@@ -322,6 +322,7 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1098 | 1 | 0 / 40 | within | 0 | agreed | the merge tool's poll line names the checks it waits on; one review by the estate's code reviewer before the push (one wrong statement, three gaps, all cured); one Copilot review: approval recommended, no finding; merged `e8b552d41` by the bot |
 | 2026-11-23 | oaknational#1099 | 1 | 0 / 40 | within | 1 | agreed | a class C go-ahead is asked at once, and a pass states its end; one Copilot finding in the review's summary body and in no thread (the stop conflicts with the rule for an absent owner), read after the merge, upheld, the owner asked, cured by 1101; merged `8531a75d6` by the bot |
 | 2026-11-23 | oaknational#1100 | 1 | 0 / 40 | within | 0 | agreed | the fold skill finds the coordination draft by its branch; one Copilot review: approval recommended, no finding; merged `6f314c21d` by the bot |
+| 2026-11-23 | oaknational#1101 | 1 | 0 / 40 | within | 1 | agreed | the class C stop applies while the owner is present; the review was read before the merge tool was started; one Copilot finding (an unattended seat could still read the action as "prompt"), upheld and cured in one push; merged `66a994074` by the bot |
 
 ## Weight changes
 

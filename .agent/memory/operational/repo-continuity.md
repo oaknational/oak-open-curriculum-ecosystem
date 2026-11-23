@@ -512,10 +512,11 @@ security ticket, MCP-985, was raised at the owner's word as planned work.
 
 STATE, 2026-11-23, before the day's third compaction (the same seat, staying live at the owner's word:
 "post-compaction we continue"): the owner decided all five proposals by question prompt. The open limit of
-the merge tool now counts the clone's own lanes (1095, with its setup steps in 1096). Next safe steps, in
-order, each one pull request at a limit of one: the `pr-lifecycle` count step (opened as 1097), the merge
-tool's waiting line (built, committed locally, opened when 1097 has merged), one documents change carrying
-the two adopted rules, then one line of the `coordination-fold` skill. The owner decided seven further
+the merge tool now counts the clone's own lanes (1095, with its setup steps in 1096). The queue that followed
+is worked through, one pull request at a time at a limit of one: the `pr-lifecycle` count step (1097), the
+merge tool's waiting line (1098), the two adopted rules (1099, scoped by 1101 to an owner who is present),
+and one line of the `coordination-fold` skill (1100). No lane pull request of this estate is open. Next safe
+step: none is queued; the owner names the next work. The owner decided seven further
 matters by prompt at this boundary and none is open. The thread record's newest block holds the queue with
 the state of each item, the two checks that were owed and are now discharged, the seven decisions, and the
 recipe for the watcher. Deep consolidation status: due, for the reason given
