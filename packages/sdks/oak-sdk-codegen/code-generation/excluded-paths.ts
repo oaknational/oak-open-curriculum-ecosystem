@@ -1,8 +1,18 @@
 /**
  * Upstream paths the code generators do not consume.
  *
- * Two sets, deliberately separate so a reader can tell a permanent design decision
- * from a temporary one:
+ * Every entry is here for one of two reasons: Oak's policy on content, or an endpoint
+ * that offers no value over MCP (the changelog pair, the upstream API's own search).
+ *
+ * Two sets hold the entries, and the split is architectural debt, not design.
+ * {@link SKIPPED_PATHS} is the intended mechanism: a filter on which paths become MCP
+ * tools, chosen because the SDK is a separate product from the MCP server and carries
+ * the whole API. {@link DEFERRED_PATHS} came later and removes paths from the OpenAPI
+ * document the SDK is generated from, so the SDK loses them too. The direction is one
+ * canonical tool filter holding every entry, with that document left whole. The move
+ * is unscheduled.
+ *
+ * What each set does today:
  *
  * - {@link SKIPPED_PATHS} — permanent. Honoured by the MCP tool generator only: these
  *   paths remain in the SDK schema, the generated types, and the Zod schemas, but never
