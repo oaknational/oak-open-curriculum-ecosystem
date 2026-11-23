@@ -2584,6 +2584,25 @@ State of the five, same day:
 - Proposals 2, 3 and 4 follow 1095, one pull request at a time: the waiting line first,
   then one documents change carrying the two adopted rules.
 
+Later the same day:
+
+- 1095 merged by the bot at 18:45:22Z (`988117c01`); one Copilot review, no finding. The
+  primary checkout and both worktrees were brought onto that build.
+- Asked which logins to list, the owner answered, verbatim: "I am expecting this config
+  to be outside of version control. It should be. Just the one bot for now. Add
+  documentation to explain how to set this up", and gave the owner's own login. The list
+  is in the untracked `.github/merge-bot.json` of the primary checkout: this estate's bot
+  and the owner's login. The file is ignored by git. The other bot with open pull
+  requests in this repository is not listed and is not this estate's to count.
+- Against that list the open count is zero: the only open pull request by either author
+  is the coordination draft, which is never a lane.
+- The setup documentation the owner asked for is pull request 1096, one section in
+  `docs/engineering/merge-bot.md`, opened at `--wip-limit 1`.
+- A scout of proposal 2: the merge tool already names the unreported required checks in
+  the verdict's evidence (`merge-door-checks.ts`), and `writeProgress` in
+  `merge-report.ts` prints the state alone. The change is to print those names on the
+  poll line.
+
 **Found on the way, each needing the owner's decision.**
 
 - The security review made one observation about the auth path in code that predates the
