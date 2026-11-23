@@ -2292,25 +2292,19 @@ record on excluded upstream paths, taken over from the Castr seat at the owner's
 finished), 1085 (the automatic label), 1086 (Hono adapter floor), 1087 (`express` 5.3.0).
 `pnpm audit` on `main` then read four findings: `zod`, `glob`, `minimatch`, `katex`.
 
-**Open, and what each waits on.**
+**Merged after those, before the compaction completed.**
 
-- 1088, Elastic client 9.5.1 and transport 9.6.1, class B, ready, every check green.
-- 1089, five small libraries, class B, ready. Main was merged in and pushed to make
+- 1090, the owner's plugin settings (the Sentry plugin back on, the Sentry CLI plugin
+  added), class A, one review finding cured (the setup guide's install command).
+- 1088, Elastic client 9.5.1 and transport 9.6.1, class B.
+- 1089, five small libraries, class B, after main was merged in and pushed to make
   SonarCloud analyse it again.
-- 1081, cookies, class C with the go-ahead, ready, both review threads resolved. Main was
-  merged in and a push started for the same reason; that push was started after the
-  owner's compaction word, which the wrap skill's freeze forbids. Read its result back.
-- 1073, this coordination draft. It goes last: mark ready and merge when the other three
-  are in, with the fold ceremony.
+- 1081, cookies, class C with the owner's go-ahead, merged at 13:31 UTC as `81a4b506c`.
+  Main had been merged in and pushed for the same SonarCloud reason; that push was started
+  after the owner's compaction word, which the wrap skill's freeze forbids.
 
-Merged while this block was being written: 1090, the owner's plugin settings (the Sentry
-plugin back on, the Sentry CLI plugin added), class A, one review finding cured (the setup
-guide's install command).
-
-Each has a merge tool run in the background from the lane worktree. A run polls for 45
-minutes and then exits 3; a compaction may end it. On resume, read each pull request's
-state from GitHub first, then start the merge tool again for any still open, one command
-per call, from the lane worktree.
+The lane then held no open pull request. The coordination draft carrying this record was
+the last of this estate's open set.
 
 **Why three stalled, and how to see it again.** SonarCloud's check is required on `main`
 and comes from SonarCloud's own automatic analysis, not from a workflow. From about 12:03
@@ -2325,22 +2319,18 @@ Code Analysis, Vercel, run-quality-gates); SonarCloud's task log is `sonar api g
 repository changed caused it: the analysis runs no build, its config file did not change,
 and it resumed with no change from this side.
 
-**Tooling hazard, live until the primary checkout is current.** The primary checkout's
-`.github/merge-bot.json` now states `pullRequestLabels`. The config schema is strict, so a
-build of `agent-tools` from before pull request 1085 refuses the file. The primary checkout
-is far behind `main` and its build is old: `merge-bot` run from the primary checkout fails.
-Run it from a worktree whose branch contains `main` at or after 1085's merge and whose
-dependencies were installed after the switch. The lane worktree and this coordination
-worktree both qualify today. A branch cut before 1085 does not, once its install rebuilds
-the tool.
+**Tooling hazard for a checkout behind 1085.** The primary checkout's
+`.github/merge-bot.json` states `pullRequestLabels`. The config schema is strict, so a
+build of `agent-tools` from before pull request 1085 refuses the file, and `merge-bot` run
+from such a build fails. A branch cut before 1085 is in that state once its install
+rebuilds the tool: merge `main` in, then install.
 
-**Bringing the primary checkout current: the first act after the compaction.** Its one
-modified file is `.claude/settings.json`, the owner's change, which 1090 has now merged. A
-hook forbids discarding it with git. With the Edit tool make that file equal to the primary
-checkout's own HEAD (remove the three added plugin lines), then `git pull --ff-only`, then
-`pnpm install`. The result is byte for byte what the owner had: compare the nine
-`enabledPlugins` entries before and after. It was held for the resume because the owner's
-compaction word had been given.
+**The primary checkout was brought current after the compaction**, at `81a4b506c`. Its
+one modified file was `.claude/settings.json`, the owner's change, which 1090 had merged.
+A hook forbids discarding a change with git, so the route was: with the Edit tool make the
+file equal to the checkout's own HEAD, `git pull --ff-only`, `pnpm install`. The nine
+`enabledPlugins` entries read the same after as before. The same route serves the next
+time the owner's tracked change has merged and still shows as modified.
 
 **Not started, and not to be started until the owner says.** `@opentelemetry/api` 1.10
 (in a combined trial it left two copies of the API in the lockfile, one under
@@ -2377,14 +2367,13 @@ with their warrants, and the question for the owner at zero.
   --model claude-fable-5-2 --supervisor-pid <the session's process id> --step-timeout-ms
   120000 --max-events-per-drain 100`. It exits 124 at expiry (or 1 when piped through a
   filter); that is not a failure.
-- The merge tool runs described above.
-- No subagent, no schedule, no other monitor.
+- No merge tool run, no subagent, no schedule, no other monitor.
 - The claim on the dependency lane stays open.
 
 **Owed at lane close, not done.** Delete the leftover local branches after checking each
 against `origin/main` (the taken-over record's branch `docs/single-tool-filter-debt-record`
-is one more; its worktree is already removed); close the claim; the final audit; fold this
-draft. The dependency ticket (MCP-978) has not been written to since it was opened: the
+is one more; its worktree is already removed); close the claim; the final audit. The
+dependency ticket (MCP-978) has not been written to since it was opened: the
 Hono advisories are now cleared and `glob` is in the audit residue. A write there waits for
 the owner's word.
 

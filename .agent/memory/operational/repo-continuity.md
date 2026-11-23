@@ -491,11 +491,12 @@ action versions), organised by risk with each change's impact validated, on lane
 the state of the primary checkout and the follow-ups not started.
 
 STATE, 2026-11-23 (the same seat, wrapped at the owner's word before a second compaction, the seat staying
-live): the pass merged eleven pull requests and then breached the work-in-progress limit at seven open. The
-owner stopped all new work until this estate's open pull requests are at zero. Next safe step: drive the open
-set to zero and start nothing; then one question to the owner on whether the pass ends there. The thread
-record's newest block holds the rulings verbatim, what each open pull request waits on, a tooling hazard in
-the primary checkout and the route out of it. Deep consolidation status: due — repeated corrections of one
+live): the pass breached the work-in-progress limit at seven open, and the owner stopped all new work until
+this estate's open pull requests are at zero. Every lane pull request of the pass then merged, the last
+(1081) at `81a4b506c`, and the primary checkout was brought current at that commit. Next safe step: one
+question to the owner on whether the pass ends there; nothing new opens before the answer. The thread
+record's newest block holds the rulings verbatim, what merged, a tooling hazard for a checkout behind 1085
+and what is owed at lane close. Deep consolidation status: due — repeated corrections of one
 kind in one day (a limit and three checks read at the near end) and two tool-feedback items; not bounded
 for this boundary, so left for a deliberate pass. The reasoning is in
 `.agent/reports/dependency-pass-limits-and-far-end-checks-exploration-2026-11-23.md`.
