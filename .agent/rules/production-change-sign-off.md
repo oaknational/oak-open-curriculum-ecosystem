@@ -34,10 +34,17 @@ and what an agent does at each moment.
      pull request's checks do not exercise.
    - **C**: a specialist review of the diff, then the owner's explicit
      go-ahead for that pull request, asked through a question prompt as soon
-     as the review is done and the description states the claim. Start no
-     new work until the question is answered. Do not start the merge tool
-     before it, stop one that is running, and say on the pull request that
-     the change is held and why.
+     as the review is done and the description states the claim. While the
+     owner is present, start no new work until the question is answered.
+     When the owner has said they are away, or the seat is unattended,
+     [`owner-attention-at-action-moments`](owner-attention-at-action-moments.md)
+     and [`unattended-seats-never-prompt`](unattended-seats-never-prompt.md)
+     govern: record the question on the pull request with a recommendation,
+     keep the change held, take the next piece of work that needs no
+     go-ahead, and open no further class C pull request until the first is
+     answered. Do not start the merge tool before the go-ahead, stop one
+     that is running, and say on the pull request that the change is held
+     and why.
    - **D**: raise it on a ticket with the evidence. Do not start it; the
      owner decides, case by case, what each one needs before it is started.
 4. **Reclassify when the facts change.** A class B change that needs a
