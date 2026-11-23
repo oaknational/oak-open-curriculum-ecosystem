@@ -85,19 +85,48 @@ function mayMerge(state: PrVerdict['state'], mayMergeUnreviewed: boolean): boole
 }
 
 /**
+ * The checks one reading shows as not finished, by name, so that a wait
+ * can say what it waits on.
+ */
+interface OutstandingChecks {
+  /** Checks the tip has reported that are still running. */
+  readonly pending: readonly string[];
+  /**
+   * Contexts the base branch requires that the tip has no check run for.
+   * The rules are read only where `resolveVerdict` reads them, so an empty
+   * list does not say that every required context has reported.
+   */
+  readonly notReported: readonly string[];
+}
+
+/** The verdict the merge acts on, with the checks its reading shows as not finished. */
+export interface ResolvedVerdict {
+  readonly verdict: PrVerdict;
+  readonly outstandingChecks: OutstandingChecks;
+}
+
+/**
  * The verdict as the core reads it; on a verdict of the merge bot's own
  * pull request that the command may merge on, the verdict recomputed with
  * every unreported required context pending. A failed rules read is
  * returned as the failure, which `merge.ts` types as a retryable reading
  * failure.
  */
-export async function resolveVerdict(input: ResolveInput): Promise<Result<PrVerdict, Error>> {
+export async function resolveVerdict(input: ResolveInput): Promise<Result<ResolvedVerdict, Error>> {
   const verdict = computePrVerdict(input.reading, input.nowIso);
+  // Each name once: two workflows may report a job under one name.
+  const pending = [
+    ...new Set(
+      input.reading.namedChecks
+        .filter((check) => check.bucket === 'pending')
+        .map((check) => check.name),
+    ),
+  ];
   if (
     !mayMerge(verdict.state, input.mayMergeUnreviewed) ||
     !isBotAuthored(input.reading.author, input.appSlug)
   ) {
-    return ok(verdict);
+    return ok({ verdict, outstandingChecks: { pending, notReported: [] } });
   }
   const required = await readRequiredContexts(input.fetchImpl, input.token, input.target);
   if (!required.ok) {
@@ -105,11 +134,14 @@ export async function resolveVerdict(input: ResolveInput): Promise<Result<PrVerd
   }
   const proved = withUnreportedRequired(input.reading, required.value);
   if (proved.notReported.length === 0) {
-    return ok(verdict);
+    return ok({ verdict, outstandingChecks: { pending, notReported: [] } });
   }
   const recomputed = computePrVerdict(proved.reading, input.nowIso);
   const note =
     `${proved.notReported.length} required context(s) the tip has not reported, pending by ` +
     `construction (${proved.notReported.join(', ')}); required contexts ${required.value.join(', ')}`;
-  return ok({ state: recomputed.state, evidence: [...recomputed.evidence, note] });
+  return ok({
+    verdict: { state: recomputed.state, evidence: [...recomputed.evidence, note] },
+    outstandingChecks: { pending, notReported: proved.notReported },
+  });
 }
