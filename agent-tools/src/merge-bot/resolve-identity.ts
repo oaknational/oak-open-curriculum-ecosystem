@@ -202,3 +202,21 @@ export function resolveMergeBotAppSlug(input: MergeBotResolveInput): Result<stri
   });
   return repoConfig.ok ? ok(repoConfig.value.appSlug) : err(repoConfig.error);
 }
+
+/**
+ * The labels this clone's bot adds to a pull request it opens, from the
+ * clone's merge-bot config; empty when the config states none.
+ */
+export function resolveMergeBotPullRequestLabels(
+  input: MergeBotResolveInput,
+): Result<readonly string[], Error> {
+  const configRoot = resolvePrimaryConfigRoot(input);
+  if (!configRoot.ok) {
+    return err(configRoot.error);
+  }
+  const repoConfig = loadMergeBotRepoConfig({
+    repoRoot: configRoot.value,
+    readFileImpl: input.readConfigFileImpl,
+  });
+  return repoConfig.ok ? ok(repoConfig.value.pullRequestLabels ?? []) : err(repoConfig.error);
+}

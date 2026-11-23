@@ -245,6 +245,14 @@ only ever name a directory under `~/.config/`). Because it is untracked, a
 clone's copy is not diffable or restorable from history — recreate it from
 the template.
 
+The same file may state `pullRequestLabels`, a list of labels this clone's bot
+adds to every pull request it opens with `pull-request open`. Such a label
+marks whose bot opened the pull request, so it belongs to the clone and not to
+the tool: the template states none, and a clone that states none adds none.
+Because the schema is strict, an older build of `agent-tools` refuses a file
+that carries the field; add it once every worktree of the clone has a build
+that knows it.
+
 **Clones that predate the untracking** (the file used to be tracked): the
 merge that removed it from version control also removes the working-tree
 copy on the next fast-forward, and the ignore rule then hides its absence, so

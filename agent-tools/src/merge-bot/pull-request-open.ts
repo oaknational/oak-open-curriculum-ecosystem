@@ -239,6 +239,6 @@ export async function openPullRequest(
     openedSchema,
   );
   return opened.ok
-    ? ok({ kind: 'opened', number: opened.value.number, url: opened.value.html_url })
+    ? ok({ kind: 'opened', number: opened.value.number, url: opened.value.html_url, labels: [] })
     : opened;
 }

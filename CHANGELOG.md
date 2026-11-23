@@ -1,3 +1,17 @@
+# [1.191.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.10...v1.191.0) (2026-11-23)
+
+
+### Bug Fixes
+
+* **agent-tools:** name the labels in the result of an open ([03c976c](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/03c976c47c954e9486717cb7110e3b8216911248))
+* **deps:** move express to 5.3.0 ([64720c1](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/64720c1663930d172aeda2d01991afc565583bf6))
+* **deps:** raise the hono node adapter floor to 2.1.6 ([fadac20](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/fadac20c09b103c6d51e5497699f79dd3187a259))
+
+
+### Features
+
+* **agent-tools:** let a clone's bot label the pull requests it opens ([83c3513](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/83c35136b8925b1c9f0af061bee0ce995ef1cba7))
+
 ## [1.190.10](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.9...v1.190.10) (2026-11-23)
 
 ## [1.190.9](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.8...v1.190.9) (2026-11-23)
