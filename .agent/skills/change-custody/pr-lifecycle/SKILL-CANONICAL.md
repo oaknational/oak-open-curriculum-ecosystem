@@ -2080,9 +2080,10 @@ allow_squash_merge, allow_rebase_merge}'`; `allow_merge_commit` has
     requests, so the listing is filtered to each author the clone counts as
     its own, one call per author (`--author <login>`, where an app's login is
     written `<appSlug>[bot]`): the same authors `merge-bot pull-request open`
-    counts. A filter that returns nothing while the seat has work open is
-    naming an author that matches nobody; check it against a pull request
-    known to be open before trusting a zero. The seat then reads
+    counts. The count is the sum across those calls, and one author's
+    listing may be empty while another's is not. A sum of zero while the
+    seat has work open means the logins match nobody; check each against a
+    pull request known to be open before trusting that zero. The seat then reads
     every repository's stream for reservations posted before its own that
     had not lapsed when it read the count. It opens only while the count
     plus those earlier reservations is under the limit; otherwise it
