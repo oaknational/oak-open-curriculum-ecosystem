@@ -2075,7 +2075,15 @@ allow_squash_merge, allow_rebase_merge}'`; `allow_merge_commit` has
     coordination stream, then reads the count first-hand from the forge for
     every repository (`gh pr list --repo <owner>/<name> --state open --limit
     1000` on GitHub: the target always named, and a limit above the default
-    page of thirty), leaving out each repository's coordination PR, then reads
+    page of thirty), leaving out each repository's coordination PR. On a
+    repository that other people share, the count is of the seat's own pull
+    requests, so the listing is filtered to each author the clone counts as
+    its own, one call per author (`--author <login>`, where an app's login is
+    written `<appSlug>[bot]`): the same authors `merge-bot pull-request open`
+    counts. The count is the sum across those calls, and one author's
+    listing may be empty while another's is not. A sum of zero while the
+    seat has work open means the logins match nobody; check each against a
+    pull request known to be open before trusting that zero. The seat then reads
     every repository's stream for reservations posted before its own that
     had not lapsed when it read the count. It opens only while the count
     plus those earlier reservations is under the limit; otherwise it
