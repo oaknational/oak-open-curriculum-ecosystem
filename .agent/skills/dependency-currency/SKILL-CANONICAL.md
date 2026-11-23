@@ -26,6 +26,13 @@ behaviour regression is the constraint. The method was proven on the
 
 ## Ground rules
 
+- **State where the pass ends before the first cycle, and agree it with the
+  owner.** Once the triage is done, say which tiers and sign-off classes this
+  pass takes and what state ends it: for example, every in-range update
+  taken, the audit at zero, and each major raised on the pass's ticket. Work
+  found on the way that is not a dependency update, or that lies past that
+  end, goes to a ticket or to a question for the owner. It is not started
+  inside the pass.
 - **One type-affecting or behaviour-affecting major per commit.** Dev-only,
   type-neutral tooling may sweep in one commit; anything on an emission, IR,
   build-output, or product-runtime path gets its own cycle with its own
@@ -119,6 +126,9 @@ owner's go-ahead on its own pull request.
 A major on a production path is class D: raise it on the pass's one ticket
 with the evidence and do not start it. Split a sweep so that no class A bump
 waits behind a class C one.
+
+The triage ends with the end of the pass stated and agreed with the owner
+(see Ground rules), before the first cycle starts.
 
 ### 4. Execute cycles
 
