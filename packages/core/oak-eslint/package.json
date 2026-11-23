@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@eslint/js": "^10.0.1",
-    "@next/eslint-plugin-next": "16.3.0",
+    "@next/eslint-plugin-next": "16.4.6",
     "@typescript-eslint/eslint-plugin": "^8.66.0",
     "@typescript-eslint/parser": "^8.66.0",
     "@typescript-eslint/utils": "^8.66.0",
