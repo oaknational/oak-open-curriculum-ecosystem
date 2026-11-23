@@ -2535,6 +2535,55 @@ holds in another form: `chore/deps-next-react`, `chore/deps-prettier` and
 closed. The primary checkout is current at `d0092d0be`. The only open pull request of this
 estate is the coordination draft, 1091.
 
+### Update 2026-11-23, after the pass: the owner's decisions on what was owed
+
+The owner said, verbatim: "on the three owed items. Let's make decisions now, otherwise we
+risk them being lost". Each was then decided by question prompt.
+
+The five proposals of the report:
+
+1. **The open verb counts this clone's own lanes.** The owner's design, verbatim: "we
+   already pass the label in config, we can pass an array of identities to count as "our"
+   PR authors, me, and the two bots", then "the default should be the default git
+   identity that git commands would use, and a custom value overrides that, so should
+   typically also include that user". Asked how the default is read, since a git identity
+   is not a GitHub login, the owner chose: git's `user.name` plus the login of the clone's
+   own bot app. In build on `feat/merge-bot-lane-authors`. The config key goes into the
+   untracked `.github/merge-bot.json` only after every worktree is on the new build,
+   because the config schema is strict. The logins to list are the owner's to state.
+2. **The merge tool's waiting line names the required checks not yet reported:** build it,
+   on its own pull request after the first merges.
+3. **A class C go-ahead is asked by question prompt and nothing new starts until it is
+   answered:** adopted as written; it goes into the sign-off document.
+4. **A pass states its end before it starts, agreed with the owner:** adopted; it goes
+   into the dependency-currency skill, with work found outside the end going to a ticket
+   or a question.
+5. **This checkout's Sonar tooling is linked to the Oak project:** investigate and fix if
+   it is checkout configuration; if it is tied to the owner's account, report and change
+   nothing.
+
+The other two:
+
+- **The three leftover local branches:** delete all three. The forced delete was denied
+  by the permission system, so the owner has the command to run.
+- **MCP-978:** update it for the day's outcomes. Done.
+
+State of the five, same day:
+
+- Proposal 1 is pull request 1095 (`feat/merge-bot-lane-authors`), opened by its own
+  build at `--wip-limit 1`, which printed "lanes already open: 0". The default counted
+  this checkout's git `user.name`, which is the bot's login. `laneAuthors` is not yet in
+  the config: it waits for the merge, for the primary checkout and both worktrees to be on
+  the new build, and for the owner to name the logins. The open count reported as zero
+  earlier is re-read against that list when it is stated.
+- Proposal 5 is done. The cause was the untracked `.sonarlint/connectedMode.json` of the
+  primary checkout, which still named the fork's organisation and project. It now names
+  `oaknational` and `oaknational_oak-open-curriculum-ecosystem`. The Sonar command was
+  already signed in to that organisation and reads the project. The Sonar connector
+  failed to connect in this session, so what it resolves to is not checked.
+- Proposals 2, 3 and 4 follow 1095, one pull request at a time: the waiting line first,
+  then one documents change carrying the two adopted rules.
+
 **Found on the way, each needing the owner's decision.**
 
 - The security review made one observation about the auth path in code that predates the
