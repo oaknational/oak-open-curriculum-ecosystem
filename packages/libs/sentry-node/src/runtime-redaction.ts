@@ -1,11 +1,12 @@
 import type { Breadcrumb, Exception, NodeOptions, RequestEventData } from '@sentry/node';
 import {
+  REDACTED_VALUE,
   redactJsonObject,
   redactStringRecord,
   redactText,
   redactUnknownValue,
 } from '@oaknational/observability';
-import { typeSafeEntries } from '@oaknational/type-helpers';
+import { typeSafeEntries, typeSafeKeys } from '@oaknational/type-helpers';
 
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
 type SentryLogPayload = Parameters<NonNullable<NodeOptions['beforeSendLog']>>[0];
@@ -62,6 +63,26 @@ function redactQueryString(
   return redactText(new URLSearchParams(queryString).toString());
 }
 
+/**
+ * Redact every value in a parsed cookie record.
+ *
+ * The keys of this record are cookie names, which the application and its
+ * identity provider choose, so no list of sensitive key names can cover them:
+ * a session cookie can be called anything. Every value is replaced and the
+ * names are kept, which is enough to see that a cookie was present.
+ */
+function redactCookieValues(
+  cookies: RequestEventData['cookies'] | undefined,
+): Record<string, string> | undefined {
+  if (!cookies) {
+    return undefined;
+  }
+
+  // `Object.fromEntries` defines each name as an own property, so a cookie
+  // called `__proto__` is kept and redacted like any other.
+  return Object.fromEntries(typeSafeKeys(cookies).map((name) => [name, REDACTED_VALUE]));
+}
+
 function redactRequestEventData(
   request: RequestEventData | undefined,
 ): RequestEventData | undefined {
@@ -70,7 +91,7 @@ function redactRequestEventData(
   }
 
   const queryString = redactQueryString(request.query_string);
-  const cookies = redactStringRecord(request.cookies);
+  const cookies = redactCookieValues(request.cookies);
   const env = redactStringRecord(request.env);
   const headers = redactStringRecord(request.headers);
 

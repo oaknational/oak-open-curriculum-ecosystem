@@ -32,6 +32,23 @@ describe('redactTelemetryValue', () => {
     });
   });
 
+  it('redacts every cookie written as a span attribute, whatever the cookie is called', () => {
+    const value = redactTelemetryObject({
+      'http.request.header.cookie': 'theme=dark; sid=abc',
+      'http.request.header.cookie.theme': 'dark',
+      'http.response.header.set_cookie.sid': 'abc',
+      'http.request.header.cookie_policy': 'strict',
+    });
+
+    expect(value).toEqual({
+      'http.request.header.cookie': REDACTED_VALUE,
+      'http.request.header.cookie.theme': REDACTED_VALUE,
+      'http.response.header.set_cookie.sid': REDACTED_VALUE,
+      // A different header that only shares the prefix's letters is kept.
+      'http.request.header.cookie_policy': 'strict',
+    });
+  });
+
   it('redacts sensitive query-string parameters inside URLs', () => {
     expect(
       redactTelemetryValue(
