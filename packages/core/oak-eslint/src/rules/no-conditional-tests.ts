@@ -145,8 +145,6 @@ const noConditionalTestsRule: RuleWithReappraisingMessages<'conditionalTestBanne
       }),
     },
   },
-  defaultOptions: [],
-
   create(context) {
     /** The variable a name resolves to here, or `undefined` when nothing declares it. */
     function resolve(node: TSESTree.Identifier): TSESLint.Scope.Variable | undefined {

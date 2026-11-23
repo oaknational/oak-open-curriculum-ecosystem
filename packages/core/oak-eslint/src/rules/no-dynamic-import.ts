@@ -25,8 +25,6 @@ const noDynamicImportRule: RuleWithReappraisingMessages<'dynamicImportBanned'> =
       }),
     },
   },
-  defaultOptions: [],
-
   create(context) {
     return {
       ImportExpression(node) {

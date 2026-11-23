@@ -86,8 +86,6 @@ const noEslintDisableRule: RuleWithReappraisingMessages<
       }),
     },
   },
-  defaultOptions: [],
-
   create(context) {
     return {
       Program() {
