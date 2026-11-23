@@ -16,17 +16,21 @@
  *   not about the MCP server: generating from the path today would produce an SDK that
  *   is broken or untrue. Honoured by the whole pipeline: the SDK schema
  *   (`api-schema-sdk.json`) and everything derived from it — types, Zod schemas, MCP
- *   tools, parameter and response maps — omit these paths. Two cases, each measured by
- *   moving the entries into `SKIPPED_PATHS` and regenerating from the cached schema:
- *   - the check-restricted (usage-licence) family: the generators cannot yet emit valid
- *     code for it. It holds the first request body, the first path with no `get`, and
- *     the first map-shaped response; the generated workspace then fails `type-check`.
- *     Building that capability is tracked by MCP-214 (blocked by MCP-152), serving it
- *     by MCP-215 (blocked by MCP-214), under an owner-ruled deferral of 2026-07-26.
- *   - the changelog pair: generation succeeds, and the SDK then describes two endpoints
- *     the live API no longer serves (dead since spec 0.11.0, removal decided
- *     2026-09-02). They leave when the schema-cache refresh tracked by MCP-630 erases
- *     them from the cache.
+ *   tools, parameter and response maps — omit these paths. It holds two unlike cases,
+ *   each measured by moving the entries into `SKIPPED_PATHS` and regenerating from the
+ *   cached schema:
+ *   - **Not yet processable** — the check-restricted (usage-licence) family. The
+ *     generators cannot yet emit valid code for it: it holds the first request body,
+ *     the first path with no `get`, and the first map-shaped response, and the
+ *     generated workspace then fails `type-check`. Building that capability is tracked
+ *     by MCP-214 (blocked by MCP-152), serving it by MCP-215 (blocked by MCP-214),
+ *     under an owner-ruled deferral of 2026-07-26.
+ *   - **No longer in the live API** — the changelog pair (dead since spec 0.11.0,
+ *     removal decided 2026-09-02). Generation succeeds, and the SDK then describes two
+ *     endpoints the API does not serve. These entries are a workaround, not a design:
+ *     the paths are only in the pipeline's input because the committed schema cache is
+ *     behind the API Oak publishes. The cure is bringing the cache up to date (tracked
+ *     by MCP-630), which erases the paths and with them the need for the entries.
  *
  *   Temporary by construction. Each entry names the ticket that retires it, and the
  *   entries are self-retiring: `applyDeferredPaths` throws when a configured path is

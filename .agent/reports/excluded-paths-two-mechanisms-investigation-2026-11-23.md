@@ -1,4 +1,4 @@
-# Excluded upstream paths: are two mechanisms one too many?
+# Excluded upstream paths: three reasons, two mechanisms
 
 An investigation of 23 November 2026, by the seat Firefly mends Quench (4f7b54), at the
 owner's word. It changes no behaviour. Its result is written into the header comment of
@@ -78,30 +78,43 @@ third result does not depend on them.
 
 ## What it shows
 
-The two sets are two classes, as the owner's second statement proposed.
+The owner's second statement holds: the two sets are different classes. And the second
+set holds two unlike cases, the second of which the owner named when this result was
+reported:
 
-- **`SKIPPED_PATHS`: not surfaced over MCP.** A decision about the MCP server. The SDK keeps
-  the path.
-- **`DEFERRED_PATHS`: not processed.** A statement about the pipeline's input. Generating
-  from the path today gives an SDK that is broken (`check-restricted`: it does not compile)
-  or untrue (the changelog pair: it compiles and describes endpoints that the file's own
-  record says the live API stopped serving at spec 0.11.0).
+> if paths are being skipped because they are no longer supported i.e. they no longer exist in
+> the live API, that is a third reason, and it is a hack around failing to update the repo to
+> use the latest API version
 
-A tool filter cannot do the second job. With `check-restricted` only tool-filtered the SDK
-does not build.
+So there are three reasons a path is excluded, in two mechanisms.
 
-The owner's first statement still holds in the form that matters: `DEFERRED_PATHS` is not
-a place to keep a path off the MCP server. It is temporary by construction. Each entry
-names the ticket that retires it, `applyDeferredPaths` fails generation once a listed path
-has left the cached document, and the file already says to delete the constant and its
-wiring when the last entry goes. At that point one tool filter is left, with no separate
-piece of work to schedule. A path that becomes processable is then either served or moved
-to `SKIPPED_PATHS`.
+| Reason | Paths | Mechanism | What ends it |
+| --- | --- | --- | --- |
+| Not surfaced over MCP: a decision about the MCP server (content policy, or no value over MCP) | the two `/search` paths, `/lessons/{lesson}/assets/{type}` | `SKIPPED_PATHS` | Nothing; it is a standing design decision |
+| Not yet processable: the generators cannot emit valid code for it | the two `check-restricted` paths | `DEFERRED_PATHS` | The capability is built (MCP-214) |
+| No longer in the live API: the cached schema still holds it | the two `/changelog` paths | `DEFERRED_PATHS` | The schema cache is brought up to date (MCP-630) |
 
-The split is therefore not debt in itself. What the first draft got wrong, and the header
+- **A tool filter cannot do the second job.** With `check-restricted` only tool-filtered
+  the SDK does not build. That exclusion has to act on the pipeline's input.
+- **The third is a workaround for a stale cache.** The changelog entries exist only because
+  the committed schema cache is behind the API Oak publishes. Nothing about those two
+  endpoints needs an exclusion; the repository needs the current schema, and with it the
+  paths, and the entries, are gone. The strategic node `upstream-api-currency` owns that
+  outcome; the delivery plans `migrate-to-curriculum-api-v1` and `mcp-served-surface-truth`
+  carry it, and the second deletes the two entries in the landing that refreshes the cache.
+- **The owner's first statement holds in the form that matters.** `DEFERRED_PATHS` is not
+  a place to keep a path off the MCP server. It is temporary by construction: each entry
+  names the ticket that retires it, `applyDeferredPaths` fails generation once a listed
+  path has left the cached document, and the file says to delete the constant and its
+  wiring when the last entry goes. At that point one tool filter is left. A path that
+  becomes processable is then either served or moved to `SKIPPED_PATHS`.
+
+What is debt, then, is not that two mechanisms exist. It is the two changelog entries,
+which stand in for a schema refresh, and the missing generator capability behind the
+other two. Both are already tracked. What the first draft got wrong, and the header
 comment before it left unsaid, is the reason for the split: the old comment gave it as
-permanent against temporary, which is true and is not the cause. The cause is the stage at
-which the exclusion has to act.
+permanent against temporary, which is true and is not the cause. The cause is the stage
+at which the exclusion has to act.
 
 ## What stays open
 
@@ -115,6 +128,3 @@ which the exclusion has to act.
   (`upstream-and-bulk-alignment-concept-exploration-2026-07-26.md`) calls it a rights and
   licensing capability. That decision is MCP-215's, and if the answer is no, the entries
   move to `SKIPPED_PATHS` when MCP-214 lands.
-- **The changelog pair in the owner's list.** The owner named it as offering no value in the
-  MCP. It sits in `DEFERRED_PATHS` for a second reason, that the endpoints are gone, and
-  leaves the file altogether at the cache refresh, so it never needs a tool-filter entry.
