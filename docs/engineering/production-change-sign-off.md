@@ -83,14 +83,13 @@ and stops one that is already running, until the go-ahead is on record. It
 says on the pull request that the change is held and why.
 
 The agent asks for the go-ahead as soon as the pull request is ready for it:
-the review done and the claim stated. It asks the owner a direct question
-that waits for the answer. A line in a status report does not ask. While the
-owner is present to answer, the agent starts no new work until the question
-is answered, so that a held change is not left waiting behind a queue that
-keeps growing.
+the review done and the claim stated. A line in a status report does not
+ask. While the owner is present to answer, the agent asks a direct question
+that waits for the answer, and starts no new work until it is answered, so
+that a held change is not left waiting behind a queue that keeps growing.
 
-When the owner is away, or the agent runs unattended, the question cannot be
-answered and must not stop the agent. The agent records the question on the
+When the owner is away, or the agent runs unattended, a question that waits
+cannot be answered, so the agent does not ask one. It records the question on the
 pull request, with the facts and its own recommendation, keeps the change
 held, and carries on with work that needs no go-ahead. It opens no further
 class C pull request until the first is answered.
