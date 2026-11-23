@@ -114,7 +114,8 @@ what the bump does to the user-facing apps. The two are independent. A
 type-neutral lint tool is class A and merges by the ordinary path. A
 product-runtime patch is class B and names its proof in the pull request. A
 dependency on an authentication, privacy or request-path boundary is class C
-whatever its size, and waits for the owner's go-ahead on its own pull request.
+whatever its size: a specialist reviews it first, and then it waits for the
+owner's go-ahead on its own pull request.
 A major on a production path is class D: raise it on the pass's one ticket
 with the evidence and do not start it. Split a sweep so that no class A bump
 waits behind a class C one.

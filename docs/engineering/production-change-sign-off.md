@@ -29,13 +29,17 @@ round settled.
 
 ### Class A: no production effect
 
-Lint, test and build tooling; CI workflows and their action pins; the demo
-apps; `agent-tools`; documentation and Practice files; a dependency reached
-only by development tooling.
+Lint and test tooling; the demo apps; `agent-tools`; documentation and
+Practice files; a dependency reached only by development tooling. Build
+tooling, CI workflows and their action pins belong here too, on one condition.
 
-Build tooling belongs here only while the built artefact is unchanged. A
-bundler or compiler update that changes what a user-facing app ships is class
-B, and the proof is a comparison of the built output before and after.
+The condition: the artefact a user-facing app ships, and the path by which it
+is deployed, are unchanged. A bundler or compiler update that changes what an
+app ships is class B, and the proof is a comparison of the built output
+before and after. A change to a workflow that builds, releases or deploys a
+user-facing app, or to an action that workflow runs, is classified by what it
+does to that artefact and that path: class B when both are provably the same,
+class C when it touches credentials, tokens or what is deployed where.
 
 ### Class B: production code path, no intended change in behaviour
 
