@@ -2213,3 +2213,50 @@ from that probe. The probe file was deleted; this paragraph is its recipe.
 - A push hook checks the working tree. Switching branch while it runs fails the push or,
   worse, proves the wrong tree.
 - vitest here swallows `console.log`; a probe writes its output to a file.
+
+## Update 2026-11-23, after the compaction: the Sentry pair and the next three
+
+This block supersedes the "open" and "remaining" lists of the block above where they differ.
+
+**Merged since.** The rubric pull request (1080) and the Sentry data collection pull request
+(1078). For 1078 the review finding was upheld: payload-level tests were added
+(`data-collection-payload.integration.test.ts`). The proof that behaviour did not change
+has three parts: in the installed 10.70.0 builds the legacy flag is read only by the
+resolver and its mapping, so the resolved object is the only channel; the resolved object
+is pinned field for field; and a throwaway run put both configurations through one request
+and one tool call and got identical request data and span attributes.
+
+**The cookie pull request is 1081, class C, a draft, waiting for the owner's go-ahead. Do
+not start the merge tool on it.** The owner was told in the session; no answer yet. What it
+does: `dataCollection.cookies` is `false`; the barrier redacts every value of
+`request.cookies`; and telemetry keys beneath `http.request.header.cookie` and
+`http.response.header.set_cookie` are redacted in full
+(`packages/core/observability/src/redaction-cookie-keys.ts`). A Sentry specialist review
+found the leak was wider than first recorded: cookies also left on spans, on every route,
+for any cookie name outside the SDK's own list. On the MCP app the event path was limited
+to routes other than `/mcp`, because a later hook replaces the request on `/mcp` events.
+A read-only query of the Sentry project found spans carrying
+`http.request.header.cookie.__client_uat` (90 days: 184 in preview, 40 in production), so
+it has happened; that cookie's value is a timestamp. Sentry answered "unknown attribute"
+for `__session` and `_ga`. No stored value was read. Whether to inspect or scrub stored
+data is the owner's to decide and has not been asked as a question yet.
+
+**Open and at the merge tool (class A).** 1083, `prettier` 3.10.1, re-cut on
+`chore/deps-prettier-3-10` (the old `chore/deps-prettier` with its placeholder commit is a
+leftover to delete). 1084, `typescript-eslint` 8.73.0.
+
+**The owner's word on the label, 2026-11-23.** Asked why only some pull requests carry
+`jimbot`: the open verb does not apply it. The owner: "make the jimbot label automatic, but
+ONLY for items opened by my bots, not on any checkout that happens to use the merge bot,
+other people use this repo and its tools, and the jimbot label is just for my bots". The
+design this seat chose: a field in the per-checkout, untracked `.github/merge-bot.json`
+naming the labels this clone's bot puts on a pull request it opens; the tracked template
+carries none. Not yet built. 1073 was labelled; the Castr seat was told about 1082.
+
+**Remaining, in order.** The label change (A); then items 5 to 11 of the list above
+unchanged (`@hono/node-server` floor first, class C).
+
+**Leftover local branches in the lane worktree.** `docs/production-change-sign-off`,
+`chore/deps-server-runtime` (both ancestors of `origin/main`), `chore/deps-next-react`
+(four commits not on `origin/main`; inspect before deleting), `chore/deps-prettier`,
+`fix/sentry-data-collection`.
