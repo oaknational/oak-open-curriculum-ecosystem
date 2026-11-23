@@ -228,6 +228,14 @@ a zero-match sweep reads as a confirmed negative.
   exposes override/manifest desync before CI does. The regenerated
   lockfile is EVIDENCE, never committed (byte-identical regeneration is
   the strongest result).
+- **The sign-off class is stated in the PR body**, per
+  [`production-change-sign-off`](../../rules/production-change-sign-off.md):
+  A (no production effect), B (production code path, proof named), C (trust,
+  privacy or request-path boundary: specialist review and the owner's explicit
+  go-ahead on that PR, the merge tool not started before it) or D (a major or
+  rewrite on a production path: a ticket, not a PR). A security cure does not
+  lower the class: a patch to a dependency on the request path is still
+  class C, and the cure waits for the go-ahead.
 - **PR opens as draft with the `jimbot` label** (owner ruling
   2026-08-11: every PR under the owner's or the bot's identity carries
   it at creation) and **gates green**; reachability reasoning for
