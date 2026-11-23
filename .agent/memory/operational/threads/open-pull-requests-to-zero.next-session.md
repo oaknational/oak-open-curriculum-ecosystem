@@ -2619,3 +2619,142 @@ Later the same day:
   its own. The limit the owner set is held by the seat, not by the tool.
 - The description of 1092 named the release-age floor as seven days. It is one day
   (`minimumReleaseAge: 1440`). Corrected on the merged pull request.
+
+### Update 2026-11-23, before the third compaction: the seat stays live and the work continues
+
+The owner's word, verbatim: "Please prepare for compaction, post-compaction we continue",
+with the cognition skills and the wrap named, then "don't stop after preparation, keep going
+and allow compaction to be reached naturally". So this is a boundary record. Nothing is
+paused, no process is stopped, and the queue below is being worked as this is written.
+
+A doctrine fact worked out twice today: an owner-invoked start-right lifts a pause unless the
+owner says it stays (the `wrap` skill, the owner's rule of 2026-10-03). The seat resumed on
+that reading after the second compaction and the owner confirmed it.
+
+**Landed since the second compaction.** 1073 (the fold), 1092, 1093, 1094 (the three
+closing pull requests; the dependency pass has ended), 1095 (the open limit counts the
+clone's own lanes) and 1096 (its setup steps, merged `827303253` at 20:04:25Z after three
+Copilot findings, each upheld). MCP-985 raised and MCP-978 updated, both at the owner's
+word. The Sonar link corrected.
+
+**The queue, in order. Each is one pull request, opened at `--wip-limit 1`.**
+
+1. The `pr-lifecycle` skill's count step. Its operating step still tells a seat to count
+   with `gh pr list --state open` over the whole repository; the paragraph above it, which
+   1095 corrected, says the limit counts the seat's own. Found by reading it at this
+   boundary. A documents change.
+2. Proposal 2, the waiting line. In `agent-tools/src/merge-bot`: `resolveVerdict` in
+   `merge-door-checks.ts` puts the names of the unreported required checks into the
+   verdict's evidence, and `writeProgress` in `merge-report.ts` prints only the state. Print
+   the names on the poll line. Tests first.
+3. Proposals 3 and 4, one documents change. Into
+   `docs/engineering/production-change-sign-off.md`: a class C go-ahead is asked by
+   question prompt, and nothing new starts until it is answered. Into the
+   `dependency-currency` skill: a pass states its end before it starts, agreed with the
+   owner, and work found outside that end goes to a ticket or a question.
+
+**Checks owed.**
+
+- The configured open limit has not been seen refusing. Two opens printed "lanes already
+  open: 0" with no lane open, which a list that matches nobody would print as well. A probe
+  run as 1096 merged decided nothing. Read directly: GitHub reports the bot's pull requests
+  under its login with the `[bot]` suffix, and the list holds that string. The check: while
+  the next pull request of this estate is open and not about to merge, run `merge-bot
+  pull-request open --branch main --title probe --body-file <a non-empty file> --wip-limit
+  1`. Expected: exit 3 and "lane pull requests open: 1". A 422 from GitHub means the count
+  was zero: stop opening at a limit of one and read the logins again. The probe writes
+  nothing either way; GitHub refuses a pull request from `main` to `main`.
+- 1094's reviews made the preview checks a condition, and the preview is keyed to the
+  development Clerk instance. Production has not been checked on the merged build. This
+  seat can read the unauthenticated half (the 401s and the discovery documents) once the
+  production deployment carries the merge; the signed-in half is the owner's.
+
+**To ask the owner by question prompt, at the first merge wait after this record is pushed.**
+Each has waited since before the second compaction, in the list headed "Observations given
+to the owner, with no decision yet" above. The seat's recommendation is given with each.
+
+- The query string is recorded on Sentry events as received. Recommendation: a ticket in
+  the MCP team, since stripping it is a change to what the production app collects.
+- Spans stored before 1081 carry a Clerk cookie attribute (184 in preview, 40 in
+  production over 90 days). Recommendation: leave them to age out, unless the owner wants
+  the stored values read first.
+- The reviewer account named `claude` posts "review skipped" on every pull request for
+  want of usage credit. Recommendation: the owner funds it or removes it; a seat changes
+  neither.
+- Dependabot will open pull requests for action versions again. Recommendation: keep its
+  config as it is; the skill `update-dependencies` says Dependabot owns those bumps, and the
+  pass moved five pins and closed two of its pull requests on one day only.
+- Whether 1090 did what the owner meant (the Sentry plugin turned back on). It rests on
+  inference, recorded above.
+- The signed-in check of production for 1094, above.
+- Whether the owner wants a retrospective on the dependency pass. The `wrap` skill routes
+  that offer to the owner; it is not run unasked.
+
+**Smaller matters for the owner, told in the report of this boundary.** The preview entry in
+the untracked `.mcp.json` points at the preview of 1094's branch, which is merged. The three
+leftover local branches wait on a command only the owner can run. The owner was offered a
+security label for the Linear team and did not take it up.
+
+**Processes this seat started, and the recipe if none survives.**
+
+- The comms watcher, a Monitor that expires every thirty minutes. The command is the one
+  in the block before the second compaction. Its `--supervisor-pid` is the process id of
+  the `claude` process that owns the session: read `$PPID` in a shell and confirm with `ps`
+  that it names `claude`. It changed when the account was switched; the old id was dead.
+  `comms assert-watcher-live` read live at this boundary. No comms event from another seat
+  arrived in this window; that is a silence, and it is not read as proof that no seat is
+  present.
+- No merge tool run, no subagent, no schedule at the moment of writing. A merge tool run
+  started after this is a background shell whose log is in the session scratch directory.
+- No claim is open. The lane's claim was closed when the pass ended. The work after it has
+  run without a claim, as a solo seat with no other seat seen. The team bootstrap of the
+  start-right skill was reduced to the watcher: no team-start report was posted and no
+  Cricket panel was run on the plan. Each item of work since has been decided by the owner
+  by prompt.
+
+**Where things live.**
+
+- The thinking of this boundary:
+  `.agent/reports/after-the-pass-whose-is-it-and-what-holds-it-exploration-2026-11-23.md`.
+  Its proposals go to the owner by prompt and do not wait in the file.
+- The token finding: Linear MCP-985. Its detail is also in the seat's private memory
+  (`auth-observation-under-investigation`), to be deleted when the ticket closes.
+- The updates held back from the pass: Linear MCP-978.
+- Untracked files of the primary checkout that carry state: `.github/merge-bot.json` (the
+  label and the authors to count), `.sonarlint/connectedMode.json` (the Sonar link),
+  `.mcp.json` (the preview server entry).
+- The session scratch directory holds commit messages, pull request bodies and logs. All
+  are disposable.
+
+**Facts a successor would otherwise work out again.**
+
+- The merge tool exits 1 with the verdict THREADS-OPEN when a review thread is unresolved.
+  Its last lines are the package manager's failure text; the verdict is higher in the log.
+- Linear turns a bare `#1094` in a description into a link to a pull request of another
+  repository in the workspace. Write the full address.
+- In zsh a loop variable named `path` replaces the command search path. Every command after
+  it in the same shell is not found.
+- The repository's hook refuses `rm -rf`, and the permission system refuses a forced branch
+  delete. A scratch directory is made fresh with `mktemp -d`; a forced delete is the
+  owner's to run.
+- The config schema of the merge tool is strict. A new key goes into the untracked config
+  only after the primary checkout and every worktree run a build that knows it, and the
+  coordination worktree gets that build by merging `main`.
+
+**What in this block is inference, not observation.**
+
+- That the owner's report "sign in on the oak-preview mcp server works correctly" means a
+  token was accepted on `/mcp`. A client that connects lists the tools with its token, so
+  the seat read it that way and recorded the owner's words on the pull request.
+- That no other seat is present. No event arrived; nothing more was read.
+- "The two bots" in the owner's first message on the limit. One bot is listed. The seat did
+  not infer the second, and the owner then said one bot for now.
+
+**What outside eyes caught in this window, as a guide to where this seat's own reading is
+weak.** A list of packages one short (Copilot, 1093). Three statements about a tool's
+behaviour in prose written straight after building it (Copilot, 1096). A version named in a
+comment and a security assumption nobody had read to its far end (the security review,
+1094). The scope of the limit ruling, which the seat had recorded wider than the owner
+meant (the owner). The seat caught a floor named from memory, a finding written into a
+public record, and a counter read at zero. The pattern is counts, lists and scopes stated
+by this seat.

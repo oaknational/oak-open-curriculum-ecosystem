@@ -510,6 +510,16 @@ its standing draft, which the count for zero excludes. Next safe step: feature d
 direction. Owed to the owner: a decision on each of the five proposals in the report named above. One
 security ticket, MCP-985, was raised at the owner's word as planned work.
 
+STATE, 2026-11-23, before the day's third compaction (the same seat, staying live at the owner's word:
+"post-compaction we continue"): the owner decided all five proposals by question prompt. The open limit of
+the merge tool now counts the clone's own lanes (1095, with its setup steps in 1096). Next safe steps, in
+order, each one pull request at a limit of one: the `pr-lifecycle` count step, the merge tool's waiting line,
+then one documents change carrying the two adopted rules. Seven matters go to the owner by prompt at the
+first merge wait. The thread record's newest block holds the queue, the two checks owed, the questions with a
+recommendation each, and the recipe for the watcher. Deep consolidation status: due, for the reason given
+above; not bounded for this boundary. The thinking is in
+`.agent/reports/after-the-pass-whose-is-it-and-what-holds-it-exploration-2026-11-23.md`.
+
 STATE, 2026-10-13T13:0xZ (Walrus seeks Maelstrom, 9585cc, the reviewer seat at n=1, at its compaction
 boundary at the owner's word): the review lane for pull request #356 is open under claim `b13d5c39`;
 the discovery is reported. Next safe steps for that seat, in order, from the thread record

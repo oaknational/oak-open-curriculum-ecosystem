@@ -316,6 +316,8 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1092 | 1 | 0 / 40 | within | 0 | agreed | `@vercel/functions` 3.11.3, class B; one Copilot review at ready: no finding; merged `864498f8d` by the bot |
 | 2026-11-23 | oaknational#1093 | 1 | 0 / 40 | within | 1 | agreed | the hold on `@opentelemetry/api` below 1.10, class A; one Copilot finding (the rationale named three of the four installed SDK packages), upheld and cured in one push; merged `6e6ff032f` by the bot |
 | 2026-11-23 | oaknational#1094 | 1 | 0 / 40 | within | 0 | agreed | the Clerk clients in range, class C; two specialist reviews before the push (Clerk, security), both acceptable on the condition of preview checks; one Copilot review: no finding; the owner's go-ahead by question prompt after the owner's signed-in check of the preview; merged `d0092d0be` by the bot |
+| 2026-11-23 | oaknational#1095 | 1 | 0 / 40 | within | 0 | agreed | the open limit counts the clone's own lanes; one review by the estate's code reviewer before the push (no defect; four points applied); one Copilot review: no finding; merged `988117c01` by the bot |
+| 2026-11-23 | oaknational#1096 | 1 | 0 / 40 | within | 1 | agreed | the setup steps for the lane authors; three Copilot findings, each a statement the code does not make, all upheld and cured in one push; merged `827303253` by the bot |
 
 ## Weight changes
 
