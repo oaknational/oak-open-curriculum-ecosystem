@@ -2471,3 +2471,24 @@ owner's call or waits for the lane's close.
 - The claim on the dependency lane (`b7576ac5`) is open in the collaboration state and is
   closed at lane close.
 - Session scratch files (commit messages, logs, pull request bodies) are disposable.
+
+### Update 2026-11-23, at zero: the owner's two answers
+
+Pull request 1073 merged by the bot at 14:24:51Z (`086dcc298`). The estate's open pull
+requests read zero by author and by the `jimbot` label. The owner's stop on new work
+ended by its own terms.
+
+The owner said the account switch is complete and pauses are lifted, and that subagents
+no longer have to be Fable: the model is chosen for the task.
+
+Both questions went to the owner by question prompt. The answers:
+
+- **How the pass ends: three more pull requests.** One open at a time, each merged before
+  the next opens: `@vercel/functions` 3.11.3 (class B), `@opentelemetry/api` 1.10
+  (class B), the Clerk clients in range (class C: specialist review, then the owner's
+  go-ahead by question prompt). Then the pass ends.
+- **Coordination branches keep a standing draft.** The fold ceremony stands as written:
+  the successor's draft is opened. The count for zero excludes the coordination draft.
+  This replaces the reading of the limit ruling that counted it.
+
+The five proposals in the report are still owed to the owner for a decision on each.
