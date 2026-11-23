@@ -2127,10 +2127,12 @@ class B, proof named in its description). `pnpm audit` on `main` after #1079: 6 
 
 **Open.**
 
-- #1080, the rubric, class A, ready, with the merge door polling. After it merges: point
-  the private memory note `sentry-changes-need-matt-approval` at the rubric file.
-- #1078, class C, ready, the door stopped. Its hold comment (issue comment 7096286980)
-  still says it waits for a colleague; it is to be edited to say what the owner ruled. One
+- #1080, the rubric, class A, ready, with the merge door polling. Copilot's three findings
+  (two pointers omitted the specialist review; the class A examples listed every workflow
+  and action pin) were upheld, cured in cff82da58 and resolved. After it merges: retire its
+  branch, and point the private memory note on Sentry sign-off at the rubric file.
+- #1078, class C, ready, the door stopped. Its status comment (issue comment 7096286980)
+  was edited to the owner's ruling and names the two things left before the door. One
   Copilot thread is open (comment 4663727536, thread `PRRT_kwDOPUA_4M66w74u`): the test
   checks resolved options and not collected payloads, and does not cover the MCP wrapper.
   The owner also has a pending, unsubmitted review comment on `data-collection.ts` line 22
