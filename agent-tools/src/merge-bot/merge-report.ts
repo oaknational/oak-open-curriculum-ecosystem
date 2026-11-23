@@ -14,7 +14,7 @@ import type { MergeOutcome } from './merge.js';
  * Under `--json`, stdout carries EXACTLY the outcome object a machine parses;
  * progress and grounds are diagnostics and go to stderr. A refusal raised
  * before the pull request is read has the same keys, with `verdictState`
- * null and no evidence.
+ * null, no evidence and no outstanding checks.
  */
 
 /** The two sinks the reporter writes to; `MergeActionInput` satisfies it structurally. */
@@ -23,16 +23,47 @@ export interface MergeStreams {
   readonly stderr: Pick<NodeJS.WriteStream, 'write'>;
 }
 
+/** One poll that will be tried again: its number, what it read, and the outcome it read it from. */
+export interface PollProgress {
+  readonly poll: number;
+  /** The verdict state, or the reading failure, as the loop names it. */
+  readonly label: string;
+  readonly outcome: Result<MergeOutcome, Error>;
+}
+
+/**
+ * The checks the poll read as not finished, by name, as the progress line
+ * says them: the reported checks still running, and the required contexts
+ * the tip has not reported. Nothing when the outcome names none.
+ */
+function outstandingNames(outcome: Result<MergeOutcome, Error>): string {
+  return outcome.ok && outcome.value.kind === 'refused' ? namesOf(outcome.value) : '';
+}
+
+/** The names a refusal carries, each list that has any led by a dash; nothing when it has none. */
+function namesOf(refusal: Extract<MergeOutcome, { kind: 'refused' }>): string {
+  const { pending, notReported } = refusal.outstandingChecks;
+  return [
+    ...(pending.length > 0 ? [`pending: ${pending.join(', ')}`] : []),
+    ...(notReported.length > 0 ? [`required, not reported: ${notReported.join(', ')}`] : []),
+  ]
+    .map((part) => ` — ${part}`)
+    .join('');
+}
+
+/**
+ * One line per poll that will be tried again. The line quotes external text
+ * (check names, a reading failure's message), so it is made printable here.
+ */
 export function writeProgress(
   parsed: MergeArgs,
-  poll: number,
-  verdictState: string,
+  progress: PollProgress,
   streams: MergeStreams,
 ): void {
-  const progress = parsed.json ? streams.stderr : streams.stdout;
-  progress.write(
-    `poll ${poll}/${parsed.maxPolls}: ${verdictState} — retrying in ${parsed.intervalSeconds}s\n`,
-  );
+  const sink = parsed.json ? streams.stderr : streams.stdout;
+  const waiting = `${progress.label}${outstandingNames(progress.outcome)}`;
+  const line = `poll ${progress.poll}/${parsed.maxPolls}: ${waiting} — retrying in ${parsed.intervalSeconds}s`;
+  sink.write(`${printable(line)}\n`);
 }
 
 /**
@@ -70,6 +101,12 @@ function writeRefusal(
   }
   streams.stderr.write(`merge-bot merge: refused: ${outcome.reason}\n`);
   writeEvidence(outcome.evidence, streams);
+  // The last poll prints no progress line, so its names are said here.
+  const names = namesOf(outcome);
+  if (names !== '') {
+    const line = printable(`  not finished${names}`);
+    streams.stderr.write(`${line}\n`);
+  }
 }
 
 /**
@@ -106,6 +143,7 @@ export function reportStopBeforeReading(
       verdictState: null,
       awaitsSettlement: false,
       evidence: [],
+      outstandingChecks: { pending: [], notReported: [] },
     };
     streams.stdout.write(`${JSON.stringify(refusal)}\n`);
   }
