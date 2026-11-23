@@ -2023,3 +2023,64 @@ it; the hand-on entry of the earlier seat is the order of work they answer.
   and on a summary. Outside readers caught what this seat's own scans missed twice: the
   pushes under the owner's account, and the description route. Both were statements about
   which credential or route a write takes; that is where to point a second reader.
+
+### Update 2026-11-23, the dependency-currency pass: survey and order (Petrel mends Pinnacle, ea9cea)
+
+The owner restarted the seat with start-right-team and these words: "please continue with
+the work. Once the dependency updates are in I would like to stop the maintenance work and
+move on to feature development". Later the same morning: every sub-agent for the next few
+hours runs on Fable, at medium effort where Opus would have been used and low where a lower
+model would have been.
+
+- **Lane.** Worktree `.claude/worktrees/deps-currency`, one branch at a time cut from
+  `origin/main`, one pull request open at a time, each opened as the bot and given the
+  `jimbot` label with a minted token (the `update-dependencies` skill requires the label;
+  `merge-bot pull-request open` does not add it).
+- **Survey, 2026-11-23 at `origin/main` 631c27866.** `pnpm -r outdated` gave 90 rows;
+  `pnpm audit` gave 13 findings (1 high, 11 moderate, 1 low); 5 of 10 pinned GitHub actions
+  were behind the maintainer's Latest release. Manifests carry caret ranges, so every
+  in-range row is a lockfile-only refresh with `pnpm update -r --no-save`.
+- **Landed.** oaknational#1076: the five action pins, each checked against
+  `/releases/latest` (ADR-169 sets Latest, not the highest tag, as the standard).
+- **Found by the first sweep, each with its decision.**
+  - `turbo` 2.11.11 to 2.11.13 hash files reached through pnpm workspace links under
+    `node_modules` (vercel/turborepo#15084, open). Here the task graph's inputs rose from
+    41,002 files to 361,157. Decision: pin `turbo` at exactly 2.11.10 and record the hold
+    in `docs/engineering/build-system.md`.
+  - `typescript-eslint` 8.73 reports two new kinds of deprecation: `defaultOptions` on ten
+    rules in `packages/core/oak-eslint/src/rules/`, and `sendDefaultPii` at
+    `packages/libs/sentry-node/src/runtime-sdk.ts`. Decision: the Sentry option moves to an
+    explicit, complete `dataCollection` on Sentry 10 first, as its own pull request with a
+    test through Sentry's own resolver; the lint stack follows with the ten rules migrated.
+  - `@next/eslint-plugin-next` is pinned exactly at 16.3.0 to match the demos' `next`,
+    which is now 16.4.3. Decision: it moves with `next` to 16.4.6 in one pull request.
+- **Order of the remaining pull requests, lowest risk first.**
+  1. Dev tooling in range, without `typescript-eslint` and with the `turbo` hold.
+  2. Sentry `dataCollection` on Sentry 10 (privacy boundary; reviewed by the Sentry expert).
+  3. Lint stack: `typescript-eslint` 8.73 and the ten rules' `meta.defaultOptions`.
+  4. Runtime in range with the audit cures: `next` 16.4.6 with its lint plugin, React 19.3,
+     express, the Clerk and Elastic clients, and the `@hono/node-server` floor to 2.1.6.
+  5. Formatters and data tools, each alone: `prettier` 3.10, `markdownlint-cli2` 0.24
+     (it pins `js-yaml` 5, against this estate's `<5` floor), `n3`, `openapi3-ts`, `pnpm`.
+  6. Majors judged straightforward by a survey this seat has still to check line by line:
+     `pixelmatch` 8, `dotenv` 18, `eslint-plugin-unicorn` 80, `tsup` 9, `@posthog/mcp` 1.6
+     on `posthog-node` 5, `@mcpjam/cli` 6, then `ink` 8 after React 19.3.
+- **Not to be done in this pass, each with its reason; these are the pass's residue.**
+  - `typescript` 7 and `@types/node` 26: the documented holds; `typescript-eslint` 8.73
+    still declares `typescript <6.1.0`.
+  - `semantic-release` 26: it requires Node 26.13 and depends on pre-release plugins.
+  - `@sentry/node` and `@sentry/esbuild-plugin` 11: version 11 makes span streaming the
+    default, under which `beforeSendTransaction` no longer runs and `beforeSendSpan`
+    receives a different shape, so the redaction barrier of ADR-160 would stop working
+    until rewritten; it also ignores OpenTelemetry spans unless a new option is set. It is
+    a planned migration, not a bump. The `glob` audit finding clears only with it.
+  - `@clerk/mcp-tools` 1.0: two days old, removes `verifyClerkToken` and requires tokens
+    to carry the resource URL as audience; an authentication redesign.
+  - `@modelcontextprotocol/ext-apps` 2: needs the MCP SDK version 2 family; ADR-229 keeps
+    the app on version 1 until that migration.
+  - `posthog-node` 6: six patch releases in six days, and 6.0.0 silently ignored the
+    `before_send` hook that carries this estate's event policy; wait for it to settle.
+  - Audit residue without a cure: `zod` 3 under `openapi-zod-client` (the advisory is
+    patched only in 4.6.6 and the consumer declares `zod ^3`); `minimatch` 10 under
+    stryker, typedoc, sonarjs and `glob` 13 (patched only in 11); `katex` under
+    `markdownlint`. Each needs the owner's acceptance with its lift condition.
