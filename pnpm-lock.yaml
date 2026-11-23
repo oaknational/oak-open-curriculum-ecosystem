@@ -384,14 +384,14 @@ importers:
   apps/oak-curriculum-mcp-streamable-http:
     dependencies:
       '@clerk/backend':
-        specifier: ^3.16.1
-        version: 3.16.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^3.31.4
+        version: 3.31.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@clerk/express':
-        specifier: ^2.1.52
-        version: 2.1.52(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^2.1.96
+        version: 2.1.96(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@clerk/mcp-tools':
         specifier: ^0.6.0
-        version: 0.6.0(@cfworker/json-schema@4.1.1)(@clerk/express@2.1.52(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(express@5.3.0(supports-color@10.2.2))(hono@4.13.16)(next@16.4.6(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.65.1)(@types/node@24.13.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(supports-color@10.2.2)(zod@4.6.7)
+        version: 0.6.0(@cfworker/json-schema@4.1.1)(@clerk/express@2.1.96(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(express@5.3.0(supports-color@10.2.2))(hono@4.13.16)(next@16.4.6(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.65.1)(@types/node@24.13.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(supports-color@10.2.2)(zod@4.6.7)
       '@elastic/elasticsearch':
         specifier: ^9.5.0
         version: 9.5.1(supports-color@10.2.2)
@@ -2321,12 +2321,12 @@ packages:
   '@cfworker/json-schema@4.1.1':
     resolution: {integrity: sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og==}
 
-  '@clerk/backend@3.16.1':
-    resolution: {integrity: sha512-tbsrGqw45ar7PDnEV3gwkHE/HM1EwRcYPPLyL3Hw9H0Ms5fG7hZ8+EJegPJ4DpKdfvOw5M+hYMeCVKwv3NxahA==}
+  '@clerk/backend@3.31.4':
+    resolution: {integrity: sha512-lirZtugApjg9P5fQEWiR4iHZvOFc8Z4zQlTadu169C8GF/M5DMvTOEnlllFDZA823nipbHkJJf3I6/Wnromtbw==}
     engines: {node: '>=20.9.0'}
 
-  '@clerk/express@2.1.52':
-    resolution: {integrity: sha512-eDwz7ZwuT9NEJXhamXtOtVd/2Y7p4v1ExTJWrb8RM+faAR57EYvous1EEaIGhdfB9dH014L2+7pcZwsVsX2ijw==}
+  '@clerk/express@2.1.96':
+    resolution: {integrity: sha512-yyLV809ZZPy2E2jYkyEHGvMbLYQZKYRPKCWLXyzI4z29+wsM2WLlMnLHU3wabG6o0gy8hHdQmqVpaTS3X7ZqGg==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
       express: ^4.17.0 || ^5.0.0
@@ -2363,8 +2363,8 @@ packages:
       redis:
         optional: true
 
-  '@clerk/shared@4.27.1':
-    resolution: {integrity: sha512-eAin1Iy42P3vkytTebD99BhxDm6Yh72Kf8xnpM401Yz/hPUe/Ut4jFqU64xzlhf/RTCPfoTkOHaNDWdMACwXjQ==}
+  '@clerk/shared@4.48.3':
+    resolution: {integrity: sha512-lcwTiQkmmmcN3KjAwEfycFv0+fNyLJQJjhC4T+zr405QyypkTZmvaNkoBQW7QpRdX8UlNW63IoTrIX/vT37EhQ==}
     engines: {node: '>=20.9.0'}
     peerDependencies:
       react: ^18.0.0 || ~19.0.3 || ~19.1.4 || ~19.2.3 || ~19.3.0-0
@@ -9337,30 +9337,28 @@ snapshots:
 
   '@cfworker/json-schema@4.1.1': {}
 
-  '@clerk/backend@3.16.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@clerk/backend@3.31.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@clerk/shared': 4.27.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@clerk/shared': 4.48.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       standardwebhooks: 1.0.0
-      tslib: 2.8.1
     transitivePeerDependencies:
       - react
       - react-dom
 
-  '@clerk/express@2.1.52(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@clerk/express@2.1.96(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@clerk/backend': 3.16.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@clerk/shared': 4.27.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@clerk/backend': 3.31.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@clerk/shared': 4.48.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       express: 5.3.0(supports-color@10.2.2)
-      tslib: 2.8.1
     transitivePeerDependencies:
       - react
       - react-dom
 
-  '@clerk/mcp-tools@0.6.0(@cfworker/json-schema@4.1.1)(@clerk/express@2.1.52(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(express@5.3.0(supports-color@10.2.2))(hono@4.13.16)(next@16.4.6(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.65.1)(@types/node@24.13.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(supports-color@10.2.2)(zod@4.6.7)':
+  '@clerk/mcp-tools@0.6.0(@cfworker/json-schema@4.1.1)(@clerk/express@2.1.96(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(express@5.3.0(supports-color@10.2.2))(hono@4.13.16)(next@16.4.6(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.65.1)(@types/node@24.13.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(supports-color@10.2.2)(zod@4.6.7)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.32.2(@cfworker/json-schema@4.1.1)(supports-color@10.2.2)(zod@4.6.7)
     optionalDependencies:
-      '@clerk/express': 2.1.52(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@clerk/express': 2.1.96(express@5.3.0(supports-color@10.2.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       express: 5.3.0(supports-color@10.2.2)
       hono: 4.13.16
       next: 16.4.6(@babel/core@7.29.7(supports-color@10.2.2))(@opentelemetry/api@1.9.1)(@playwright/test@1.65.1)(@types/node@24.13.3)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -9369,7 +9367,7 @@ snapshots:
       - supports-color
       - zod
 
-  '@clerk/shared@4.27.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@clerk/shared@4.48.3(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@tanstack/query-core': 5.101.4
       dequal: 2.0.3
