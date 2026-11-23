@@ -1,3 +1,11 @@
+## [1.191.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.191.1...v1.191.2) (2026-11-23)
+
+
+### Bug Fixes
+
+* **observability:** redact cookies written as span attributes ([1a060b6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/1a060b6cd1b71def0f4ec7e79a34b60ab12d1cb1))
+* **sentry-node:** stop cookies reaching Sentry on error events ([6bd12c0](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6bd12c0934a8b2799e35adb166e04cf5e90368aa))
+
 ## [1.191.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.191.0...v1.191.1) (2026-11-23)
 
 
