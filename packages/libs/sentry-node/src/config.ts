@@ -98,7 +98,6 @@ function createOffConfig(environment: ResolvedSentryEnvironment): SentryOffConfi
     environment: environment.value,
     environmentSource: environment.source,
     enableLogs: false,
-    sendDefaultPii: false,
     debug: false,
   };
 }
@@ -117,7 +116,6 @@ function createFixtureConfig(
     releaseSource: release.source,
     ...(gitSha ? { gitSha: gitSha.value, gitShaSource: gitSha.source } : {}),
     enableLogs: flags.enableLogs ?? true,
-    sendDefaultPii: false,
     debug: flags.debug ?? false,
   };
 }
@@ -151,7 +149,6 @@ function createLiveConfig(
     ...(gitSha ? { gitSha: gitSha.value, gitShaSource: gitSha.source } : {}),
     tracesSampleRate: tracesSampleRateResult.value,
     enableLogs: flags.enableLogs ?? true,
-    sendDefaultPii: false,
     debug: flags.debug ?? false,
   });
 }

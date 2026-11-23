@@ -17,7 +17,6 @@ function liveConfig(overrides: Partial<SentryLiveConfig> = {}): SentryLiveConfig
     releaseSource: 'SENTRY_RELEASE_OVERRIDE',
     tracesSampleRate: 0.5,
     enableLogs: false,
-    sendDefaultPii: false,
     debug: false,
     ...overrides,
   };

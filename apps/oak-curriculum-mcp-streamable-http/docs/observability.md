@@ -207,14 +207,17 @@ applies deny-list masking to:
 - `application/x-www-form-urlencoded` OAuth payloads (treated as sensitive
   input)
 
-`sendDefaultPii` is invariantly `false` per ADR-143; the redaction barrier
-adds structural redaction on top of that floor.
+The SDK's own data collection is fixed per ADR-143 by the explicit
+`dataCollection` option in `@oaknational/sentry-node`, with user information,
+bodies, AI payloads and database values off; the redaction barrier adds
+structural redaction on top of that floor.
 
 **Behavioural expectations (enforced by vendor integration, not the Oak
 barrier)**: `wrapMcpServerWithSentry` attaches MCP tool, resource, and
 prompt observations with kind, name, status, duration, and trace
 identifiers. These are not filtered by the Oak redactor alone — the shape
-is a property of the vendor integration + `sendDefaultPii: false` combined.
+is a property of the vendor integration + `dataCollection.genAI` (inputs and
+outputs both `false`) combined.
 Converting this to a tested invariant is a candidate for a future lane.
 
 ## Handled-error capture boundaries

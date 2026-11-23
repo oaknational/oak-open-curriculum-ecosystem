@@ -15,7 +15,8 @@
  * the factory, not callers.
  *
  * Constrained to `id` (required) and optional `username`. No PII fields
- * (email, IP) — mirrors the `sendDefaultPii: false` policy.
+ * (email, IP) — mirrors the policy that the adapter collects no user
+ * information by default (ADR-143).
  */
 export interface ObservabilityUser {
   readonly id: string;
