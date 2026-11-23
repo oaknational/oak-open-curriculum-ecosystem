@@ -1,7 +1,7 @@
 import type { NodeOptions } from '@sentry/node';
 
 /**
- * Substrings of header, cookie and query-parameter names that identify a
+ * Substrings of header and query-parameter names that identify a
  * person or their network position. The Sentry SDK applies exactly these
  * when its legacy `sendDefaultPii` option is `false`. Sentry does not export
  * the list, so it is restated here; `data-collection.integration.test.ts`
@@ -15,12 +15,13 @@ const IDENTIFYING_KEY_SNIPPETS = ['forwarded', '-ip', 'remote-', 'via', '-user']
  * ADR-143 pins default PII collection off. This type is that pin for user
  * information, bodies, AI payloads and database values: each is a literal
  * `false` or an empty list, so a value that switches one on does not
- * type-check. The deny lists for cookies, headers and query parameters are
- * ordinary string arrays; the integration test pins their contents.
+ * type-check. Cookies are pinned off the same way. The deny lists for headers
+ * and query parameters are ordinary string arrays; the integration test pins
+ * their contents.
  */
 interface SentryDataCollection {
   readonly userInfo: false;
-  readonly cookies: { deny: string[] };
+  readonly cookies: false;
   readonly httpHeaders: {
     readonly request: { deny: string[] };
     readonly response: { deny: string[] };
@@ -56,7 +57,12 @@ export function createSentryDataCollection(): SentryDataCollection &
   NonNullable<NodeOptions['dataCollection']> {
   return {
     userInfo: false,
-    cookies: denyIdentifyingKeys(),
+    // Off, not a deny list. With a deny list the SDK attaches the `cookie`
+    // header and a parsed record of every cookie to error events: it filters
+    // cookie names only when it writes span attributes. Both apps
+    // authenticate by bearer token, so no cookie value is needed to diagnose
+    // a request.
+    cookies: false,
     httpHeaders: { request: denyIdentifyingKeys(), response: denyIdentifyingKeys() },
     httpBodies: [],
     urlQueryParams: denyIdentifyingKeys(),

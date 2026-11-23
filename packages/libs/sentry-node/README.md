@@ -111,7 +111,7 @@ establishes the non-bypassable redaction barrier as the single closure point
 for every payload that would otherwise leave the process. An explicit
 `dataCollection` option (ADR-143) is set as the floor: every category the SDK
 can collect by itself is stated in `src/data-collection.ts`, with user
-information, bodies, AI payloads and database values off, and no configuration
+information, cookies, bodies, AI payloads and database values off, and no configuration
 value can change it. The barrier adds structural redaction on top so every
 outbound event, transaction, span, log, and breadcrumb is sanitised before
 transmission.

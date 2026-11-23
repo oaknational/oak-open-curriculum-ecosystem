@@ -1,5 +1,6 @@
 import type { Breadcrumb, Exception, NodeOptions, RequestEventData } from '@sentry/node';
 import {
+  REDACTED_VALUE,
   redactJsonObject,
   redactStringRecord,
   redactText,
@@ -62,6 +63,30 @@ function redactQueryString(
   return redactText(new URLSearchParams(queryString).toString());
 }
 
+/**
+ * Redact every value in a parsed cookie record.
+ *
+ * The keys of this record are cookie names, which the application and its
+ * identity provider choose, so no list of sensitive key names can cover them:
+ * a session cookie can be called anything. Every value is replaced and the
+ * names are kept, which is enough to see that a cookie was present.
+ */
+function redactCookieValues(
+  cookies: RequestEventData['cookies'] | undefined,
+): Record<string, string> | undefined {
+  if (!cookies) {
+    return undefined;
+  }
+
+  const redacted: Record<string, string> = {};
+
+  for (const name in cookies) {
+    redacted[name] = REDACTED_VALUE;
+  }
+
+  return redacted;
+}
+
 function redactRequestEventData(
   request: RequestEventData | undefined,
 ): RequestEventData | undefined {
@@ -70,7 +95,7 @@ function redactRequestEventData(
   }
 
   const queryString = redactQueryString(request.query_string);
-  const cookies = redactStringRecord(request.cookies);
+  const cookies = redactCookieValues(request.cookies);
   const env = redactStringRecord(request.env);
   const headers = redactStringRecord(request.headers);
 

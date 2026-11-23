@@ -152,10 +152,13 @@ async function resolveHookReturn<T>(value: T | PromiseLike<T | null> | null): Pr
 }
 
 function assertRedactedErrorEvent(event: SentryErrorEvent): void {
-  expect(event.request?.headers).toEqual({
+  const request = requireDefined(event.request, 'Expected the request to be kept');
+  expect(request.headers).toEqual({
     authorization: REDACTED_VALUE,
     cookie: REDACTED_VALUE,
   });
+  // Every cookie value goes, whatever the cookie is called; the names stay.
+  expect(request.cookies).toEqual({ sid: REDACTED_VALUE, theme: REDACTED_VALUE });
   expect(event.extra).toEqual({
     token: REDACTED_VALUE,
     refresh_token: REDACTED_VALUE,
@@ -203,6 +206,7 @@ function assertBypassLeaksEveryErrorEventField(event: SentryErrorEvent): void {
   const firstException = requireDefined(event.exception?.values?.[0], 'Expected exception[0]');
   expect(headers.authorization).toBe(BEARER_TOKEN_VALUE);
   expect(headers.cookie).toBe(SESSION_COOKIE_VALUE);
+  expect(event.request?.cookies).toEqual({ sid: SESSION_ID_VALUE, theme: 'dark' });
   expect(firstException.value).toBe(BEARER_TOKEN_VALUE);
   expect(event.extra).toEqual({
     token: API_KEY_VALUE,
@@ -243,6 +247,8 @@ const API_KEY_VALUE = 'secret-api-key-zzz';
 const JWT_BEARER_VALUE = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIn0.abc';
 /** Session-cookie string placed under a `cookie` header — full-redacted by key name. */
 const SESSION_COOKIE_VALUE = 'sid=session-secret-xyz; path=/; HttpOnly';
+/** The same session identifier as the SDK parses it into `request.cookies`. */
+const SESSION_ID_VALUE = 'session-secret-xyz';
 /** Refresh-token placed under a `refresh_token` key — full-redacted by key name. */
 const REFRESH_TOKEN_VALUE = 'oak-refresh-secret-value-123';
 /** Span data value — Bearer-shaped so pattern redaction fires independent of span key conventions. */
@@ -269,6 +275,8 @@ function buildPiiErrorEvent(): SentryErrorEvent {
         authorization: BEARER_TOKEN_VALUE,
         cookie: SESSION_COOKIE_VALUE,
       },
+      // Parsed cookies under names no list of sensitive keys contains.
+      cookies: { sid: SESSION_ID_VALUE, theme: 'dark' },
       url: OAUTH_CALLBACK_URL,
     },
   };

@@ -140,21 +140,20 @@ describe('what the Sentry SDK attaches under the init options', () => {
     const processed = await requestDataIntegration().processEvent?.(event, {}, createClient());
 
     // The whole of what the SDK attaches, so a change in what it collects
-    // shows here. No user or IP address is attached and the IP headers are
-    // dropped. Everything else is attached as received: the redaction barrier
-    // (ADR-160), which runs after this, is what removes credentials.
+    // shows here. No user or IP address is attached, the IP headers are
+    // dropped, and no cookie is attached: neither the `cookie` header nor a
+    // parsed record. Everything else is attached as received: the redaction
+    // barrier (ADR-160), which runs after this, is what removes credentials.
     expect(processed?.user).toBeUndefined();
     expect(processed?.request).toEqual({
       method: 'POST',
       url: 'https://example.test/mcp?page=2&x-user=u1',
       query_string: 'page=2&x-user=u1',
       headers: {
-        cookie: 'theme=dark; consent=yes',
         authorization: 'Bearer token-value',
         'user-agent': 'client/1.0',
         via: '1.1 proxy',
       },
-      cookies: { theme: 'dark', consent: 'yes' },
       data: '{"q":"body text"}',
     });
   });
