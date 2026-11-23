@@ -33,9 +33,11 @@ and what an agent does at each moment.
      the suite that exercises the code, the preview checked, and what the
      pull request's checks do not exercise.
    - **C**: a specialist review of the diff, then the owner's explicit
-     go-ahead for that pull request, asked through a question prompt. Do not
-     start the merge tool before it, stop one that is running, and say on the
-     pull request that the change is held and why.
+     go-ahead for that pull request, asked through a question prompt as soon
+     as the review is done and the description states the claim. Start no
+     new work until the question is answered. Do not start the merge tool
+     before it, stop one that is running, and say on the pull request that
+     the change is held and why.
    - **D**: raise it on a ticket with the evidence. Do not start it; the
      owner decides, case by case, what each one needs before it is started.
 4. **Reclassify when the facts change.** A class B change that needs a

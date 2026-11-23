@@ -82,6 +82,12 @@ An agent working a class C pull request does not start the merge tool on it,
 and stops one that is already running, until the go-ahead is on record. It
 says on the pull request that the change is held and why.
 
+The agent asks for the go-ahead as soon as the pull request is ready for it:
+the review done and the claim stated. It asks the owner a direct question
+that waits for the answer. A line in a status report does not ask. Until the
+question is answered the agent starts no new work, so that a held change is
+not left waiting behind a queue that keeps growing.
+
 ### Class D: major version or rewrite on a production path
 
 Examples from the pass that produced this page: `@sentry/node` 11,
