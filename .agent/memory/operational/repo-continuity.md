@@ -490,6 +490,16 @@ action versions), organised by risk with each change's impact validated, on lane
 `origin/main`, one concern per pull request. The thread record's newest block holds the instruction verbatim,
 the state of the primary checkout and the follow-ups not started.
 
+STATE, 2026-11-23 (the same seat, wrapped at the owner's word before a second compaction, the seat staying
+live): the pass merged eleven pull requests and then breached the work-in-progress limit at seven open. The
+owner stopped all new work until this estate's open pull requests are at zero. Next safe step: drive the open
+set to zero and start nothing; then one question to the owner on whether the pass ends there. The thread
+record's newest block holds the rulings verbatim, what each open pull request waits on, a tooling hazard in
+the primary checkout and the route out of it. Deep consolidation status: due — repeated corrections of one
+kind in one day (a limit and three checks read at the near end) and two tool-feedback items; not bounded
+for this boundary, so left for a deliberate pass. The reasoning is in
+`.agent/reports/dependency-pass-limits-and-far-end-checks-exploration-2026-11-23.md`.
+
 STATE, 2026-10-13T13:0xZ (Walrus seeks Maelstrom, 9585cc, the reviewer seat at n=1, at its compaction
 boundary at the owner's word): the review lane for pull request #356 is open under claim `b13d5c39`;
 the discovery is reported. Next safe steps for that seat, in order, from the thread record
