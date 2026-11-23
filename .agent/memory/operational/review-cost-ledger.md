@@ -318,6 +318,7 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1094 | 1 | 0 / 40 | within | 0 | agreed | the Clerk clients in range, class C; two specialist reviews before the push (Clerk, security), both acceptable on the condition of preview checks; one Copilot review: no finding; the owner's go-ahead by question prompt after the owner's signed-in check of the preview; merged `d0092d0be` by the bot |
 | 2026-11-23 | oaknational#1095 | 1 | 0 / 40 | within | 0 | agreed | the open limit counts the clone's own lanes; one review by the estate's code reviewer before the push (no defect; four points applied); one Copilot review: no finding; merged `988117c01` by the bot |
 | 2026-11-23 | oaknational#1096 | 1 | 0 / 40 | within | 1 | agreed | the setup steps for the lane authors; three Copilot findings, each a statement the code does not make, all upheld and cured in one push; merged `827303253` by the bot |
+| 2026-11-23 | oaknational#1097 | 1 | 0 / 40 | within | 1 | agreed | the `pr-lifecycle` count step counts the seat's own lanes; one Copilot finding (the zero caution was too strong for one listing per author), upheld and cured in one push; merged `061e7fee4` by the bot |
 
 ## Weight changes
 

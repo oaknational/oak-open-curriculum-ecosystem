@@ -2642,16 +2642,48 @@ word. The Sonar link corrected.
 1. The `pr-lifecycle` skill's count step. Its operating step still tells a seat to count
    with `gh pr list --state open` over the whole repository; the paragraph above it, which
    1095 corrected, says the limit counts the seat's own. Found by reading it at this
-   boundary. A documents change.
+   boundary. A documents change. **Opened as 1097** on
+   `docs/pr-lifecycle-count-own-lanes`. One Copilot finding, upheld: with one listing per
+   author, an empty listing for one author is normal, so the caution about a zero applies
+   to the sum. Corrected in a second push, replied to and resolved.
 2. Proposal 2, the waiting line. In `agent-tools/src/merge-bot`: `resolveVerdict` in
    `merge-door-checks.ts` puts the names of the unreported required checks into the
    verdict's evidence, and `writeProgress` in `merge-report.ts` prints only the state. Print
-   the names on the poll line. Tests first.
+   the names on the poll line. Tests first. **Built and committed locally**, not pushed, on
+   `feat/merge-bot-poll-names-waiting-checks` in the lane worktree; it is pushed and
+   opened when 1097 has merged. What it does: the refusal carries a field
+   `outstandingChecks` with two lists, `pending` (reported checks still running) and
+   `notReported` (required contexts the tip has no check run for), and the poll line
+   prints whichever is not empty. The two never appear together, because the rules are
+   read only once every reported check is green, and no read was added. Under `--json`
+   the field is a new key of the refusal object. Its pull request description must say
+   all of that, each sentence read against the code.
 3. Proposals 3 and 4, one documents change. Into
    `docs/engineering/production-change-sign-off.md`: a class C go-ahead is asked by
    question prompt, and nothing new starts until it is answered. Into the
    `dependency-currency` skill: a pass states its end before it starts, agreed with the
-   owner, and work found outside that end goes to a ticket or a question.
+   owner, and work found outside that end goes to a ticket or a question. **Written and
+   committed locally**, not pushed, on `docs/sign-off-ask-and-pass-end`. It also changes
+   the class C action of `.agent/rules/production-change-sign-off.md`, which already
+   named the question prompt and now says when it is asked.
+4. Step 1 of the `coordination-fold` skill finds the coordination draft with a bare
+   `gh pr list`, which lists every author's pull requests and stops at thirty. It names
+   the branch instead (`--head <branch>`). Found by the sweep recorded in the report
+   below. A documents change, and the last of the sweep's findings. **Written and
+   committed locally**, not pushed, on `docs/coordination-fold-find-draft-by-branch`.
+
+State at 21:20Z: 1097 merged (`061e7fee4`). Item 2 is open as **1098**, ready, with the
+merge tool polling it from a background shell. The estate's code reviewer read it before
+the push and found one wrong statement and three gaps, all cured in a second commit; the
+push gate then found an exported type nothing imports, cured in a third. Items 3 and 4
+are still local.
+
+Items 2 to 4 were prepared during the waits on 1097 and are held locally because one of
+this estate's pull requests is open at a time. Each is pushed, opened and merged in turn.
+The three local branches are in the lane worktree's repository and carry one commit each
+over `origin/main`; if `main` has moved under one, merge `main` into it before the push.
+The description of each is drafted in the session scratch directory, which is
+disposable, and each is short enough to write again from its commit message.
 
 **Checks owed. Both are now discharged.**
 

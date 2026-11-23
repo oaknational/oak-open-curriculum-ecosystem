@@ -7,7 +7,8 @@ closing pull requests of the dependency pass, the token finding, and the change 
 limit. The earlier report of the same day is
 `dependency-pass-limits-and-far-end-checks-exploration-2026-11-23.md`.
 
-Every proposal here goes to the owner by question prompt. None waits in this file.
+The seat decided each proposal here the same evening, and none needed the owner. The section
+"What became of each proposal" says how. None waits in this file.
 
 ## What the reflection changed
 
@@ -114,6 +115,20 @@ in one day from one seat are one seat's day. No rule is proposed.
 | One bounded sweep (an hour) of `agent-tools` and the skills for operations and instructions that select "ours" by container | Four instances since 18 November: label, limit, Sonar link, the count step | The sweep finds none beyond those four |
 | A question to the owner that concerns a personal identifier says where it will be stored | One instance: the owner answered that before the question asked | The owner says the context was plain |
 | No new rule for properties held by something that cannot refuse | Existing rules cover each instance seen | A fifth instance in a domain no rule covers |
+
+### What became of each proposal
+
+- **The count step.** Built as pull request 1097. A review found its caution about a zero too
+  strong for one listing per author. Upheld and corrected.
+- **The sweep.** Run by the seat the same evening, over `agent-tools/src` and the skills, rules,
+  reference notes and engineering documents. In code it found one whole-repository listing, the
+  one 1095 had corrected. In the instructions it found one more instance: step 1 of the
+  `coordination-fold` skill finds the coordination draft with a bare `gh pr list`, which lists
+  every author's pull requests and stops at thirty. Decision: correct it, as its own small pull
+  request. The falsifier did not fire, since one instance was found, and the sweep is closed.
+- **The wording of a question about a personal identifier.** Kept as a napkin line. It is one
+  instance, so it is an observation and no rule.
+- **No new rule.** Stands.
 
 Unresolved evidence: which accounts the owner meant by "the two bots" (one is listed; the seat
 did not infer the second). Whether any colleague's checkout now counts nothing because its git

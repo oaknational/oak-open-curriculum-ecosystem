@@ -443,3 +443,21 @@ The account with its sources is the addendum to the reunification retrospective 
   the party was meant, seen in the label, the limit, the token and the Sonar link. A bound
   the bounded party can step over. The exploration is in
   `.agent/reports/after-the-pass-whose-is-it-and-what-holds-it-exploration-2026-11-23.md`.
+- **Mistake (caught by the advisor, before any code):** my plan for the waiting line gave
+  an example with a pending check and an unreported required check on one line. The tool
+  cannot reach that state: it reads the rules only once no reported check is pending. I
+  had written the example from what I wanted the line to say. It is the second time in
+  one day that prose about a tool came before reading the tool (the setup steps of 1096,
+  then this). The order that works: read the control flow, then write the example.
+- **Mistake (caught by review, 1097):** a caution written for one listing ("a filter that
+  returns nothing names an author that matches nobody") sat beside an instruction to run
+  one listing per author, where an empty listing is normal. I wrote the two sentences in
+  one edit and did not read the second against the first.
+- **What worked:** the probe at the limit. With one pull request open, a second open at a
+  limit of one was refused and named both listed authors. Ten seconds, and the claim
+  moved from tested to observed.
+- **What worked:** preparing the next changes as local commits during a merge wait, with
+  the tool holding the open count at one. The wait went to closing and preparing, and
+  nothing new reached the forge.
+- **Surprise:** I twice read a merge wait as stalled when under five minutes had passed.
+  A poll takes about 45 seconds here. Read the clock before reading a wait as slow.
