@@ -101,6 +101,7 @@ it by hand.
 | `.agent/rules/pre-merge-divergence-analysis.md` | situational | `ceremony:merge — every merge: the premise sweep at any size; the full workflow past thresholds` |
 | `.agent/rules/precedence-is-not-approval.md` | core | — |
 | `.agent/rules/present-verdicts-not-menus.md` | core | — |
+| `.agent/rules/production-change-sign-off.md` | situational | `ceremony:pr-lifecycle ∪ surface:dependency-management` |
 | `.agent/rules/re-apply-first-question-at-elaboration-boundaries.md` | core | — |
 | `.agent/rules/read-agent-md.md` | core | — |
 | `.agent/rules/read-before-asking.md` | core | — |

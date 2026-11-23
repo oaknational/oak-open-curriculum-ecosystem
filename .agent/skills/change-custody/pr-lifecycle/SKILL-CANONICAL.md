@@ -242,6 +242,16 @@ separates this estate's PRs from other authors' on a shared repository; a
 PR found without it is labelled at sight, and this open-step is the
 generator cure so the convention never depends on per-seat vigilance.
 
+The description states the change's sign-off class, with its reason in one
+sentence, per
+[`production-change-sign-off`](../../../rules/production-change-sign-off.md):
+A (no production effect), B (a production code path with no intended change
+in behaviour, its proof named), C (a trust, privacy or request-path boundary)
+or D (a major version or rewrite on a production path, which is a ticket and
+not a pull request). The class is read from the call sites: which app runs
+the changed code. It decides at Phase 7 whether the ordinary merge path is
+enough.
+
 Request no HUMAN reviewer at open or at any later round without the owner's
 express word (owner standing rule, 2026-08-13: "don't request matt as a
 reviewer, don't tag anyone in a Linear ticket without my express request").
@@ -1739,6 +1749,18 @@ grep -E "^-" | grep -v "^---"` and read every printed line — each is an
   branch, never a branch delete.
 
 ## Phase 7 — Merge-ready is a declaration with a gate
+
+**The sign-off class comes first.** Everything below is the ordinary merge
+path, and it is sufficient for class A and class B changes only
+([`production-change-sign-off`](../../../rules/production-change-sign-off.md)).
+A class C change (a trust, privacy or request-path boundary) also needs a
+specialist review and the owner's explicit go-ahead for that pull request,
+asked by question prompt and recorded on the pull request. The merge tool
+reads checks, threads and reviewer legs; it cannot read the class. So for a
+class C pull request the seat does not start `merge-bot merge` until the
+go-ahead is on record, stops a run already polling, and says on the pull
+request that the change is held and why. Marking the pull request ready is
+not a request to merge it.
 
 Merge-ready means, re-verified at the declaration instant: all checks green
 AND zero unresolved review threads AND the Sonar quality gate passing AND any

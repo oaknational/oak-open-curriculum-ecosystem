@@ -1,0 +1,6 @@
+---
+description: "Before a pull request is opened and again before it merges, classify the change by what it does to the user-facing apps (the MCP app and the search app) and take the sign-off its class requires: A no production effect, ordinary merge; B production code path with no intended change in behaviour, ordinary merge plus a named proof; C trust, privacy or request-path boundary, a specialist review and the owner's explicit go-ahead on that pull request, with the merge tool never started before it; D a major version or rewrite on a production path, a ticket first, with the owner deciding case by case what each one needs before it is started."
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/production-change-sign-off.md`.

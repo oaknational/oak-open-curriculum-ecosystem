@@ -53,6 +53,13 @@ codegen died, cascading 30 tasks.
 
 ### Dependency updates
 
+Who has to agree before a dependency update merges depends on what it does to
+the user-facing apps: see
+[Production Change Sign-Off](./production-change-sign-off.md). A lint or test
+tool merges by the ordinary path; a dependency on an authentication, privacy
+or request-path boundary needs the owner's go-ahead; a major on a production
+path is raised on a ticket and not done in a sweep.
+
 npm dependencies are updated by **agent-run sweeps**, not by Dependabot.
 `.github/dependabot.yml` covers github-actions only: Dependabot regenerates the
 whole lockfile per PR with its own resolver invocation — which, if that
