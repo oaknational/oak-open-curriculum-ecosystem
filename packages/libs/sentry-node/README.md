@@ -112,7 +112,11 @@ for every payload that would otherwise leave the process. An explicit
 `dataCollection` option (ADR-143) is set as the floor: every category the SDK
 can collect by itself is stated in `src/data-collection.ts`, with user
 information, cookies, bodies, AI payloads and database values off, and no configuration
-value can change it. The barrier adds structural redaction on top so every
+value can change it. "Off" means the SDK does not capture that category by
+itself; it is not a promise about the event. Request data another part of the
+process has already put on the scope, a parsed body among it, is still
+attached, and the header and query-parameter deny lists filter span attributes
+and not the request recorded on an event. The barrier is what covers those. It adds structural redaction on top so every
 outbound event, transaction, span, log, and breadcrumb is sanitised before
 transmission.
 
