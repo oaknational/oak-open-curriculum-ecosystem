@@ -2084,3 +2084,130 @@ model would have been.
     patched only in 4.6.6 and the consumer declares `zod ^3`); `minimatch` 10 under
     stryker, typedoc, sonarjs and `glob` 13 (patched only in 11); `katex` under
     `markdownlint`. Each needs the owner's acceptance with its lift condition.
+
+### Update 2026-11-23, before a compaction: where the dependency pass stands (Petrel mends Pinnacle, ea9cea)
+
+Written at the owner's word, "Prepare for compaction ... we will continue post-compaction".
+The seat stays live. This block supersedes the order in the block above where they differ.
+
+**The owner's rulings of the day, in order.**
+
+- `zod` 3 under the code generator is known and recorded; the tool is isolated in its own
+  workspace. It needs no further decision.
+- "Any updates that are high risk or require policy decisions or serious architecture
+  changes or rewrites should be raised under a single Linear ticket, but not undertaken
+  yet". The ticket is MCP-978 (MCP team, no project). It says an agent wrote it.
+- Node 26: the owner knew of one blocker, support in GitHub workflows, and Vercel supports
+  it. Checked: `actions/node-versions` carries 26.13.1 (LTS) for every platform, so
+  `setup-node` resolves it; the hosted image does not pre-cache it. MCP-978 lists what moves
+  together. "We can plan an upgrade"; it is not started.
+- "Mcpjam is fine, update it." So `@mcpjam/cli` 6 is in this pass (it was taken off the
+  ticket). MCP-884 held it below 6.1.0 for a `re2js` advisory; recheck that first.
+- The rubric for who signs off a change: agreed, and recorded at the owner's word "in its
+  own file", wired into the skills and rules. It is `docs/engineering/production-change-sign-off.md`
+  with the rule `production-change-sign-off`, on oaknational#1080. Class C (a trust, privacy
+  or request-path boundary): "class C I can sign off on". Class D: "I will decide what is
+  needed on a case by case basis". The user-facing apps are the MCP app and the search app
+  only.
+- oaknational#1078 (Sentry `dataCollection`): first "needs explicit approval from [a colleague]",
+  then withdrawn ("I am reconsidering this position now"), then: "merge once it passes the
+  normal requirements, edit the comment that says it is held. Address the copilot finding
+  first, assess if we have really proven the payload does not change".
+- The cookie work: "move the cookie work into a separate PR, as it is a potential fix
+  rather than a behaviour neutral improvement. Let me know once the PR exists".
+- Splitting a pull request is decided by the rubric, not put to the owner: "use the
+  decision matrix, that is what it is for, only come to me if it is not resolved".
+- Sub-agents for some hours from about 08:40 UTC: Fable only, medium effort where Opus
+  would have been used, low where a lower model would have been.
+
+**Merged today.** #1076 (action pins), #1077 (dev tooling in range, `turbo` held at
+2.11.10, a knip entry removed), #1079 (`next` 16.4.6 with its lint plugin, React 19.3.1;
+class B, proof named in its description). `pnpm audit` on `main` after #1079: 6 findings
+(`katex`, `zod`, `glob`, `minimatch`, `@hono/node-server` twice).
+
+**Open.**
+
+- #1080, the rubric, class A, ready, with the merge door polling. After it merges: point
+  the private memory note `sentry-changes-need-matt-approval` at the rubric file.
+- #1078, class C, ready, the door stopped. Its hold comment (issue comment 7096286980)
+  still says it waits for a colleague; it is to be edited to say what the owner ruled. One
+  Copilot thread is open (comment 4663727536, thread `PRRT_kwDOPUA_4M66w74u`): the test
+  checks resolved options and not collected payloads, and does not cover the MCP wrapper.
+  The owner also has a pending, unsubmitted review comment on `data-collection.ts` line 22
+  asking whether `userInfo` is a native Sentry option; it is (a field of the SDK's
+  `DataCollection` type), answered in the session.
+- #1073, the coordination draft, carries these records.
+
+**The cookie finding (not caused by #1078; it exists on `main`).** A throwaway test in
+`packages/libs/sentry-node/src/` built a `NodeClient` (no integrations, a transport that
+never sends), ran `requestDataIntegration().processEvent` on an event whose
+`sdkProcessingMetadata.normalizedRequest` carried a `cookie` header, and passed the result
+through `redactSentryEvent`. With `sendDefaultPii: false` on `@sentry/node` 10.70.0 the
+event carried the `cookie` header and a parsed `request.cookies` record of every name and
+value. The barrier redacted the header and left the record unchanged: a JWT-shaped
+`__session` value came through. The causes: the SDK maps the legacy flag to a cookie deny
+list and the event path tests only `cookies !== false`
+(`@sentry/core` `integrations/requestdata.js`); the barrier's `redactStringRecord` redacts
+by key name, and in that record the keys are cookie names. With the explicit option of the
+Sentry pull request the event was identical; with `cookies: false` neither the header nor
+the record was present. Not established: whether production requests carry cookies (authentication is by
+bearer token), whether such an event has reached Sentry, and whether spans carry the same.
+The cure is its own class C pull request: the barrier redacts every value in
+`request.cookies`, and `dataCollection.cookies` becomes `false`, each with a test built
+from that probe. The probe file was deleted; this paragraph is its recipe.
+
+**What is in the lane worktree (`.claude/worktrees/deps-currency`), all local unless said.**
+
+- `fix/sentry-data-collection` at 724c49975: pushed, #1078.
+- `chore/deps-typescript-eslint` at 4c4c5d904: `typescript-eslint` 8.73 with the ten
+  `defaultOptions` lines removed; lint passed on all 58 tasks. It is cut from the Sentry
+  branch because 8.73 fails lint on `sendDefaultPii` until #1078 is in. After #1078 merges:
+  merge `origin/main` into it, run, push, open (class A).
+- `chore/deps-prettier` at 2cf323588, a local save commit: six manifests moved from
+  `~3.9.6` to `~3.10.1` and the lockfile. `format-check:root` reported nothing to reformat.
+  Not yet proven: that code generation output is unchanged (prettier is imported by
+  `demos/oak-curriculum-hub/scripts/generator-cli.ts` and
+  `packages/sdks/graph-corpus-sdk/scripts/render-eef-markdown.ts`). The commit message is a
+  placeholder: amend nothing, add a proper commit or re-cut before pushing.
+- `chore/deps-next-react` and `chore/deps-server-runtime`: leftovers of work that merged
+  as #1079; delete once confirmed ancestors of `origin/main` or empty.
+
+**Remaining, in order, with each one's class.**
+
+1. #1078: add payload-level tests (request data on an event for a fixed request, and the
+   MCP wrapper's `recordInputs` and `recordOutputs` resolving to false), answer and
+   resolve the Copilot thread, edit the hold comment, then the door.
+2. The cookie pull request (class C; tell the owner when it exists; do not merge without
+   the go-ahead).
+3. `typescript-eslint` 8.73 (A).
+4. `prettier` 3.10.1 (A, with the generated-output proof).
+5. `@hono/node-server` floor to `>=2.1.6 <3` in `pnpm-workspace.yaml` (C: it is on the
+   `/mcp` request path; two advisories, GHSA-qv5m-9pm6-hqp3 and GHSA-jpvv-r467-5p4w).
+6. Clerk clients in range, `@clerk/backend` 3.31 and `@clerk/express` 2.1.96 (C).
+7. `express` 5.3, `@elastic/elasticsearch` 9.5.1, `@elastic/transport` 9.6.1,
+   `@opentelemetry/api` 1.10, `@vercel/functions` 3.11, and the search app's `commander`,
+   `chalk` (B, proof named); `uuid`, `yaml`, `semver` where only tooling uses them (A).
+8. `n3` 2.13 and `openapi3-ts` 4.6.2 (data and code generation: prove the generated output).
+9. `markdownlint-cli2` 0.24 (it pins `js-yaml` 5.5.0 against this estate's `<5` floor;
+   decide the floor first), `pnpm` 12.21.
+10. Majors judged straightforward by the survey, each still to be checked line by line:
+    `pixelmatch` 8 (A), `eslint-plugin-unicorn` 80 (A), `tsup` 9 (build output: B if any
+    shipped artefact changes, proved by a `dist/` comparison), `dotenv` 18 (B: it parses
+    env files for both apps), `@posthog/mcp` 1.6 on `posthog-node` 5 (C: event policy),
+    `@mcpjam/cli` 6 (A), `ink` 8 (A; React 19.3 is in).
+11. Then close the lane: the plan node or record, the final audit, the claim, and tell the
+    owner the maintenance work is done.
+
+**Tooling facts learned today.**
+
+- `merge-bot pull-request open --wip-limit` counts every open pull request in the
+  repository, colleagues' included; 20 was refused at 20 open, 30 was used.
+- `merge-bot merge` exits when GitHub has not computed mergeability; a loop that reruns it
+  after 45 seconds while the log says so is what worked.
+- The door refuses when Copilot's review has not arrived; `request-review` then refuses if
+  one is already pending. Waiting was the cure.
+- The label `jimbot` is added with a minted `pull-request-work` token and
+  `POST /issues/<n>/labels`; a description is corrected with `PATCH /pulls/<n>`.
+- A push hook checks the working tree. Switching branch while it runs fails the push or,
+  worse, proves the wrong tree.
+- vitest here swallows `console.log`; a probe writes its output to a file.

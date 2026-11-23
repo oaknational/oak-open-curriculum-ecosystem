@@ -290,3 +290,38 @@ The account with its sources is the addendum to the reunification retrospective 
   the result. The owner's word does not lift a hook; the act went back to the owner.
 - **Mistake (mine):** I appended the wrap's block to the thread record with a shell heredoc.
   Tracked files are edited with the edit tool. The text is as intended; the route was wrong.
+
+## 2026-11-23 — Petrel mends Pinnacle (ea9cea): the dependency pass
+
+- **Mistake (mine):** I put a change to what the Sentry SDK collects to the merge tool as
+  one more update in a dependency pass. The owner stopped it. The tool reads checks and
+  reviews; it cannot read what a change does to a live product. The cure became a rubric
+  (`production-change-sign-off`): classify by which app runs the changed code, before the
+  pull request is marked ready.
+- **Mistake (mine):** I switched branch in the lane worktree while a push hook was checking
+  the tree, to run a probe on another branch. The push failed. A hook proves the working
+  tree, so the tree is left alone until the push returns; a second look goes in a second
+  worktree.
+- **Mistake (mine):** I proved "only five packages changed" by comparing the set of
+  versions in the lockfile before and after. A consumer that moves between two versions
+  both already present does not change the set. Copilot found `sharp`'s `semver` moving
+  from 7.8.5 to 7.8.6. The lockfile diff is read line by line, with the expected lines
+  filtered out and what is left counted.
+- **Surprise:** a patch release of a build tool changed what every task hashes. `turbo`
+  2.11.11 follows pnpm workspace links under `node_modules` for a `**` input glob; the
+  task graph's inputs went from 41,002 files to 361,157. An end-to-end test of the deploy
+  gate caught it by failing to read the dry run. The proof for a build-tool bump is the
+  input sets from `--dry=json` before and after, not a green build.
+- **Surprise:** asked "tell me more about the strict cookie option", I read the vendor
+  source and then ran it. The legacy flag set to false does not switch cookies off on this
+  SDK version: the event carried a parsed `request.cookies` record, and the redaction
+  barrier, which works by key name, let a session token through because the keys were
+  cookie names. Reading resolved options had shown none of this. A privacy claim is
+  tested on the payload, with a real value in it.
+- **What worked:** a specialist asked to disprove my reading, with the vendor's installed
+  source named as the place to check. It confirmed the reading, and found what the bump to
+  the next major would break (the redaction hooks would stop running), which turned a
+  version bump into planned work before any code was written.
+- **What worked:** the standard for a pinned action is the maintainer's Latest release
+  (ADR-169), not the highest tag. I had used the highest tag and checked afterwards; they
+  matched this time. The decision record is read before the tag list.
