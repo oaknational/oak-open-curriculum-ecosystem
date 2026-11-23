@@ -1,3 +1,10 @@
+## [1.190.7](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.6...v1.190.7) (2026-11-23)
+
+
+### Bug Fixes
+
+* **deps:** move next to 16.4.6 and react to 19.3.1 ([431416e](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/431416e80f278a546532829d1412d775c72b4965))
+
 ## [1.190.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.5...v1.190.6) (2026-11-23)
 
 ## [1.190.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.4...v1.190.5) (2026-11-23)
