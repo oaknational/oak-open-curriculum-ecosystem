@@ -52,7 +52,7 @@
     "@oaknational/result": "workspace:*",
     "@oaknational/sentry-node": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
-    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/api": ">=1.9.1 <1.10.0",
     "@sentry/node": "^10.70.0",
     "@vercel/functions": "^3.11.3",
     "cors": "^2.8.6",

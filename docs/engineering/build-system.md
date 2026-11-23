@@ -128,7 +128,21 @@ One version is held below its latest patch, for a defect and not a major:
   comparing each task's input set from `turbo run … --dry=json` before and
   after the raise.
 
-All three holds must survive a full lockfile rebuild — see
+One version is held below its latest minor, for a peer range and not a major:
+
+- **`@opentelemetry/api` stays below 1.10.** Every 2.x release of the
+  OpenTelemetry SDK packages installed here (`@opentelemetry/core`,
+  `resources`, `sdk-trace` and `sdk-trace-base`) declares the API as a peer `<1.10.0`; the 3.x SDK declares
+  `>=1.10.0 <1.11.0` (registry-verified 2026-11-23, at `core` 2.12.1 and
+  3.1.1). `@sentry/node` 10 and `@elastic/transport` 9 bring the 2.x SDK, so
+  API 1.10 beside them is an unmet peer. Enforced by the `'@opentelemetry/api': '>=1.9.1 <1.10.0'`
+  override in `pnpm-workspace.yaml`: the two manifests state the same bound,
+  but `@sentry/node` declares the API directly as `^1.9.1`, so the manifests
+  alone do not hold it. Before the override, a cold lockfile rebuild resolved
+  1.10.0. **Lift condition: the installed OpenTelemetry SDK packages admit
+  1.10**: no dependent still brings a 2.x SDK package.
+
+All four holds must survive a full lockfile rebuild — see
 [`lockfile-rebuild-survivability`](../../.agent/rules/lockfile-rebuild-survivability.md).
 
 **Project `.npmrc` is optional.** Use it for npm-compatible registry and auth

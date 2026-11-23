@@ -132,6 +132,17 @@ overrides:
   # This override IS the hold — lift it when the project moves Node majors
   # (docs/engineering/build-system.md §Dependency updates).
   '@types/node': '^24.13.3'
+  # Hold, added 2026-11-23: @opentelemetry/api stays below 1.10. Every 2.x
+  # release of the OpenTelemetry SDK packages installed here (core,
+  # resources, sdk-trace, sdk-trace-base) declares the API as a peer `<1.10.0`; only the 3.x SDK
+  # admits 1.10. @sentry/node 10 brings the 2.x SDK, and it also declares the
+  # API directly as ^1.9.1, so the two manifests' ranges alone cannot hold
+  # it. Without this entry a lockfile rebuild resolves 1.10.0 with an unmet
+  # peer. Rewrites the ranges in apps/oak-curriculum-mcp-streamable-http and
+  # packages/core/observability, which state the same bound. Lift it when the
+  # installed OpenTelemetry SDK packages admit 1.10
+  # (docs/engineering/build-system.md §Dependency updates).
+  '@opentelemetry/api': '>=1.9.1 <1.10.0'
   # Security floor, raised 2026-11-02: advisories patched in 1.20.0. Production
   # dependency scope per `pnpm audit --prod`; runtime reachability not
   # established in this sweep. Bounded below 2 so a future major arrives

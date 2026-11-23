@@ -31,7 +31,7 @@
   "dependencies": {
     "@oaknational/result": "workspace:*",
     "@oaknational/type-helpers": "workspace:*",
-    "@opentelemetry/api": "^1.9.1"
+    "@opentelemetry/api": ">=1.9.1 <1.10.0"
   },
   "devDependencies": {
     "@oaknational/eslint-plugin-standards": "workspace:*",
