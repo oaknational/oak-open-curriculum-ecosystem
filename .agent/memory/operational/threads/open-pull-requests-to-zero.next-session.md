@@ -2524,12 +2524,25 @@ The five proposals in the report are still owed to the owner for a decision on e
   preview is keyed to the development Clerk instance.
 - On the auth observation below: investigate now, before the pass ends.
 
+- The owner then signed in to the preview from an MCP client and reported that it works.
+  That met the condition the owner had set, and 1094 merged by the bot at 18:06:20Z
+  (`d0092d0be`). Both the check and the go-ahead are recorded on the pull request.
+
+**The pass has ended.** The lane's local branches that are ancestors of `main` are
+deleted. Three remain, each with commits that are not on `main` and whose content `main`
+holds in another form: `chore/deps-next-react`, `chore/deps-prettier` and
+`chore/deps-runtime-in-range`. Deleting them is the owner's call. The claim on the lane is
+closed. The primary checkout is current at `d0092d0be`. The only open pull request of this
+estate is the coordination draft, 1091.
+
 **Found on the way, each needing the owner's decision.**
 
 - The security review made one observation about the auth path in code that predates the
   pass. Its detail is held outside this public repository, in the seat's private memory
   (`auth-observation-under-investigation`), until the investigation says whether it is a
-  defect. The owner has it by question prompt.
+  defect. The owner has it by question prompt. Investigated the same day; the owner ruled
+  it a real gap of low risk and planned work, and it was raised at the owner's word as
+  MCP-985, which is its home from here.
 - `pnpm audit` on `main` still reports the four findings recorded above as residue without
   a cure (`zod`, `glob`, `minimatch`, `katex`). The three pull requests leave them as they
   were.

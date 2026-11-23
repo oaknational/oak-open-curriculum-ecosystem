@@ -501,6 +501,15 @@ kind in one day (a limit and three checks read at the near end) and two tool-fee
 for this boundary, so left for a deliberate pass. The reasoning is in
 `.agent/reports/dependency-pass-limits-and-far-end-checks-exploration-2026-11-23.md`.
 
+STATE, 2026-11-23, later (the same seat): the dependency-currency pass has ended. The fold (1073) merged
+and the open count read zero; the owner then chose three closing pull requests, taken one at a time, and all
+three merged: 1092 (`@vercel/functions`), 1093 (a declared hold on `@opentelemetry/api` below 1.10) and
+1094 (the Clerk clients in range, class C, at the owner's go-ahead after the owner's signed-in check of the
+preview). The primary checkout is current at `d0092d0be`. The owner ruled that a coordination branch keeps
+its standing draft, which the count for zero excludes. Next safe step: feature development, at the owner's
+direction. Owed to the owner: a decision on each of the five proposals in the report named above. One
+security ticket, MCP-985, was raised at the owner's word as planned work.
+
 STATE, 2026-10-13T13:0xZ (Walrus seeks Maelstrom, 9585cc, the reviewer seat at n=1, at its compaction
 boundary at the owner's word): the review lane for pull request #356 is open under claim `b13d5c39`;
 the discovery is reported. Next safe steps for that seat, in order, from the thread record
