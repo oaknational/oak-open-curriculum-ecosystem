@@ -32,6 +32,15 @@ const MERGE_BOT_CONFIG_SCHEMA = z
     repo: z
       .string()
       .regex(/^[A-Za-z0-9-]+\/[A-Za-z0-9._-]+$/, 'repo must be owner/name in GitHub grammar'),
+    /**
+     * The labels this clone's bot adds to a pull request it opens. Absent
+     * means none: a label marks whose bot opened the pull request, so it is
+     * each clone's to state and the tracked template states none.
+     */
+    pullRequestLabels: z
+      .array(z.string().trim().min(1, 'a label must not be blank'))
+      .readonly()
+      .optional(),
   })
   .strict();
 

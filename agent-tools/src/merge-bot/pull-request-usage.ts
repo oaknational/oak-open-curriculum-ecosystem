@@ -24,7 +24,10 @@ export const PULL_REQUEST_USAGE = `merge-bot pull-request <verb> [flags] [--json
     is not Dependabot is at or above --wip-limit (neither is a lane). All
     four flags are REQUIRED: the limit is the seat's to
     state, so it has no default. --branch is a git branch name in ASCII
-    letters, digits and . _ / -. Prints the new number and URL.
+    letters, digits and . _ / -. Prints the new number and URL. Then adds
+    the labels this clone states in pullRequestLabels of its
+    .github/merge-bot.json, if it states any; if that fails the pull
+    request exists and exit is 1, naming it.
   comment --pr <n> --body-file <path>
     Posts the file as an issue comment on the pull request's conversation.
   reply --pr <n> --comment <id> --body-file <path>

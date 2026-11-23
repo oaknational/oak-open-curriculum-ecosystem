@@ -33,9 +33,20 @@ describe('loadMergeBotRepoConfig', () => {
     expect(paths).toEqual([join('/repo', '.github', 'merge-bot.json')]);
   });
 
+  it('reads the labels the clone states for the pull requests its bot opens', () => {
+    const result = loadMergeBotRepoConfig({
+      repoRoot: '/repo',
+      readFileImpl: () => JSON.stringify({ ...JSON.parse(VALID), pullRequestLabels: ['fleet'] }),
+    });
+
+    expect(result).toMatchObject({ ok: true, value: { pullRequestLabels: ['fleet'] } });
+  });
+
   it('rejects unknown keys, malformed slugs, and non-numeric ids (strict boundary)', () => {
     for (const bad of [
       { ...JSON.parse(VALID), extra: true },
+      { ...JSON.parse(VALID), pullRequestLabels: 'fleet' },
+      { ...JSON.parse(VALID), pullRequestLabels: [' '] },
       { ...JSON.parse(VALID), appSlug: 'Not A Slug' },
       { ...JSON.parse(VALID), appId: 'abc' },
       { ...JSON.parse(VALID), repo: 'no-slash' },
