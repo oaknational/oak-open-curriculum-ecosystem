@@ -170,8 +170,6 @@ const noShellFormProcessLaunchRule: RuleWithReappraisingMessages<MessageId> = {
       }),
     },
   },
-  defaultOptions: [],
-
   create(context) {
     return {
       ImportDeclaration(node) {

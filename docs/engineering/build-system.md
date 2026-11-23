@@ -88,8 +88,8 @@ Two majors are held deliberately. A sweep must not cross either, and
 `pnpm -r up --latest` crosses both:
 
 - **`typescript` stays on 6.x.** The binding blocker is the type-aware lint
-  stack: every published `typescript-eslint`, including 8.66.0 (installed
-  by the 2026-08-11 wave; peer range registry-verified), declares
+  stack: every published `typescript-eslint`, including 8.73.0 (installed
+  by the 2026-11-23 pass; peer range registry-verified), declares
   `typescript: ">=4.8.4 <6.1.0"`. Nothing admits TS 7, so
   adopting it would run type-aware linting across all 28 packages on an
   unsupported compiler — and the only way to make that pass is to switch the

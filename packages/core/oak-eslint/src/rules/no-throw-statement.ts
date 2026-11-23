@@ -31,8 +31,6 @@ const noThrowStatementRule: RuleWithReappraisingMessages<'throwBanned'> = {
       }),
     },
   },
-  defaultOptions: [],
-
   create(context) {
     return {
       ThrowStatement(node) {

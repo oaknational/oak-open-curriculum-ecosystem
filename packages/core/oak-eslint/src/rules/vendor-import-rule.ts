@@ -56,8 +56,6 @@ export function createVendorImportRule<MessageId extends string>(
       schema: [],
       messages: spec.messages,
     },
-    defaultOptions: [],
-
     create(context) {
       const filename = context.physicalFilename ?? context.filename;
       if (filename && spec.isExemptFile(filename)) {
