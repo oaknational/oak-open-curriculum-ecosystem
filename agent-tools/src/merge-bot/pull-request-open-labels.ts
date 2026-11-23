@@ -32,7 +32,8 @@ const labelledSchema = z.array(z.object({ name: z.string() }));
  * @param repo - The bot identity's repository.
  * @param input - The branch, the title, the body and the limit.
  * @param labels - The clone's configured labels; may be empty.
- * @returns The open's own outcome, or the failure described above.
+ * @returns The open's outcome, carrying the labels GitHub says are now on
+ *   the pull request, or the failure described above.
  */
 export async function openLabelledPullRequest(
   fetchImpl: GithubApiFetch,
@@ -58,7 +59,7 @@ export async function openLabelledPullRequest(
     labelledSchema,
   );
   return labelled.ok
-    ? ok(opened.value)
+    ? ok({ ...opened.value, labels: labelled.value.map((label) => label.name) })
     : err(
         new Error(
           `pull request #${String(opened.value.number)} was opened (${opened.value.url}) but its labels (${labels.join(', ')}) were not added: ${labelled.error.message}; add them by hand, do not open it again`,

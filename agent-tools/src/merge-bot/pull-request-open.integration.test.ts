@@ -82,7 +82,12 @@ describe('openPullRequest', () => {
 
     expect(result).toEqual({
       ok: true,
-      value: { kind: 'opened', number: 42, url: 'https://github.com/acme/widgets/pull/42' },
+      value: {
+        kind: 'opened',
+        number: 42,
+        url: 'https://github.com/acme/widgets/pull/42',
+        labels: [],
+      },
     });
     expect(requestLines(github.requests)).toEqual(
       expect.arrayContaining([

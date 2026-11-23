@@ -9,7 +9,13 @@
 
 /** What a verb did, as the outcome object a machine reads under `--json`. */
 export type PullRequestOutcome =
-  | { readonly kind: 'opened'; readonly number: number; readonly url: string }
+  | {
+      readonly kind: 'opened';
+      readonly number: number;
+      readonly url: string;
+      /** The labels on the new pull request, as GitHub answered; empty when the clone states none. */
+      readonly labels: readonly string[];
+    }
   | {
       readonly kind: 'commented';
       readonly pr: number;
@@ -35,10 +41,15 @@ export interface RenderedOutcome {
   readonly stderr: string;
 }
 
+/** The labels on a new pull request as the done line names them; nothing when there are none. */
+function labelsSuffix(labels: readonly string[]): string {
+  return labels.length === 0 ? '' : ` labels: ${labels.join(', ')}`;
+}
+
 /** The operator's line for a write that landed. */
 function doneLine(outcome: Exclude<PullRequestOutcome, { kind: 'refused' }>): string {
   if (outcome.kind === 'opened') {
-    return `opened: draft pull request #${String(outcome.number)} ${outcome.url}`;
+    return `opened: draft pull request #${String(outcome.number)} ${outcome.url}${labelsSuffix(outcome.labels)}`;
   }
   if (outcome.kind === 'commented' || outcome.kind === 'replied') {
     return `${outcome.kind}: #${String(outcome.pr)} comment ${String(outcome.commentId)} ${outcome.url}`;

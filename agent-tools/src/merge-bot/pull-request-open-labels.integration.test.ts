@@ -69,6 +69,9 @@ describe('merge-bot pull-request open, the labels of the clone that opens', () =
 
     expect(run.exit).toBe(0);
     expect(run.out).toContain('#43');
+    // The result names the labels GitHub says are on the pull request, so
+    // the seat can see the labelling held without a second call.
+    expect(run.out).toContain('labels: fleet, docs');
     const writes = run.requests.filter((request) => request.method === 'POST');
     expect(writes.map((request) => request.url)).toEqual([`${API}/pulls`, LABELS_URL]);
     expect(writes[1]?.body).toEqual({ labels: ['fleet', 'docs'] });
@@ -94,6 +97,7 @@ describe('merge-bot pull-request open, the labels of the clone that opens', () =
     });
 
     expect(run.exit).toBe(1);
+    expect(run.out).toBe('');
     expect(run.err).toContain('#43');
     expect(run.err).toContain('fleet');
     expect(run.err).toContain('do not open it again');
