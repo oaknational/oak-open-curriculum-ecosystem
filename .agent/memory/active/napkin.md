@@ -392,7 +392,11 @@ The account with its sources is the addendum to the reunification retrospective 
   pull requests, and each status message ended with a list of what was owed. The owner:
   "Let's make decisions now, otherwise we risk them being lost". Seven answers took two
   prompts. A matter only the owner can decide is asked at the first wait after it is
-  found. A list of owed decisions in a status message is a queue with no clock.
+  found. A list of owed decisions in a status message is a queue with no clock. The rule
+  was not new: it was in this seat's loaded memory all session, from two earlier
+  corrections of other seats. The lists read to me as openness, so the rule did not fire.
+  The gate: read the last section of a status message before sending it, and turn any
+  line that waits on the owner into a prompt in the same turn.
 - **Correction (the owner):** I had recorded the limit ruling as counting the coordination
   draft, and cut the successor branch with no draft to keep a zero. Asked, the owner kept
   the standing draft and excluded it from the count. I had widened a ruling and then built

@@ -2653,9 +2653,12 @@ word. The Sonar link corrected.
    `dependency-currency` skill: a pass states its end before it starts, agreed with the
    owner, and work found outside that end goes to a ticket or a question.
 
-**Checks owed.**
+**Checks owed. Both are now discharged.**
 
-- The configured open limit has not been seen refusing. Two opens printed "lanes already
+- The configured open limit was seen refusing, after this block was first written: with
+  1097 open as a draft, the probe below answered "refused: lane pull requests open: 1" and
+  named both listed authors. The reasoning that made the check necessary stays here for a
+  seat that changes the list. Two opens printed "lanes already
   open: 0" with no lane open, which a list that matches nobody would print as well. A probe
   run as 1096 merged decided nothing. Read directly: GitHub reports the bot's pull requests
   under its login with the `[bot]` suffix, and the list holds that string. The check: while
@@ -2664,31 +2667,26 @@ word. The Sonar link corrected.
   1`. Expected: exit 3 and "lane pull requests open: 1". A 422 from GitHub means the count
   was zero: stop opening at a limit of one and read the logins again. The probe writes
   nothing either way; GitHub refuses a pull request from `main` to `main`.
-- 1094's reviews made the preview checks a condition, and the preview is keyed to the
-  development Clerk instance. Production has not been checked on the merged build. This
-  seat can read the unauthenticated half (the 401s and the discovery documents) once the
-  production deployment carries the merge; the signed-in half is the owner's.
+- 1094 on production: discharged at this boundary; see the decisions below.
 
-**To ask the owner by question prompt, at the first merge wait after this record is pushed.**
-Each has waited since before the second compaction, in the list headed "Observations given
-to the owner, with no decision yet" above. The seat's recommendation is given with each.
+**Decided by the owner by question prompt at this boundary.** Each had waited since before
+the second compaction, in the list headed "Observations given to the owner, with no
+decision yet" above, or arose from this boundary's scan. All seven are closed.
 
-- The query string is recorded on Sentry events as received. Recommendation: a ticket in
-  the MCP team, since stripping it is a change to what the production app collects.
-- Spans stored before 1081 carry a Clerk cookie attribute (184 in preview, 40 in
-  production over 90 days). Recommendation: leave them to age out, unless the owner wants
-  the stored values read first.
-- The reviewer account named `claude` posts "review skipped" on every pull request for
-  want of usage credit. Recommendation: the owner funds it or removes it; a seat changes
-  neither.
-- Dependabot will open pull requests for action versions again. Recommendation: keep its
-  config as it is; the skill `update-dependencies` says Dependabot owns those bumps, and the
-  pass moved five pins and closed two of its pull requests on one day only.
-- Whether 1090 did what the owner meant (the Sentry plugin turned back on). It rests on
-  inference, recorded above.
-- The signed-in check of production for 1094, above.
-- Whether the owner wants a retrospective on the dependency pass. The `wrap` skill routes
-  that offer to the owner; it is not run unasked.
+- The query string recorded on Sentry events as received: leave it. The seat had
+  recommended a ticket.
+- Spans stored before 1081 that carry a Clerk cookie attribute: let them age out.
+- The reviewer account named `claude` posting "review skipped": the owner, verbatim: "Leave
+  it, eventually it will start working again".
+- Dependabot's config for action versions: keep it.
+- 1090 (the Sentry plugin turned back on): the owner confirmed it was meant. The inference
+  recorded above is now the owner's word.
+- 1094 on production: the release that carries it is live. The seat ran the
+  unauthenticated checks against production and they pass (401 with no token and with
+  made-up tokens, 406 for a browser document request, the discovery documents 200). The
+  owner answered that a signed-in client works against production since the release. The
+  class C proof is complete and is posted on the pull request.
+- A retrospective on the dependency pass: declined. The owner: the two reports are enough.
 
 **Smaller matters for the owner, told in the report of this boundary.** The preview entry in
 the untracked `.mcp.json` points at the preview of 1094's branch, which is merged. The three

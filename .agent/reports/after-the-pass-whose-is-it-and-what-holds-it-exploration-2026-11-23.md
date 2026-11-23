@@ -171,6 +171,11 @@ file> --wip-limit 1`. Expected: exit 3 and "lane pull requests open: 1". A 422 f
 instead means the count was zero and the list matches nobody: stop opening at a limit of one and
 read the logins again. Owner of the check: this seat.
 
+**The return, the same evening.** With pull request 1097 open as a draft, the probe answered
+"refused: lane pull requests open: 1" and named both listed authors. The bridge claim is now
+observed end to end. Status of the first question: validated, for the list as configured on that
+day. A change to the list reopens it.
+
 **Learning signal.** Observation: two pass-case readings were taken as verification of a
 counter. Expected against observed: the seat wrote the guard into the tool (the printed count)
 and still read zero as confirmation. Recurrence hypothesis: any counter introduced while its
