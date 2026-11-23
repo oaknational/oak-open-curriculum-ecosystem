@@ -114,9 +114,14 @@ export interface ResolvedVerdict {
  */
 export async function resolveVerdict(input: ResolveInput): Promise<Result<ResolvedVerdict, Error>> {
   const verdict = computePrVerdict(input.reading, input.nowIso);
-  const pending = input.reading.namedChecks
-    .filter((check) => check.bucket === 'pending')
-    .map((check) => check.name);
+  // Each name once: two workflows may report a job under one name.
+  const pending = [
+    ...new Set(
+      input.reading.namedChecks
+        .filter((check) => check.bucket === 'pending')
+        .map((check) => check.name),
+    ),
+  ];
   if (
     !mayMerge(verdict.state, input.mayMergeUnreviewed) ||
     !isBotAuthored(input.reading.author, input.appSlug)

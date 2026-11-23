@@ -37,10 +37,12 @@ export interface PollProgress {
  * the tip has not reported. Nothing when the outcome names none.
  */
 function outstandingNames(outcome: Result<MergeOutcome, Error>): string {
-  if (!outcome.ok || outcome.value.kind !== 'refused') {
-    return '';
-  }
-  const { pending, notReported } = outcome.value.outstandingChecks;
+  return outcome.ok && outcome.value.kind === 'refused' ? namesOf(outcome.value) : '';
+}
+
+/** The names a refusal carries, each list that has any led by a dash; nothing when it has none. */
+function namesOf(refusal: Extract<MergeOutcome, { kind: 'refused' }>): string {
+  const { pending, notReported } = refusal.outstandingChecks;
   return [
     ...(pending.length > 0 ? [`pending: ${pending.join(', ')}`] : []),
     ...(notReported.length > 0 ? [`required, not reported: ${notReported.join(', ')}`] : []),
@@ -99,6 +101,12 @@ function writeRefusal(
   }
   streams.stderr.write(`merge-bot merge: refused: ${outcome.reason}\n`);
   writeEvidence(outcome.evidence, streams);
+  // The last poll prints no progress line, so its names are said here.
+  const names = namesOf(outcome);
+  if (names !== '') {
+    const line = printable(`  not finished${names}`);
+    streams.stderr.write(`${line}\n`);
+  }
 }
 
 /**

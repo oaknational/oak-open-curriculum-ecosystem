@@ -575,7 +575,7 @@ describe('runMergeBotCli merge — the poll line names the checks it waits on', 
     expect(run.out()).toContain(': CHECKS-RUNNING — pending: e2e — retrying in');
   });
 
-  it("names a required context the bot's own pull request has not reported, once every reported check is green", async () => {
+  it("names a required context the bot's own pull request has not reported, once its verdict would otherwise merge", async () => {
     const run = runMerge({
       args: [...PR_ARGS],
       readings: [botReported(['CodeQL']), botReported(['CodeQL', 'run-quality-gates'])],
@@ -621,6 +621,47 @@ describe('runMergeBotCli merge — the poll line names the checks it waits on', 
 
     expect(await run.exit).toBe(0);
     expect(run.out()).toContain('pending: [31me2e — retrying in');
+  });
+
+  it('names a check once when two workflows report it under one name', async () => {
+    const twice = settledReading({
+      checks: { total: 2, passed: 0, failed: 0, pending: 2 },
+      namedChecks: [
+        { name: 'build', bucket: 'pending' },
+        { name: 'build', bucket: 'pending' },
+      ],
+      checksGreenAt: null,
+    });
+    const run = runMerge({ args: [...PR_ARGS], readings: [twice, settledReading()] });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain('pending: build — retrying in');
+  });
+
+  it('prints a reading failure without the control characters its message carries', async () => {
+    const sequence = [
+      ok(runningChecksReading()),
+      err(new ReadingUnavailableError('gh said \u001B[31mno\u0007')),
+      ok(settledReading()),
+    ];
+    const run = runMerge({
+      args: [...PR_ARGS],
+      readings: [settledReading()],
+      overrides: { readReadingImpl: () => sequence.shift() ?? ok(settledReading()) },
+    });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain('gh said [31mno)');
+  });
+
+  it('names the checks beside the grounds when the poll budget runs out', async () => {
+    const run = runMerge({
+      args: [...PR_ARGS, '--max-polls', '2'],
+      readings: [runningChecksReading()],
+    });
+
+    expect(await run.exit).toBe(3);
+    expect(run.errText()).toContain('  not finished — pending: e2e\n');
   });
 
   it('carries the names on the refusal when the poll budget runs out', async () => {
