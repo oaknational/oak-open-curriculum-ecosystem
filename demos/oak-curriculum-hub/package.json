@@ -29,7 +29,7 @@
     "@oaknational/oak-design-system": "workspace:*",
     "@oaknational/oak-search-sdk": "workspace:*",
     "@oaknational/result": "workspace:*",
-    "next": "16.4.3",
+    "next": "16.4.6",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "server-only": "^0.0.1",
