@@ -72,6 +72,9 @@ describe('runMergeExecution — one rule for every pull request', () => {
     );
 
     expect(refusedState(outcome)).toBe('CHECKS-RUNNING');
+    expect(outcome).toMatchObject({
+      value: { outstandingChecks: { pending: ['a-review-bot'], notReported: [] } },
+    });
     expect(mergeAsked(port)).toBe(false);
   });
 
@@ -118,6 +121,9 @@ describe('runMergeExecution — the settled verdict proves the required contexts
         (line) => line.includes('not reported') && line.includes('(run-quality-gates)'),
       ),
     ).toBe(true);
+    expect(outcome).toMatchObject({
+      value: { outstandingChecks: { pending: [], notReported: ['run-quality-gates'] } },
+    });
     expect(mergeAsked(port)).toBe(false);
   });
 

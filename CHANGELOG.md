@@ -1,3 +1,17 @@
+# [1.193.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.192.2...v1.193.0) (2026-11-23)
+
+
+### Bug Fixes
+
+* **merge-bot:** four corrections from review of the poll line ([a1736db](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/a1736dbb1c5233f398048bc6ae068dbda0a31cc6))
+
+
+### Features
+
+* **merge-bot:** the poll line names the checks it waits on ([ff16044](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ff1604452a28c90e3f12a1bf9abfc9cd40c08cb1))
+
+## [1.192.2](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.192.1...v1.192.2) (2026-11-23)
+
 ## [1.192.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.192.0...v1.192.1) (2026-11-23)
 
 # [1.192.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.191.6...v1.192.0) (2026-11-23)

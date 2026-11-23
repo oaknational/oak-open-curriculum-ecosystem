@@ -5,6 +5,7 @@ import type { PrStateReading } from '../pr-watch/state-types.js';
 import { runMergeBotCli, type MergeBotCliInput } from './cli.js';
 import { ReadingUnavailableError } from './merge.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
+import { makeDoorPort } from './test-helpers/door-port.js';
 import { settledReading } from './test-helpers/pr-state-reading.js';
 
 import { generateKeyPairSync } from 'node:crypto';
@@ -488,6 +489,7 @@ describe('runMergeBotCli merge — no review, on a reason the caller states', ()
       verdictState: null,
       awaitsSettlement: false,
       evidence: [],
+      outstandingChecks: { pending: [], notReported: [] },
     });
     expect(run.errText()).toContain('merge-bot merge: refused: --no-review-reason-file');
     expect(run.urls).toEqual([]);
@@ -531,5 +533,148 @@ describe('runMergeBotCli merge — a pull request nobody has reviewed', () => {
     expect(await run.exit).toBe(3);
     expect(run.errText()).toContain('SILENT-WAIT-NO-REVIEWER');
     expect(run.sleeps).toEqual([]);
+  });
+});
+
+/** The configured app as `gh` spells it as an author: the merge bot's own pull request. */
+const BOT_AUTHOR = 'app/jimbot-oakington-iii';
+
+/** The merge fetch with the base branch's rules served: the mint from `mergeFetch`, the rest from the door port. */
+function mergeFetchWithRules(): ReturnType<typeof mergeFetch> {
+  const mint = mergeFetch();
+  const door = makeDoorPort();
+  const fetchImpl: GithubApiFetch = (url, init) =>
+    url.endsWith('/installation') || url.endsWith('/access_tokens')
+      ? mint.fetchImpl(url, init)
+      : door.fetchImpl(url, init);
+  return { ...mint, fetchImpl };
+}
+
+/** The bot's own settled pull request on a tip that has reported exactly these checks, all green. */
+function botReported(names: readonly string[]): PrStateReading {
+  return settledReading({
+    author: BOT_AUTHOR,
+    namedChecks: names.map((name) => ({ name, bucket: 'passed' })),
+    checks: { total: names.length, passed: names.length, failed: 0, pending: 0 },
+  });
+}
+
+/**
+ * A poll that will be tried again says which checks it has read as not
+ * finished, by name, so a check that never arrives is seen on the first
+ * line that names it.
+ */
+describe('runMergeBotCli merge — the poll line names the checks it waits on', () => {
+  it('names the reported checks that have not finished', async () => {
+    const run = runMerge({
+      args: [...PR_ARGS],
+      readings: [runningChecksReading(), settledReading()],
+    });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain(': CHECKS-RUNNING — pending: e2e — retrying in');
+  });
+
+  it("names a required context the bot's own pull request has not reported, once its verdict would otherwise merge", async () => {
+    const run = runMerge({
+      args: [...PR_ARGS],
+      readings: [botReported(['CodeQL']), botReported(['CodeQL', 'run-quality-gates'])],
+      fetch: mergeFetchWithRules(),
+    });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain(
+      ': CHECKS-RUNNING — required, not reported: run-quality-gates — retrying in',
+    );
+  });
+
+  it('writes the names to stderr under --json, leaving stdout the outcome alone', async () => {
+    const run = runMerge({
+      args: [...PR_ARGS, '--json'],
+      readings: [runningChecksReading(), settledReading()],
+    });
+
+    expect(await run.exit).toBe(0);
+    expect(JSON.parse(run.out())).toMatchObject({ kind: 'merged' });
+    expect(run.errText()).toContain('pending: e2e');
+  });
+
+  it('adds nothing to the line when no check is read as waiting by name', async () => {
+    const nothingReported = settledReading({
+      checks: { total: 0, passed: 0, failed: 0, pending: 0 },
+      namedChecks: [],
+      checksGreenAt: null,
+    });
+    const run = runMerge({ args: [...PR_ARGS], readings: [nothingReported, settledReading()] });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain(': CHECKS-RUNNING — retrying in');
+  });
+
+  it('prints a check name without the control characters it carries', async () => {
+    const colouredName = settledReading({
+      checks: { total: 2, passed: 1, failed: 0, pending: 1 },
+      namedChecks: [{ name: '\u001B[31me2e\u0007', bucket: 'pending' }],
+      checksGreenAt: null,
+    });
+    const run = runMerge({ args: [...PR_ARGS], readings: [colouredName, settledReading()] });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain('pending: [31me2e — retrying in');
+  });
+
+  it('names a check once when two workflows report it under one name', async () => {
+    const twice = settledReading({
+      checks: { total: 2, passed: 0, failed: 0, pending: 2 },
+      namedChecks: [
+        { name: 'build', bucket: 'pending' },
+        { name: 'build', bucket: 'pending' },
+      ],
+      checksGreenAt: null,
+    });
+    const run = runMerge({ args: [...PR_ARGS], readings: [twice, settledReading()] });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain('pending: build — retrying in');
+  });
+
+  it('prints a reading failure without the control characters its message carries', async () => {
+    const sequence = [
+      ok(runningChecksReading()),
+      err(new ReadingUnavailableError('gh said \u001B[31mno\u0007')),
+      ok(settledReading()),
+    ];
+    const run = runMerge({
+      args: [...PR_ARGS],
+      readings: [settledReading()],
+      overrides: { readReadingImpl: () => sequence.shift() ?? ok(settledReading()) },
+    });
+
+    expect(await run.exit).toBe(0);
+    expect(run.out()).toContain('gh said [31mno)');
+  });
+
+  it('names the checks beside the grounds when the poll budget runs out', async () => {
+    const run = runMerge({
+      args: [...PR_ARGS, '--max-polls', '2'],
+      readings: [runningChecksReading()],
+    });
+
+    expect(await run.exit).toBe(3);
+    expect(run.errText()).toContain('  not finished — pending: e2e\n');
+  });
+
+  it('carries the names on the refusal when the poll budget runs out', async () => {
+    const run = runMerge({
+      args: [...PR_ARGS, '--max-polls', '2', '--json'],
+      readings: [runningChecksReading()],
+    });
+
+    expect(await run.exit).toBe(3);
+    expect(JSON.parse(run.out())).toMatchObject({
+      kind: 'refused',
+      verdictState: 'CHECKS-RUNNING',
+      outstandingChecks: { pending: ['e2e'], notReported: [] },
+    });
   });
 });

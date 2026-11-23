@@ -7,7 +7,7 @@ import { decideMergeAction, type MergeDecision } from './merge-decision.js';
 import { realFetch } from './github-fetch.js';
 import { readMergeSettings, putMerge } from './merge-github-api.js';
 import { readExecutor } from './merge-read-env.js';
-import { resolveVerdict } from './merge-door-checks.js';
+import { resolveVerdict, type ResolvedVerdict } from './merge-door-checks.js';
 import { mergeGrounds, noReviewObstacle } from './merge-no-review.js';
 import { mintForConfig, type MintedToken, type MintSeams } from './mint-for-config.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
@@ -73,6 +73,7 @@ export type MergeOutcome =
       /** Whether the poll loop may outwait this refusal (`merge-decision.ts`); a terminal one ends it. */
       readonly awaitsSettlement: boolean;
       readonly evidence: readonly string[];
+      readonly outstandingChecks: ResolvedVerdict['outstandingChecks'];
     };
 
 function defaultMint(input: MergeExecutionInput): () => Promise<Result<MintedToken, Error>> {
@@ -157,9 +158,10 @@ function defaultReadReading(
 
 /** The decision's refusal carried as the outcome, with the verdict it fired on. */
 type Refusal = Extract<MergeDecision, { kind: 'refuse' }>;
-function refused(decision: Refusal, verdict: PrVerdict): Result<MergeOutcome, Error> {
-  const { state: verdictState, evidence } = verdict;
-  return ok({ ...decision, kind: 'refused', verdictState, evidence });
+function refused(decision: Refusal, resolved: ResolvedVerdict): Result<MergeOutcome, Error> {
+  const { state: verdictState, evidence } = resolved.verdict;
+  const { outstandingChecks } = resolved;
+  return ok({ ...decision, kind: 'refused', verdictState, evidence, outstandingChecks });
 }
 
 /**
@@ -193,7 +195,7 @@ async function gateAndMerge(context: {
   if (!resolved.ok) {
     return doorReadingFailed(resolved.error);
   }
-  const verdict = resolved.value;
+  const { verdict } = resolved.value;
   const decide = (allowMergeCommit: boolean): MergeDecision =>
     decideMergeAction({
       verdict,
@@ -204,7 +206,7 @@ async function gateAndMerge(context: {
 
   const eligible = decide(true);
   if (eligible.kind === 'refuse') {
-    return refused(eligible, verdict);
+    return refused(eligible, resolved.value);
   }
   const allowMergeCommit = await readMergeSettings(fetchImpl, token, input.identity);
   if (!allowMergeCommit.ok) {
@@ -212,7 +214,7 @@ async function gateAndMerge(context: {
   }
   const decision = decide(allowMergeCommit.value);
   if (decision.kind === 'refuse') {
-    return refused(decision, verdict);
+    return refused(decision, resolved.value);
   }
   // A merge with no review puts its reason on the pull request BEFORE the merge call.
   const grounds = await mergeGrounds({ decision, verdict, fetchImpl, token, ...target });
