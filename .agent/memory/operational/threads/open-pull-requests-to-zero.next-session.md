@@ -2492,3 +2492,49 @@ Both questions went to the owner by question prompt. The answers:
   This replaces the reading of the limit ruling that counted it.
 
 The five proposals in the report are still owed to the owner for a decision on each.
+
+### Update 2026-11-23, the three closing pull requests
+
+- **1092, `@vercel/functions` 3.11.3 (class B):** merged `864498f8d`. The server imports
+  only `waitUntil`; the changelog from 3.9.1 leaves it unchanged. No review finding.
+- **1093, `@opentelemetry/api` (class A): a hold, not a raise.** Merged `6e6ff032f`. Every
+  2.x OpenTelemetry SDK package installed (`core`, `resources`, `sdk-trace`,
+  `sdk-trace-base`) declares the API as a peer `<1.10.0`; the 3.x SDK declares
+  `>=1.10.0 <1.11.0`. `@sentry/node` 10 and `@elastic/transport` 9 bring the 2.x SDK. The
+  manifests said `^1.9.1` and only the lockfile kept 1.9.1: a cold rebuild on `main`
+  resolved 1.10.0 with an unmet peer. That is the cause of the two copies seen in the
+  earlier combined trial. The hold is an override in `pnpm-workspace.yaml`, because
+  `@sentry/node` asks for the API directly; it is listed in `build-system.md` with its
+  lift condition. One Copilot finding, upheld: `sdk-trace` was missing from the list.
+  The reference branch `chore/deps-runtime-in-range` has served its purpose.
+- **1094, the Clerk clients in range (class C):** `@clerk/backend` 3.31.4,
+  `@clerk/express` 2.1.96, `@clerk/shared` 4.48.3. Two specialist reviews (Clerk,
+  security) returned "acceptable with conditions": preview checks, since no test in the
+  repository runs Clerk's real token verification (every test that sends a token injects
+  a fake middleware). `@clerk/express` differs only in version strings; machine-token
+  routing and the handshake condition in `@clerk/backend` are unchanged.
+
+**The owner's answers on 1094, by question prompt.**
+
+- The go-ahead is not given yet: the owner runs the signed-in client flow against the
+  preview first. 1094 stays a draft until the owner confirms. Preview checks 1 to 4 and 6
+  passed and are posted on the pull request (comment 7106535029): no token, a made-up
+  opaque token and a made-up JWT each return 401; a browser document request returns 406;
+  the discovery documents match production in shape; the logs hold no Clerk warning. The
+  preview is keyed to the development Clerk instance.
+- On the auth observation below: investigate now, before the pass ends.
+
+**Found on the way, each needing the owner's decision.**
+
+- The security review made one observation about the auth path in code that predates the
+  pass. Its detail is held outside this public repository, in the seat's private memory
+  (`auth-observation-under-investigation`), until the investigation says whether it is a
+  defect. The owner has it by question prompt.
+- `pnpm audit` on `main` still reports the four findings recorded above as residue without
+  a cure (`zod`, `glob`, `minimatch`, `katex`). The three pull requests leave them as they
+  were.
+- `merge-bot pull-request open` counts every open lane pull request in the repository,
+  colleagues' included (19 on this day), so the seat passes a limit of 20 to open one of
+  its own. The limit the owner set is held by the seat, not by the tool.
+- The description of 1092 named the release-age floor as seven days. It is one day
+  (`minimumReleaseAge: 1440`). Corrected on the merged pull request.

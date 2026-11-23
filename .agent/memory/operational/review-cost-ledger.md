@@ -313,6 +313,8 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1089 | 1 | 0 / 40 | within | 0 | agreed | five small libraries in range; class B, held 45 minutes by a required check that an outside service did not deliver; one Copilot review: no finding |
 | 2026-11-23 | oaknational#1090 | 1 | 0 / 40 | within | 1 | agreed | the owner's change to the enabled plugins, committed at the owner's word; one Copilot finding (the setup guide's install command fitted one marketplace only), upheld and cured in one push |
 | 2026-11-23 | oaknational#1073 | 1 | 0 / 40 | within | 0 | agreed | the coordination branch of 2026-11-22 and 23, folded after the lane's last pull request merged; one Copilot review at open: no finding; the `claude` reviewer posted "Code review skipped" on the tip for want of usage credit, which is no review. Merged `086dcc298` by the bot at 14:24:51Z. fold-clock PR 1073 tip 21339545: ready 2026-11-23T14:03:40Z; checks green +10.5 min; rounds 1 (Copilot 2.3 min); merged +21.2 min. No successor draft was opened: the owner's count of open pull requests includes it |
+| 2026-11-23 | oaknational#1092 | 1 | 0 / 40 | within | 0 | agreed | `@vercel/functions` 3.11.3, class B; one Copilot review at ready: no finding; merged `864498f8d` by the bot |
+| 2026-11-23 | oaknational#1093 | 1 | 0 / 40 | within | 1 | agreed | the hold on `@opentelemetry/api` below 1.10, class A; one Copilot finding (the rationale named three of the four installed SDK packages), upheld and cured in one push; merged `6e6ff032f` by the bot |
 
 ## Weight changes
 
