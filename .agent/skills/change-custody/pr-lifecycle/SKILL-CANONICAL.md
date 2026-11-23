@@ -2062,9 +2062,11 @@ allow_squash_merge, allow_rebase_merge}'`; `allow_merge_commit` has
   its limit is one open pull request across the repositories. On a
   repository where other people and their bots hold open pull requests, the
   limit counts the seat's own (the owner's words: "Count only my own"); those
-  pull requests are not the team's to take on. The merge tool counts every
-  open pull request that is not Dependabot's, so on such a repository a seat
-  passes `--wip-limit` just above the open count. The
+  pull requests are not the team's to take on. The merge tool counts the same
+  way: `--wip-limit` is read against the open pull requests of the authors
+  the clone counts as its own (`laneAuthors` in its merge-bot config, or by
+  default git's `user.name` and the clone's own bot), so a seat passes the
+  limit itself and never a number chosen to get past other people's work. The
   operating steps:
   - No PR that starts new work opens while the count is at the limit or over
     it, other than a repository's one coordination PR. The reservation comes

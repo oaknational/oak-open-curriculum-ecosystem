@@ -1,6 +1,7 @@
 import { err, ok, type Result } from '@oaknational/result';
 import { z } from 'zod';
 
+import type { CloneStatements } from './clone-statements.js';
 import { restJson } from './github-rest.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import { openPullRequest, type OpenInput, type OpenOutcome } from './pull-request-open.js';
@@ -31,7 +32,8 @@ const labelledSchema = z.array(z.object({ name: z.string() }));
  * @param token - The installation token minted for this invocation.
  * @param repo - The bot identity's repository.
  * @param input - The branch, the title, the body and the limit.
- * @param labels - The clone's configured labels; may be empty.
+ * @param clone - What the clone states: the labels to add, which may be
+ *   empty, and the authors whose open pull requests the limit counts.
  * @returns The open's outcome, carrying the labels GitHub says are now on
  *   the pull request, or the failure described above.
  */
@@ -39,10 +41,10 @@ export async function openLabelledPullRequest(
   fetchImpl: GithubApiFetch,
   token: string,
   repo: BotRepository,
-  input: OpenInput,
-  labels: readonly string[],
+  input: Omit<OpenInput, 'laneAuthors'>,
+  { labels, laneAuthors }: CloneStatements,
 ): Promise<Result<OpenOutcome, Error>> {
-  const opened = await openPullRequest(fetchImpl, token, repo, input);
+  const opened = await openPullRequest(fetchImpl, token, repo, { ...input, laneAuthors });
   if (!opened.ok || opened.value.kind !== 'opened' || labels.length === 0) {
     return opened;
   }

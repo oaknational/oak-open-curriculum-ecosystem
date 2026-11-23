@@ -20,8 +20,19 @@ const DONE: readonly { readonly outcome: PullRequestOutcome; readonly names: str
       number: 42,
       url: 'https://github.com/acme/widgets/pull/42',
       labels: [],
+      laneCount: 0,
     },
     names: '#42',
+  },
+  {
+    outcome: {
+      kind: 'opened',
+      number: 44,
+      url: 'https://github.com/acme/widgets/pull/44',
+      labels: [],
+      laneCount: 2,
+    },
+    names: 'lanes already open: 2',
   },
   {
     outcome: {
@@ -29,6 +40,7 @@ const DONE: readonly { readonly outcome: PullRequestOutcome; readonly names: str
       number: 43,
       url: 'https://github.com/acme/widgets/pull/43',
       labels: ['fleet', 'docs'],
+      laneCount: 0,
     },
     names: 'labels: fleet, docs',
   },

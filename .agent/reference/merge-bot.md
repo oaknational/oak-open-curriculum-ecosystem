@@ -233,6 +233,15 @@ Because the schema is strict, an older build of `agent-tools` refuses a file
 that carries the field; add it once every worktree of the clone has a build
 that knows it.
 
+The file may also state `laneAuthors`, the GitHub logins whose open pull
+requests `pull-request open` counts against `--wip-limit`. Absent, the tool
+counts git's `user.name` where it is run and the clone's own bot
+(`<appSlug>[bot]`). A stated list replaces that default, so it names every
+author to count, the bot included. A login is compared as GitHub reports a
+pull request's author, without regard to case: an app's carries `[bot]`, and
+a display name matches nobody. An empty list is refused. The caution about
+older builds applies to this field too.
+
 **Clones that predate the untracking** (the file used to be tracked): the
 merge that removed it from version control also removes the working-tree
 copy on the next fast-forward, and the ignore rule then hides its absence, so
@@ -585,9 +594,13 @@ pnpm agent-tools merge-bot pull-request dispatch-workflow --workflow <file-name>
   remote does not hold the branch, when an open pull request already has
   that head, or when the open lanes number at or above `--wip-limit`: a lane
   is an open pull request whose head is not a `coordination/` branch and
-  whose author is not Dependabot (neither is a lane under the
-  work-in-progress limit; every other author's counts). The limit is
-  REQUIRED: it is the seat's to state, so it has no default.
+  whose author is one the clone counts as its own. Those authors are the
+  `laneAuthors` of the clone's merge-bot config, or by default git's
+  `user.name` and the clone's own bot (`<appSlug>[bot]`); a stated list
+  replaces the default. Other people's pull requests in a shared repository
+  are not counted. The open prints the count it found and the refusal names
+  the authors it counted. The limit is REQUIRED: it is the seat's to state,
+  so it has no default.
 - `resolve` reads the thread first and refuses one that is not on that pull
   request or is already resolved; `ready` refuses a pull request that is not
   an open draft; `close` posts the reason as an issue comment, then closes,

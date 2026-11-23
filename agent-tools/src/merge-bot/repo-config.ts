@@ -41,6 +41,19 @@ const MERGE_BOT_CONFIG_SCHEMA = z
       .array(z.string().trim().min(1, 'a label must not be blank'))
       .readonly()
       .optional(),
+    /**
+     * The GitHub logins whose open pull requests this clone counts as its own
+     * lanes when it reads the open limit (an app's login carries `[bot]`).
+     * Absent means the default the resolver derives: git's `user.name` and
+     * this clone's own bot. A stated list REPLACES that default, so it names
+     * every author to count. Empty is refused: it would count nobody, and the
+     * limit would limit nothing.
+     */
+    laneAuthors: z
+      .array(z.string().trim().min(1, 'a login must not be blank'))
+      .min(1, 'laneAuthors must name at least one login; omit the key for the default')
+      .readonly()
+      .optional(),
   })
   .strict();
 
