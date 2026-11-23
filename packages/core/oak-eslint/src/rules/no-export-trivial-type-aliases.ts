@@ -32,7 +32,6 @@ const noExportTrivialTypeAliasesRule: RuleWithReappraisingMessages<'aliasNotAllo
       }),
     },
   },
-  defaultOptions: [],
   create(context) {
     const importedBindings = new Set<string>();
 

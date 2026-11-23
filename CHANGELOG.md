@@ -1,3 +1,14 @@
+## [1.190.10](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.9...v1.190.10) (2026-11-23)
+
+## [1.190.9](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.8...v1.190.9) (2026-11-23)
+
+## [1.190.8](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.7...v1.190.8) (2026-11-23)
+
+
+### Bug Fixes
+
+* **sentry-node:** state data collection in full, not by a removed flag ([242be98](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/242be987fc2cbdaf3b59f3492609c79fc399f02e))
+
 ## [1.190.7](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.6...v1.190.7) (2026-11-23)
 
 

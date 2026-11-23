@@ -239,8 +239,13 @@ ledger under `docs/engineering/`). Owner standing word (2026-08-11): "PRs are
 getting created without the jimbot label, if a PR is created with my identity
 or the jimbot identity, it needs that label." The label is the filter that
 separates this estate's PRs from other authors' on a shared repository; a
-PR found without it is labelled at sight, and this open-step is the
-generator cure so the convention never depends on per-seat vigilance.
+PR found without it is labelled at sight. `merge-bot pull-request open` adds
+the labels the clone states in `pullRequestLabels` of its own, untracked
+`.github/merge-bot.json`, so on a clone configured that way the label needs no
+separate step; the label follows the clone's bot and not the tool (owner,
+2026-11-23: the label is "just for my bots", never for "any checkout that
+happens to use the merge bot"). Check the result names the label on the new
+PR; a clone whose config states none adds none, and there the step is by hand.
 
 The description states the change's sign-off class, with its reason in one
 sentence, per

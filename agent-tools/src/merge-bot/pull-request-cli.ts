@@ -15,7 +15,7 @@ import {
   commentOnPullRequest,
   replyToReviewComment,
 } from './pull-request-github.js';
-import { openPullRequest } from './pull-request-open.js';
+import { openLabelledPullRequest } from './pull-request-open-labels.js';
 import {
   exitCodeFor,
   writePullRequestOutcome,
@@ -27,6 +27,7 @@ import type { PushMint } from './push-mint.js';
 import { RefFormatOracleUnavailableError } from './ref-format.js';
 import {
   resolveBotIdentity,
+  resolveMergeBotPullRequestLabels,
   type BotIdentity,
   type BotRepository,
   type MergeBotResolveInput,
@@ -110,15 +111,15 @@ async function readBody(
 }
 
 /** The write for a verb that sends a body, the body read and non-empty. */
-function bodiedWrite(request: BodiedRequest, repo: BotRepository, body: string): Write {
+function bodiedWrite(
+  request: BodiedRequest,
+  repo: BotRepository,
+  body: string,
+  labels: readonly string[],
+): Write {
   if (request.verb === 'open') {
-    return (token, fetchImpl) =>
-      openPullRequest(fetchImpl, token, repo, {
-        branch: request.branch,
-        title: request.title,
-        body,
-        wipLimit: request.wipLimit,
-      });
+    const open = { branch: request.branch, title: request.title, body, wipLimit: request.wipLimit };
+    return (token, fetchImpl) => openLabelledPullRequest(fetchImpl, token, repo, open, labels);
   }
   if (request.verb === 'comment') {
     return (token, fetchImpl) => commentOnPullRequest(fetchImpl, token, repo, request.pr, body);
@@ -162,7 +163,12 @@ async function bodiedPrepared(
       reason: `${file.flag} ${printable(file.path)} is empty; the file is sent verbatim, so nothing would be posted`,
     };
   }
-  return { kind: 'ready', identity, write: bodiedWrite(request, identity, body.value) };
+  const labels = resolveMergeBotPullRequestLabels(input.identityInput);
+  if (!labels.ok) {
+    return { kind: 'failed', exit: 2, message: labels.error.message };
+  }
+  const write = bodiedWrite(request, identity, body.value, labels.value);
+  return { kind: 'ready', identity, write };
 }
 
 /** Identity and the verb's own precondition — all of it BEFORE the mint. */

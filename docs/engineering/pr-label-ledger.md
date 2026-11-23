@@ -24,10 +24,16 @@ state and never lift on merge — they are routing, not status.
 
 ## Provenance labels
 
-| Label      | Meaning                                                                 | Applied by                      | Lifts                            |
-| ---------- | ----------------------------------------------------------------------- | ------------------------------- | -------------------------------- |
-| `jimbot`   | Agent-fleet (jimbot) authored PR.                                       | The authoring agent at PR-open. | Never — provenance is permanent. |
-| `released` | Applied by semantic-release automation when a merge ships in a release. | Automation only.                | Never.                           |
+| Label      | Meaning                                                                 | Applied by                  | Lifts                            |
+| ---------- | ----------------------------------------------------------------------- | --------------------------- | -------------------------------- |
+| `jimbot`   | Agent-fleet (jimbot) authored PR.                                       | The fleet's bot at PR-open. | Never — provenance is permanent. |
+| `released` | Applied by semantic-release automation when a merge ships in a release. | Automation only.            | Never.                           |
+
+`jimbot` is one fleet's label, not the repository's: it is for pull requests
+that fleet's bots open and for no one else's. `merge-bot pull-request open`
+adds it only on a clone whose own `.github/merge-bot.json` states it in
+`pullRequestLabels` (see [Merge bot](./merge-bot.md)); the tool names no label,
+so another person's clone using the same tool adds none.
 
 ## Status labels (state — each names its lift condition)
 

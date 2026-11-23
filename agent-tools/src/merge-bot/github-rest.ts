@@ -26,7 +26,7 @@ const GITHUB_API = 'https://api.github.com';
 export interface RestCall {
   readonly method: 'GET' | 'POST' | 'PATCH';
   readonly path: string;
-  readonly body?: Readonly<Record<string, string | boolean>>;
+  readonly body?: Readonly<Record<string, string | boolean | readonly string[]>>;
   /** Names the call in every failure. */
   readonly label: string;
 }
