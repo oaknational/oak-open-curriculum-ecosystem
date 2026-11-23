@@ -20,6 +20,7 @@ This directory contains engineering workflow and implementation documentation fo
 - [MCP Servers for Contributors](./mcp-servers-for-contributors.md) - Sanctioned MCP server set for AI coding agents
 - [Tooling](./tooling.md) - Development tools, versions, and setup instructions
 - [Build System](./build-system.md) - Turborepo tasks, caching, and quality gate commands
+- [Production Change Sign-Off](./production-change-sign-off.md) - The four classes of change by their effect on the user-facing apps, and who has to agree before each one merges
 - [Troubleshooting](../operations/troubleshooting.md) - Operational issues and resolutions
 - [CI Policy](./ci-policy.md) - What runs in CI (sdk-codegen policy, build behavior)
 - [Testing Patterns](./testing-patterns.md) - Reusable test recipes (E2E DI pattern, subprocess tests)

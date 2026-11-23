@@ -20,7 +20,6 @@ function createFakeRuntime(): SentryNodeRuntime {
       release: 'test',
       releaseSource: 'application_version',
       enableLogs: false,
-      sendDefaultPii: false,
       debug: false,
     },
     tracePropagationTargets: [],

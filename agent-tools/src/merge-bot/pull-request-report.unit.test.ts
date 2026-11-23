@@ -15,8 +15,22 @@ import {
 /** Each write that landed, with the value its line must name. */
 const DONE: readonly { readonly outcome: PullRequestOutcome; readonly names: string }[] = [
   {
-    outcome: { kind: 'opened', number: 42, url: 'https://github.com/acme/widgets/pull/42' },
+    outcome: {
+      kind: 'opened',
+      number: 42,
+      url: 'https://github.com/acme/widgets/pull/42',
+      labels: [],
+    },
     names: '#42',
+  },
+  {
+    outcome: {
+      kind: 'opened',
+      number: 43,
+      url: 'https://github.com/acme/widgets/pull/43',
+      labels: ['fleet', 'docs'],
+    },
+    names: 'labels: fleet, docs',
   },
   {
     outcome: { kind: 'commented', pr: 42, commentId: 9001, url: 'https://x/pull/42#i' },

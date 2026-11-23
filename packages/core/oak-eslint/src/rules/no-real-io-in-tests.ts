@@ -260,8 +260,6 @@ const noRealIoInTestsRule: RuleWithReappraisingMessages<MessageId, [NoRealIoInTe
       }),
     },
   },
-  defaultOptions: [{}],
-
   create(context) {
     const rawFilename = context.physicalFilename ?? context.filename;
     if (!rawFilename) return {};

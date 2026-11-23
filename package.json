@@ -1,6 +1,6 @@
 {
   "name": "@oaknational/open-curriculum-ecosystem",
-  "version": "1.190.3",
+  "version": "1.191.0",
   "private": true,
   "description": "Oak National Academy open curriculum data ecosystem - tools and services for working with the Oak Open Curriculum data",
   "author": {
@@ -159,11 +159,11 @@
     "husky": "^9.1.7",
     "knip": "^6.32.1",
     "markdownlint-cli2": "^0.23.2",
-    "prettier": "~3.9.6",
+    "prettier": "~3.10.1",
     "semantic-release": "^25.0.9",
     "supertest": "^7.2.2",
     "tsx": "^4.23.12",
-    "turbo": "^2.10.9",
+    "turbo": "2.11.10",
     "typescript": "^6.0.3",
     "vitest": "^5.0.5"
   }

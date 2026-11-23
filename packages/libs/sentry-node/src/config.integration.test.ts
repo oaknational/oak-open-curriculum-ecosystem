@@ -23,7 +23,6 @@ describe('createSentryConfig', () => {
       environment: 'development',
       environmentSource: 'development',
       enableLogs: false,
-      sendDefaultPii: false,
       debug: false,
     });
     expect('release' in result.value).toBe(false);
@@ -197,7 +196,6 @@ describe('createSentryConfig', () => {
       environment: 'development',
       release: `dev-${SHORT_SHA}`,
       enableLogs: true,
-      sendDefaultPii: false,
       debug: false,
     });
   });

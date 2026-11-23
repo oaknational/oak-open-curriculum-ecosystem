@@ -182,6 +182,12 @@ permissions investigation.
 
 ## Who executes the merge
 
+- **The merge tool does not read a change's sign-off class.** It merges on
+  checks, threads and reviewer legs. A class C change
+  ([Production Change Sign-Off](./production-change-sign-off.md): a trust,
+  privacy or request-path boundary) needs the owner's explicit go-ahead on
+  that pull request first, so a seat does not start `merge-bot merge` on one
+  until that go-ahead is on record.
 - **A PR with a live implementer seat lands via that seat's own bot merge**
   (merge-commit method). A merge monitor's standing "merge at settled
   without re-asking" grant covers only orphaned or lane-retired PRs;
@@ -238,6 +244,14 @@ identity, and the schema is strict (`appSlug` is a lowercase slug, so it can
 only ever name a directory under `~/.config/`). Because it is untracked, a
 clone's copy is not diffable or restorable from history — recreate it from
 the template.
+
+The same file may state `pullRequestLabels`, a list of labels this clone's bot
+adds to every pull request it opens with `pull-request open`. Such a label
+marks whose bot opened the pull request, so it belongs to the clone and not to
+the tool: the template states none, and a clone that states none adds none.
+Because the schema is strict, an older build of `agent-tools` refuses a file
+that carries the field; add it once every worktree of the clone has a build
+that knows it.
 
 **Clones that predate the untracking** (the file used to be tracked): the
 merge that removed it from version control also removes the working-tree

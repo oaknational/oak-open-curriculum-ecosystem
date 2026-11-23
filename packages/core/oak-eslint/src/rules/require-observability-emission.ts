@@ -247,7 +247,6 @@ const requireObservabilityEmissionRule: RuleWithReappraisingMessages<'requireEmi
       }),
     },
   },
-  defaultOptions: [],
   create(context) {
     const rawFilename = context.physicalFilename ?? context.filename;
     if (!rawFilename) return {};

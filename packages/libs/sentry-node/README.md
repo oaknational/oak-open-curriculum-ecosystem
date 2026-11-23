@@ -108,10 +108,13 @@ configuration enforces the ban on `process.env` reads inside `src/**` at
 
 [ADR-160](../../../docs/architecture/architectural-decisions/160-non-bypassable-redaction-barrier-as-principle.md)
 establishes the non-bypassable redaction barrier as the single closure point
-for every payload that would otherwise leave the process. `sendDefaultPii:
-false` (ADR-143) is set as the floor; the barrier adds structural redaction
-on top so every outbound event, transaction, span, log, and breadcrumb is
-sanitised before transmission.
+for every payload that would otherwise leave the process. An explicit
+`dataCollection` option (ADR-143) is set as the floor: every category the SDK
+can collect by itself is stated in `src/data-collection.ts`, with user
+information, bodies, AI payloads and database values off, and no configuration
+value can change it. The barrier adds structural redaction on top so every
+outbound event, transaction, span, log, and breadcrumb is sanitised before
+transmission.
 
 The **shared delegates** are the mechanism. The barrier wires five hooks
 as a single adapter-level type, `SentryRedactionHooks`

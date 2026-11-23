@@ -25,6 +25,7 @@ import {
 } from './runtime-redaction.js';
 import { redactSentrySpan } from './runtime-redaction-span.js';
 import { applyFingerprint } from './runtime-fingerprint.js';
+import { createSentryDataCollection } from './data-collection.js';
 
 /**
  * Default timeout used by {@link SentryNodeRuntime.flush} and
@@ -130,7 +131,7 @@ export function createSentryInitOptions(
     release: config.release,
     tracesSampleRate: config.tracesSampleRate,
     enableLogs: config.enableLogs,
-    sendDefaultPii: config.sendDefaultPii,
+    dataCollection: createSentryDataCollection(),
     debug: config.debug,
     tracePropagationTargets: [...DEFAULT_TRACE_PROPAGATION_TARGETS],
     // L-IMM Sub-item 2 — allow-list scaffold. Both fields are

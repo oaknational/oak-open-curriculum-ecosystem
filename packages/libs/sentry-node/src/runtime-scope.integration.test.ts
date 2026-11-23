@@ -61,7 +61,6 @@ function createOffConfig(): Extract<ParsedSentryConfig, { readonly mode: 'off' }
     environment: 'test',
     environmentSource: 'SENTRY_ENVIRONMENT_OVERRIDE',
     enableLogs: false,
-    sendDefaultPii: false,
     debug: false,
   };
 }
@@ -74,7 +73,6 @@ function createFixtureConfig(): Extract<ParsedSentryConfig, { readonly mode: 'fi
     release: 'test-1.0.0',
     releaseSource: 'application_version',
     enableLogs: true,
-    sendDefaultPii: false,
     debug: false,
   };
 }
@@ -89,7 +87,6 @@ function createLiveConfig(): Extract<ParsedSentryConfig, { readonly mode: 'sentr
     releaseSource: 'application_version',
     tracesSampleRate: 1.0,
     enableLogs: true,
-    sendDefaultPii: false,
     debug: false,
   };
 }

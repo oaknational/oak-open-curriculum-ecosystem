@@ -1,27 +1,44 @@
 /**
  * Upstream paths the code generators do not consume.
  *
- * Two sets, deliberately separate so a reader can tell a permanent design decision
- * from a temporary one:
+ * Two sets, because they are two different classes of exclusion that act at different
+ * stages of generation:
  *
- * - {@link SKIPPED_PATHS} — permanent. Honoured by the MCP tool generator only: these
- *   paths remain in the SDK schema, the generated types, and the Zod schemas, but never
- *   become MCP tools, because they are superseded by Elasticsearch search or are not
- *   transportable over MCP. Removing an entry is a design decision, not a chore.
- * - {@link DEFERRED_PATHS} — temporary. Honoured by the whole generation pipeline: the
- *   SDK schema (`api-schema-sdk.json`) and everything derived from it — types, Zod
- *   schemas, MCP tools, parameter and response maps — omit these paths. Each entry
- *   names the ticket that retires it, and carries one of two directions:
- *   capability deferred before it is built (the check-restricted family — owner-ruled
- *   deferral 2026-07-26, tracked by MCP-214 (build, blocked by MCP-152) and MCP-215
- *   (serve, blocked by MCP-214)), or an upstream-removed endpoint disabled ahead of
- *   the schema-cache refresh that erases it (the changelog pair — dead on the live
- *   API since spec 0.11.0, removal decided 2026-09-02, refresh tracked by MCP-630).
- *   Either way the entries are self-retiring: `applyDeferredPaths` throws when a
- *   configured path is absent from the document, so the refresh that removes a path
- *   from the cache forces its entry's deletion in the same change. When the last
- *   entry retires, delete this constant, `apply-deferred-paths.ts`, and their wiring,
- *   then regenerate; nothing else changes.
+ * - {@link SKIPPED_PATHS} — **not surfaced over MCP.** A decision about the MCP server.
+ *   Honoured by the MCP tool generator only: these paths stay in the SDK schema, the
+ *   generated types and the Zod schemas, and never become MCP tools. The SDK is a
+ *   separate product from the MCP server and carries the API whole, so a decision about
+ *   what the server offers belongs here and nowhere else. The reasons an entry is here
+ *   are Oak's policy on content, or an endpoint that offers no value over MCP (the
+ *   upstream API's own search is superseded by Elasticsearch search). Permanent:
+ *   removing an entry is a design decision, not a chore.
+ * - {@link DEFERRED_PATHS} — **not processed.** A statement about the pipeline's input,
+ *   not about the MCP server: generating from the path today would produce an SDK that
+ *   is broken or untrue. Honoured by the whole pipeline: the SDK schema
+ *   (`api-schema-sdk.json`) and everything derived from it — types, Zod schemas, MCP
+ *   tools, parameter and response maps — omit these paths. It holds two unlike cases,
+ *   each measured by moving the entries into `SKIPPED_PATHS` and regenerating from the
+ *   cached schema:
+ *   - **Not yet processable** — the check-restricted (usage-licence) family. The
+ *     generators cannot yet emit valid code for it: it holds the first request body,
+ *     the first path with no `get`, and the first map-shaped response, and the
+ *     generated workspace then fails `type-check`. Building that capability is tracked
+ *     by MCP-214 (blocked by MCP-152), serving it by MCP-215 (blocked by MCP-214),
+ *     under an owner-ruled deferral of 2026-07-26.
+ *   - **No longer in the live API** — the changelog pair (dead since spec 0.11.0,
+ *     removal decided 2026-09-02). Generation succeeds, and the SDK then describes two
+ *     endpoints the API does not serve. These entries are a workaround, not a design:
+ *     the paths are only in the pipeline's input because the committed schema cache is
+ *     behind the API Oak publishes. The cure is bringing the cache up to date (tracked
+ *     by MCP-630), which erases the paths and with them the need for the entries.
+ *
+ *   Temporary by construction. Each entry names the ticket that retires it, and the
+ *   entries are self-retiring: `applyDeferredPaths` throws when a configured path is
+ *   absent from the document, so the refresh that removes a path from the cache forces
+ *   its entry's deletion in the same change. A path that becomes processable is then
+ *   either served or moved to `SKIPPED_PATHS`; it never stays here as a way to keep it
+ *   off the MCP server. When the last entry retires, delete this constant,
+ *   `apply-deferred-paths.ts` and their wiring, then regenerate; one filter remains.
  *
  * Neither set touches the committed schema cache or the emitted
  * `api-schema-original.json`: both stay verbatim upstream truth, so the CI schema-drift
