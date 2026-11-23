@@ -343,6 +343,63 @@ for admin credentials, and optional for everyone else.
 The client ID / client secret on the app page belong to OAuth user flows
 and are **not used** by this path; you never need to generate the secret.
 
+## Setting whose pull requests your clone counts
+
+`pull-request open` refuses to open a pull request when your clone already
+has `--wip-limit` lanes open. It needs to know which open pull requests are
+yours. This repository is shared, so it does not count everybody's.
+
+**With no setup** it takes its authors from two places: the name git commits
+as in your checkout (`git config user.name`) and your clone's own bot. Where
+git commits as the bot, the two are the same author and it counts one. The
+default is right when your bot opens all your pull requests. It misses the
+ones you open by hand under your own account, unless your git `user.name` is
+your GitHub login.
+
+**To state the list yourself**, add `laneAuthors` to your clone's
+`.github/merge-bot.json`. That file is ignored by git, so the list stays on
+your machine and is never committed.
+
+1. Bring every worktree of your clone onto a build that knows the key: pull
+   `main` and run `pnpm install` in the primary checkout and in each
+   worktree. The config schema is strict, so an older build refuses a file
+   that carries a key it does not know, and every `merge-bot` command that
+   reads the config in that worktree then exits 2 (the help text still
+   prints).
+2. Edit `.github/merge-bot.json` in the **primary checkout**. Every worktree
+   reads that one copy. Add the logins beside the keys already there:
+
+   ```json
+   {
+     "appSlug": "some-github-app-slug",
+     "appId": "1234567",
+     "repo": "your-username/your-fork-name",
+     "laneAuthors": ["some-github-app-slug[bot]", "your-github-login"]
+   }
+   ```
+
+3. Check it. Open your next pull request with the limit you mean to hold,
+   for example `--wip-limit 1`. When it opens, the done line ends
+   `lanes already open: <n>`. When it refuses because you are at the limit,
+   the refusal starts `lane pull requests open: <n>` and names the authors it
+   counted. Either way, compare `<n>` with what you know is open.
+
+What to put in the list:
+
+- **Your bot, with its `[bot]` suffix.** GitHub reports an app's pull requests
+  as authored by `<appSlug>[bot]`. The bare slug matches nothing.
+- **Your own GitHub login**, if you ever open pull requests by hand. Case does
+  not matter.
+- **Any other bot whose pull requests are your work.**
+
+The list replaces the default, so it must name every author you want counted,
+your bot included. An empty list is refused.
+
+If `<n>` reads zero while you have work open, a login in the list matches
+nobody. The refusal message names the authors it counted, which shows the
+spelling the tool is using. A pull request on a `coordination/` branch is
+never counted, whoever opened it.
+
 ## Agent actions run as the bot — attribution by identity
 
 The bot's Copilot review request registers. It is

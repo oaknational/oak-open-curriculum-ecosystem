@@ -1,3 +1,10 @@
+# [1.192.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.191.6...v1.192.0) (2026-11-23)
+
+
+### Features
+
+* **merge-bot:** the open limit counts the clone's own lanes ([7b63904](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/7b639045e0c25836603832eb0935b45a54700d7f))
+
 ## [1.191.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.191.5...v1.191.6) (2026-11-23)
 
 ## [1.191.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.191.4...v1.191.5) (2026-11-23)
