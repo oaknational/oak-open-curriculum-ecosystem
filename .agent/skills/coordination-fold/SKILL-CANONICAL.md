@@ -43,7 +43,10 @@ contradiction and wording in one push (2026-10-02 and 2026-10-03).
 
 1. Confirm the primary sits on the live coordination branch and that its
    draft PR, opened at the branch's first records push (step 10), is the
-   one PR open for it (`gh pr list`).
+   one PR open for it (`gh pr list --repo <owner>/<name> --state open --head
+   <branch>`). The listing names the branch: an unfiltered one returns every
+   author's pull requests and stops at thirty, so on a repository other
+   people share it can leave the draft out.
 2. **Working-tree survey with ownership.** Classify every dirty and
    untracked path: (a) own work or settled fleet docs — fold them, with
    authorship named in the commit message for peer-authored files;
