@@ -12,6 +12,7 @@
 import {
   createTransport,
   defaultStackParser,
+  httpHeadersToSpanAttributes,
   NodeClient,
   requestDataIntegration,
   spanToJSON,
@@ -156,6 +157,27 @@ describe('what the Sentry SDK attaches under the init options', () => {
       },
       data: '{"q":"body text"}',
     });
+  });
+
+  it('writes no cookie onto a span, from a request or a response', () => {
+    const collection = createClient().getDataCollectionOptions();
+
+    // The function the SDK's HTTP instrumentation uses to turn headers into
+    // span attributes. The other headers show it ran.
+    expect(
+      httpHeadersToSpanAttributes(
+        { cookie: 'theme=dark; consent=yes', 'user-agent': 'client/1.0' },
+        collection,
+        'request',
+      ),
+    ).toEqual({ 'http.request.header.user_agent': 'client/1.0' });
+    expect(
+      httpHeadersToSpanAttributes(
+        { 'set-cookie': 'theme=dark; Path=/', 'content-type': 'application/json' },
+        collection,
+        'response',
+      ),
+    ).toEqual({ 'http.response.header.content_type': 'application/json' });
   });
 
   it('keeps tool arguments and results off the MCP server span, as the app calls the wrapper', async () => {

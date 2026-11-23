@@ -249,6 +249,8 @@ const JWT_BEARER_VALUE = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOi
 const SESSION_COOKIE_VALUE = 'sid=session-secret-xyz; path=/; HttpOnly';
 /** The same session identifier as the SDK parses it into `request.cookies`. */
 const SESSION_ID_VALUE = 'session-secret-xyz';
+/** A cookie value on a span attribute whose name marks nothing as sensitive. */
+const SPAN_COOKIE_VALUE = 'span-cookie-value-qqq';
 /** Refresh-token placed under a `refresh_token` key — full-redacted by key name. */
 const REFRESH_TOKEN_VALUE = 'oak-refresh-secret-value-123';
 /** Span data value — Bearer-shaped so pattern redaction fires independent of span key conventions. */
@@ -275,7 +277,7 @@ function buildPiiErrorEvent(): SentryErrorEvent {
         authorization: BEARER_TOKEN_VALUE,
         cookie: SESSION_COOKIE_VALUE,
       },
-      // Parsed cookies under names no list of sensitive keys contains.
+      // Parsed cookies under names this package's sensitive-key rules miss.
       cookies: { sid: SESSION_ID_VALUE, theme: 'dark' },
       url: OAUTH_CALLBACK_URL,
     },
@@ -323,6 +325,9 @@ function buildPiiSpan(): SentrySpanPayload {
   return {
     data: {
       'http.request.header.authorization': BEARER_TOKEN_VALUE,
+      // The shape the SDK writes when cookie collection is on: one attribute
+      // per cookie, the cookie's name as the last segment.
+      'http.request.header.cookie.theme': SPAN_COOKIE_VALUE,
       'oak.span.raw_header': OAK_SPAN_BEARER_TOKEN,
     },
     description: `POST ${OAUTH_CALLBACK_URL}`,
@@ -531,6 +536,7 @@ describe('ADR-160 Part 3: redacted-at-destination', () => {
     // replaced while the `Bearer` scheme is preserved as informational.
     expect(result.data['http.request.header.authorization']).toBe(`Bearer ${REDACTED_VALUE}`);
     expect(result.data['oak.span.raw_header']).toBe(`Bearer ${REDACTED_VALUE}`);
+    expect(result.data['http.request.header.cookie.theme']).toBe(REDACTED_VALUE);
     // Closure proof: the raw token values do not appear anywhere in the span.
     const serialised = JSON.stringify(result);
     expect(serialised).not.toContain('super-secret-abc123');

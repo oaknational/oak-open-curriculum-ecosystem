@@ -211,8 +211,9 @@ The SDK's own data collection is fixed per ADR-143 by the explicit
 `dataCollection` option in `@oaknational/sentry-node`, with user information,
 cookies, bodies, AI payloads and database values off; the redaction barrier
 adds structural redaction on top of that floor. Cookies have both: the SDK is
-told not to collect them, and the barrier replaces every value in a parsed
-cookie record whatever the cookie is called.
+told not to collect them, and the barrier replaces every cookie value whatever
+the cookie is called, in an event's parsed cookie record and in the span
+attributes HTTP instrumentation writes cookies under.
 
 **Behavioural expectations (enforced by vendor integration, not the Oak
 barrier)**: `wrapMcpServerWithSentry` attaches MCP tool, resource, and

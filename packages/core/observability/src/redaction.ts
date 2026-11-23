@@ -8,6 +8,7 @@
  */
 
 import { typeSafeEntries } from '@oaknational/type-helpers';
+import { isCookieAttributeKey } from './redaction-cookie-keys.js';
 import { redactFormEncodedString } from './redaction-form.js';
 import { redactUrlString } from './redaction-url.js';
 import type { JsonObject, JsonValue } from './types.js';
@@ -82,6 +83,7 @@ function shouldFullyRedactKey(key: string): boolean {
   const normalisedKey = normaliseKey(key);
   return (
     FULLY_REDACTED_KEYS.has(normalisedKey) ||
+    isCookieAttributeKey(normalisedKey) ||
     normalisedKey.includes('token') ||
     normalisedKey.includes('secret') ||
     normalisedKey.includes('password')

@@ -45,7 +45,8 @@ function denyIdentifyingKeys(): { deny: string[] } {
  * Every category is stated. The SDK treats a `dataCollection` object as an
  * opt-in to its permissive defaults for any category left out, so an omitted
  * key would switch that category on. The values are the ones the SDK resolved
- * from `sendDefaultPii: false`, which this option replaces: the redaction
+ * from `sendDefaultPii: false`, which this option replaces, with one
+ * difference: cookies are off, where that flag left them on. The redaction
  * barrier (ADR-160) still runs on everything that is collected.
  *
  * It takes no argument on purpose: no configuration value can reach it.

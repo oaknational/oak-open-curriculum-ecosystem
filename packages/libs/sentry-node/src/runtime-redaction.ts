@@ -6,7 +6,7 @@ import {
   redactText,
   redactUnknownValue,
 } from '@oaknational/observability';
-import { typeSafeEntries } from '@oaknational/type-helpers';
+import { typeSafeEntries, typeSafeKeys } from '@oaknational/type-helpers';
 
 type SentryErrorEvent = Parameters<NonNullable<NodeOptions['beforeSend']>>[0];
 type SentryLogPayload = Parameters<NonNullable<NodeOptions['beforeSendLog']>>[0];
@@ -78,13 +78,9 @@ function redactCookieValues(
     return undefined;
   }
 
-  const redacted: Record<string, string> = {};
-
-  for (const name in cookies) {
-    redacted[name] = REDACTED_VALUE;
-  }
-
-  return redacted;
+  // `Object.fromEntries` defines each name as an own property, so a cookie
+  // called `__proto__` is kept and redacted like any other.
+  return Object.fromEntries(typeSafeKeys(cookies).map((name) => [name, REDACTED_VALUE]));
 }
 
 function redactRequestEventData(
