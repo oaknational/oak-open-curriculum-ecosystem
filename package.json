@@ -159,7 +159,7 @@
     "husky": "^9.1.7",
     "knip": "^6.32.1",
     "markdownlint-cli2": "^0.23.2",
-    "prettier": "~3.9.6",
+    "prettier": "~3.10.1",
     "semantic-release": "^25.0.9",
     "supertest": "^7.2.2",
     "tsx": "^4.23.12",
