@@ -938,9 +938,12 @@ Director's landing record of 2026-09-06, event f05a54da).
 - **A ruleset that follows the default branch moves when the default changes.** Retarget it to
   the old branch by name before switching the default, or a rule that requires a pull request
   lands on the new default and blocks a mirror's fast-forward (2026-11-18).
-- **The merge tool's `--wip-limit` counts every open pull request that is not Dependabot's**,
-  whoever opened it. Its merge holds a quiet window and can outrun a 300-second tool timeout;
-  the merge then completes in the background (2026-11-16; 2026-11-18).
+- **The merge tool's `--wip-limit` counts the clone's own lanes**: open pull requests by the
+  authors the clone states in `laneAuthors`, or by default git's `user.name` and the clone's
+  own bot. A login is compared as GitHub reports it, so an app's carries `[bot]`; the open
+  prints the count it found, and a zero where work is open means a login that matches nothing
+  (2026-11-23). Its merge holds a quiet window and can outrun a 300-second tool timeout; the
+  merge then completes in the background (2026-11-16; 2026-11-18).
 - **The review-cost gate reads its decision file relative to the pushing worktree**, and a line
   there starts with the bare pull request number, no `#` (2026-11-12).
 - **A sub-agent in this repository carries about 107,000 tokens of fixed load before it reads

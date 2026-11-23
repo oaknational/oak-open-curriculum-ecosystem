@@ -27,6 +27,7 @@ const INPUT: OpenInput = {
   title: 'feat: x',
   body: 'The body.\n',
   wipLimit: 3,
+  laneAuthors: ['octocat'],
 };
 
 /** An open pull request in a listing: its head ref and its author, null for an account that is gone. */
@@ -34,9 +35,10 @@ function openPr(number: number, ref: string, login: string | null = 'octocat'): 
   return { number, head: { ref }, user: login === null ? null : { login } };
 }
 
-const DEPENDABOT = openPr(10, 'dependabot/npm_and_yarn/zod-4.2.0', 'dependabot[bot]');
+/** A pull request by an author no case here counts: somebody else's bot. */
+const SOMEBODY_ELSES = openPr(10, 'dependabot/npm_and_yarn/zod-4.2.0', 'dependabot[bot]');
 
-/** GitHub as it reads when the open can proceed: two lanes (one by an account that is gone), a coordination one, Dependabot's. */
+/** GitHub as it reads when the open can proceed: one lane by the counted author, that author's coordination branch, one by an account that is gone, one by somebody else's bot. */
 function happyScript(overrides: Partial<Record<string, GithubScript>> = {}): GithubScript {
   return (request) => {
     const line = `${request.method} ${request.url}`;
@@ -60,7 +62,7 @@ function happyScript(overrides: Partial<Record<string, GithubScript>> = {}): Git
           openPr(7, 'feat/a'),
           openPr(8, 'coordination/2026-10-27-abc123'),
           openPr(9, 'fix/b', null),
-          DEPENDABOT,
+          SOMEBODY_ELSES,
         ],
       };
     }
@@ -87,6 +89,7 @@ describe('openPullRequest', () => {
         number: 42,
         url: 'https://github.com/acme/widgets/pull/42',
         labels: [],
+        laneCount: 1,
       },
     });
     expect(requestLines(github.requests)).toEqual(
@@ -143,29 +146,69 @@ describe('openPullRequest', () => {
     expect(writes(github.requests)).toEqual([]);
   });
 
-  it('refuses at the limit, counting the lanes: not the coordination branch, not Dependabot, every other author', async () => {
+  it("refuses at the limit, counting the counted author's lane and not their coordination branch, an account that is gone, or somebody else's bot", async () => {
     const github = scriptedGithub(happyScript());
 
-    const result = await openPullRequest(github.fetchImpl, TOKEN, REPO, { ...INPUT, wipLimit: 2 });
+    const result = await openPullRequest(github.fetchImpl, TOKEN, REPO, { ...INPUT, wipLimit: 1 });
 
-    expect(refusalReason(result)).toContain('2 lane pull requests');
+    expect(refusalReason(result)).toContain('lane pull requests open: 1');
     expect(writes(github.requests)).toEqual([]);
   });
 
-  it("counts a third lane by any other author, where Dependabot's did not count", async () => {
-    const github = scriptedGithub(
-      happyScript({
-        [`GET ${API}/pulls?state=open&per_page=100&page=1`]: () => ({
-          status: 200,
-          body: [openPr(7, 'feat/a'), openPr(9, 'fix/b'), DEPENDABOT, openPr(11, 'chore/c', 'ada')],
-        }),
+  describe('with more than one counted author', () => {
+    /** Six open pull requests: two by the counted authors on lane branches, four that are not this clone's lanes. */
+    const MIXED = {
+      [`GET ${API}/pulls?state=open&per_page=100&page=1`]: () => ({
+        status: 200,
+        body: [
+          openPr(7, 'feat/a'),
+          openPr(8, 'coordination/2026-10-27-abc123', 'hubot[bot]'),
+          openPr(9, 'fix/b', null),
+          SOMEBODY_ELSES,
+          openPr(11, 'chore/c', 'ada'),
+          openPr(12, 'chore/d', 'hubot[bot]'),
+        ],
       }),
-    );
+    };
+    const AUTHORS = ['Hubot[bot]', 'ada'];
 
-    const result = await openPullRequest(github.fetchImpl, TOKEN, REPO, { ...INPUT, wipLimit: 3 });
+    it('counts only the stated authors, whatever the case of the login, and never a coordination branch', async () => {
+      const github = scriptedGithub(happyScript(MIXED));
 
-    expect(refusalReason(result)).toContain('3 lane pull requests');
-    expect(writes(github.requests)).toEqual([]);
+      const result = await openPullRequest(github.fetchImpl, TOKEN, REPO, {
+        ...INPUT,
+        wipLimit: 3,
+        laneAuthors: AUTHORS,
+      });
+
+      expect(result).toMatchObject({ ok: true, value: { kind: 'opened', laneCount: 2 } });
+    });
+
+    it('refuses at the limit, naming the count and the authors it was taken over', async () => {
+      const github = scriptedGithub(happyScript(MIXED));
+
+      const result = await openPullRequest(github.fetchImpl, TOKEN, REPO, {
+        ...INPUT,
+        wipLimit: 2,
+        laneAuthors: AUTHORS,
+      });
+
+      expect(refusalReason(result)).toContain('lane pull requests open: 2');
+      expect(refusalReason(result)).toContain('Hubot[bot], ada');
+      expect(writes(github.requests)).toEqual([]);
+    });
+
+    it("opens at a limit of one when every open pull request is somebody else's", async () => {
+      const github = scriptedGithub(happyScript());
+
+      const result = await openPullRequest(github.fetchImpl, TOKEN, REPO, {
+        ...INPUT,
+        wipLimit: 1,
+        laneAuthors: AUTHORS,
+      });
+
+      expect(result).toMatchObject({ ok: true, value: { kind: 'opened', laneCount: 0 } });
+    });
   });
 
   it('follows the listing to the next page when a page holds 100, so a count past 100 is exact', async () => {

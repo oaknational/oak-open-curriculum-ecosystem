@@ -42,9 +42,23 @@ describe('loadMergeBotRepoConfig', () => {
     expect(result).toMatchObject({ ok: true, value: { pullRequestLabels: ['fleet'] } });
   });
 
+  it('reads the authors whose open pull requests the clone counts as its lanes', () => {
+    const result = loadMergeBotRepoConfig({
+      repoRoot: '/repo',
+      readFileImpl: () =>
+        JSON.stringify({ ...JSON.parse(VALID), laneAuthors: ['hubot[bot]', 'ada'] }),
+    });
+
+    expect(result).toMatchObject({ ok: true, value: { laneAuthors: ['hubot[bot]', 'ada'] } });
+  });
+
   it('rejects unknown keys, malformed slugs, and non-numeric ids (strict boundary)', () => {
     for (const bad of [
       { ...JSON.parse(VALID), extra: true },
+      // An empty list would count nobody, which is a limit that limits nothing.
+      { ...JSON.parse(VALID), laneAuthors: [] },
+      { ...JSON.parse(VALID), laneAuthors: [' '] },
+      { ...JSON.parse(VALID), laneAuthors: 'ada' },
       { ...JSON.parse(VALID), pullRequestLabels: 'fleet' },
       { ...JSON.parse(VALID), pullRequestLabels: [' '] },
       { ...JSON.parse(VALID), appSlug: 'Not A Slug' },

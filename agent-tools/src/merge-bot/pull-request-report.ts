@@ -15,6 +15,12 @@ export type PullRequestOutcome =
       readonly url: string;
       /** The labels on the new pull request, as GitHub answered; empty when the clone states none. */
       readonly labels: readonly string[];
+      /**
+       * The lanes that were open before this one, as the limit counted them.
+       * Printed so a count that matches no author shows as a zero the seat
+       * can question, not as a limit that silently limits nothing.
+       */
+      readonly laneCount: number;
     }
   | {
       readonly kind: 'commented';
@@ -49,7 +55,7 @@ function labelsSuffix(labels: readonly string[]): string {
 /** The operator's line for a write that landed. */
 function doneLine(outcome: Exclude<PullRequestOutcome, { kind: 'refused' }>): string {
   if (outcome.kind === 'opened') {
-    return `opened: draft pull request #${String(outcome.number)} ${outcome.url}${labelsSuffix(outcome.labels)}`;
+    return `opened: draft pull request #${String(outcome.number)} ${outcome.url}${labelsSuffix(outcome.labels)} lanes already open: ${String(outcome.laneCount)}`;
   }
   if (outcome.kind === 'commented' || outcome.kind === 'replied') {
     return `${outcome.kind}: #${String(outcome.pr)} comment ${String(outcome.commentId)} ${outcome.url}`;

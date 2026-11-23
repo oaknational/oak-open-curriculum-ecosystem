@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { readDefaultBranch } from './github-repository.js';
 import { restJson, restProbe, unexpectedStatus } from './github-rest.js';
+import { laneCount, type OpenEntry } from './lane-count.js';
 import type { GithubApiFetch } from './mint-installation-token.js';
 import type { PullRequestOutcome } from './pull-request-report.js';
 import type { BotRepository } from './resolve-identity.js';
@@ -12,10 +13,12 @@ import type { BotRepository } from './resolve-identity.js';
  * branch into the repository's default branch, written only once four reads
  * hold. The default branch is read, never assumed. The remote must hold the
  * branch; no open pull request may already have it as head; and the open
- * lane count must sit under the limit the seat states, where a coordination
- * branch's pull request and Dependabot's are not lanes and are not counted.
- * Each read that fails its condition is a typed refusal, and nothing is
- * written after one.
+ * lane count must sit under the limit the seat states. A lane is an open
+ * pull request by one of the authors this clone counts as its own, on a
+ * branch that is not a coordination branch: the limit is on this clone's
+ * work in progress, and other people's pull requests in a shared repository
+ * are not part of it. Each read that fails its condition is a typed
+ * refusal, and nothing is written after one.
  */
 
 /** What the seat asks to open. */
@@ -26,16 +29,16 @@ export interface OpenInput {
   readonly body: string;
   /** The open lane count at or above which the open refuses. */
   readonly wipLimit: number;
+  /**
+   * The GitHub logins whose open pull requests count as this clone's lanes,
+   * compared without regard to case. An app's login carries its `[bot]`
+   * suffix, as GitHub reports a pull request's author.
+   */
+  readonly laneAuthors: readonly string[];
 }
 
 /** The outcome of an open: the new pull request, or the refusal. */
 export type OpenOutcome = Extract<PullRequestOutcome, { kind: 'opened' | 'refused' }>;
-
-/** Head refs with this prefix are coordination branches, not lanes, and are not counted. */
-const COORDINATION_PREFIX = 'coordination/';
-
-/** Dependabot's pull requests are not lanes either (the owner's word, 2026-10-17) and are not counted. */
-const DEPENDABOT_LOGIN = 'dependabot[bot]';
 
 /** GitHub lists at most this many per page; a full page means another may follow. */
 const PAGE_SIZE = 100;
@@ -49,11 +52,6 @@ const openListSchema = z.array(
   }),
 );
 
-/** One open pull request as the lane count reads it: its head ref and its author's login. */
-interface OpenEntry {
-  readonly ref: string;
-  readonly author: string | undefined;
-}
 const openedSchema = z.object({
   number: z.number().int().positive(),
   html_url: z.string().min(1),
@@ -144,25 +142,13 @@ async function openEntries(
   }
 }
 
-/** A lane: an open pull request that is neither a coordination branch's nor Dependabot's. */
-function isLane(entry: OpenEntry): boolean {
-  return (
-    !entry.ref.startsWith(COORDINATION_PREFIX) && entry.author?.toLowerCase() !== DEPENDABOT_LOGIN
-  );
-}
-
-/** The open lane count, which the limit is read against. */
-function laneCount(entries: readonly OpenEntry[]): number {
-  return entries.filter((entry) => isLane(entry)).length;
-}
-
-/** The three reads that can refuse, in order; undefined when the open may proceed. */
+/** The three reads that can refuse, in order; the open lane count when the open may proceed. */
 async function refusalBeforeOpen(
   fetchImpl: GithubApiFetch,
   token: string,
   repo: BotRepository,
   input: OpenInput,
-): Promise<Result<OpenOutcome | undefined, Error>> {
+): Promise<Result<OpenOutcome | number, Error>> {
   const held = await remoteHoldsBranch(fetchImpl, token, repo, input.branch);
   if (!held.ok) {
     return held;
@@ -183,13 +169,13 @@ async function refusalBeforeOpen(
   if (!entries.ok) {
     return entries;
   }
-  const lanes = laneCount(entries.value);
+  const lanes = laneCount(entries.value, input.laneAuthors);
   return ok(
     lanes >= input.wipLimit
       ? refused(
-          `${String(lanes)} lane pull requests are open, at or above the --wip-limit of ${String(input.wipLimit)}; land or close one first`,
+          `lane pull requests open: ${String(lanes)} (authors counted: ${input.laneAuthors.join(', ')}), at or above the --wip-limit of ${String(input.wipLimit)}; land or close one first`,
         )
-      : undefined,
+      : lanes,
   );
 }
 
@@ -217,9 +203,10 @@ export async function openPullRequest(
   if (!refusal.ok) {
     return refusal;
   }
-  if (refusal.value !== undefined) {
+  if (typeof refusal.value !== 'number') {
     return ok(refusal.value);
   }
+  const lanes = refusal.value;
   const opened = await restJson(
     fetchImpl,
     token,
@@ -239,6 +226,12 @@ export async function openPullRequest(
     openedSchema,
   );
   return opened.ok
-    ? ok({ kind: 'opened', number: opened.value.number, url: opened.value.html_url, labels: [] })
+    ? ok({
+        kind: 'opened',
+        number: opened.value.number,
+        url: opened.value.html_url,
+        labels: [],
+        laneCount: lanes,
+      })
     : opened;
 }

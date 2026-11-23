@@ -15,6 +15,7 @@ import {
   commentOnPullRequest,
   replyToReviewComment,
 } from './pull-request-github.js';
+import { resolveCloneStatements, type CloneStatements } from './clone-statements.js';
 import { openLabelledPullRequest } from './pull-request-open-labels.js';
 import {
   exitCodeFor,
@@ -27,7 +28,6 @@ import type { PushMint } from './push-mint.js';
 import { RefFormatOracleUnavailableError } from './ref-format.js';
 import {
   resolveBotIdentity,
-  resolveMergeBotPullRequestLabels,
   type BotIdentity,
   type BotRepository,
   type MergeBotResolveInput,
@@ -115,11 +115,11 @@ function bodiedWrite(
   request: BodiedRequest,
   repo: BotRepository,
   body: string,
-  labels: readonly string[],
+  clone: CloneStatements,
 ): Write {
   if (request.verb === 'open') {
     const open = { branch: request.branch, title: request.title, body, wipLimit: request.wipLimit };
-    return (token, fetchImpl) => openLabelledPullRequest(fetchImpl, token, repo, open, labels);
+    return (token, fetchImpl) => openLabelledPullRequest(fetchImpl, token, repo, open, clone);
   }
   if (request.verb === 'comment') {
     return (token, fetchImpl) => commentOnPullRequest(fetchImpl, token, repo, request.pr, body);
@@ -163,11 +163,11 @@ async function bodiedPrepared(
       reason: `${file.flag} ${printable(file.path)} is empty; the file is sent verbatim, so nothing would be posted`,
     };
   }
-  const labels = resolveMergeBotPullRequestLabels(input.identityInput);
-  if (!labels.ok) {
-    return { kind: 'failed', exit: 2, message: labels.error.message };
+  const clone = resolveCloneStatements(input.identityInput);
+  if (!clone.ok) {
+    return { kind: 'failed', exit: 2, message: clone.error.message };
   }
-  const write = bodiedWrite(request, identity, body.value, labels.value);
+  const write = bodiedWrite(request, identity, body.value, clone.value);
   return { kind: 'ready', identity, write };
 }
 

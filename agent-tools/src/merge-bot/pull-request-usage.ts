@@ -19,15 +19,20 @@ export const PULL_REQUEST_USAGE = `merge-bot pull-request <verb> [flags] [--json
   open --branch <name> --title <text> --body-file <path> --wip-limit <n>
     Opens a DRAFT pull request from <branch> into the repository's default
     branch. Refuses (exit 3) when the remote does not hold the branch, when
-    an open pull request already has that head, or when the count of open
-    pull requests whose head is not a coordination/ branch and whose author
-    is not Dependabot is at or above --wip-limit (neither is a lane). All
-    four flags are REQUIRED: the limit is the seat's to
-    state, so it has no default. --branch is a git branch name in ASCII
-    letters, digits and . _ / -. After the open it adds the labels this
-    clone states in pullRequestLabels of its .github/merge-bot.json, if it
-    states any, and only then prints the new number, the URL and the
-    labels now on the pull request. If the labelling fails the pull
+    an open pull request already has that head, or when this clone's own
+    open lanes are at or above --wip-limit. A lane is an open pull request
+    whose head is not a coordination/ branch and whose author is in
+    laneAuthors of the clone's .github/merge-bot.json, or, with none
+    stated, is git's user.name or the clone's own bot (<appSlug>[bot]).
+    Other people's pull requests are not counted. All four flags are
+    REQUIRED: the limit is the seat's to state, so it has no default.
+    --branch is a git branch name in ASCII letters, digits and . _ / -.
+    The done line prints how many lanes were already open, so a count of
+    zero where work is open shows a login that matches nobody; the
+    refusal names the authors counted. After the open it adds the labels
+    this clone states in pullRequestLabels of its .github/merge-bot.json,
+    if it states any, and only then prints the new number, the URL and
+    the labels now on the pull request. If the labelling fails the pull
     request still exists: nothing is printed to stdout, exit is 1, and
     stderr names it.
   comment --pr <n> --body-file <path>
