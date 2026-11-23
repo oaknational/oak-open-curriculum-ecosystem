@@ -88,7 +88,7 @@ function mayMerge(state: PrVerdict['state'], mayMergeUnreviewed: boolean): boole
  * The checks one reading shows as not finished, by name, so that a wait
  * can say what it waits on.
  */
-export interface OutstandingChecks {
+interface OutstandingChecks {
   /** Checks the tip has reported that are still running. */
   readonly pending: readonly string[];
   /**
