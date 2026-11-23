@@ -28,7 +28,7 @@ const LIVE_CONFIG: SentryLiveConfig = {
 const IDENTIFYING_KEY_SNIPPETS = ['forwarded', '-ip', 'remote-', 'via', '-user'];
 
 describe('the data collection the Sentry SDK resolves from the init options', () => {
-  it('collects no user information, bodies, AI payloads or database values', () => {
+  it('collects no user information, cookies, bodies, AI payloads or database values', () => {
     const client = new NodeClient({
       ...createSentryInitOptions(LIVE_CONFIG, { serviceName: 'oak-http' }),
       integrations: [],
@@ -45,7 +45,7 @@ describe('the data collection the Sentry SDK resolves from the init options', ()
     // an unexpected key instead of defaulting to "collect".
     expect(client.getDataCollectionOptions()).toEqual({
       userInfo: false,
-      cookies: { deny: IDENTIFYING_KEY_SNIPPETS },
+      cookies: false,
       httpHeaders: {
         request: { deny: IDENTIFYING_KEY_SNIPPETS },
         response: { deny: IDENTIFYING_KEY_SNIPPETS },

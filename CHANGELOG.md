@@ -1,3 +1,11 @@
+## [1.191.1](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.191.0...v1.191.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **deps:** move the elastic client to 9.5.1 and its transport to 9.6.1 ([cdf5616](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/cdf5616cca8c0334a894ea4fd74e364f7906fbcb))
+* **deps:** refresh five small libraries in range ([43704e6](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/43704e6f81d167d9cfb8e9a078c8d4fed0df32dc))
+
 # [1.191.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.190.10...v1.191.0) (2026-11-23)
 
 

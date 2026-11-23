@@ -24,7 +24,11 @@ is installed inside WSL, never in PowerShell.
 - **Claude Code plugins** (Claude Code users) — the tracked
   [`.claude/settings.json`](../../.claude/settings.json) enables the project's plugins under
   `enabledPlugins`, and enabling a plugin does not install it. Install each one you use once, with
-  `claude plugin install <plugin>@claude-plugins-official --scope project`;
+  `claude plugin install <entry> --scope project`, where `<entry>` is the key exactly as it appears
+  in `enabledPlugins`. The part after `@` names the marketplace the plugin comes from: most are
+  `@claude-plugins-official`, and some (the Elastic and Sentry CLI plugins) are
+  `@anthropic-plugin-directory`. If Claude Code reports that it does not know a marketplace, add
+  that marketplace first; Claude Code's plugin documentation gives the command.
   [MCP servers for contributors](mcp-servers-for-contributors.md) names the plugin for each
   sanctioned server.
 - **MCPJam** (optional, for MCP server development and validation only) —

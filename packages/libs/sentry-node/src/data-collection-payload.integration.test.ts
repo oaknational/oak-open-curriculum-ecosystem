@@ -12,6 +12,7 @@
 import {
   createTransport,
   defaultStackParser,
+  httpHeadersToSpanAttributes,
   NodeClient,
   requestDataIntegration,
   spanToJSON,
@@ -140,23 +141,43 @@ describe('what the Sentry SDK attaches under the init options', () => {
     const processed = await requestDataIntegration().processEvent?.(event, {}, createClient());
 
     // The whole of what the SDK attaches, so a change in what it collects
-    // shows here. No user or IP address is attached and the IP headers are
-    // dropped. Everything else is attached as received: the redaction barrier
-    // (ADR-160), which runs after this, is what removes credentials.
+    // shows here. No user or IP address is attached, the IP headers are
+    // dropped, and no cookie is attached: neither the `cookie` header nor a
+    // parsed record. Everything else is attached as received: the redaction
+    // barrier (ADR-160), which runs after this, is what removes credentials.
     expect(processed?.user).toBeUndefined();
     expect(processed?.request).toEqual({
       method: 'POST',
       url: 'https://example.test/mcp?page=2&x-user=u1',
       query_string: 'page=2&x-user=u1',
       headers: {
-        cookie: 'theme=dark; consent=yes',
         authorization: 'Bearer token-value',
         'user-agent': 'client/1.0',
         via: '1.1 proxy',
       },
-      cookies: { theme: 'dark', consent: 'yes' },
       data: '{"q":"body text"}',
     });
+  });
+
+  it('writes no cookie onto a span, from a request or a response', () => {
+    const collection = createClient().getDataCollectionOptions();
+
+    // The function the SDK's HTTP instrumentation uses to turn headers into
+    // span attributes. The other headers show it ran.
+    expect(
+      httpHeadersToSpanAttributes(
+        { cookie: 'theme=dark; consent=yes', 'user-agent': 'client/1.0' },
+        collection,
+        'request',
+      ),
+    ).toEqual({ 'http.request.header.user_agent': 'client/1.0' });
+    expect(
+      httpHeadersToSpanAttributes(
+        { 'set-cookie': 'theme=dark; Path=/', 'content-type': 'application/json' },
+        collection,
+        'response',
+      ),
+    ).toEqual({ 'http.response.header.content_type': 'application/json' });
   });
 
   it('keeps tool arguments and results off the MCP server span, as the app calls the wrapper', async () => {
