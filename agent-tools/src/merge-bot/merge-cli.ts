@@ -214,7 +214,7 @@ async function pollUntilActionable(context: {
     if (retry === undefined) {
       return reportOutcome(outcome, parsed, input);
     }
-    writeProgress(parsed, poll, retry, input);
+    writeProgress(parsed, { poll, label: retry, outcome }, input);
     await sleep(parsed.intervalSeconds * MILLIS_PER_SECOND);
   }
 }

@@ -31,7 +31,11 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-fi
   ${MAX_BUDGET_SECONDS}s, keeping the whole budget inside GitHub's one-hour
   installation-token TTL); every other verdict is an immediate typed
   refusal, and an exhausted poll budget also exits 3, reporting the last
-  verdict. That budget counts SLEEP alone, so polling ALSO stops (exit 1,
+  verdict. Each poll line names the checks it read as not finished:
+  reported checks still pending, or, on the bot's own PR once every
+  reported check is green, required contexts the tip has not reported. A
+  refusal carries the same names as outstandingChecks; its notReported
+  list is empty wherever the rules were not read. That budget counts SLEEP alone, so polling ALSO stops (exit 1,
   naming the deadline) once the wall clock reaches five minutes before the
   minted token's own stated expiry — no merge call is ever fired in a round
   that could straddle it.
@@ -63,7 +67,8 @@ export const MERGE_USAGE = `merge-bot merge --pr <number> [--no-review-reason-fi
   every merge: the call is pinned to the commit, not to the reviews.
   --json puts EXACTLY the outcome object on stdout; progress moves to
   stderr. A refusal raised before the pull request is read (the reason
-  file) has a refusal's keys, with verdictState null and no evidence.
+  file) has a refusal's keys, with verdictState null, no evidence and no
+  outstanding checks.
   Exit map: 0 merged, 1 operational failure, 2 usage, 3 typed refusal —
   an already-MERGED PR exits 3.
   The pr-lifecycle merge-base deletion sweep is NOT discharged by this
