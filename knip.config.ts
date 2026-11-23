@@ -201,7 +201,6 @@ const config: KnipConfig = {
         'operations/**/*.ts',
         'scripts/**/*.ts',
         'runtime-only-scripts/**/*.mjs',
-        'widget/src/main.tsx',
         'widget/src/vite-env.d.ts',
         'e2e-tests/**/*.ts',
       ],

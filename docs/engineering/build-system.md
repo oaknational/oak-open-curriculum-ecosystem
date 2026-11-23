@@ -103,7 +103,24 @@ Two majors are held deliberately. A sweep must not cross either, and
   covers workspaces that pull it only as a transitive peer. Lift it when the
   project moves Node majors.
 
-Both holds must survive a full lockfile rebuild — see
+One version is held below its latest patch, for a defect and not a major:
+
+- **`turbo` is pinned at exactly 2.11.10.** From 2.11.11, a task input glob
+  that reaches a pnpm workspace link under `node_modules` through `**` hashes
+  the linked package's files as inputs
+  ([vercel/turborepo#15084](https://github.com/vercel/turborepo/issues/15084),
+  open, reproduced there on 2.11.11 to 2.11.13). Measured here on 2.11.13:
+  the inputs of the `build`, `type-check`, `lint`, `test`, `test:e2e` and
+  `sdk-codegen` graph rose from 41,002 files to 361,157, of which 320,724 sit
+  under `node_modules`, and they include sibling workspaces' `dist/`. A task's
+  cache key then depends on which siblings have been built, and the app's
+  `deploy-config-gate` end-to-end test fails reading the dry run. Enforced by
+  the exact version in the root manifest, which a lockfile rebuild cannot
+  move. **Lift condition: a turbo release that closes that issue**, proved by
+  comparing each task's input set from `turbo run … --dry=json` before and
+  after the raise.
+
+All three holds must survive a full lockfile rebuild — see
 [`lockfile-rebuild-survivability`](../../.agent/rules/lockfile-rebuild-survivability.md).
 
 **Project `.npmrc` is optional.** Use it for npm-compatible registry and auth
