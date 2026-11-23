@@ -2270,7 +2270,9 @@ is a boundary record, not a retirement.
 
 - On the limit, after the seat reached seven open pull requests: "We are supposed to work to
   a WIP limit, and for good reason, open the seventh PR, but then all further new work stops
-  until we are down to zero open PRs or I say otherwise". The stop stands. The unit is every
+  until we are down to zero open PRs or I say otherwise". The stop holds until this
+  estate's open count reads zero on GitHub; after that nothing opens before the owner
+  answers the question named below. The unit is every
   open pull request of this estate's bots, drafts and the coordination draft included (the
   owner's own count of six included them).
 - On the primary checkout: "you are the agent looking after OCE, please keep the main

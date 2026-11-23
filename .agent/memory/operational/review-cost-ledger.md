@@ -308,11 +308,11 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1085 | 1 | 0 / 40 | within | 1 | agreed | the merge bot labels the pull requests its clone's bot opens; one Copilot review: two findings (the result never named the labels; the help text gave the wrong order on the failure path), both upheld and cured in one push in the tool, not the wording |
 | 2026-11-23 | oaknational#1086 | 1 | 0 / 40 | within | 0 | agreed | the Hono adapter floor raised to 2.1.6; class C, merged on the owner's go-ahead after a specialist review; one Copilot review: no finding |
 | 2026-11-23 | oaknational#1087 | 1 | 0 / 40 | within | 0 | agreed | `express` 5.3.0; class B, the preview checked; one Copilot review: no finding |
-| 2026-11-23 | oaknational#1081 | 1 | 0 / 40 | within | 1 | agreed | cookies stop reaching Sentry; class C, open at this row with the owner's go-ahead given; one Copilot review: two findings (the documents read as if "off" were a promise about the event; a query parameter is recorded on events as received), the first upheld and cured, the second true and left out of scope with the reason |
-| 2026-11-23 | oaknational#1088 | 1 | 0 / 40 | within | 0 | agreed | the Elastic client 9.5.1 and its transport 9.6.1; class B, open at this row; one Copilot review: no finding |
-| 2026-11-23 | oaknational#1089 | 1 | 0 / 40 | within | 0 | agreed | five small libraries in range; class B, open at this row, held 45 minutes by a required check that an outside service did not deliver; one Copilot review: no finding |
-| 2026-11-23 | oaknational#1090 | 1 | 0 / 40 | within | 1 | agreed | the owner's change to the enabled plugins, committed at the owner's word; open at this row; one Copilot finding (the setup guide's install command fitted one marketplace only), upheld and cured in one push |
-| 2026-11-23 | oaknational#1073 | 1 | 0 / 40 | within | 0 | agreed | the coordination branch of 2026-11-22 and 23, open at this row and not yet folded; one Copilot review at open: no finding |
+| 2026-11-23 | oaknational#1081 | 1 | 0 / 40 | within | 1 | agreed | cookies stop reaching Sentry; class C, merged on the owner's go-ahead; one Copilot review: two findings (the documents read as if "off" were a promise about the event; a query parameter is recorded on events as received), the first upheld and cured, the second true and left out of scope with the reason |
+| 2026-11-23 | oaknational#1088 | 1 | 0 / 40 | within | 0 | agreed | the Elastic client 9.5.1 and its transport 9.6.1; class B; one Copilot review: no finding |
+| 2026-11-23 | oaknational#1089 | 1 | 0 / 40 | within | 0 | agreed | five small libraries in range; class B, held 45 minutes by a required check that an outside service did not deliver; one Copilot review: no finding |
+| 2026-11-23 | oaknational#1090 | 1 | 0 / 40 | within | 1 | agreed | the owner's change to the enabled plugins, committed at the owner's word; one Copilot finding (the setup guide's install command fitted one marketplace only), upheld and cured in one push |
+| 2026-11-23 | oaknational#1073 | 1 | 0 / 40 | within | 0 | agreed | the coordination branch of 2026-11-22 and 23, folded after the lane's last pull request merged; one Copilot review at open: no finding |
 
 ## Weight changes
 
