@@ -253,6 +253,19 @@ Because the schema is strict, an older build of `agent-tools` refuses a file
 that carries the field; add it once every worktree of the clone has a build
 that knows it.
 
+The file may also state `laneAuthors`, the GitHub logins whose open pull
+requests `pull-request open` counts against `--wip-limit`. The limit is on a
+clone's own work in progress, and a repository shared with other people holds
+their pull requests too. With the field absent the tool counts two authors:
+git's `user.name` where it is run, and the clone's own bot (`<appSlug>[bot]`),
+which authors everything the tool opens. A stated list replaces that default,
+so it names every author to count, the bot included. Logins are compared as
+GitHub reports a pull request's author, without regard to case: an app's login
+carries its `[bot]` suffix, and a display name in `user.name` matches nobody.
+The open prints the count it found, so a zero where work is open shows a login
+that matches nothing. An empty list is refused. The same caution about older
+builds applies as for `pullRequestLabels`.
+
 **Clones that predate the untracking** (the file used to be tracked): the
 merge that removed it from version control also removes the working-tree
 copy on the next fast-forward, and the ignore rule then hides its absence, so
@@ -510,9 +523,11 @@ pnpm agent-tools merge-bot pull-request dispatch-workflow --workflow <file-name>
 - `open` writes a DRAFT from the branch into the repository's default
   branch, read from GitHub, and refuses (exit 3, writing nothing) when the
   remote does not hold the branch, when an open pull request already has
-  that head, or when the open pull requests whose head is not a
-  `coordination/` branch number at or above `--wip-limit`, a REQUIRED flag
-  with no default.
+  that head, or when the clone's own open lanes number at or above
+  `--wip-limit`, a REQUIRED flag with no default. A lane is an open pull
+  request whose head is not a `coordination/` branch and whose author the
+  clone counts as its own (see `laneAuthors` above). The open prints the
+  count it found, and the refusal names the authors it counted.
 - `resolve`, `ready` and `close` each read the state they depend on first
   and refuse as a typed value before writing: a thread on another pull
   request or already resolved; a pull request that is not an open draft; a
