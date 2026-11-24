@@ -320,7 +320,7 @@ on `claims open` exist since PR #225: frictions F-94 and F-95.)
 
 No Director is seated and no effort is under direction, so there is no handoff state. The blocks this
 section held, the newest dated 2026-11-04, are byte-identical in
-[`archive/director-handoff-current-handoff-state-2026-11-24.md`](archive/director-handoff-current-handoff-state-2026-11-24.md);
+`archive/director-handoff-current-handoff-state-2026-11-24.md`;
 they describe the fork line before the reunification of 2026-11-18. Live state is in
 [`repo-continuity.md`](repo-continuity.md) and the thread records. A Director who takes the seat writes
 the first block here.
