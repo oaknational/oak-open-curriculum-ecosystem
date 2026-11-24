@@ -1,0 +1,6 @@
+---
+description: 'A watcher or monitor that has run three full times in a row with no activity is stopped and not re-armed: the seat says so once and arms it again only when work resumes or the owner asks. Applies to every re-armed watcher, the comms watcher included, whatever other rule armed it. Deliberately primitive: it will miss some cases, and that costs less than hours of re-arming with nothing to hear. Failure shape: a seat answering each expiry notice by re-arming, for ten hours and about twenty model turns, with an empty queue and no event.'
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/watcher-stops-after-three-quiet-runs.md`.
