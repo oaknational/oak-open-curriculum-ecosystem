@@ -1,3 +1,16 @@
+# [1.194.0](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.193.6...v1.194.0) (2026-11-24)
+
+
+### Bug Fixes
+
+* **hooks:** the push hook catches each status under sh -e ([555ff60](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/555ff60ef879887d78d9ec8103ae4334d4bdf8dc))
+
+
+### Features
+
+* **hooks:** the family copy of the push hook follows ([6199ccb](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/6199ccbc7fdf2c6bc50f71f15f471a8acbdf7b55))
+* **hooks:** the push hook passes a deletions-only push ([9f6038d](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/9f6038df7a88227dd6dfc5a246cf5183bdba44c6))
+
 ## [1.193.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.193.5...v1.193.6) (2026-11-24)
 
 
