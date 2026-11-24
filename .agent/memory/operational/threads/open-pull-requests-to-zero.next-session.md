@@ -2936,3 +2936,25 @@ merged, and its scope goes back to the owner before any code.
 300). The coordination worktree's directory is named for 2026-10-28 while it holds the
 2026-11-24 branch. The owner names the next feature; the candidates on record are the
 Attendant Workflow's step 2 and the decoupling of the thin Oak apps.
+
+**Later the same afternoon: the hook lane landed (1105, `68ce7de7e`).** The pre-push hook
+reads the pushed refs before any gate: a deletions-only push passes with no gate, and a
+push that deletes a ref and sends commits is refused under the new rule
+`deletions-never-ride-a-push`. The classifier is `agent-tools/src/push-shape/`. Two things
+the lane met on the way:
+
+- The family-conformance leg refused the first push: `.husky/pre-push` must be the same
+  bytes as `.agent/family/typescript/hooks/pre-push`. The owner, asked nothing, said of
+  the fork the same hour: "the Engraph fork is reduced to a simple mirror of the Oak fork,
+  it does not require any consideration". So this repository is the whole family.
+- Copilot's one finding was upheld: husky runs the hook under `sh -e`, so a status read
+  from `$?` on the line after a failing step is never reached. Each status in the hook,
+  the secret scan's and the cost gate's included, is now caught with an or-list.
+
+The lane was pushed with `merge-bot push` and its branch retired with `merge-bot retire`.
+The merge-base deletion sweep of `pr-lifecycle` was not run before either merge of this
+seat (1104, 1105); read afterwards, every removed line of both is an intended edit.
+
+**Owed to the owner.** The scope of the deletion command chosen by question prompt:
+`merge-bot retire` covers a merged branch, so what remains is a branch that is abandoned
+and not merged. Nothing is built for it.
