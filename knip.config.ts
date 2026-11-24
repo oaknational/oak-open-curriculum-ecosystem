@@ -52,6 +52,14 @@ const config: KnipConfig = {
   // printing a hint that scrolls past.
   treatConfigHintsAsErrors: true,
 
+  // The MCP plugin reads the tracked client configs only. Its default list
+  // also holds `.mcp.json`, which git ignores and each checkout writes for
+  // itself from `.mcp.json.example`: a checkout with one saw `mcpjam` as used
+  // and failed on the `@mcpjam/cli` ignore above, while CI and a fresh
+  // worktree, with none, needed that ignore. A gate reads tracked files, so
+  // its verdict is the same in every checkout.
+  mcp: { config: ['.cursor/mcp.json', '.codex/config.toml'] },
+
   eslint: true,
   vitest: true,
   typescript: true,
