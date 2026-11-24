@@ -501,6 +501,31 @@ kind in one day (a limit and three checks read at the near end) and two tool-fee
 for this boundary, so left for a deliberate pass. The reasoning is in
 `.agent/reports/dependency-pass-limits-and-far-end-checks-exploration-2026-11-23.md`.
 
+STATE, 2026-11-23, later (the same seat): the dependency-currency pass has ended. The fold (1073) merged
+and the open count read zero; the owner then chose three closing pull requests, taken one at a time, and all
+three merged: 1092 (`@vercel/functions`), 1093 (a declared hold on `@opentelemetry/api` below 1.10) and
+1094 (the Clerk clients in range, class C, at the owner's go-ahead after the owner's signed-in check of the
+preview). The primary checkout is current at `d0092d0be`. The owner ruled that a coordination branch keeps
+its standing draft, which the count for zero excludes. Next safe step: feature development, at the owner's
+direction. Owed to the owner: a decision on each of the five proposals in the report named above. One
+security ticket, MCP-985, was raised at the owner's word as planned work.
+
+STATE, 2026-11-23, before the day's third compaction (the same seat, staying live at the owner's word:
+"post-compaction we continue"): the owner decided all five proposals by question prompt. The open limit of
+the merge tool now counts the clone's own lanes (1095, with its setup steps in 1096). The queue that followed
+is worked through, one pull request at a time at a limit of one: the `pr-lifecycle` count step (1097), the
+merge tool's waiting line (1098), the two adopted rules (1099, scoped by 1101 to an owner who is present),
+and one line of the `coordination-fold` skill (1100). On 2026-11-24 the owner asked for one more rule, a
+watcher stops after three quiet watcher periods (1102), and then for the seat to stop on this machine and the
+work to move to a cloud session. Next safe step: read the newest block of the thread record, headed "Handoff
+2026-11-24", which says what a cloud session lacks and must check before its first write. 1102 merged; no
+lane pull request of this estate is open. Nothing is queued; the owner names the next work. The owner decided seven further
+matters by prompt at this boundary and none is open. The thread record's newest block holds the queue with
+the state of each item, the two checks that were owed and are now discharged, the seven decisions, and the
+recipe for the watcher. Deep consolidation status: due, for the reason given
+above; not bounded for this boundary. The thinking is in
+`.agent/reports/after-the-pass-whose-is-it-and-what-holds-it-exploration-2026-11-23.md`.
+
 STATE, 2026-10-13T13:0xZ (Walrus seeks Maelstrom, 9585cc, the reviewer seat at n=1, at its compaction
 boundary at the owner's word): the review lane for pull request #356 is open under claim `b13d5c39`;
 the discovery is reported. Next safe steps for that seat, in order, from the thread record
