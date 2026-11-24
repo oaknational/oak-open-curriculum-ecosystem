@@ -2727,18 +2727,19 @@ answered that point, so it stands as the seat's reading of "more general". 1102 
 - The seat's private memory. Every owner ruling this thread relies on is quoted in this
   record or in a tracked rule. The one item held only there is the detail of the token
   finding, which Linear MCP-985 also holds.
-- The two worktrees of this machine. A cloud checkout works from `main` and from the
-  coordination branch `coordination/2026-11-23-086dcc`, both on the remote.
+- The two worktrees of this machine. A cloud checkout starts on `main`, which carries
+  these records. Records written after them go to the live coordination branch: the one
+  open draft pull request whose head begins `coordination/`, found with `gh pr list
+  --repo <owner>/<name> --state open --search "head:coordination/"`, never to `main`
+  directly.
 - This session's scratch directory. Nothing in it is needed.
 
 **Rules of the road that are easy to miss.** One of this estate's pull requests open at a
-time, opened with `--wip-limit 1`; the coordination draft 1091 is not counted. A review
+time, opened with `--wip-limit 1`; the coordination draft is not counted. A review
 is read, body included, before the merge tool is started. A decision only the owner can
 make goes to the owner by question prompt when it is found, never into a list. A watcher
 is not armed by a solo seat, and no watcher is armed a fourth time after three quiet
-watcher periods. The coordination branch is past the day it was cut on: its fold to
-`main` is due when useful, by the `coordination-fold` skill, and is the first piece of
-work a successor with a bot identity would take.
+watcher periods.
 
 **What is context-only and why.** The transcript of this session, the scratch files, and
 the reasoning behind each small wording choice in the merged pull requests. Each pull
