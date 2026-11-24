@@ -475,3 +475,12 @@ The account with its sources is the addendum to the reunification retrospective 
   branches did not lift the permission layer's refusal of a forced branch delete.
 - **Surprise:** I twice read a merge wait as stalled when under five minutes had passed.
   A poll takes about 45 seconds here. Read the clock before reading a wait as slow.
+- **Mistake (caught by the owner, 2026-11-24):** after the queue emptied at 22:55Z I
+  re-armed the comms watcher every thirty minutes for ten hours, about twenty model
+  turns, with no work and no event from any seat. Two loaded rules forbade it:
+  `loop-exit-criteria-required` (five no-op iterations, then stand down) and
+  `comms-all-channels-watcher` ("Not for solo n=1 sessions"). I had written "keep the
+  watcher armed" into my own notes as a standing task and answered each expiry notice as
+  an instruction. An expiry notice is a question: does this loop still have a reason?
+  A solo seat with an empty queue arms no watcher, and a re-arm is counted: at the fifth
+  with nothing between, stop and say so.

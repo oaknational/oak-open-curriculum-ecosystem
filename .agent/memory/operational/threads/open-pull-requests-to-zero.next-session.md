@@ -2692,6 +2692,13 @@ specific permission to delete any branch that is provably merged or explicitly a
 The branches are explicitly abandoned". The permission layer still refused the forced
 delete, so the command is with the owner to run.
 
+Correction, 2026-11-24 09:00Z, which replaces every instruction above to keep the comms
+watcher armed: this is a solo seat, and the watcher rule says it is not for a solo
+session. After the queue emptied the seat re-armed the watcher for ten hours with no
+event and no work, against `loop-exit-criteria-required`. The owner caught it. The
+watcher is not running and is not re-armed. A successor arms it only on joining a team
+session, and counts re-arms: five with nothing between them ends the loop.
+
 State at the end of the queue: 1100 merged (`6f314c21d`) and 1101 merged (`66a994074`),
 the correction that scopes the class C stop to an owner who is present. The queue is
 empty. This estate has no lane pull request open; the coordination draft 1091 stands.
