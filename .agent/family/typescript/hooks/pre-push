@@ -16,6 +16,40 @@ export TURBO_UI=0
 
 echo "🚀 Running pre-push checks..."
 
+# git feeds pre-push the destination remote name as $1 and, on stdin, one
+# "<local_ref> <local_sha> <remote_ref> <remote_sha>" line per pushed ref.
+# Capture the ref lines once into a temp file (a clean single-token path
+# survives pnpm's argument handling); every step below that reads them takes
+# the file. It is empty on a manual/TTY run.
+pushed_refs="$(mktemp)"
+[ -t 0 ] || cat > "$pushed_refs"
+
+# What the push does, before any gate runs. The gates check the commits a push
+# sends: a push that only deletes refs sends none, so it passes here; a push
+# that deletes a ref and sends commits is refused (the rule
+# deletions-never-ride-a-push). The tested classification lives in
+# agent-tools/src/push-shape/. The command prints its verdict as one exact
+# word on stdout, and only when it exits 0; the gates are skipped on the word
+# "deletions-only" alone, so a command that crashes, prints nothing or prints
+# anything else can never skip them. Called through `pnpm exec`, never a
+# package script, whose echoed command line would join the captured word.
+#
+# husky runs this hook under `sh -e`, where a failing command ends the script
+# on the spot: a status is caught with `||`, never read from `$?` on the next
+# line, which the script would not reach.
+push_shape_status=0
+push_shape="$(pnpm exec tsx agent-tools/src/push-shape/push-shape.ts --refs-file "$pushed_refs")" || push_shape_status=$?
+if [ "$push_shape_status" -ne 0 ]; then
+  rm "$pushed_refs"
+  echo "❌ Push stopped before the gates: read the lines above."
+  exit 1
+fi
+if [ "$push_shape" = "deletions-only" ]; then
+  rm "$pushed_refs"
+  echo "✅ Nothing to check: the push only deletes refs."
+  exit 0
+fi
+
 if ! command -v gitleaks >/dev/null 2>&1; then
   echo "❌ gitleaks is not installed."
   echo "Install it before running pre-push:"
@@ -28,21 +62,17 @@ if ! command -v gitleaks >/dev/null 2>&1; then
   echo "The scan accepts gitleaks only at /opt/homebrew/bin, /usr/local/bin or /usr/bin;"
   echo "symlink an install from anywhere else into one of those."
   echo "Then retry your push."
+  rm "$pushed_refs"
   exit 1
 fi
 
 echo "🛡️ Running secret scan (pushed commits only; CI scans full history)..."
-# git feeds pre-push the destination remote name as $1 and, on stdin, one
-# "<local_ref> <local_sha> <remote_ref> <remote_sha>" line per pushed ref. The
-# tested range logic lives in agent-tools/src/secret-scan/; here we only capture
-# git's ref lines into a temp file (a clean single-token path survives pnpm's
-# argument handling) and hand them to the scanner, which scans ONLY the pushed
+# The tested range logic lives in agent-tools/src/secret-scan/; here we only
+# hand the captured ref lines to the scanner, which scans ONLY the pushed
 # commits. The CI secret-scan job runs the full `--branches --tags` scan as the
 # comprehensive backstop, so no history goes unscanned.
-pushed_refs="$(mktemp)"
-[ -t 0 ] || cat > "$pushed_refs"   # capture git's ref lines once (empty on a manual/TTY run)
-pnpm agent-tools:secret-scan --remote "$1" --refs-file "$pushed_refs"
-secret_scan_status=$?
+secret_scan_status=0
+pnpm agent-tools:secret-scan --remote "$1" --refs-file "$pushed_refs" || secret_scan_status=$?
 if [ "$secret_scan_status" -ne 0 ]; then
   rm "$pushed_refs"
   echo "❌ Secret scan failed."
@@ -60,8 +90,8 @@ echo "💸 Pricing the review loop against the declared budget..."
 # push passes (the owner, 2026-10-24: the check makes the seat think, and
 # costs no comment, no further push and never the owner's word). A TTY run
 # with no ref lines prices nothing.
-pnpm --silent agent-tools:review-cost gate --refs-file "$pushed_refs"
-review_cost_status=$?
+review_cost_status=0
+pnpm --silent agent-tools:review-cost gate --refs-file "$pushed_refs" || review_cost_status=$?
 rm "$pushed_refs"
 if [ "$review_cost_status" -ne 0 ]; then
   echo "❌ Review cost gate held the push: read its lines above (the budget is spent with no decision line recorded, or the pricing failed)."

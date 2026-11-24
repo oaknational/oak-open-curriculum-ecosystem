@@ -1951,9 +1951,11 @@ posted, then fired within the minute — fully auditable). Then:
   merge without the flag and delete the branch separately. The separate
   delete is `merge-bot retire` (a proven-ancestor compare-and-swap through
   the API as the bot, with read-back), never `git push --delete`: a
-  push-based delete runs the full pre-push gate on the shared host inside
-  whoever holds the push slot (2026-09-15: a Director's branch delete ran
-  the whole gate inside a lane's slot; the lane's API delete ran no hook).
+  push-based delete goes out under the sign-in of whoever owns the checkout,
+  not as the bot, and it proves nothing about the branch. (Until the hook
+  learned to pass a deletions-only push, it also ran the full pre-push gate:
+  on 2026-09-15 a Director's branch delete ran the whole gate inside a
+  lane's slot.)
 - **A deferred or denied merge does not end shepherding.** "Truly green" has
   a shelf life: bots re-review every push asynchronously, so comment-clean
   verified at one instant expires at the next event. When the merge is handed

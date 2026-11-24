@@ -231,6 +231,12 @@ tests, and a11y tests. See ADR-121 for the full rationale.
 `pnpm check:docs` is the focused, verify-only aggregate for documentation work;
 it does not replace the full gate for product or tooling changes.
 
+The pre-push hook first reads what the push does. A push that only deletes
+refs sends no commits, so the hook passes it and runs no gate; a push that
+deletes a ref and sends commits is refused before any gate runs (the rule
+[`deletions-never-ride-a-push`](../../.agent/rules/deletions-never-ride-a-push.md)).
+Everything below is about a push that sends commits.
+
 The full gate is authoritative in both directions. A **successful push has
 already run the entire pre-push gate** — the push cannot succeed otherwise —
 so do not offer `pnpm check` or CI-watching merely to "confirm green" after
