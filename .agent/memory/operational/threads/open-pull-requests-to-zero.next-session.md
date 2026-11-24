@@ -2871,3 +2871,68 @@ comment and a security assumption nobody had read to its far end (the security r
 meant (the owner). The seat caught a floor named from memory, a finding written into a
 public record, and a counter read at zero. The pattern is counts, lists and scopes stated
 by this seat.
+
+### Update 2026-11-24, afternoon: a review of the estate, a gate cure and a cleanup (Wyvern tracks Draught, fefee9)
+
+The owner asked for a review of the repository, the plans and the handoff, then gave each
+item below as an instruction in session. This seat ran on the owner's machine; the cloud
+session the handoff above describes folded 1091 and opened the standing draft 1103.
+
+**Correction to the handoff above.** "The coordination draft 1091 stands" is no longer
+true: 1091 merged on 2026-11-24 at 10:36Z, and the live coordination branch is
+`coordination/2026-11-24-a1ba48`, draft 1103.
+
+**The Director handoff's state section is emptied.** The blocks it held, the newest of
+2026-11-04, are byte-identical in
+`archive/director-handoff-current-handoff-state-2026-11-24.md`. The Director Brief stays.
+The seat read "empty the director handoff" as the state section, since the file's own
+disposition line keeps the Brief; the owner was told and did not correct it.
+
+**The knip gate was failing in the primary checkout, and is cured (1104, `6ae4ee780`).**
+Knip's MCP plugin read the git-ignored `.mcp.json`. A checkout that had one saw `mcpjam`
+as used and failed on the `@mcpjam/cli` ignore; CI and a fresh worktree had none and
+needed it. The plugin is now given the two tracked client configs. Copilot's one finding,
+that the tracked `.codex/config.toml` names an `mcpjam` server, was tested and not
+upheld: the file names none.
+
+**Branches deleted from origin at the owner's word**, verbatim: "all provably merged or
+explicitly abandoned branches and worktrees should be deleted". Each tip, for recovery:
+
+- Abandoned, each with only closed pull requests: `docs/first-class-copilot-agent-support`
+  at `4ead1345b` (522, 708, 777); `feat/mcp-103-content-workspace` at `04b91b02e` (956);
+  `jimcresswell/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the` at
+  `30d0e81c5` (644, 779, 806); `jimcresswell/mcp-487-sanitise-numeric-input` at
+  `9b6da6178` (752); `fix/chatgpt-oak-mcp-config` at `b6d0a3ef8` (1001), which the owner
+  named abandoned by word. The first four the owner deleted by command.
+- Merged, each tip an ancestor of `main`: `agent/n8n-practice-comparative-research` and
+  `agent/persistent-reflex-layer-report` (both at `f0de159eb`), and
+  `jimcresswell/jim-next-2026-08-04` at `5f7d656b2`.
+- Locally: the `deps-currency` worktree removed without force (its ignored files were
+  build output, fetched assets and a `.env.local` identical to the primary's); the local
+  branches `engraph` and the knip lane's, both merged.
+- Left: `claude/objective-nightingale-b4ba25`, merged, a colleague's.
+
+**Two faults of this seat, both told to the owner.**
+
+- Every push this seat made before the hook lane's went out by plain `git push`, which
+  uses the keychain credential of the checkout's owner. GitHub's activity log names the
+  owner as the actor for the knip lane's branch creation and the four deletions the seat
+  made; the seat's one push to the coordination branch went the same way. The commits are the bot's. The route is `merge-bot push`
+  (`pr-lifecycle`, the push step), used from that point.
+- The merged branches were deleted by `git push --delete`. `merge-bot retire` existed and
+  `pr-lifecycle` names it as the only route. The seat had read neither skill before
+  acting. Each push-delete ran the full pre-push gate, and the first was refused by the
+  knip fault above, which is how that fault was found.
+
+**In flight when this was written.** The lane `feat/push-hook-handles-deletions`, at the
+owner's word: the pre-push hook reads the pushed refs first, passes a deletions-only push
+with no gate and refuses a push that deletes a ref and sends commits; the new rule
+`deletions-never-ride-a-push`. The owner also chose, by question prompt, an agent-tools
+command for deletion. That choice was made before the seat found `merge-bot retire`, so
+what remains to build is the case `retire` refuses, a branch that is abandoned and not
+merged, and its scope goes back to the owner before any code.
+
+**Still standing.** Deep consolidation is due (the napkin at 498 lines against a limit of
+300). The coordination worktree's directory is named for 2026-10-28 while it holds the
+2026-11-24 branch. The owner names the next feature; the candidates on record are the
+Attendant Workflow's step 2 and the decoupling of the thin Oak apps.
