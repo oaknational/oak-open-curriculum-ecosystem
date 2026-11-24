@@ -58,8 +58,8 @@ iteration default by reference to this rule.
   the monitor terminates when the stream closes or the agent
   closes it. (See `use-monitor-for-event-driven-wake.md`.) A
   monitor the agent re-arms at each expiry is bounded by
-  `watcher-stops-after-three-quiet-runs.md`: three full runs with
-  no activity, then it is not armed again.
+  `watcher-stops-after-three-quiet-periods.md`: three watcher
+  periods in a row with no activity, then it is not armed again.
 - Owner-driven manual wake-ups. The owner authoring each prompt
   is the exit criterion.
 
