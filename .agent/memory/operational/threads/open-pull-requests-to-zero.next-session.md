@@ -2955,6 +2955,10 @@ The lane was pushed with `merge-bot push` and its branch retired with `merge-bot
 The merge-base deletion sweep of `pr-lifecycle` was not run before either merge of this
 seat (1104, 1105); read afterwards, every removed line of both is an intended edit.
 
-**Owed to the owner.** The scope of the deletion command chosen by question prompt:
-`merge-bot retire` covers a merged branch, so what remains is a branch that is abandoned
-and not merged. Nothing is built for it.
+**No command for abandoned branches: the owner's decision.** `merge-bot retire` covers a
+merged branch, so what remained of the deletion command chosen by question prompt was a
+branch that is abandoned and not merged. Told that, the owner said, verbatim: "we won't
+build a command for abandoned branches, it is higher risk and rare, so it is best handled
+carefully and on an individual basis". Nothing is built and nothing is owed. An abandoned
+branch is assessed one at a time, named abandoned by the owner, and its tip recorded
+before it is deleted; how each is deleted is settled with the owner at the time.
