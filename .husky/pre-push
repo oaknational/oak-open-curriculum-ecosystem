@@ -33,8 +33,12 @@ pushed_refs="$(mktemp)"
 # "deletions-only" alone, so a command that crashes, prints nothing or prints
 # anything else can never skip them. Called through `pnpm exec`, never a
 # package script, whose echoed command line would join the captured word.
-push_shape="$(pnpm exec tsx agent-tools/src/push-shape/push-shape.ts --refs-file "$pushed_refs")"
-push_shape_status=$?
+#
+# husky runs this hook under `sh -e`, where a failing command ends the script
+# on the spot: a status is caught with `||`, never read from `$?` on the next
+# line, which the script would not reach.
+push_shape_status=0
+push_shape="$(pnpm exec tsx agent-tools/src/push-shape/push-shape.ts --refs-file "$pushed_refs")" || push_shape_status=$?
 if [ "$push_shape_status" -ne 0 ]; then
   rm "$pushed_refs"
   echo "❌ Push stopped before the gates: read the lines above."
@@ -67,8 +71,8 @@ echo "🛡️ Running secret scan (pushed commits only; CI scans full history)..
 # hand the captured ref lines to the scanner, which scans ONLY the pushed
 # commits. The CI secret-scan job runs the full `--branches --tags` scan as the
 # comprehensive backstop, so no history goes unscanned.
-pnpm agent-tools:secret-scan --remote "$1" --refs-file "$pushed_refs"
-secret_scan_status=$?
+secret_scan_status=0
+pnpm agent-tools:secret-scan --remote "$1" --refs-file "$pushed_refs" || secret_scan_status=$?
 if [ "$secret_scan_status" -ne 0 ]; then
   rm "$pushed_refs"
   echo "❌ Secret scan failed."
@@ -86,8 +90,8 @@ echo "💸 Pricing the review loop against the declared budget..."
 # push passes (the owner, 2026-10-24: the check makes the seat think, and
 # costs no comment, no further push and never the owner's word). A TTY run
 # with no ref lines prices nothing.
-pnpm --silent agent-tools:review-cost gate --refs-file "$pushed_refs"
-review_cost_status=$?
+review_cost_status=0
+pnpm --silent agent-tools:review-cost gate --refs-file "$pushed_refs" || review_cost_status=$?
 rm "$pushed_refs"
 if [ "$review_cost_status" -ne 0 ]; then
   echo "❌ Review cost gate held the push: read its lines above (the budget is spent with no decision line recorded, or the pricing failed)."
