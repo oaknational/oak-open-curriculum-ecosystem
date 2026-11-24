@@ -2690,7 +2690,7 @@ after 1100. Item 4 is open as **1100**, ready, with the merge tool polling it.
 The three leftover branches of the dependency pass: the owner, verbatim: "I give you
 specific permission to delete any branch that is provably merged or explicitly abandoned.
 The branches are explicitly abandoned". The permission layer still refused the forced
-delete, so the command is with the owner to run.
+delete, so the owner ran it on 2026-11-24 and the three branches are gone.
 
 ### Handoff 2026-11-24: the seat stops on this machine and the work moves to a cloud session
 
