@@ -1,3 +1,10 @@
+## [1.193.6](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.193.5...v1.193.6) (2026-11-24)
+
+
+### Bug Fixes
+
+* **knip:** the gate reads tracked MCP configs only ([ea3bf4f](https://github.com/oaknational/oak-open-curriculum-ecosystem/commit/ea3bf4f93efee3e6fe3478050ed6c7b56481e0bb))
+
 ## [1.193.5](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.193.4...v1.193.5) (2026-11-24)
 
 ## [1.193.4](https://github.com/oaknational/oak-open-curriculum-ecosystem/compare/v1.193.3...v1.193.4) (2026-11-24)
