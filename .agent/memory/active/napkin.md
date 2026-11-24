@@ -483,4 +483,16 @@ The account with its sources is the addendum to the reunification retrospective 
   watcher armed" into my own notes as a standing task and answered each expiry notice as
   an instruction. An expiry notice is a question: does this loop still have a reason?
   A solo seat with an empty queue arms no watcher, and a re-arm is counted: at the fifth
-  with nothing between, stop and say so.
+  with nothing between, stop and say so. The owner then asked for a blunter rule, now
+  `watcher-stops-after-three-quiet-periods`: three, not five.
+- **Mistake (caught by the owner, 2026-11-24):** the reviewer subagent for 1098 returned
+  its report and stayed alive, idle, for twelve hours. A returned in-process agent lives
+  until it is stopped; the wrap skill says so. Stop a reviewer in the turn its findings
+  are acted on.
+- **Pattern across this session (my reading):** four times I took a notification as an
+  instruction. An expiry notice became "re-arm". A settled verdict became "merge", before
+  the review body was read. A line in my own notes ("keep the watcher armed") became a
+  standing task. A returned agent became "done", with no stop. Each notice is a prompt to
+  ask what the thing is for now, and the answer had changed each time.
+- **What worked:** reading the review before starting the merge tool, from 1101 on. It
+  caught a real fault on 1101 and two on 1102 before either merged.

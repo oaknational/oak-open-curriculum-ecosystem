@@ -515,8 +515,11 @@ STATE, 2026-11-23, before the day's third compaction (the same seat, staying liv
 the merge tool now counts the clone's own lanes (1095, with its setup steps in 1096). The queue that followed
 is worked through, one pull request at a time at a limit of one: the `pr-lifecycle` count step (1097), the
 merge tool's waiting line (1098), the two adopted rules (1099, scoped by 1101 to an owner who is present),
-and one line of the `coordination-fold` skill (1100). No lane pull request of this estate is open. Next safe
-step: none is queued; the owner names the next work. The owner decided seven further
+and one line of the `coordination-fold` skill (1100). On 2026-11-24 the owner asked for one more rule, a
+watcher stops after three quiet watcher periods (1102), and then for the seat to stop on this machine and the
+work to move to a cloud session. Next safe step: read the newest block of the thread record, headed "Handoff
+2026-11-24", which says what a cloud session lacks and must check before its first write; then read 1102's
+state from the forge. Nothing else is queued; the owner names the next work. The owner decided seven further
 matters by prompt at this boundary and none is open. The thread record's newest block holds the queue with
 the state of each item, the two checks that were owed and are now discharged, the seven decisions, and the
 recipe for the watcher. Deep consolidation status: due, for the reason given

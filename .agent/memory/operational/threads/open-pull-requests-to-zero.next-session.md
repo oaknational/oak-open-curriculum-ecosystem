@@ -2692,6 +2692,60 @@ specific permission to delete any branch that is provably merged or explicitly a
 The branches are explicitly abandoned". The permission layer still refused the forced
 delete, so the command is with the owner to run.
 
+### Handoff 2026-11-24: the seat stops on this machine and the work moves to a cloud session
+
+The owner's word, verbatim: "find a point in the next roughtly 20 minutes where this work
+can be made safe, stop on this machine, and transfer to a Claude Code cloud session. All
+relevant state must be stored in the repo." This block is the entry point for that
+session. Read it first, then the blocks below it only as needed.
+
+**What is open.** Nothing is queued. The last pull request of this seat is 1102, a new
+rule the owner asked for on 2026-11-24, verbatim: "We need an additional, simpler, and
+more general rule. If a watcher has run three full sessions with no activity then stop",
+then "replace my word session with "watcher period"". The rule is
+`.agent/rules/watcher-stops-after-three-quiet-periods.md`. Copilot found two faults on its
+first commit, both upheld and cured (which rule governs a team seat's standing watcher;
+a summary line missing one condition). The seat decided that the new rule takes
+precedence over `comms-all-channels-watcher` and told the owner so; the owner has not
+answered that point, so it stands as the seat's reading of "more general". The ledger row
+for 1102 in `review-cost-ledger.md` says whether it had merged when this seat stopped.
+If it is still open, it is ready, its threads are resolved, and it needs only the merge
+tool; the review of the second commit, if one arrived, is read first.
+
+**What a cloud session does not have, and must check before its first write.**
+
+- The merge bot's private key. On this machine it is at
+  `~/.config/<appSlug>/private-key.pem`. Without it no push, pull request verb or merge
+  can be made as the bot, and the owner's ruling is that agent work never goes out under
+  the owner's own sign-in. A session with no bot identity records that and asks the owner
+  before any outward write.
+- The untracked per-checkout config `.github/merge-bot.json`. It holds the app's slug and
+  id, the repository, the pull request label, and `laneAuthors`: the logins whose open
+  pull requests count towards this estate's limit of one. A fresh checkout has none, and
+  `docs/engineering/merge-bot.md` (section "Setting whose pull requests your clone
+  counts") says how to write it. The owner's login belongs in that file and in no tracked
+  file.
+- The untracked `.sonarlint/connectedMode.json` and `.mcp.json` of the primary checkout.
+- The seat's private memory. Every owner ruling this thread relies on is quoted in this
+  record or in a tracked rule. The one item held only there is the detail of the token
+  finding, which Linear MCP-985 also holds.
+- The two worktrees of this machine. A cloud checkout works from `main` and from the
+  coordination branch `coordination/2026-11-23-086dcc`, both on the remote.
+- This session's scratch directory. Nothing in it is needed.
+
+**Rules of the road that are easy to miss.** One of this estate's pull requests open at a
+time, opened with `--wip-limit 1`; the coordination draft 1091 is not counted. A review
+is read, body included, before the merge tool is started. A decision only the owner can
+make goes to the owner by question prompt when it is found, never into a list. A watcher
+is not armed by a solo seat, and no watcher is armed a fourth time after three quiet
+watcher periods. The coordination branch is past the day it was cut on: its fold to
+`main` is due when useful, by the `coordination-fold` skill, and is the first piece of
+work a successor with a bot identity would take.
+
+**What is context-only and why.** The transcript of this session, the scratch files, and
+the reasoning behind each small wording choice in the merged pull requests. Each pull
+request's description and commit messages carry what a reader needs.
+
 Correction, 2026-11-24 09:00Z, which replaces every instruction above to keep the comms
 watcher armed: this is a solo seat, and the watcher rule says it is not for a solo
 session. After the queue emptied the seat re-armed the watcher for ten hours with no
