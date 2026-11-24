@@ -142,5 +142,6 @@ it by hand.
 | `.agent/rules/verify-dont-trust.md` | core | — |
 | `.agent/rules/verify-vendor-call-shapes-at-plan-author-time.md` | core | — |
 | `.agent/rules/visual-verdicts-require-rendered-proof.md` | situational | `surface:design — Issuing any assessment of visual work` |
+| `.agent/rules/watcher-stops-after-three-quiet-periods.md` | situational | `tool:background-task-arm` |
 | `.agent/rules/worktree-hygiene.md` | core | — |
 | `.agent/rules/worktree-residency.md` | core | — |

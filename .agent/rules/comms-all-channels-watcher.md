@@ -21,6 +21,13 @@ stream, and all are important. A watcher that filters to a single view
 (e.g. directed-only filters, manual `ls -t` polling) discards the others
 and will miss vital coordination.
 
+One bound sits above this rule:
+[`watcher-stops-after-three-quiet-periods`](watcher-stops-after-three-quiet-periods.md).
+A watcher that has completed three watcher periods in a row with no activity
+is not armed again, in a team session too. The seat broadcasts once that it
+has stopped listening and how to reach it, and arms the watcher again when
+work resumes, another seat is known to have joined, or the owner asks.
+
 ## Trigger
 
 A team session is bootstrapping (`start-right-team` SKILL First Moves move
