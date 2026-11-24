@@ -22,6 +22,9 @@ The five surfaces are:
    format and blocks accidental breaking changes.
 3. **Pre-push hook** (`.husky/pre-push`) — runs before `git push`. Can be
    thorough (2-5 min) since pushes are less frequent.
+   It checks the commits a push sends: a push that only deletes refs sends
+   none and runs no check, and a push that deletes a ref and sends commits
+   is refused (the rule `deletions-never-ride-a-push`).
 4. **GitHub CI workflow** (`.github/workflows/ci.yml`) — runs on PRs and
    pushes to `main`. Canonical remote gate. Must be self-contained (no
    local tooling assumptions).

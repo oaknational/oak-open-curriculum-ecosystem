@@ -39,6 +39,7 @@ it by hand.
 | `.agent/rules/coordination-branch-24h-lifetime.md` | situational | `ceremony:branch-cut — Cutting a coordination branch, or session-open on one` |
 | `.agent/rules/cross-estate-work-must-reduce-divergence.md` | situational | `ceremony:cross-estate-work — any activity that edits both estates` |
 | `.agent/rules/cross-repo-sessions-run-the-join-ceremony.md` | situational | `surface:cross-repo — Worktree repo ≠ coordination home, or sibling-estate write/registration` |
+| `.agent/rules/deletions-never-ride-a-push.md` | situational | `ceremony:push` |
 | `.agent/rules/design-from-impact-not-the-cowpath.md` | core | — |
 | `.agent/rules/design-values-come-from-the-system.md` | situational | `surface:design — Authoring or reviewing a design value on a consumer surface` |
 | `.agent/rules/design-work-for-small-prs.md` | core | — |

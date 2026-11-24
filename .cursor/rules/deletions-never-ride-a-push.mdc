@@ -1,0 +1,6 @@
+---
+description: 'A git push either sends commits or deletes refs, never both. The pre-push hook passes a deletions-only push without running its gates, because the gates check the commits a push sends and a deletion sends none, and it refuses a push that does both. An agent does not delete a remote branch by push at all: it uses merge-bot retire, which deletes through the API as the bot. Failure shapes: a branch deletion that waited minutes on a full check of an unrelated working tree and was refused by it; a deletion slipped into a push of commits so that one of the two escapes its proper handling.'
+alwaysApply: false
+---
+
+Read and follow `.agent/rules/deletions-never-ride-a-push.md`.

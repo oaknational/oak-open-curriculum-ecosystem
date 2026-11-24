@@ -123,6 +123,7 @@ const config: KnipConfig = {
         'src/commit-advisories/check-commit-skill-advisories.ts',
         'src/workspace-census/cli.ts',
         'src/secret-scan/run-push-secret-scan.ts',
+        'src/push-shape/push-shape.ts',
         'src/version-guard/prevent-accidental-major-version.ts',
         'src/validators/fitness-vocabulary/validate-fitness-vocabulary.ts',
         'src/validators/collaboration-state/validate-collaboration-state.ts',
