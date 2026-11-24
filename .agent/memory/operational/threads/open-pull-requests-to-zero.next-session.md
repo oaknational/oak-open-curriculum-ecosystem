@@ -2699,7 +2699,7 @@ can be made safe, stop on this machine, and transfer to a Claude Code cloud sess
 relevant state must be stored in the repo." This block is the entry point for that
 session. Read it first, then the blocks below it only as needed.
 
-**What is open.** Nothing is queued. The last pull request of this seat is 1102, a new
+**What is open.** Nothing is open and nothing is queued. The last pull request of this seat is 1102, a new
 rule the owner asked for on 2026-11-24, verbatim: "We need an additional, simpler, and
 more general rule. If a watcher has run three full sessions with no activity then stop",
 then "replace my word session with "watcher period"". The rule is
@@ -2707,10 +2707,8 @@ then "replace my word session with "watcher period"". The rule is
 first commit, both upheld and cured (which rule governs a team seat's standing watcher;
 a summary line missing one condition). The seat decided that the new rule takes
 precedence over `comms-all-channels-watcher` and told the owner so; the owner has not
-answered that point, so it stands as the seat's reading of "more general". The ledger row
-for 1102 in `review-cost-ledger.md` says whether it had merged when this seat stopped.
-If it is still open, it is ready, its threads are resolved, and it needs only the merge
-tool; the review of the second commit, if one arrived, is read first.
+answered that point, so it stands as the seat's reading of "more general". 1102 merged
+(`2fc67b761`) before this seat stopped, so no lane pull request of this estate is open.
 
 **What a cloud session does not have, and must check before its first write.**
 

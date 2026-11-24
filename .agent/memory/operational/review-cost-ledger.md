@@ -323,7 +323,7 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1099 | 1 | 0 / 40 | within | 1 | agreed | a class C go-ahead is asked at once, and a pass states its end; one Copilot finding in the review's summary body and in no thread (the stop conflicts with the rule for an absent owner), read after the merge, upheld, the owner asked, cured by 1101; merged `8531a75d6` by the bot |
 | 2026-11-23 | oaknational#1100 | 1 | 0 / 40 | within | 0 | agreed | the fold skill finds the coordination draft by its branch; one Copilot review: approval recommended, no finding; merged `6f314c21d` by the bot |
 | 2026-11-23 | oaknational#1101 | 1 | 0 / 40 | within | 1 | agreed | the class C stop applies while the owner is present; the review was read before the merge tool was started; one Copilot finding (an unattended seat could still read the action as "prompt"), upheld and cured in one push; merged `66a994074` by the bot |
-| 2026-11-24 | oaknational#1102 | 1 | not priced | not read | 2 | not read | a watcher stops after three quiet watcher periods, a rule the owner asked for; two Copilot findings on the first commit, both upheld and cured in one push, with a rename at the owner's word in between; OPEN and ready when this row was written, with the merge tool waiting on its checks; the successor reads its state from the forge and prices it |
+| 2026-11-24 | oaknational#1102 | 1 | 0 / 40 | within | 2 | agreed | a watcher stops after three quiet watcher periods, a rule the owner asked for; two Copilot findings on the first commit, both upheld and cured in one push, with a rename at the owner's word in between; the review was read before the merge tool was started; merged `2fc67b761` by the bot |
 
 ## Weight changes
 
