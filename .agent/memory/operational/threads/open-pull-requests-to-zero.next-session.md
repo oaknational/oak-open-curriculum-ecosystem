@@ -2900,13 +2900,13 @@ explicitly abandoned branches and worktrees should be deleted". Each tip, for re
 
 - Abandoned, each with only closed pull requests: `docs/first-class-copilot-agent-support`
   at `4ead1345b` (522, 708, 777); `feat/mcp-103-content-workspace` at `04b91b02e` (956);
-  `jimcresswell/mcp-372-hub-demo-conformance-true-up-re-point-the-token-audit-at-the` at
-  `30d0e81c5` (644, 779, 806); `jimcresswell/mcp-487-sanitise-numeric-input` at
+  the MCP-372 hub-demo conformance branch at
+  `30d0e81c5` (644, 779, 806); the MCP-487 numeric-input branch at
   `9b6da6178` (752); `fix/chatgpt-oak-mcp-config` at `b6d0a3ef8` (1001), which the owner
   named abandoned by word. The first four the owner deleted by command.
 - Merged, each tip an ancestor of `main`: `agent/n8n-practice-comparative-research` and
   `agent/persistent-reflex-layer-report` (both at `f0de159eb`), and
-  `jimcresswell/jim-next-2026-08-04` at `5f7d656b2`.
+  the next-steps note branch of 2026-08-04 (pull request 765) at `5f7d656b2`.
 - Locally: the `deps-currency` worktree removed without force (its ignored files were
   build output, fetched assets and a `.env.local` identical to the primary's); the local
   branches `engraph` and the knip lane's, both merged.
