@@ -324,6 +324,7 @@ budget, and #146 exempted syncs only. No weight changes; the CI-cure reading wai
 | 2026-11-23 | oaknational#1100 | 1 | 0 / 40 | within | 0 | agreed | the fold skill finds the coordination draft by its branch; one Copilot review: approval recommended, no finding; merged `6f314c21d` by the bot |
 | 2026-11-23 | oaknational#1101 | 1 | 0 / 40 | within | 1 | agreed | the class C stop applies while the owner is present; the review was read before the merge tool was started; one Copilot finding (an unattended seat could still read the action as "prompt"), upheld and cured in one push; merged `66a994074` by the bot |
 | 2026-11-24 | oaknational#1102 | 1 | 0 / 40 | within | 2 | agreed | a watcher stops after three quiet watcher periods, a rule the owner asked for; two Copilot findings on the first commit, both upheld and cured in one push, with a rename at the owner's word in between; the review was read before the merge tool was started; merged `2fc67b761` by the bot |
+| 2026-11-24 | oaknational#1091 | 1 | 0 / 40 | within | 1 | agreed | the coordination branch of 2026-11-23, folded so that a session starting on `main` finds the handoff; one Copilot finding from its review of the draft (a ledger row still stating the earlier count), upheld and cured; merged `a1ba48193` by the bot |
 
 ## Weight changes
 
