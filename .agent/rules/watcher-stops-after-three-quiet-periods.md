@@ -1,6 +1,6 @@
 ---
 classification: situational
-description: 'A watcher or monitor that has completed three watcher periods in a row with no activity is stopped and not re-armed: the seat says so once and arms it again only when work resumes or the owner asks. A watcher period is one arming, from start to expiry. Applies to every re-armed watcher, the comms watcher included, whatever other rule armed it. Deliberately primitive: it will miss some cases, and that costs less than hours of re-arming with nothing to hear. Failure shape: a seat answering each expiry notice by re-arming, for ten hours and about twenty model turns, with an empty queue and no event.'
+description: 'A watcher or monitor that has completed three watcher periods in a row with no activity is stopped and not re-armed: the seat says so once and arms it again only when work resumes, another seat is known to have joined, or the owner asks. A watcher period is one arming, from start to expiry. Applies to every re-armed watcher, the comms watcher included, and takes precedence over any rule that says a watcher stays armed. Deliberately primitive: it will miss some cases, and that costs less than hours of re-arming with nothing to hear. Failure shape: a seat answering each expiry notice by re-arming, for ten hours and about twenty model turns, with an empty queue and no event.'
 trigger: tool:background-task-arm
 ---
 
@@ -27,13 +27,21 @@ when another seat is known to have joined, or when the owner asks.
 
 ## Where it applies
 
-Every re-armed watcher, whichever rule led the seat to arm it. It applies
-alongside
+Every re-armed watcher, whichever rule led the seat to arm it.
+
+**It takes precedence over a rule that says a watcher stays armed.**
+[`comms-all-channels-watcher`](comms-all-channels-watcher.md) has a team seat
+keep its comms watcher up for the whole session. After three quiet periods
+this rule wins: the seat stops the watcher and broadcasts once, on the comms
+stream, that it has stopped listening and how to reach it. A seat that is
+then needed is reached through the owner or by a direct message. This is one
+of the cases the rule knowingly gets wrong sometimes.
+
+It also applies alongside
 [`loop-exit-criteria-required`](loop-exit-criteria-required.md), which leaves
 event-driven monitors out of its own five-iteration count: a watcher that is
 re-armed on every expiry has become a loop, and this rule is its exit. A solo
-seat does not arm the comms watcher in the first place
-([`comms-all-channels-watcher`](comms-all-channels-watcher.md)).
+seat does not arm the comms watcher in the first place.
 
 ## Why it is this simple
 
